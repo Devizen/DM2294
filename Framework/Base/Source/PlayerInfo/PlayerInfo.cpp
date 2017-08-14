@@ -38,7 +38,7 @@ CPlayerInfo::CPlayerInfo(void)
 	, m_bCameraSwayDirection(false)
     , theMaxPitch(80)
     , theMinPitch(-80)
-	, health(100)
+	//, health(100)
 	, tookDamage(false)
 	, score(0.f)
 {
@@ -985,14 +985,22 @@ CWeaponInfo ** CPlayerInfo::getWeaponManager(void)
 	return weaponManager;
 }
 
-void CPlayerInfo::setHealth(int _health)
-{
-	health = _health;
-}
+//void CPlayerInfo::setHealth(int _health)
+//{
+//	health = _health;
+//}
 
-int CPlayerInfo::getHealth(void)
+//int CPlayerInfo::getHealth(void)
+//{
+//	return health;
+//}
+
+/*
+Get player's CAttribute
+*/
+CAttributes CPlayerInfo::getAttribute()
 {
-	return health;
+	return playerAttribute;
 }
 
 void CPlayerInfo::setTookDamage(bool _tookDamage)

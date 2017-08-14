@@ -61,11 +61,11 @@ public:
 	/*
 	Sets Attack damage to amount specified in parameter
 	*/
-	void setAttackTo(float _amount);
+	void setAttackTo(int _amount);
 	/*
 	Sets Defense to amount specified in parameter
 	*/
-	void setDefenseTo(float _amount);
+	void setDefenseTo(int _amount);
 	/*
 	Increase max health to amount specified in parameter
 	*/

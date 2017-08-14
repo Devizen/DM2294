@@ -4,6 +4,7 @@
 #include "../GroundEntity.h"
 #include "../WeaponInfo/WeaponInfo.h"
 #include "Collider\Collider.h"
+#include "../Attributes.h"
 
 #include <fstream>
 #include <string>
@@ -150,9 +151,14 @@ public:
 	CWeaponInfo** getWeaponManager(void);
 
 	/*Set Health*/
-	void setHealth(int _health);
+	//void setHealth(int _health);
 	/*Get Health*/
-	int getHealth(void);
+	//int getHealth(void);
+
+	/*
+	Get player's CAttribute
+	*/
+	CAttributes getAttribute();
 
 	/*Set Took Damage*/
 	void setTookDamage(bool _tookDamage);
@@ -195,11 +201,13 @@ private:
     const float theMaxPitch, theMinPitch;
 
 	/*Health system*/
-	int health;
+	//int health;
 	/*Boolean to activate camera effects if bullet hits player.*/
 	bool tookDamage;
 	/*Score*/
 	float score;
+
+	CAttributes playerAttribute;
 public:
 	// Camera Sway
 	float m_fCameraSwayAngle;

@@ -94,14 +94,14 @@ void CAttributes::increaseGoldBy(int _amount)
 /*
 Sets Attack damage to amount specified in parameter
 */
-void CAttributes::setAttackTo(float _amount)
+void CAttributes::setAttackTo(int _amount)
 {
 	this->ATTACK = _amount;
 }
 /*
 Sets Defense to amount specified in parameter
 */
-void CAttributes::setDefenseTo(float _amount)
+void CAttributes::setDefenseTo(int _amount)
 {
 	this->DEFENSE = _amount;
 }
