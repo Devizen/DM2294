@@ -301,26 +301,6 @@ void SceneText::renderHit(void)
 
 SceneText::~SceneText()
 {
-	if (theCameraEffects)
-	{
-		delete theCameraEffects;
-		theCameraEffects = NULL;
-	}
-	if (theMinimap)
-	{
-		delete theMinimap;
-		theMinimap = NULL;
-	}
-	if (theMouse)
-	{
-		delete theMouse;
-		theMouse = NULL;
-	}
-	if (theKeyboard)
-	{
-		delete theKeyboard;
-		theKeyboard = NULL;
-	}
 }
 
 void SceneText::Init()
@@ -549,6 +529,7 @@ void SceneText::Init()
 	groundEntity->SetPosition(Vector3(0, -10, 0));
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
+	groundEntity->SetLight(true);
 	playerInfo->SetTerrain(groundEntity);
 
 	//Create::Entity("PAUSE", Vector3(Application::GetInstance().GetWindowWidth() / 2.0f, Application::GetInstance().GetWindowHeight() / 2.0f, 1.f),
@@ -648,7 +629,27 @@ void SceneText::Update(double dt)
 			/*Create random health power-up for player.*/
 			createHealth(dt);
 
+			cout << "Light Position X: " << lights[0]->position.x << endl;
+			cout << "Light Position Y: " << lights[0]->position.x << endl;
+			cout << "Light Position Z: " << lights[0]->position.x << endl;
 
+			if (KeyboardController::GetInstance()->IsKeyDown('I'))
+				lights[0]->position.z += 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('K'))
+				lights[0]->position.z -= 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('L'))
+				lights[0]->position.x += 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('J'))
+				lights[0]->position.x -= 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('U'))
+				lights[0]->position.x -= 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('O'))
+				lights[0]->position.x += 100.f * dt;
 
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
 			{
@@ -998,7 +999,7 @@ void SceneText::RenderPassGPass(void)
 
 	if (lights[0]->type == Light::LIGHT_DIRECTIONAL)
 	{
-		m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
+		DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
 	}
 	else
 	{
@@ -1007,11 +1008,11 @@ void SceneText::RenderPassGPass(void)
 
 	if (lights[1]->type == Light::LIGHT_POINT)
 	{
-		m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
+		DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
 	}
 	else
 	{
-		m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
+		DepthFBO::GetInstance()->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
 	}
 
 	m_lightDepthView.SetToLookAt(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z, 0, 0, 0, 0, 1, 0);
@@ -1200,4 +1201,123 @@ void SceneText::Exit()
 	// Delete the lights
 	delete lights[0];
 	delete lights[1];
+
+	if (theCameraEffects)
+	{
+		delete theCameraEffects;
+		theCameraEffects = NULL;
+	}
+	if (theMinimap)
+	{
+		delete theMinimap;
+		theMinimap = NULL;
+	}
+	if (theMouse)
+	{
+		delete theMouse;
+		theMouse = NULL;
+	}
+	if (theKeyboard)
+	{
+		delete theKeyboard;
+		theKeyboard = NULL;
+	}
+
+	if (currProg)
+	{
+		delete currProg;
+		currProg = nullptr;
+	}
+
+	if (m_gPassShaderID)
+	{
+		delete m_gPassShaderID;
+		m_gPassShaderID = nullptr;
+	}
+
+	//if (playerInfo)
+	//{
+	//	delete playerInfo;
+	//	playerInfo = nullptr;
+	//}
+
+	//if (groundEntity)
+	//{
+	//	delete groundEntity;
+	//	groundEntity = nullptr;
+	//}
+
+	//if (theOption)
+	//{
+	//	delete theOption;
+	//	theOption = nullptr;
+	//}
+
+	//if (theCube)
+	//{
+	//	delete theCube;
+	//	theCube = nullptr;
+	//}
+
+	//if (anEnemy3D)
+	//{
+	//	delete anEnemy3D;
+	//	anEnemy3D = nullptr;
+	//}
+
+	//if (input)
+	//{
+	//	delete input;
+	//	input = nullptr;
+	//}
+
+	//if (optionUI)
+	//{
+	//	delete optionUI;
+	//	optionUI = nullptr;
+	//}
+
+	//if (weaponUI)
+	//{
+	//	delete weaponUI;
+	//	weaponUI = nullptr;
+	//}
+
+	//if (hitDisplay)
+	//{
+	//	delete hitDisplay;
+	//	hitDisplay = nullptr;
+	//}
+
+	//if (camera)
+	//{
+	//	delete camera;
+	//	camera = nullptr;
+	//}
+
+	while (theObjects.size() > 0)
+	{
+		GenericEntity* object = theObjects.back();
+		delete object;
+		object = nullptr;
+		theObjects.pop_back();
+	}
+
+	while (controls.size() > 0)
+	{
+		Controls* object = controls.back();
+		delete object;
+		object = nullptr;
+		controls.pop_back();
+	}
+
+	for (int i = 0; i < 17; ++i)
+	{
+		delete controlText[i];
+	}
+
+	for (int i = 0; i < 30; ++i)
+	{
+		delete textObj[i];
+	}
 }

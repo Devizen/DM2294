@@ -133,6 +133,9 @@ public:
 
 	/*Get Player Property*/
 	float getShootDelay(void);
+
+	/*Render Health Bar*/
+	void renderHealthBar(void);
 private:
 	ATTRIBUTES attributes;
 	int health;

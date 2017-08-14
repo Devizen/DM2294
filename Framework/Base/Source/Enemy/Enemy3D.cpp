@@ -283,15 +283,10 @@ void CEnemy3D::Render(void)
 		RenderHelper::RenderMeshWithLight(modelMesh);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	//cout << "Position Y: " << position.y << endl;
-	//cout << "Max AABB.Y: " << maxAABB.y << endl;
-	modelStack.Translate(position.x + minAABB.x + ((attributes.HEALTH / attributes.MAX_HEALTH) * MAX_HEALTH_SCALE) * 0.5f, position.y + (maxAABB.y - position.y), position.z);
-	Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());
-	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
-	modelStack.Scale((attributes.HEALTH / attributes.MAX_HEALTH) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 1.f);
-	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
-	modelStack.PopMatrix();
+	if (attributes.HEALTH > 0.f)
+	{
+		renderHealthBar();
+	}
 }
 
 void CEnemy3D::setHealth(int _health)
@@ -434,6 +429,47 @@ void CEnemy3D::setShootDelay(float _shootDelay)
 float CEnemy3D::getShootDelay(void)
 {
 	return shootDelay;
+}
+
+void CEnemy3D::renderHealthBar(void)
+{
+	/*Calculate the displacement from player to enemy.*/
+	Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+
+	///*Black health bar that depicts the total health of enemy.*/
+	//modelStack.PushMatrix();
+	///*Keep the health bar fixed to the left of the enemy.*/
+	//modelStack.Translate(position.x, position.y + (maxAABB.y - position.y), position.z - 0.1f);
+	//modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
+	///*Scale it according to the health left.*/
+	//modelStack.Scale(MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 1.f);
+	//MeshBuilder::GetInstance()->GenerateCube("cube", Color(0.f, 0.f, 0.0f), 1.f);
+	//RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
+	//modelStack.PopMatrix();
+
+	/*Health Bar above enemy head*/
+	modelStack.PushMatrix();
+	/*Keep the health bar fixed to the left of the enemy.*/
+	modelStack.Translate(position.x + minAABB.x + ((attributes.HEALTH / attributes.MAX_HEALTH) * MAX_HEALTH_SCALE) * 0.5f, position.y + (maxAABB.y - position.y), position.z);
+	/*Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());*/
+	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
+	/*Scale it according to the health left.*/
+	modelStack.Scale((attributes.HEALTH / attributes.MAX_HEALTH) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 1.f);
+
+	/*Set health bar to green colour before damage.*/
+	if (attributes.HEALTH / attributes.MAX_HEALTH == 1)
+		MeshBuilder::GetInstance()->GenerateCube("cube", Color(0.f, 1.f, 0.0f), 1.f);
+
+	/*Set health bar to yellow color when taken damage and is above 20%.*/
+	if (attributes.HEALTH / attributes.MAX_HEALTH > 0.2f && attributes.HEALTH / attributes.MAX_HEALTH < 1.f)
+		MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.f, 1.f, 0.0f), 1.f);
+
+	/*Set health bar to red color when health is 20% and below.*/
+	if (attributes.HEALTH / attributes.MAX_HEALTH <= 0.2f)
+		MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.f, 0.f, 0.0f), 1.f);
+	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
+	modelStack.PopMatrix();
 }
 
 CEnemy3D* Create::Enemy3D(const std::string& _meshName,
