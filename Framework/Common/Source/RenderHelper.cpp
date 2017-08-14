@@ -3,11 +3,40 @@
 #include "GraphicsManager.h"
 #include "ShaderProgram.h"
 #include "MatrixStack.h"
+#include "GL\glew.h"
+#include "../../Base/Source/DepthFBO.h"
 
 void RenderHelper::RenderMesh(Mesh* _mesh)
 {
 	// Get all our transform matrices & update shader
 	Mtx44 MVP;
+	GraphicsManager* g = GraphicsManager::GetInstance();
+	if (DepthFBO::GetInstance()->m_renderPass == DepthFBO::RENDER_PASS_PRE)
+	{
+		Mtx44 lightDepthMVP = DepthFBO::GetInstance()->m_lightDepthProj * DepthFBO::GetInstance()->m_lightDepthView * g->GetModelStack().Top();
+		g->SetActiveShader("gpass");
+		ShaderProgram* gpassShader = g->GetActiveShader();
+		glUniformMatrix4fv(g->GetActiveShader()->GetUniform("lightDepthMVP"), 1, GL_FALSE, &lightDepthMVP.a[0]);
+		//mesh->Render();
+
+		//for (int i = 0; i < MAX_TEXTURES; ++i)
+		//{
+		if (_mesh->textureID > 0)
+		{
+			gpassShader->UpdateInt("colorTextureEnabled[0]", 1);
+			GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID);
+			gpassShader->UpdateInt("colorTexture[0]", 0);
+
+		}
+		else
+			gpassShader->UpdateInt("colorTextureEnabled", 0);
+		//	}
+		_mesh->Render();
+
+		g->SetActiveShader("default");
+
+		return;
+	}
 	MVP = GraphicsManager::GetInstance()->GetProjectionMatrix() * GraphicsManager::GetInstance()->GetViewMatrix() * GraphicsManager::GetInstance()->GetModelStack().Top();
 	ShaderProgram* currProg = GraphicsManager::GetInstance()->GetActiveShader();
 	currProg->UpdateMatrix44("MVP", &MVP.a[0]);
@@ -41,6 +70,36 @@ void RenderHelper::RenderMeshWithLight(Mesh* _mesh)
 {
 	// Get all our transform matrices & update shader
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	GraphicsManager* g = GraphicsManager::GetInstance();
+	
+	if (DepthFBO::GetInstance()->m_renderPass == DepthFBO::RENDER_PASS_PRE)
+	{
+		Mtx44 lightDepthMVP = DepthFBO::GetInstance()->m_lightDepthProj * DepthFBO::GetInstance()->m_lightDepthView * g->GetModelStack().Top();
+		g->SetActiveShader("gpass");
+		ShaderProgram* gpassShader = g->GetActiveShader();
+		glUniformMatrix4fv(g->GetActiveShader()->GetUniform("lightDepthMVP"), 1, GL_FALSE, &lightDepthMVP.a[0]);
+		//mesh->Render();
+
+		//for (int i = 0; i < MAX_TEXTURES; ++i)
+		//{
+			if (_mesh->textureID > 0)
+			{
+				gpassShader->UpdateInt("colorTextureEnabled[0]", 1);
+				GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID);
+				gpassShader->UpdateInt("colorTexture[0]", 0);
+
+			}
+			else
+				gpassShader->UpdateInt("colorTextureEnabled", 0);
+	//	}
+		_mesh->Render();
+
+		g->SetActiveShader("default");
+
+		return;
+	}
+
 	MVP = GraphicsManager::GetInstance()->GetProjectionMatrix() * GraphicsManager::GetInstance()->GetViewMatrix() * GraphicsManager::GetInstance()->GetModelStack().Top();
 	ShaderProgram* currProg = GraphicsManager::GetInstance()->GetActiveShader();
 	currProg->UpdateMatrix44("MVP", &MVP.a[0]);
@@ -51,6 +110,12 @@ void RenderHelper::RenderMeshWithLight(Mesh* _mesh)
 	currProg->UpdateMatrix44("MV", &modelView.a[0]);
 	modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
 	currProg->UpdateMatrix44("MV_inverse_transpose", &modelView.a[0]);
+
+	Mtx44 lightDepthMVP = DepthFBO::GetInstance()->m_lightDepthProj *
+		DepthFBO::GetInstance()->m_lightDepthView * g->GetModelStack().Top();
+
+	glUniformMatrix4fv(g->GetActiveShader()->GetUniform("lightDepthMvp"), 1,
+		GL_FALSE, &lightDepthMVP.a[0]);
 
 	//load material
 	currProg->UpdateVector3("material.kAmbient", &_mesh->material.kAmbient.r);

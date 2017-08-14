@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Attributes.cpp" />
     <ClCompile Include="Source\CameraEffects\CameraEffects.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\Enemy\Enemy3D.cpp" />
@@ -54,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Attributes.h" />
     <ClInclude Include="Source\CameraEffects\CameraEffects.h" />
     <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\Enemy\Enemy3D.h" />

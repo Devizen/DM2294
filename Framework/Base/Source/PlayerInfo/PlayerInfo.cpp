@@ -995,14 +995,6 @@ CWeaponInfo ** CPlayerInfo::getWeaponManager(void)
 //	return health;
 //}
 
-/*
-Get player's CAttribute
-*/
-CAttributes CPlayerInfo::getAttribute()
-{
-	return playerAttribute;
-}
-
 void CPlayerInfo::setTookDamage(bool _tookDamage)
 {
 	tookDamage = _tookDamage;

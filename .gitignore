@@ -3,3 +3,4 @@
 *.mtl
 *.tmp
 Framework/Base/Debug/
+*.idb

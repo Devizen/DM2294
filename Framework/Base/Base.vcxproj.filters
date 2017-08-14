@@ -171,6 +171,9 @@
     <ClCompile Include="Source\Object\Health.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Attributes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -289,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="Source\Object\Health.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
