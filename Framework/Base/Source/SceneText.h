@@ -113,6 +113,12 @@ private:
 	void RenderPassGPass(void);
 	void RenderPassMain(void);
 	void RenderWorld(void);
+
+	/*Render KO Count*/
+	void renderKO_Count(void);
+
+	float m_worldHeight;
+	float m_worldWidth;
 };
 
 #endif

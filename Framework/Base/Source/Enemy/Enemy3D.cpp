@@ -159,12 +159,15 @@ void CEnemy3D::Update(double dt)
 			if (!checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
 				state = IDLE;
 
+			if (this->getPlayerProperty() && returnNearestEnemy() == nullptr)
+				state = IDLE;
+
 			/*Offset the y to make it seem as if bullet is hitting face on.*/
 			Vector3 targetLower(CPlayerInfo::GetInstance()->GetPos().x, CPlayerInfo::GetInstance()->GetPos().y, CPlayerInfo::GetInstance()->GetPos().z);
 			Vector3 viewVector = (targetLower - position).Normalized();
 			Vector3 distanceBetween = CPlayerInfo::GetInstance()->GetPos() - GetPos();
 
-			if (this->getPlayerProperty())
+			if (this->getPlayerProperty() && returnNearestEnemy() != nullptr)
 			{
 				/*Offset the y to make it seem as if bullet is hitting face on.*/
 				targetLower.Set(returnNearestEnemy()->GetPos().x, returnNearestEnemy()->GetPos().y, returnNearestEnemy()->GetPos().z);
@@ -205,6 +208,9 @@ void CEnemy3D::Update(double dt)
 		case DEAD:
 		{
 			CPlayerInfo::GetInstance()->setScore(CPlayerInfo::GetInstance()->getScore() + 100);
+			int _KO_Count = CPlayerInfo::GetInstance()->getKO_Count() + 1;
+			CPlayerInfo::GetInstance()->setKO_Count(_KO_Count);
+
 			CSoundEngine::GetInstance()->PlayASound("EXPLODE");
 
 			/*Converting Enemy to Player vice versa.*/
@@ -267,7 +273,7 @@ void CEnemy3D::Render(void)
 	{
 		if (!getPlayerProperty())
 			angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
-		else
+		else if (returnNearestEnemy() != nullptr)
 			angleToFace = Math::RadianToDegree(atan2(returnNearestEnemy()->GetPos().x - this->position.x, returnNearestEnemy()->GetPos().z - this->position.z));
 		modelStack.Rotate(angleToFace, 0.f, 1.f, 0.f);
 	}
@@ -328,6 +334,9 @@ bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 	}
 	else
 	{
+		if (returnNearestEnemy() == nullptr)
+			return false;
+
 		Vector3 objectMin = returnNearestEnemy()->GetMinAABB() + Vector3( returnNearestEnemy()->GetPos().x, -5.f,  returnNearestEnemy()->GetPos().z);
 		Vector3 objectMax = returnNearestEnemy()->GetMaxAABB() + Vector3( returnNearestEnemy()->GetPos().x, -5.f,  returnNearestEnemy()->GetPos().z);
 
@@ -342,20 +351,31 @@ bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 
 CEnemy3D * CEnemy3D::returnNearestEnemy(void)
 {
-	CEnemy3D* enemy;
+	CEnemy3D* enemy = nullptr;
 	float nearestDistance = 0.f;
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
-		enemy = (CEnemy3D*)*it;
 		if (this == (*it))
 			continue;
 
+		if ((*it)->getPlayerProperty())
+			continue;
+
+
 		nearestDistance = ((*it)->GetPos() - this->GetPos()).LengthSquared();
+		enemy = (CEnemy3D*)*it;
 		break;
 	}
+
+	if (enemy == nullptr)
+		return enemy;
+
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
 		/*enemy = (CEnemy3D*)*it;*/
+
+		if ((*it)->getPlayerProperty())
+			continue;
 
 		if (((*it)->GetPos() - this->GetPos()).LengthSquared() < nearestDistance && this != (*it))
 		{

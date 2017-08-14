@@ -165,6 +165,11 @@ public:
 	/*Get Score*/
 	float getScore(void);
 
+	/*Set KO Count*/
+	void setKO_Count(float _KO_Count);
+	/*Get KO Count*/
+	int getKO_Count(void);
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;
@@ -201,6 +206,9 @@ private:
 	bool tookDamage;
 	/*Score*/
 	float score;
+
+	/*KO Count*/
+	int KO_Count;
 public:
 	// Camera Sway
 	float m_fCameraSwayAngle;
