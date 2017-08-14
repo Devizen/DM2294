@@ -1,0 +1,996 @@
+#include "SceneText.h"
+#include "GL\glew.h"
+
+#include "shader.hpp"
+#include "MeshBuilder.h"
+#include "Application.h"
+#include "Utility.h"
+#include "LoadTGA.h"
+#include <sstream>
+#include "KeyboardController.h"
+#include "MouseController.h"
+#include "SceneManager.h"
+#include "GraphicsManager.h"
+#include "ShaderProgram.h"
+#include "EntityManager.h"
+
+#include "GenericEntity.h"
+#include "GroundEntity.h"
+#include "TextEntity.h"
+#include "SpriteEntity.h"
+#include "Light.h"
+#include "SkyBox/SkyBoxEntity.h"
+#include "Minimap\Minimap.h"
+#include "Object\Furniture.h"
+#include "Object\Bullet.h"
+#include "Object\Health.h"
+
+/*Options Manager*/
+#include "Options\OptionsManager.h"
+#include "Options\Controls.h"
+
+/*Rendering*/
+#include "RenderHelper.h"
+
+/*Sound*/
+#include "SoundEngine.h"
+#include <iostream>
+using namespace std;
+
+SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
+
+SceneText::SceneText()
+	: theMinimap(NULL)
+	, theCameraEffects(NULL)
+	, currentHighscore(0)
+{
+}
+
+SceneText::SceneText(SceneManager* _sceneMgr)
+	: theMinimap(NULL)
+	, theCameraEffects(NULL)
+	, currentHighscore(0)
+{
+	_sceneMgr->AddScene("Start", this);
+}
+
+void SceneText::RenderPassGPass(void)
+{
+}
+
+void SceneText::displayControls(void)
+{
+	std::ostringstream ss;
+	ss << "[Enter] to save changes.";
+	controlText[16]->SetText(ss.str());
+	ss.str("");
+	ss << "[TAB] to go back";
+	controlText[15]->SetText(ss.str());
+	ss.str("");
+	ss << "LEFT [1]: " << checkInput(OptionsManager::GetInstance()->getInput(0));
+	controlText[14]->SetText(ss.str());
+	ss.str("");
+	ss << "RIGHT [2]: " << checkInput(OptionsManager::GetInstance()->getInput(1));
+	controlText[13]->SetText(ss.str());
+	ss.str("");
+	ss << "UP [3]: " << checkInput(OptionsManager::GetInstance()->getInput(2));
+	controlText[12]->SetText(ss.str());
+	ss.str("");
+	ss << "DOWN [4]: " << checkInput(OptionsManager::GetInstance()->getInput(3));
+	controlText[11]->SetText(ss.str());
+	ss.str("");
+	ss << "LOOKLEFT [5]: " << checkInput(OptionsManager::GetInstance()->getInput(4));
+	controlText[10]->SetText(ss.str());
+	ss.str("");
+	ss << "LOOKRIGHT [6]: " << checkInput(OptionsManager::GetInstance()->getInput(5));
+	controlText[9]->SetText(ss.str());
+	ss.str("");
+	ss << "LOOKUP [7]: " << checkInput(OptionsManager::GetInstance()->getInput(6));
+	controlText[8]->SetText(ss.str());
+	ss.str("");
+	ss << "LOOKDOWN [8]: " << checkInput(OptionsManager::GetInstance()->getInput(7));
+	controlText[7]->SetText(ss.str());
+	ss.str("");
+	ss << "RUN [9]: " << checkInput(OptionsManager::GetInstance()->getInput(8));
+	controlText[6]->SetText(ss.str());
+	ss.str("");
+	ss << "CROUCH [0]: " << checkInput(OptionsManager::GetInstance()->getInput(9));
+	controlText[5]->SetText(ss.str());
+	ss.str("");
+	ss << "JUMP [Q]: " << checkInput(OptionsManager::GetInstance()->getInput(10));
+	controlText[4]->SetText(ss.str());
+	ss.str("");
+	ss << "RELOAD [W]: " << checkInput(OptionsManager::GetInstance()->getInput(11));
+	controlText[3]->SetText(ss.str());
+	ss.str("");
+	ss << "CHANGE [E]: " << checkInput(OptionsManager::GetInstance()->getInput(12));
+	controlText[2]->SetText(ss.str());
+	ss.str("");
+	ss << "RESET [R]: " << checkInput(OptionsManager::GetInstance()->getInput(13));
+	controlText[1]->SetText(ss.str());
+	ss.str("");
+	ss << "FIRE [T]: " << checkInput(OptionsManager::GetInstance()->getInput(14));
+	controlText[0]->SetText(ss.str());
+}
+
+void SceneText::renderWeapon(void)
+{
+	Mesh* modelMesh;
+	if (playerInfo->GetWeapon() == 0)
+		 modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_PISTOL");
+	if (playerInfo->GetWeapon() == 1)
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_ASSAULT");
+
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	if (playerInfo->GetWeapon() == 0)
+	{
+		modelStack.Translate(250.f, -240.f, 0.f);
+		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		{
+			CSoundEngine::GetInstance()->PlayASound("PISTOL");
+			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
+		}
+		modelStack.Scale(290.f, 200.f, 50.f);
+	}
+	if (playerInfo->GetWeapon() == 1)
+	{
+		modelStack.Translate(250.f, -240.f, 0.f);
+		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		{
+			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
+			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
+		}
+		modelStack.Scale(400.f, 250.f, 1.f);
+	}
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+}
+
+void SceneText::renderWeaponUI(void)
+{
+	Mesh* modelMesh;
+	if (playerInfo->GetWeapon() == 0)
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("PISTOL");
+	if (playerInfo->GetWeapon() == 1)
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("ASSAULT");
+
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	if (playerInfo->GetWeapon() == 0)
+	{
+		modelStack.Translate(-350.0f, -250.0f, 0.f);
+		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
+		modelStack.Scale(50.0f, 50.0f, 1.f);
+	}
+	if (playerInfo->GetWeapon() == 1)
+	{
+		modelStack.Translate(-350.0f, -250.0f, 0.f);
+		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
+		modelStack.Scale(100.0f, 40.0f, 1.f);
+	}
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+}
+
+void SceneText::createEnemies(double dt)
+{
+	static float increaseEnemies = 0.f;
+	increaseEnemies += (float)dt;
+
+	static bool once = false;
+	if (!once)
+	{
+		if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
+		{
+			Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+			Vector3 _minAABB(-5.f, 0.f, -5.f);
+			Vector3 _maxAABB(5.f, 5.f, 5.f);
+			/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+			while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+			{
+				newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+			}
+			// Create a CEnemy instance
+			//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
+			anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f));
+			//anEnemy3D->Init();
+			anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+			anEnemy3D->SetCollider(true);
+			anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
+			CEnemy3D::ATTRIBUTES _attributes;
+			_attributes.MAX_HEALTH = 10.f;
+			_attributes.HEALTH = 10.f;
+			_attributes.ATTACK = 1.f;
+			_attributes.DEFENSE = 1.f;
+			anEnemy3D->setAttributes(_attributes);
+			anEnemy3D->SetTerrain(groundEntity);
+		}
+		once = true;
+	}
+}
+
+void SceneText::createCrates(double dt)
+{
+	static float increaseCrates = 0.f;
+	increaseCrates += (float)dt;
+	static int crateCount = 0;
+
+	if (crateCount < increaseCrates / 2.f)
+	{
+
+		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		Vector3 _minAABB(-6.f, -6.f, -6.f);
+		Vector3 _maxAABB(6.f, 6.f, 6.f);
+		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+		{
+			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		}
+		CFurniture* crate = Create::Furniture("crate", newPosition, Vector3(5.f, 5.f, 5.f));
+		crate->SetCollider(true);
+		crate->SetAABB(_maxAABB, _minAABB);
+		++crateCount;
+	}
+}
+
+void SceneText::createBullets(double dt)
+{
+	static float increaseBullets = 0.f;
+	increaseBullets += (float)dt;
+	static int bulletCount = 0;
+
+	if (bulletCount < increaseBullets / 4.f)
+	{
+		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		Vector3 _minAABB(-5.f, -5.f, -5.f);
+		Vector3 _maxAABB(5.f, 5.f, 5.f);
+		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+		{
+			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		}
+		CBullet* bullet = Create::Bullet("POWERUP_BULLET", newPosition, Vector3(5.f, 5.f, 5.f));
+		bullet->SetCollider(true);
+		bullet->SetAABB(_maxAABB, _minAABB);
+		bullet->SetItem(EntityBase::BULLET);
+		++bulletCount;
+	}
+}
+
+void SceneText::createHealth(double dt)
+{
+	static float increaseHealth = 0.f;
+	increaseHealth += (float)dt;
+	static int healthCount = 0;
+
+	if (healthCount < increaseHealth / 4.f)
+	{
+		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		Vector3 _minAABB(-5.f, -5.f, -5.f);
+		Vector3 _maxAABB(5.f, 5.f, 5.f);
+		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+		{
+			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		}
+		CHealth* health = Create::Health("POWERUP_HEALTH", newPosition, Vector3(5.f, 5.f, 5.f));
+		health->SetCollider(true);
+		health->SetAABB(_maxAABB, _minAABB);
+		health->SetItem(EntityBase::HEALTH);
+		++healthCount;
+	}
+}
+
+void SceneText::renderHit(void)
+{
+
+	Mesh* modelMesh;
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("HIT");
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 150.f, 0.f);
+	modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
+	modelStack.Scale(200.f, 200.f, 1.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+}
+
+SceneText::~SceneText()
+{
+	if (theCameraEffects)
+	{
+		delete theCameraEffects;
+		theCameraEffects = NULL;
+	}
+	if (theMinimap)
+	{
+		delete theMinimap;
+		theMinimap = NULL;
+	}
+	if (theMouse)
+	{
+		delete theMouse;
+		theMouse = NULL;
+	}
+	if (theKeyboard)
+	{
+		delete theKeyboard;
+		theKeyboard = NULL;
+	}
+}
+
+void SceneText::Init()
+{
+	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
+	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
+	m_gPassShaderID = GraphicsManager::GetInstance()->LoadShader("gpass",	"Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
+	
+	// Tell the shader program to store these uniform locations
+	currProg->AddUniform("MVP");
+	currProg->AddUniform("MV");
+	currProg->AddUniform("MV_inverse_transpose");
+	currProg->AddUniform("material.kAmbient");
+	currProg->AddUniform("material.kDiffuse");
+	currProg->AddUniform("material.kSpecular");
+	currProg->AddUniform("material.kShininess");
+	currProg->AddUniform("lightEnabled");
+	currProg->AddUniform("numLights");
+	currProg->AddUniform("lights[0].type");
+	currProg->AddUniform("lights[0].position_cameraspace");
+	currProg->AddUniform("lights[0].color");
+	currProg->AddUniform("lights[0].power");
+	currProg->AddUniform("lights[0].kC");
+	currProg->AddUniform("lights[0].kL");
+	currProg->AddUniform("lights[0].kQ");
+	currProg->AddUniform("lights[0].spotDirection");
+	currProg->AddUniform("lights[0].cosCutoff");
+	currProg->AddUniform("lights[0].cosInner");
+	currProg->AddUniform("lights[0].exponent");
+	currProg->AddUniform("lights[1].type");
+	currProg->AddUniform("lights[1].position_cameraspace");
+	currProg->AddUniform("lights[1].color");
+	currProg->AddUniform("lights[1].power");
+	currProg->AddUniform("lights[1].kC");
+	currProg->AddUniform("lights[1].kL");
+	currProg->AddUniform("lights[1].kQ");
+	currProg->AddUniform("lights[1].spotDirection");
+	currProg->AddUniform("lights[1].cosCutoff");
+	currProg->AddUniform("lights[1].cosInner");
+	currProg->AddUniform("lights[1].exponent");
+	currProg->AddUniform("colorTextureEnabled");
+	currProg->AddUniform("colorTexture");
+	currProg->AddUniform("textEnabled");
+	currProg->AddUniform("textColor");
+
+	/*Fog*/
+	currProg->AddUniform("fogParam.color");
+	currProg->AddUniform("fogParam.start");
+	currProg->AddUniform("fogParam.end");
+	currProg->AddUniform("fogParam.density");
+	currProg->AddUniform("fogParam.type");
+	currProg->AddUniform("fogParam.enabled");
+
+	/*Shadow*/
+	currProg->AddUniform("lightDepthMVP");
+	currProg->AddUniform("lightDepthMVP");
+	currProg->AddUniform("shadowMap");
+
+	m_gPassShaderID->AddUniform("colorTextureEnabled[0]");
+	m_gPassShaderID->AddUniform("colorTexture[0]");
+	m_gPassShaderID->AddUniform("colorTextureEnabled[1]");
+	m_gPassShaderID->AddUniform("colorTexture[1]");
+	m_gPassShaderID->AddUniform("colorTextureEnabled[2]");
+	m_gPassShaderID->AddUniform("colorTexture[2]");
+
+	//m_parameters[U_FOG_COLOR] = glGetUniformLocation(m_programID, "fogParam.color");
+	//m_parameters[U_FOG_START] = glGetUniformLocation(m_programID, "fogParam.start");
+	//m_parameters[U_FOG_END] = glGetUniformLocation(m_programID, "fogParam.end");
+	//m_parameters[U_FOG_DENSITY] = glGetUniformLocation(m_programID, "fogParam.density");
+	//m_parameters[U_FOG_TYPE] = glGetUniformLocation(m_programID, "fogParam.type");
+	//m_parameters[U_FOG_ENABLED] = glGetUniformLocation(m_programID, "fogParam.enabled");
+
+	///*Shadow*/
+	//m_parameters[U_LIGHT_DEPTH_MVP_GPASS] = glGetUniformLocation(m_gPassShaderID, "lightDepthMVP");
+	//m_parameters[U_LIGHT_DEPTH_MVP] = glGetUniformLocation(m_programID, "lightDepthMVP");
+	//m_parameters[U_SHADOW_MAP] = glGetUniformLocation(m_programID, "shadowMap");
+
+	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[0]");
+	//m_parameters[U_SHADOW_COLOR_TEXTURE] = glGetUniformLocation(m_gPassShaderID, "colorTexture[0]");
+	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED1] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[1]");
+	//m_parameters[U_SHADOW_COLOR_TEXTURE1] = glGetUniformLocation(m_gPassShaderID, "colorTexture[1]");
+	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED2] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[2]");
+	//m_parameters[U_SHADOW_COLOR_TEXTURE2] = glGetUniformLocation(m_gPassShaderID, "colorTexture[2]");
+	
+	// Tell the graphics manager to use the shader we just loaded
+	GraphicsManager::GetInstance()->SetActiveShader("default");
+
+	lights[0] = new Light();
+	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
+	lights[0]->type = Light::LIGHT_DIRECTIONAL;
+	lights[0]->position.Set(0, 20, 0);
+	lights[0]->color.Set(1, 1, 1);
+	lights[0]->power = 1;
+	lights[0]->kC = 1.f;
+	lights[0]->kL = 0.01f;
+	lights[0]->kQ = 0.001f;
+	lights[0]->cosCutoff = cos(Math::DegreeToRadian(45));
+	lights[0]->cosInner = cos(Math::DegreeToRadian(30));
+	lights[0]->exponent = 3.f;
+	lights[0]->spotDirection.Set(0.f, 1.f, 0.f);
+	lights[0]->name = "lights[0]";
+
+	lights[1] = new Light();
+	GraphicsManager::GetInstance()->AddLight("lights[1]", lights[1]);
+	lights[1]->type = Light::LIGHT_DIRECTIONAL;
+	lights[1]->position.Set(1, 1, 0);
+	lights[1]->color.Set(1, 1, 0.5f);
+	lights[1]->power = 0.4f;
+	lights[1]->name = "lights[1]";
+
+	currProg->UpdateInt("numLights", 1);
+	currProg->UpdateInt("textEnabled", 0);
+
+	Color fogColor(0.5f, 0.5f, 0.5f); //Vec3 Color
+	currProg->UpdateVector3("fogParam.color", &fogColor.r);
+	currProg->UpdateFloat("fogParam.start", 10);
+	currProg->UpdateFloat("fogParam.end", 2000);
+	currProg->UpdateFloat("fogParam.density", 0.005f);
+	currProg->UpdateInt("fogParam.type", 0);
+	currProg->UpdateInt("fogParam.enabled", 0);
+	
+	// Create the playerinfo instance, which manages all information about the player
+	playerInfo = CPlayerInfo::GetInstance();
+	playerInfo->Init();
+
+	// Create and attach the camera to the scene
+	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
+	playerInfo->AttachCamera(&camera);
+	GraphicsManager::GetInstance()->AttachCamera(&camera);
+
+	// Load all the meshes
+	MeshBuilder::GetInstance()->GenerateAxes("reference");
+	MeshBuilder::GetInstance()->GenerateCrossHair("crosshair");
+	MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
+	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
+	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//calibri.tga");
+	MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
+
+	/*Enemy Turret*/
+	MeshBuilder::GetInstance()->GenerateOBJ("turret", "OBJ//turret.obj");
+	MeshBuilder::GetInstance()->GetMesh("turret")->textureID = LoadTGA("Image//turret.tga");
+
+	/*Crate*/
+	MeshBuilder::GetInstance()->GenerateOBJ("crate", "OBJ//crate.obj");
+	MeshBuilder::GetInstance()->GetMesh("crate")->textureID = LoadTGA("Image//crate.tga");
+
+	MeshBuilder::GetInstance()->GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
+	MeshBuilder::GetInstance()->GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
+	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(0, 0, 0), 18, 36, 0.5f);
+	MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
+	MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ENEMY", Color(1.0f, 0.0f, 0.0f), 1.0f);
+	MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
+	MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
+
+	MeshBuilder::GetInstance()->GenerateQuad("snowGround", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("snowGround")->textureID = LoadTGA("Image//snowGround.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_LEFT", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_RIGHT", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_TOP", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BOTTOM", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_FRONT")->textureID = LoadTGA("Image//SkyBox//skybox_front.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BACK")->textureID = LoadTGA("Image//SkyBox//skybox_back.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_LEFT")->textureID = LoadTGA("Image//SkyBox//skybox_left.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureID = LoadTGA("Image//SkyBox//skybox_right.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//skybox_top.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//skybox_bottom.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("PISTOL", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("PISTOL")->textureID = LoadTGA("Image//PISTOL.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("ASSAULT", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("ASSAULT")->textureID = LoadTGA("Image//ASSAULT.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("PAUSE", Color(1, 0, 0), 1.f);
+
+	MeshBuilder::GetInstance()->GenerateQuad("PLAYER_PISTOL", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("PLAYER_PISTOL")->textureID = LoadTGA("Image//PLAYER_PISTOL.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("PLAYER_ASSAULT", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("PLAYER_ASSAULT")->textureID = LoadTGA("Image//PLAYER_ASSAULT.tga");
+
+	/*Bullet*/
+	//MeshBuilder::GetInstance()->GenerateCube("POWERUP_BULLET", Color(0.f, 0.f, 1.f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateOBJ("POWERUP_BULLET", "OBJ//POWERUP_BULLET.obj");
+	MeshBuilder::GetInstance()->GetMesh("POWERUP_BULLET")->textureID = LoadTGA("Image//POWERUP_BULLET.tga");
+	/*Health*/
+	//MeshBuilder::GetInstance()->GenerateCube("health", Color(0.f, 1.f, 0.f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateOBJ("POWERUP_HEALTH", "OBJ//POWERUP_HEALTH.obj");
+	MeshBuilder::GetInstance()->GetMesh("POWERUP_HEALTH")->textureID = LoadTGA("Image//POWERUP_HEALTH.tga");
+	/*Hit*/
+	MeshBuilder::GetInstance()->GenerateQuad("HIT", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("HIT")->textureID = LoadTGA("Image//HIT.tga");
+	/*Game Over*/
+	MeshBuilder::GetInstance()->GenerateQuad("GAMEOVER", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("GAMEOVER")->textureID = LoadTGA("Image//GAMEOVER.tga");
+
+	// Create entities into the scene
+	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
+	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
+	////GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
+	//Create::Entity("ring", Vector3(0.0f, 0.0f, 0.0f)); // Reference
+
+	groundEntity = Create::Ground("snowGround", "snowGround");
+
+//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
+	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f), true);
+
+	///*Chair Test*/
+	//CFurniture* chair = Create::Furniture("Chair", Vector3(20.f, 0.f, 0.f), Vector3(1.f, 1.f, 1.f));
+	//chair->SetCollider(true);
+	//chair->SetLight(false);
+	//chair->SetAABB(Vector3(5.f, 5.f, 5.f), Vector3(-5.f, -5.f, -5.f));
+	//
+
+
+	SkyBoxEntity* theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
+											 "SKYBOX_LEFT", "SKYBOX_RIGHT",
+											 "SKYBOX_TOP", "SKYBOX_BOTTOM");
+	// Customise the ground entity
+	groundEntity->SetPosition(Vector3(0, -10, 0));
+	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
+	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
+	playerInfo->SetTerrain(groundEntity);
+
+	//Create::Entity("PAUSE", Vector3(Application::GetInstance().GetWindowWidth() / 2.0f, Application::GetInstance().GetWindowHeight() / 2.0f, 1.f),
+	//	Vector3(100.f, 100.f, 100.f));
+
+	// Setup the 2D entities
+	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
+	float fontSize = 25.0f;
+	float halfFontSize = fontSize / 2.0f;
+	for (int i = 0; i < 30; ++i)
+	{
+		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(1.0f, 0.f,0.0f));
+	}
+
+	for (int i = 0; i < 17; ++i)
+	{
+		controlText[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, (-halfWindowHeight / 2) + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.f, 0.f, 0.0f));
+	}
+
+
+
+	// Hardware Abstraction
+	theKeyboard = new CKeyboard();
+	theKeyboard->Create(playerInfo);
+
+	// Activate the Blend Function
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Minimap
+	theMinimap = Create::Minimap(false);
+	theMinimap->SetBackground(MeshBuilder::GetInstance()->GenerateQuad("MINIMAP", Color(1, 1, 1), 1.f));
+	theMinimap->GetBackground()->textureID = LoadTGA("Image//snowGround.tga");
+	theMinimap->SetBorder(MeshBuilder::GetInstance()->GenerateCircle("MINIMAPBORDER", Color(1, 1, 1), 1.05f));
+	theMinimap->SetAvatar(MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 0), 0.25f));
+	theMinimap->GetAvatar()->textureID = LoadTGA("Image//Avatar.tga");
+	theMinimap->SetStencil(MeshBuilder::GetInstance()->GenerateCircle("MINIMAP_STENCIL", Color(1, 1, 1), 1.0f));
+
+	// CameraEffects
+	theCameraEffects = Create::CameraEffects(false);
+	theCameraEffects->SetBloodScreen(MeshBuilder::GetInstance()->GenerateQuad("CAMERAEFFECTS_BLOODSCREEN", 
+										Color(1, 1, 1), 1.f));
+	theCameraEffects->GetBloodScreen()->textureID = LoadTGA("Image//CameraEffects_Blood.tga");
+	theCameraEffects->SetStatus_BloodScreen(false);
+
+	theMouse = new CMouse();
+	theMouse->Create(playerInfo);
+
+	/*Load Controls*/
+	OptionsManager::GetInstance()->loadConfig("Data//keyconfig.txt");
+	/*Load Highscore*/
+	OptionsManager::GetInstance()->loadHighscore("Data//highscore.txt");
+	primaryWeapon = playerInfo->getPrimaryWeapon();
+	cout << "Primary Weapon From Scene: " << primaryWeapon << endl;
+	weaponManager = playerInfo->getWeaponManager();
+
+	/*Initialise Sounds*/
+	CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
+	CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
+	CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
+	CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
+	CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
+	CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
+	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
+	/*Shadow*/
+	//DepthFBO::GetInstance()->Init(1024, 1024);
+	//m_lightDepthFBO.Init(1024, 1024);
+}
+
+void SceneText::Update(double dt)
+{
+	static bool pause = false;
+
+
+	if (playerInfo->getHealth() > 0)
+	{
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_BACK))
+			pause = true;
+
+		if (pause)
+		{
+			pauseOptions(dt, pause);
+			displayControls();
+		}
+
+		if (!OptionsManager::GetInstance()->getEditingState())
+		{
+			// Update our entities
+			EntityManager::GetInstance()->Update(dt);
+			clearKeyDisplay();
+			/*Create random enemies around the map.*/
+			createEnemies(dt);
+			/*Create random crates for player to hide behind.*/
+			//createCrates(dt);
+			/*Create random bullet power-up for player.*/
+			createBullets(dt);
+			/*Create random health power-up for player.*/
+			createHealth(dt);
+
+			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
+			{
+				cout << "Left Mouse Button was released!" << endl;
+			}
+			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
+			{
+				cout << "Right Mouse Button was released!" << endl;
+			}
+			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
+			{
+				cout << "Middle Mouse Button was released!" << endl;
+			}
+			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
+			{
+				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
+			}
+
+			static float printInterval = 0;
+			printInterval += static_cast<float>(dt);
+
+			if (printInterval > 0.1f)
+			{
+				std::ostringstream weaponType;
+				string weaponName = "";
+
+				weaponType.precision(4);
+				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
+				{
+					//cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
+					if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 1)
+					{
+						weaponName = "Assault Rifle";
+						EntityManager::GetInstance()->RemoveEntity(weaponUI);
+						//weaponUI = Create::Sprite2DObject("ASSAULT", Vector3(-350.0f, -250.0f, 0.f), Vector3(100.0f, 40.0f, 100.0f), true);
+					}
+				}
+				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 0)
+				{
+					weaponName = "Pistol";
+					EntityManager::GetInstance()->RemoveEntity(weaponUI);
+					//weaponUI = Create::Sprite2DObject("PISTOL", Vector3(-350.0f, -250.0f, 0.f), Vector3(50.0f, 50.0f, 50.0f), true);
+				}
+
+				weaponType << weaponName;
+				textObj[4]->SetText(weaponType.str());
+				printInterval = 0.f;
+			}
+
+			/*Display weapon info.*/
+			std::ostringstream ss;
+			ss << weaponManager[playerInfo->GetWeapon()]->GetMagRound() << "/" << weaponManager[playerInfo->GetWeapon()]->GetTotalRound();
+			textObj[5]->SetText(ss.str());
+
+			/*Display player health.*/
+			ss.str("");
+			ss << "Health:" << playerInfo->getHealth();
+			textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
+			textObj[23]->SetText(ss.str());
+
+			/*Display score*/
+			ss.str("");
+			ss << "Score:" << playerInfo->getScore();
+			textObj[24]->SetPosition(Vector3(textObj[23]->GetPosition().x + 325.f, textObj[23]->GetPosition().y, textObj[23]->GetPosition().z));
+			textObj[24]->SetColor(Color(1.f, 0.f, 0.f));
+			textObj[24]->SetText(ss.str());
+
+			ss.str("");
+			ss << "Highscore:" << OptionsManager::GetInstance()->getHighscore();
+			textObj[25]->SetPosition(Vector3(textObj[24]->GetPosition().x- 200.f, textObj[24]->GetPosition().y -570.f, textObj[24]->GetPosition().z));
+			textObj[25]->SetColor(Color(1.f, 0.f, 0.f));
+			textObj[25]->SetText(ss.str());
+
+
+			if (playerInfo->getScore() > OptionsManager::GetInstance()->getHighscore())
+			{
+				OptionsManager::GetInstance()->setHighscore(playerInfo->getScore());
+				OptionsManager::GetInstance()->saveHighscore();
+			}
+
+			// Hardware Abstraction
+			theKeyboard->Read(dt);
+			theMouse->Read(dt);
+
+			// Update the player position and other details based on keyboard and mouse inputs
+			playerInfo->Update(dt);
+
+			// Update NPC
+			//enemyInfo->Update(dt);
+			//anEnemy3D->SetTarget(playerInfo->GetPos());
+			GraphicsManager::GetInstance()->UpdateLights(dt);
+
+			// Update camera effects
+			theCameraEffects->Update(dt);
+		}
+	}
+	else
+	{
+		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
+		{
+			CPlayerInfo::GetInstance()->setHealth(100);
+			CPlayerInfo::GetInstance()->setScore(0.f);
+		}
+	}
+}
+
+void SceneText::Render()
+{
+	/*Debug*/
+	//CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	if (playerInfo->getHealth() <= 0)
+	{
+		Mesh* modelMesh;
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("GAMEOVER");
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		modelStack.PushMatrix();
+		modelStack.Translate(0.f, 0.f, 0.f);
+		modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
+		modelStack.Scale(400.f, 300.f, 1.f);
+		RenderHelper::RenderMesh(modelMesh);
+		modelStack.PopMatrix();
+	}
+
+	currProg->UpdateInt("fogParam.enabled", 1);
+	GraphicsManager::GetInstance()->UpdateLightUniforms();
+	//playerInfo->setHealth(playerInfo->getHealth() - 10);
+	// Setup 3D pipeline then render 3D
+	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	GraphicsManager::GetInstance()->AttachCamera(&camera);
+
+	EntityManager::GetInstance()->Render();
+	currProg->UpdateInt("fogParam.enabled", 0);
+	// Enable blend mode
+	glEnable(GL_BLEND);
+
+	// Setup 2D pipeline then render 2D
+	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
+	GraphicsManager::GetInstance()->DetachCamera();
+	EntityManager::GetInstance()->RenderUI();
+
+	// Render Camera Effects
+	theCameraEffects->RenderUI();
+
+	// Render Minimap
+	theMinimap->RenderUI();
+
+	/*Render Weapon*/
+	renderWeapon();
+
+	/*Render Weapon UI*/
+	renderWeaponUI();
+
+	/*Render Hit*/
+	if (EntityManager::GetInstance()->getHit())
+		renderHit();
+
+	// Disable blend mode
+	glDisable(GL_BLEND);
+	
+}
+
+void SceneText::pauseOptions(double dt, bool &pause)
+{
+	OptionsManager::GetInstance()->setEditingState(true);
+	static bool choseType = false;
+	static bool changedInput = false;
+
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_TAB))
+	{
+		choseType = false;
+		changedInput = false;
+		OptionsManager::GetInstance()->setEditingState(false);
+		pause = false;
+	}
+
+	if (!choseType && !changedInput)
+	{
+		static int option = 20;
+		cout << "Choose Type to Edit." << endl;
+		if (KeyboardController::GetInstance()->IsKeyDown('1'))
+			option = 0;
+		if (KeyboardController::GetInstance()->IsKeyDown('2'))
+			option = 1;
+		if (KeyboardController::GetInstance()->IsKeyDown('3'))
+			option = 2;
+		if (KeyboardController::GetInstance()->IsKeyDown('4'))
+			option = 3;
+		if (KeyboardController::GetInstance()->IsKeyDown('5'))
+			option = 4;
+		if (KeyboardController::GetInstance()->IsKeyDown('6'))
+			option = 5;
+		if (KeyboardController::GetInstance()->IsKeyDown('7'))
+			option = 6;
+		if (KeyboardController::GetInstance()->IsKeyDown('8'))
+			option = 7;
+		if (KeyboardController::GetInstance()->IsKeyDown('9'))
+			option = 8;
+		if (KeyboardController::GetInstance()->IsKeyDown('0'))
+			option = 9;
+		if (KeyboardController::GetInstance()->IsKeyDown('Q'))
+			option = 10;
+		if (KeyboardController::GetInstance()->IsKeyDown('W'))
+			option = 11;
+		if (KeyboardController::GetInstance()->IsKeyDown('E'))
+			option = 12;
+		if (KeyboardController::GetInstance()->IsKeyDown('R'))
+			option = 13;
+		if (KeyboardController::GetInstance()->IsKeyDown('T'))
+			option = 14;
+
+		for (vector<Controls*>::iterator it = OptionsManager::GetInstance()->getControls().begin(); it != OptionsManager::GetInstance()->getControls().end(); ++it)
+		{
+			Controls* findControl = (Controls*)*it;
+			if (findControl->checkType(option))
+			{
+				input = findControl;
+				choseType = true;
+			}
+		}
+
+	}
+
+	if (choseType && !changedInput)
+	{
+		cout << input << endl;
+		//cout << "Current Input: " << input->getKey() << endl;
+		if (KeyboardController::GetInstance()->IsKeyPressed('A'))
+			input->setKey('A');
+		if (KeyboardController::GetInstance()->IsKeyPressed('B'))
+			input->setKey('B');
+		if (KeyboardController::GetInstance()->IsKeyPressed('C'))
+			input->setKey('C');
+		if (KeyboardController::GetInstance()->IsKeyPressed('D'))
+			input->setKey('D');
+		if (KeyboardController::GetInstance()->IsKeyPressed('E'))
+			input->setKey('E');
+		if (KeyboardController::GetInstance()->IsKeyPressed('F'))
+			input->setKey('F');
+		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
+			input->setKey('G');
+		if (KeyboardController::GetInstance()->IsKeyPressed('H'))
+			input->setKey('H');
+		if (KeyboardController::GetInstance()->IsKeyPressed('I'))
+			input->setKey('I');
+		if (KeyboardController::GetInstance()->IsKeyPressed('J'))
+			input->setKey('J');
+		if (KeyboardController::GetInstance()->IsKeyPressed('K'))
+			input->setKey('K');
+		if (KeyboardController::GetInstance()->IsKeyPressed('L'))
+			input->setKey('L');
+		if (KeyboardController::GetInstance()->IsKeyPressed('M'))
+			input->setKey('M');
+		if (KeyboardController::GetInstance()->IsKeyPressed('N'))
+			input->setKey('N');
+		if (KeyboardController::GetInstance()->IsKeyPressed('O'))
+			input->setKey('O');
+		if (KeyboardController::GetInstance()->IsKeyPressed('P'))
+			input->setKey('P');
+		if (KeyboardController::GetInstance()->IsKeyPressed('Q'))
+			input->setKey('Q');
+		if (KeyboardController::GetInstance()->IsKeyPressed('R'))
+			input->setKey('R');
+		if (KeyboardController::GetInstance()->IsKeyPressed('S'))
+			input->setKey('S');
+		if (KeyboardController::GetInstance()->IsKeyPressed('T'))
+			input->setKey('T');
+		if (KeyboardController::GetInstance()->IsKeyPressed('U'))
+			input->setKey('U');
+		if (KeyboardController::GetInstance()->IsKeyPressed('V'))
+			input->setKey('V');
+		if (KeyboardController::GetInstance()->IsKeyPressed('W'))
+			input->setKey('W');
+		if (KeyboardController::GetInstance()->IsKeyPressed('X'))
+			input->setKey('X');
+		if (KeyboardController::GetInstance()->IsKeyPressed('Y'))
+			input->setKey('Y');
+		if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
+			input->setKey('Z');
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_SPACE))
+			input->setKey(32);
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_LEFT))
+			input->setKey(39);
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RIGHT))
+			input->setKey(37);
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP))
+			input->setKey(40);
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN))
+			input->setKey(38);
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
+			input->setKey(160);
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_LCONTROL))
+			input->setKey(162);
+		if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
+			input->setKey(1);
+
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
+		{
+			OptionsManager::GetInstance()->setEditingState(false);
+			OptionsManager::GetInstance()->saveConfig();
+			choseType = false;
+			changedInput = false;
+			pause = false;
+		}
+
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
+		{
+			OptionsManager::GetInstance()->setEditingState(false);
+			OptionsManager::GetInstance()->defaultConfig();
+			OptionsManager::GetInstance()->loadConfig("Data//keyconfig");
+			choseType = false;
+			changedInput = false;
+			pause = false;
+		}
+	}
+
+	cout << "TEST" << endl;
+
+}
+
+void SceneText::clearKeyDisplay(void)
+{
+	for (int i = 0; i < 17; ++i)
+	{
+		controlText[i]->SetText("");
+	}
+}
+
+
+void SceneText::Exit()
+{
+	// Detach camera from other entities
+	GraphicsManager::GetInstance()->DetachCamera();
+	playerInfo->DetachCamera();
+
+	if (playerInfo->DropInstance() == false)
+	{
+#if _DEBUGMODE==1
+		cout << "Unable to drop PlayerInfo class" << endl;
+#endif
+	}
+
+	// Delete the lights
+	delete lights[0];
+	delete lights[1];
+}
