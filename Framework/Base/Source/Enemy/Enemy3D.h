@@ -100,6 +100,9 @@ public:
 	/*Check if player is inside defined boundary around enemy.*/
 	bool checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary);
 
+	/*Return nearest enemy*/
+	CEnemy3D* returnNearestEnemy(void);
+
 	/*Set Alert Boundary*/
 	void setAlertBoundary(Vector3 _minAlertBoundary, Vector3 _maxAlertBoundary);
 	/*Get Min Alert Boundary*/
@@ -118,6 +121,21 @@ public:
 
 	/*Get Attributes*/
 	float getAttributes(ATTRIBUTE_TYPES type);
+
+	/*Set Player Property*/
+	void setPlayerProperty(bool _playerProperty);
+
+	/*Get Player Property*/
+	bool getPlayerProperty(void);
+
+	/*Set Shoot Delay*/
+	void setShootDelay(float _shootDelay);
+
+	/*Get Player Property*/
+	float getShootDelay(void);
+
+	/*Render Health Bar*/
+	void renderHealthBar(void);
 private:
 	ATTRIBUTES attributes;
 	int health;
@@ -125,6 +143,9 @@ private:
 	Vector3 minAlertBoundary, maxAlertBoundary;
 	double portableDT;
 	float angleToFace;
+	/*Check if enemy belongs to player.*/
+	bool playerProperty;
+	float shootDelay;
 };
 
 namespace Create

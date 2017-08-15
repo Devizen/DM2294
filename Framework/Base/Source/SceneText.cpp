@@ -34,6 +34,7 @@
 
 /*Sound*/
 #include "SoundEngine.h"
+
 #include <iostream>
 using namespace std;
 
@@ -43,6 +44,8 @@ SceneText::SceneText()
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
+	, m_worldHeight(0.f)
+	, m_worldWidth(0.f)
 {
 }
 
@@ -54,276 +57,18 @@ SceneText::SceneText(SceneManager* _sceneMgr)
 	_sceneMgr->AddScene("Start", this);
 }
 
-void SceneText::RenderPassGPass(void)
-{
-}
-
-void SceneText::displayControls(void)
-{
-	std::ostringstream ss;
-	ss << "[Enter] to save changes.";
-	controlText[16]->SetText(ss.str());
-	ss.str("");
-	ss << "[TAB] to go back";
-	controlText[15]->SetText(ss.str());
-	ss.str("");
-	ss << "LEFT [1]: " << checkInput(OptionsManager::GetInstance()->getInput(0));
-	controlText[14]->SetText(ss.str());
-	ss.str("");
-	ss << "RIGHT [2]: " << checkInput(OptionsManager::GetInstance()->getInput(1));
-	controlText[13]->SetText(ss.str());
-	ss.str("");
-	ss << "UP [3]: " << checkInput(OptionsManager::GetInstance()->getInput(2));
-	controlText[12]->SetText(ss.str());
-	ss.str("");
-	ss << "DOWN [4]: " << checkInput(OptionsManager::GetInstance()->getInput(3));
-	controlText[11]->SetText(ss.str());
-	ss.str("");
-	ss << "LOOKLEFT [5]: " << checkInput(OptionsManager::GetInstance()->getInput(4));
-	controlText[10]->SetText(ss.str());
-	ss.str("");
-	ss << "LOOKRIGHT [6]: " << checkInput(OptionsManager::GetInstance()->getInput(5));
-	controlText[9]->SetText(ss.str());
-	ss.str("");
-	ss << "LOOKUP [7]: " << checkInput(OptionsManager::GetInstance()->getInput(6));
-	controlText[8]->SetText(ss.str());
-	ss.str("");
-	ss << "LOOKDOWN [8]: " << checkInput(OptionsManager::GetInstance()->getInput(7));
-	controlText[7]->SetText(ss.str());
-	ss.str("");
-	ss << "RUN [9]: " << checkInput(OptionsManager::GetInstance()->getInput(8));
-	controlText[6]->SetText(ss.str());
-	ss.str("");
-	ss << "CROUCH [0]: " << checkInput(OptionsManager::GetInstance()->getInput(9));
-	controlText[5]->SetText(ss.str());
-	ss.str("");
-	ss << "JUMP [Q]: " << checkInput(OptionsManager::GetInstance()->getInput(10));
-	controlText[4]->SetText(ss.str());
-	ss.str("");
-	ss << "RELOAD [W]: " << checkInput(OptionsManager::GetInstance()->getInput(11));
-	controlText[3]->SetText(ss.str());
-	ss.str("");
-	ss << "CHANGE [E]: " << checkInput(OptionsManager::GetInstance()->getInput(12));
-	controlText[2]->SetText(ss.str());
-	ss.str("");
-	ss << "RESET [R]: " << checkInput(OptionsManager::GetInstance()->getInput(13));
-	controlText[1]->SetText(ss.str());
-	ss.str("");
-	ss << "FIRE [T]: " << checkInput(OptionsManager::GetInstance()->getInput(14));
-	controlText[0]->SetText(ss.str());
-}
-
-void SceneText::renderWeapon(void)
-{
-	Mesh* modelMesh;
-	if (playerInfo->GetWeapon() == 0)
-		 modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_PISTOL");
-	if (playerInfo->GetWeapon() == 1)
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_ASSAULT");
-
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelStack.PushMatrix();
-	if (playerInfo->GetWeapon() == 0)
-	{
-		modelStack.Translate(250.f, -240.f, 0.f);
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-		{
-			CSoundEngine::GetInstance()->PlayASound("PISTOL");
-			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
-		}
-		modelStack.Scale(290.f, 200.f, 50.f);
-	}
-	if (playerInfo->GetWeapon() == 1)
-	{
-		modelStack.Translate(250.f, -240.f, 0.f);
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-		{
-			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
-			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-		}
-		modelStack.Scale(400.f, 250.f, 1.f);
-	}
-	RenderHelper::RenderMesh(modelMesh);
-	modelStack.PopMatrix();
-}
-
-void SceneText::renderWeaponUI(void)
-{
-	Mesh* modelMesh;
-	if (playerInfo->GetWeapon() == 0)
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("PISTOL");
-	if (playerInfo->GetWeapon() == 1)
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("ASSAULT");
-
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelStack.PushMatrix();
-	if (playerInfo->GetWeapon() == 0)
-	{
-		modelStack.Translate(-350.0f, -250.0f, 0.f);
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-		modelStack.Scale(50.0f, 50.0f, 1.f);
-	}
-	if (playerInfo->GetWeapon() == 1)
-	{
-		modelStack.Translate(-350.0f, -250.0f, 0.f);
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-		modelStack.Scale(100.0f, 40.0f, 1.f);
-	}
-	RenderHelper::RenderMesh(modelMesh);
-	modelStack.PopMatrix();
-}
-
-void SceneText::createEnemies(double dt)
-{
-	static float increaseEnemies = 0.f;
-	increaseEnemies += (float)dt;
-
-	static bool once = false;
-	if (!once)
-	{
-		if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
-		{
-			Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-			Vector3 _minAABB(-5.f, 0.f, -5.f);
-			Vector3 _maxAABB(5.f, 5.f, 5.f);
-			/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
-			while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
-			{
-				newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-			}
-			// Create a CEnemy instance
-			//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
-			anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f));
-			//anEnemy3D->Init();
-			anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
-			anEnemy3D->SetCollider(true);
-			anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
-			CEnemy3D::ATTRIBUTES _attributes;
-			_attributes.MAX_HEALTH = 10.f;
-			_attributes.HEALTH = 10.f;
-			_attributes.ATTACK = 1.f;
-			_attributes.DEFENSE = 1.f;
-			anEnemy3D->setAttributes(_attributes);
-			anEnemy3D->SetTerrain(groundEntity);
-		}
-		once = true;
-	}
-}
-
-void SceneText::createCrates(double dt)
-{
-	static float increaseCrates = 0.f;
-	increaseCrates += (float)dt;
-	static int crateCount = 0;
-
-	if (crateCount < increaseCrates / 2.f)
-	{
-
-		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-		Vector3 _minAABB(-6.f, -6.f, -6.f);
-		Vector3 _maxAABB(6.f, 6.f, 6.f);
-		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
-		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
-		{
-			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-		}
-		CFurniture* crate = Create::Furniture("crate", newPosition, Vector3(5.f, 5.f, 5.f));
-		crate->SetCollider(true);
-		crate->SetAABB(_maxAABB, _minAABB);
-		++crateCount;
-	}
-}
-
-void SceneText::createBullets(double dt)
-{
-	static float increaseBullets = 0.f;
-	increaseBullets += (float)dt;
-	static int bulletCount = 0;
-
-	if (bulletCount < increaseBullets / 4.f)
-	{
-		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-		Vector3 _minAABB(-5.f, -5.f, -5.f);
-		Vector3 _maxAABB(5.f, 5.f, 5.f);
-		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
-		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
-		{
-			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-		}
-		CBullet* bullet = Create::Bullet("POWERUP_BULLET", newPosition, Vector3(5.f, 5.f, 5.f));
-		bullet->SetCollider(true);
-		bullet->SetAABB(_maxAABB, _minAABB);
-		bullet->SetItem(EntityBase::BULLET);
-		++bulletCount;
-	}
-}
-
-void SceneText::createHealth(double dt)
-{
-	static float increaseHealth = 0.f;
-	increaseHealth += (float)dt;
-	static int healthCount = 0;
-
-	if (healthCount < increaseHealth / 4.f)
-	{
-		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-		Vector3 _minAABB(-5.f, -5.f, -5.f);
-		Vector3 _maxAABB(5.f, 5.f, 5.f);
-		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
-		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
-		{
-			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-		}
-		CHealth* health = Create::Health("POWERUP_HEALTH", newPosition, Vector3(5.f, 5.f, 5.f));
-		health->SetCollider(true);
-		health->SetAABB(_maxAABB, _minAABB);
-		health->SetItem(EntityBase::HEALTH);
-		++healthCount;
-	}
-}
-
-void SceneText::renderHit(void)
-{
-
-	Mesh* modelMesh;
-	modelMesh = MeshBuilder::GetInstance()->GetMesh("HIT");
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 150.f, 0.f);
-	modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
-	modelStack.Scale(200.f, 200.f, 1.f);
-	RenderHelper::RenderMesh(modelMesh);
-	modelStack.PopMatrix();
-}
-
 SceneText::~SceneText()
 {
-	if (theCameraEffects)
-	{
-		delete theCameraEffects;
-		theCameraEffects = NULL;
-	}
-	if (theMinimap)
-	{
-		delete theMinimap;
-		theMinimap = NULL;
-	}
-	if (theMouse)
-	{
-		delete theMouse;
-		theMouse = NULL;
-	}
-	if (theKeyboard)
-	{
-		delete theKeyboard;
-		theKeyboard = NULL;
-	}
 }
 
 void SceneText::Init()
 {
+	////Calculating aspect ratio
+	//m_worldHeight = 100.f;
+	//m_worldWidth = m_worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
+	m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
+	m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
+
 	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
 	m_gPassShaderID = GraphicsManager::GetInstance()->LoadShader("gpass",	"Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
@@ -375,16 +120,16 @@ void SceneText::Init()
 
 	/*Shadow*/
 	currProg->AddUniform("lightDepthMVP");
-	currProg->AddUniform("lightDepthMVP");
 	currProg->AddUniform("shadowMap");
 
+	m_gPassShaderID->AddUniform("lightDepthMVP");
 	m_gPassShaderID->AddUniform("colorTextureEnabled[0]");
 	m_gPassShaderID->AddUniform("colorTexture[0]");
 	m_gPassShaderID->AddUniform("colorTextureEnabled[1]");
 	m_gPassShaderID->AddUniform("colorTexture[1]");
 	m_gPassShaderID->AddUniform("colorTextureEnabled[2]");
 	m_gPassShaderID->AddUniform("colorTexture[2]");
-
+	
 	//m_parameters[U_FOG_COLOR] = glGetUniformLocation(m_programID, "fogParam.color");
 	//m_parameters[U_FOG_START] = glGetUniformLocation(m_programID, "fogParam.start");
 	//m_parameters[U_FOG_END] = glGetUniformLocation(m_programID, "fogParam.end");
@@ -410,7 +155,7 @@ void SceneText::Init()
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	lights[0]->position.Set(0, 20, 0);
+	lights[0]->position.Set(0, 0, 2);
 	lights[0]->color.Set(1, 1, 1);
 	lights[0]->power = 1;
 	lights[0]->kC = 1.f;
@@ -548,6 +293,7 @@ void SceneText::Init()
 	groundEntity->SetPosition(Vector3(0, -10, 0));
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
+	groundEntity->SetLight(true);
 	playerInfo->SetTerrain(groundEntity);
 
 	//Create::Entity("PAUSE", Vector3(Application::GetInstance().GetWindowWidth() / 2.0f, Application::GetInstance().GetWindowHeight() / 2.0f, 1.f),
@@ -619,10 +365,14 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+	//Calculating aspect ratio
+	m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
+	m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
+
 	static bool pause = false;
 
 
-	if (playerInfo->getHealth() > 0)
+	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) > 0)
 	{
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_BACK))
 			pause = true;
@@ -641,11 +391,33 @@ void SceneText::Update(double dt)
 			/*Create random enemies around the map.*/
 			createEnemies(dt);
 			/*Create random crates for player to hide behind.*/
-			//createCrates(dt);
+			createCrates(dt);
 			/*Create random bullet power-up for player.*/
 			createBullets(dt);
 			/*Create random health power-up for player.*/
 			createHealth(dt);
+
+			cout << "Light Position X: " << lights[0]->position.x << endl;
+			cout << "Light Position Y: " << lights[0]->position.x << endl;
+			cout << "Light Position Z: " << lights[0]->position.x << endl;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('I'))
+				lights[0]->position.z += 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('K'))
+				lights[0]->position.z -= 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('L'))
+				lights[0]->position.x += 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('J'))
+				lights[0]->position.x -= 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('U'))
+				lights[0]->position.x -= 100.f * dt;
+
+			if (KeyboardController::GetInstance()->IsKeyDown('O'))
+				lights[0]->position.x += 100.f * dt;
 
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
 			{
@@ -702,7 +474,7 @@ void SceneText::Update(double dt)
 
 			/*Display player health.*/
 			ss.str("");
-			ss << "Health:" << playerInfo->getHealth();
+			ss << "Health:" << playerInfo->getAttribute(CAttributes::TYPE_HEALTH);
 			textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
 			textObj[23]->SetText(ss.str());
 
@@ -746,7 +518,7 @@ void SceneText::Update(double dt)
 	{
 		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
 		{
-			CPlayerInfo::GetInstance()->setHealth(100);
+			CPlayerInfo::GetInstance()->setHealthTo(100.f);
 			CPlayerInfo::GetInstance()->setScore(0.f);
 		}
 	}
@@ -754,60 +526,304 @@ void SceneText::Update(double dt)
 
 void SceneText::Render()
 {
-	/*Debug*/
-	//CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	if (playerInfo->getHealth() <= 0)
-	{
-		Mesh* modelMesh;
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("GAMEOVER");
-		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-		modelStack.PushMatrix();
-		modelStack.Translate(0.f, 0.f, 0.f);
-		modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
-		modelStack.Scale(400.f, 300.f, 1.f);
-		RenderHelper::RenderMesh(modelMesh);
-		modelStack.PopMatrix();
-	}
+	RenderPassGPass();
+	RenderPassMain();
+	///*Debug*/
+	////CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) <= 0)
+	//{
+	//	Mesh* modelMesh;
+	//	modelMesh = MeshBuilder::GetInstance()->GetMesh("GAMEOVER");
+	//	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	//	modelStack.PushMatrix();
+	//	modelStack.Translate(0.f, 0.f, 0.f);
+	//	modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
+	//	modelStack.Scale(400.f, 300.f, 1.f);
+	//	RenderHelper::RenderMesh(modelMesh);
+	//	modelStack.PopMatrix();
+	//}
 
-	currProg->UpdateInt("fogParam.enabled", 1);
-	GraphicsManager::GetInstance()->UpdateLightUniforms();
-	//playerInfo->setHealth(playerInfo->getHealth() - 10);
-	// Setup 3D pipeline then render 3D
-	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	GraphicsManager::GetInstance()->AttachCamera(&camera);
+	//currProg->UpdateInt("fogParam.enabled", 1);
+	//GraphicsManager::GetInstance()->UpdateLightUniforms();
+	////playerInfo->setHealth(playerInfo->getHealth() - 10);
+	//// Setup 3D pipeline then render 3D
+	//GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	//GraphicsManager::GetInstance()->AttachCamera(&camera);
 
-	EntityManager::GetInstance()->Render();
-	currProg->UpdateInt("fogParam.enabled", 0);
-	// Enable blend mode
-	glEnable(GL_BLEND);
+	//EntityManager::GetInstance()->Render();
+	//currProg->UpdateInt("fogParam.enabled", 0);
+	//// Enable blend mode
+	//glEnable(GL_BLEND);
 
-	// Setup 2D pipeline then render 2D
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
-	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
-	GraphicsManager::GetInstance()->DetachCamera();
-	EntityManager::GetInstance()->RenderUI();
+	//// Setup 2D pipeline then render 2D
+	//int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+	//int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	//GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
+	//GraphicsManager::GetInstance()->DetachCamera();
+	//EntityManager::GetInstance()->RenderUI();
 
-	// Render Camera Effects
-	theCameraEffects->RenderUI();
+	//// Render Camera Effects
+	//theCameraEffects->RenderUI();
 
-	// Render Minimap
-	theMinimap->RenderUI();
+	//// Render Minimap
+	//theMinimap->RenderUI();
 
-	/*Render Weapon*/
-	renderWeapon();
+	///*Render Weapon*/
+	//renderWeapon();
 
-	/*Render Weapon UI*/
-	renderWeaponUI();
+	///*Render Weapon UI*/
+	//renderWeaponUI();
 
-	/*Render Hit*/
-	if (EntityManager::GetInstance()->getHit())
-		renderHit();
+	///*Render Hit*/
+	//if (EntityManager::GetInstance()->getHit())
+	//	renderHit();
 
-	// Disable blend mode
-	glDisable(GL_BLEND);
+	//// Disable blend mode
+	//glDisable(GL_BLEND);
 	
+}
+
+void SceneText::displayControls(void)
+{
+	std::ostringstream ss;
+	ss << "[Enter] to save changes.";
+	controlText[16]->SetText(ss.str());
+	ss.str("");
+	ss << "[TAB] to go back";
+	controlText[15]->SetText(ss.str());
+	ss.str("");
+	ss << "LEFT [1]: " << checkInput(OptionsManager::GetInstance()->getInput(0));
+	controlText[14]->SetText(ss.str());
+	ss.str("");
+	ss << "RIGHT [2]: " << checkInput(OptionsManager::GetInstance()->getInput(1));
+	controlText[13]->SetText(ss.str());
+	ss.str("");
+	ss << "UP [3]: " << checkInput(OptionsManager::GetInstance()->getInput(2));
+	controlText[12]->SetText(ss.str());
+	ss.str("");
+	ss << "DOWN [4]: " << checkInput(OptionsManager::GetInstance()->getInput(3));
+	controlText[11]->SetText(ss.str());
+	ss.str("");
+	ss << "LOOKLEFT [5]: " << checkInput(OptionsManager::GetInstance()->getInput(4));
+	controlText[10]->SetText(ss.str());
+	ss.str("");
+	ss << "LOOKRIGHT [6]: " << checkInput(OptionsManager::GetInstance()->getInput(5));
+	controlText[9]->SetText(ss.str());
+	ss.str("");
+	ss << "LOOKUP [7]: " << checkInput(OptionsManager::GetInstance()->getInput(6));
+	controlText[8]->SetText(ss.str());
+	ss.str("");
+	ss << "LOOKDOWN [8]: " << checkInput(OptionsManager::GetInstance()->getInput(7));
+	controlText[7]->SetText(ss.str());
+	ss.str("");
+	ss << "RUN [9]: " << checkInput(OptionsManager::GetInstance()->getInput(8));
+	controlText[6]->SetText(ss.str());
+	ss.str("");
+	ss << "CROUCH [0]: " << checkInput(OptionsManager::GetInstance()->getInput(9));
+	controlText[5]->SetText(ss.str());
+	ss.str("");
+	ss << "JUMP [Q]: " << checkInput(OptionsManager::GetInstance()->getInput(10));
+	controlText[4]->SetText(ss.str());
+	ss.str("");
+	ss << "RELOAD [W]: " << checkInput(OptionsManager::GetInstance()->getInput(11));
+	controlText[3]->SetText(ss.str());
+	ss.str("");
+	ss << "CHANGE [E]: " << checkInput(OptionsManager::GetInstance()->getInput(12));
+	controlText[2]->SetText(ss.str());
+	ss.str("");
+	ss << "RESET [R]: " << checkInput(OptionsManager::GetInstance()->getInput(13));
+	controlText[1]->SetText(ss.str());
+	ss.str("");
+	ss << "FIRE [T]: " << checkInput(OptionsManager::GetInstance()->getInput(14));
+	controlText[0]->SetText(ss.str());
+}
+
+void SceneText::renderWeapon(void)
+{
+	Mesh* modelMesh;
+	if (playerInfo->GetWeapon() == 0)
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_PISTOL");
+	if (playerInfo->GetWeapon() == 1)
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_ASSAULT");
+
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	if (playerInfo->GetWeapon() == 0)
+	{
+		modelStack.Translate(250.f, -240.f, 0.f);
+		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		{
+			CSoundEngine::GetInstance()->PlayASound("PISTOL");
+			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
+		}
+		modelStack.Scale(290.f, 200.f, 50.f);
+	}
+	if (playerInfo->GetWeapon() == 1)
+	{
+		modelStack.Translate(250.f, -240.f, 0.f);
+		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		{
+			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
+			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
+		}
+		modelStack.Scale(400.f, 250.f, 1.f);
+	}
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+}
+
+void SceneText::renderWeaponUI(void)
+{
+	Mesh* modelMesh;
+	if (playerInfo->GetWeapon() == 0)
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("PISTOL");
+	if (playerInfo->GetWeapon() == 1)
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("ASSAULT");
+
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	if (playerInfo->GetWeapon() == 0)
+	{
+		modelStack.Translate(-350.0f, -250.0f, 0.f);
+		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
+		modelStack.Scale(50.0f, 50.0f, 1.f);
+	}
+	if (playerInfo->GetWeapon() == 1)
+	{
+		modelStack.Translate(-350.0f, -250.0f, 0.f);
+		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
+		modelStack.Scale(100.0f, 40.0f, 1.f);
+	}
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+}
+
+void SceneText::createEnemies(double dt)
+{
+	static float increaseEnemies = 0.f;
+	increaseEnemies += (float)dt;
+
+	static int count = 0;
+	if (count < 2)
+	{
+		if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
+		{
+			Vector3 newPosition(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
+			Vector3 _minAABB(-5.f, 0.f, -5.f);
+			Vector3 _maxAABB(5.f, 5.f, 5.f);
+			/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+			while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+			{
+				newPosition.Set(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
+			}
+			// Create a CEnemy instance
+			//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
+			anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f));
+			//anEnemy3D->Init();
+			anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+			anEnemy3D->SetCollider(true);
+			anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
+			CEnemy3D::ATTRIBUTES _attributes;
+			_attributes.MAX_HEALTH = 10.f;
+			_attributes.HEALTH = 10.f;
+			_attributes.ATTACK = 1.f;
+			_attributes.DEFENSE = 1.f;
+			anEnemy3D->setAttributes(_attributes);
+			anEnemy3D->SetTerrain(groundEntity);
+			anEnemy3D->SetLight(true);
+			++count;
+		}
+	}
+}
+
+void SceneText::createCrates(double dt)
+{
+	static float increaseCrates = 0.f;
+	increaseCrates += (float)dt;
+	static int crateCount = 0;
+
+	if (crateCount < increaseCrates / 2.f)
+	{
+
+		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		Vector3 _minAABB(-6.f, -6.f, -6.f);
+		Vector3 _maxAABB(6.f, 6.f, 6.f);
+		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+		{
+			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		}
+		CFurniture* crate = Create::Furniture("crate", newPosition, Vector3(5.f, 5.f, 5.f));
+		crate->SetCollider(true);
+		crate->SetAABB(_maxAABB, _minAABB);
+		crate->SetLight(true);
+		++crateCount;
+	}
+}
+
+void SceneText::createBullets(double dt)
+{
+	static float increaseBullets = 0.f;
+	increaseBullets += (float)dt;
+	static int bulletCount = 0;
+
+	if (bulletCount < increaseBullets / 4.f)
+	{
+		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		Vector3 _minAABB(-5.f, -5.f, -5.f);
+		Vector3 _maxAABB(5.f, 5.f, 5.f);
+		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+		{
+			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		}
+		CBullet* bullet = Create::Bullet("POWERUP_BULLET", newPosition, Vector3(5.f, 5.f, 5.f));
+		bullet->SetCollider(true);
+		bullet->SetAABB(_maxAABB, _minAABB);
+		bullet->SetItem(EntityBase::BULLET);
+		++bulletCount;
+	}
+}
+
+void SceneText::createHealth(double dt)
+{
+	static float increaseHealth = 0.f;
+	increaseHealth += (float)dt;
+	static int healthCount = 0;
+
+	if (healthCount < increaseHealth / 4.f)
+	{
+		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		Vector3 _minAABB(-5.f, -5.f, -5.f);
+		Vector3 _maxAABB(5.f, 5.f, 5.f);
+		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+		{
+			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		}
+		CHealth* health = Create::Health("POWERUP_HEALTH", newPosition, Vector3(5.f, 5.f, 5.f));
+		health->SetCollider(true);
+		health->SetAABB(_maxAABB, _minAABB);
+		health->SetItem(EntityBase::HEALTH);
+		++healthCount;
+	}
+}
+
+void SceneText::renderHit(void)
+{
+
+	Mesh* modelMesh;
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("HIT");
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 150.f, 0.f);
+	modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
+	modelStack.Scale(200.f, 200.f, 1.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
 }
 
 void SceneText::pauseOptions(double dt, bool &pause)
@@ -976,6 +992,222 @@ void SceneText::clearKeyDisplay(void)
 	}
 }
 
+void SceneText::RenderPassGPass(void)
+{
+	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_PRE;
+
+	DepthFBO::GetInstance()->BindForWriting();
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	GraphicsManager* g = GraphicsManager::GetInstance();
+	g->SetActiveShader("gpass");
+
+	/*glUseProgram(g);*/
+
+	if (lights[0]->type == Light::LIGHT_DIRECTIONAL)
+	{
+		DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
+	}
+	else
+	{
+		m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
+	}
+
+	if (lights[1]->type == Light::LIGHT_POINT)
+	{
+		DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
+	}
+	else
+	{
+		DepthFBO::GetInstance()->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
+	}
+
+	m_lightDepthView.SetToLookAt(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z, 0, 0, 0, 0, 1, 0);
+
+
+	RenderWorld();
+}
+
+void SceneText::RenderPassMain(void)
+{
+	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glViewport(0, 0, 800, 600);
+	glViewport(0, 0, m_worldWidth, m_worldHeight);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	GraphicsManager::GetInstance()->SetActiveShader("default");
+	//glUseProgram(m_programID);
+
+	//pass light depth texture 
+	DepthFBO::GetInstance()->BindForReading(GL_TEXTURE8);
+	currProg->UpdateInt("shadowMap", 8);
+	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+
+	// Camera matrix
+	GraphicsManager::GetInstance()->GetViewMatrix().SetToIdentity();
+	GraphicsManager::GetInstance()->GetViewMatrix().SetToLookAt(
+		camera.GetCameraPos().x, camera.GetCameraPos().y, camera.GetCameraPos().z,
+		camera.GetCameraTarget().x, camera.GetCameraTarget().y, camera.GetCameraTarget().z,
+		camera.GetCameraUp().x, camera.GetCameraUp().y, camera.GetCameraUp().z);
+
+	// Model matrix : an identity matrix (model will be at the origin)
+	GraphicsManager::GetInstance()->GetModelStack().LoadIdentity();
+
+	if (lights[0]->type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
+		Vector3 lightDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lightDir;
+		currProg->UpdateVector3("lights[0].position_cameraspace", &lightDirection_cameraspace.x);
+	}
+	else if (lights[0]->type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[0]->position;
+		currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[0]->spotDirection;
+		currProg->UpdateVector3("lights[0].spotDirection", &spotDirection_cameraspace.x);
+	}
+	else
+	{
+		Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[0]->position;
+		currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
+	}
+
+	if (lights[1]->type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(lights[1]->position.x, lights[1]->position.y, lights[1]->position.z);
+		Vector3 lightDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lightDir;
+		currProg->UpdateVector3("lights[1].position_cameraspace", &lightDirection_cameraspace.x);
+	}
+	else if (lights[1]->type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->position;
+		currProg->UpdateVector3("lights[1].position_cameraspace", &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->spotDirection;
+		currProg->UpdateVector3("lights[1].spotDirection", &spotDirection_cameraspace.x);
+	}
+	else
+	{
+		Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->position;
+		currProg->UpdateVector3("lights[1].position_cameraspace", &lightPosition_cameraspace.x);
+	}
+
+
+	//RenderMesh(meshList[GEO_AXES], false);
+
+	RenderWorld();
+	// Render LightBall
+	//modelStack.PushMatrix();
+	//modelStack.Rotate(lightMove, 0.f, 1.f, 0.f);
+	//modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
+	//RenderMesh(meshList[GEO_LIGHTBALL], false);
+	//modelStack.PopMatrix();
+
+	//// Render the crosshair
+	//RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
+
+	//if (debugInfo)
+	//{
+	//	std::ostringstream ss;
+	//	ss.precision(5);
+	//	ss << "Particles: " << m_particleCount;
+	//	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 1.5, 15);
+
+
+	//	ss.str("");
+	//	ss.precision(5);
+	//	ss << "FPS: " << fps;
+	//	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 1.5, 12);
+
+	//	std::ostringstream ss1;
+	//	ss1.precision(4);
+	//	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
+	//	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 1.5, 9);
+
+	//	std::string xPosition = "X: " + to_string((int)camera.position.x);
+	//	std::string yPosition = "Y: " + to_string((int)camera.position.y);
+	//	std::string zPosition = "Z: " + to_string((int)camera.position.z);
+
+	//	RenderTextOnScreen(meshList[GEO_TEXT], xPosition, Color(0, 1, 0), 3, 1.5, 6);
+	//	RenderTextOnScreen(meshList[GEO_TEXT], yPosition, Color(0, 1, 0), 3, 1.5, 3);
+	//	RenderTextOnScreen(meshList[GEO_TEXT], zPosition, Color(0, 1, 0), 3, 1.5, 0);
+	//}
+}
+
+void SceneText::RenderWorld(void)
+{
+	/*Debug*/
+	//CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) <= 0)
+	{
+		Mesh* modelMesh;
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("GAMEOVER");
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		modelStack.PushMatrix();
+		modelStack.Translate(0.f, 0.f, 0.f);
+		modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
+		modelStack.Scale(400.f, 300.f, 1.f);
+		RenderHelper::RenderMesh(modelMesh);
+		modelStack.PopMatrix();
+	}
+
+	currProg->UpdateInt("fogParam.enabled", 1);
+	GraphicsManager::GetInstance()->UpdateLightUniforms();
+	//playerInfo->setHealth(playerInfo->getHealth() - 10);
+	// Setup 3D pipeline then render 3D
+	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	GraphicsManager::GetInstance()->AttachCamera(&camera);
+
+	EntityManager::GetInstance()->Render();
+	currProg->UpdateInt("fogParam.enabled", 0);
+	// Enable blend mode
+	glEnable(GL_BLEND);
+
+	// Setup 2D pipeline then render 2D
+	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
+	GraphicsManager::GetInstance()->DetachCamera();
+	EntityManager::GetInstance()->RenderUI();
+
+	// Render Camera Effects
+	theCameraEffects->RenderUI();
+
+	// Render Minimap
+	theMinimap->RenderUI();
+
+	/*Render Weapon*/
+	renderWeapon();
+
+	/*Render Weapon UI*/
+	renderWeaponUI();
+
+	/*Render Hit*/
+	if (EntityManager::GetInstance()->getHit())
+		renderHit();
+
+	/*Render KO Count*/
+	renderKO_Count();
+
+	// Disable blend mode
+	glDisable(GL_BLEND);
+}
+
+void SceneText::renderKO_Count(void)
+{
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	modelStack.Translate(10.f, 10.f, 0.f);
+	modelStack.Scale(100.f, 100.f, 1.f);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), to_string(CPlayerInfo::GetInstance()->getKO_Count()), Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+}
 
 void SceneText::Exit()
 {
@@ -993,4 +1225,123 @@ void SceneText::Exit()
 	// Delete the lights
 	delete lights[0];
 	delete lights[1];
+
+	if (theCameraEffects)
+	{
+		delete theCameraEffects;
+		theCameraEffects = NULL;
+	}
+	if (theMinimap)
+	{
+		delete theMinimap;
+		theMinimap = NULL;
+	}
+	if (theMouse)
+	{
+		delete theMouse;
+		theMouse = NULL;
+	}
+	if (theKeyboard)
+	{
+		delete theKeyboard;
+		theKeyboard = NULL;
+	}
+
+	if (currProg)
+	{
+		delete currProg;
+		currProg = nullptr;
+	}
+
+	if (m_gPassShaderID)
+	{
+		delete m_gPassShaderID;
+		m_gPassShaderID = nullptr;
+	}
+
+	//if (playerInfo)
+	//{
+	//	delete playerInfo;
+	//	playerInfo = nullptr;
+	//}
+
+	//if (groundEntity)
+	//{
+	//	delete groundEntity;
+	//	groundEntity = nullptr;
+	//}
+
+	//if (theOption)
+	//{
+	//	delete theOption;
+	//	theOption = nullptr;
+	//}
+
+	//if (theCube)
+	//{
+	//	delete theCube;
+	//	theCube = nullptr;
+	//}
+
+	//if (anEnemy3D)
+	//{
+	//	delete anEnemy3D;
+	//	anEnemy3D = nullptr;
+	//}
+
+	//if (input)
+	//{
+	//	delete input;
+	//	input = nullptr;
+	//}
+
+	//if (optionUI)
+	//{
+	//	delete optionUI;
+	//	optionUI = nullptr;
+	//}
+
+	//if (weaponUI)
+	//{
+	//	delete weaponUI;
+	//	weaponUI = nullptr;
+	//}
+
+	//if (hitDisplay)
+	//{
+	//	delete hitDisplay;
+	//	hitDisplay = nullptr;
+	//}
+
+	//if (camera)
+	//{
+	//	delete camera;
+	//	camera = nullptr;
+	//}
+
+	while (theObjects.size() > 0)
+	{
+		GenericEntity* object = theObjects.back();
+		delete object;
+		object = nullptr;
+		theObjects.pop_back();
+	}
+
+	while (controls.size() > 0)
+	{
+		Controls* object = controls.back();
+		delete object;
+		object = nullptr;
+		controls.pop_back();
+	}
+
+	for (int i = 0; i < 17; ++i)
+	{
+		delete controlText[i];
+	}
+
+	for (int i = 0; i < 30; ++i)
+	{
+		delete textObj[i];
+	}
 }

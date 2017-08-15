@@ -6,6 +6,8 @@ DepthFBO::DepthFBO()
 	//Allocate memory for frame buffer object and texture
 	glGenFramebuffers(1, &m_fbo);
 	glGenTextures(1, &m_texture);
+
+	this->Init(1024, 1024);
 }
 
 DepthFBO::~DepthFBO()
@@ -40,6 +42,7 @@ bool DepthFBO::Init(unsigned width, unsigned height)
 		return false;
 	}
 	return true;
+
 }
 
 void DepthFBO::BindForWriting()

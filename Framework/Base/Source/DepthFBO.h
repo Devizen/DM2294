@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include "SingletonTemplate.h"
+#include "Mtx44.h"
 
 class DepthFBO : public Singleton<DepthFBO>
 {
@@ -18,6 +19,15 @@ public:
 	GLuint GetTexture() {return m_texture;}
 	unsigned GetWidth() {return m_width;}
 	unsigned GetHeight() {return m_height;}
+
+	enum RENDER_PASS
+	{
+		RENDER_PASS_PRE,
+		RENDER_PASS_MAIN,
+	};
+	Mtx44 m_lightDepthProj;
+	Mtx44 m_lightDepthView;
+	RENDER_PASS m_renderPass;
 
 private:
     GLuint m_fbo;		// The frame buffer object, to be written to

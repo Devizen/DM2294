@@ -41,6 +41,7 @@ CPlayerInfo::CPlayerInfo(void)
 	//, health(100)
 	, tookDamage(false)
 	, score(0.f)
+	, KO_Count(0)
 {
 }
 
@@ -995,14 +996,6 @@ CWeaponInfo ** CPlayerInfo::getWeaponManager(void)
 //	return health;
 //}
 
-/*
-Get player's CAttribute
-*/
-CAttributes CPlayerInfo::getAttribute()
-{
-	return playerAttribute;
-}
-
 void CPlayerInfo::setTookDamage(bool _tookDamage)
 {
 	tookDamage = _tookDamage;
@@ -1021,4 +1014,14 @@ void CPlayerInfo::setScore(float _score)
 float CPlayerInfo::getScore(void)
 {
 	return score;
+}
+
+void CPlayerInfo::setKO_Count(float _KO_Count)
+{
+	KO_Count = _KO_Count;
+}
+
+int CPlayerInfo::getKO_Count(void)
+{
+	return KO_Count;
 }

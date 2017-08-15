@@ -20,6 +20,7 @@ void EntityManager::Update(double _dt)
 {
 	static float displayHit = 0.f;
 
+	/*Checking projectile*/
 	for (list<CProjectile*>::iterator thisObj = projectileList.begin(); thisObj != projectileList.end(); ++thisObj)
 	{
 		CProjectile* bullet = (CProjectile*)*thisObj;
@@ -46,7 +47,7 @@ void EntityManager::Update(double _dt)
 			if (CheckProjectileToPlayerCollision(bullet, player))
 			{
 				CSoundEngine::GetInstance()->PlayASound("TAKEDAMAGE");
-				player->setHealth(player->getHealth() - 1);
+				player->deductHealthBy(1.f);
 				player->setTookDamage(true);
 				bullet->SetStatus(false);
 				player->setTookDamage(false);
@@ -60,6 +61,9 @@ void EntityManager::Update(double _dt)
 		for (list<CEnemy3D*>::iterator enemyObj = enemyList.begin(); enemyObj != enemyList.end(); ++enemyObj)
 		{
 			CEnemy3D* enemy = (CEnemy3D*)*enemyObj;
+			if (enemy->getPlayerProperty())
+				continue;
+
 			if (CheckProjectileToEnemyCollision(bullet, enemy))
 			{
 				enemy->setHealth(enemy->getHealth() - 1);
@@ -105,10 +109,10 @@ void EntityManager::Update(double _dt)
 			if (item->GetItem() == EntityBase::HEALTH)
 			{
 				CSoundEngine::GetInstance()->PlayASound("HEAL");
-				if (player->getHealth() + 20 > 100)
-					player->setHealth(100);
+				if (player->getAttribute(CAttributes::TYPE_HEALTH) + 20 > 100)
+					player->setHealthTo(100);
 				else
-					player->setHealth(player->getHealth() + 20);
+					player->setHealthTo(player->getAttribute(CAttributes::TYPE_HEALTH) + 20);
 
 				item->SetIsDone(true);
 			}

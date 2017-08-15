@@ -11,7 +11,7 @@
 #include <sstream>
 using namespace std;
 
-class CPlayerInfo : public CCollider
+class CPlayerInfo : public CCollider, public CAttributes
 {
 protected:
 	static CPlayerInfo *s_instance;
@@ -155,11 +155,6 @@ public:
 	/*Get Health*/
 	//int getHealth(void);
 
-	/*
-	Get player's CAttribute
-	*/
-	CAttributes getAttribute();
-
 	/*Set Took Damage*/
 	void setTookDamage(bool _tookDamage);
 	/*Get Took Damage*/
@@ -169,6 +164,11 @@ public:
 	void setScore(float _score);
 	/*Get Score*/
 	float getScore(void);
+
+	/*Set KO Count*/
+	void setKO_Count(float _KO_Count);
+	/*Get KO Count*/
+	int getKO_Count(void);
 
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
@@ -207,7 +207,8 @@ private:
 	/*Score*/
 	float score;
 
-	CAttributes playerAttribute;
+	/*KO Count*/
+	int KO_Count;
 public:
 	// Camera Sway
 	float m_fCameraSwayAngle;

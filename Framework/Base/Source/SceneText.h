@@ -67,7 +67,6 @@ private:
 
 	void pauseOptions(double dt,bool &pause);
 	void clearKeyDisplay(void);
-	void RenderPassGPass(void);
 	SpriteEntity* optionUI;
 	SpriteEntity* weaponUI;
 	SpriteEntity* hitDisplay;
@@ -110,6 +109,16 @@ private:
 
 	/*Current highscore*/
 	int currentHighscore;
+
+	void RenderPassGPass(void);
+	void RenderPassMain(void);
+	void RenderWorld(void);
+
+	/*Render KO Count*/
+	void renderKO_Count(void);
+
+	float m_worldHeight;
+	float m_worldWidth;
 };
 
 #endif
