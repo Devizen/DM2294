@@ -28,6 +28,12 @@ public:
 
 	int GetWindowHeight();
 	int GetWindowWidth();
+
+	void setAspectRatioHeight(float _height);
+	void setAspectRatioWidth(float _width);
+
+	float getAspectRatioHeight();
+	float getAspectRatioWidth();
 	
 private:
 	Application();

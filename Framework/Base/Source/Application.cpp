@@ -23,6 +23,10 @@ const unsigned int frameTime = 1000 / FPS; // time for each frame
 int m_window_width;
 int m_window_height;
 
+/*Aspect Ratio*/
+float m_worldHeight;
+float m_worldWidth;
+
 //Define an error callback
 static void error_callback(int error, const char* description)
 {
@@ -223,4 +227,24 @@ int Application::GetWindowHeight()
 int Application::GetWindowWidth()
 {
 	return m_window_width;
+}
+
+void Application::setAspectRatioHeight(float _height)
+{
+	m_worldHeight = _height;
+}
+
+void Application::setAspectRatioWidth(float _width)
+{
+	m_worldWidth = _width;
+}
+
+float Application::getAspectRatioHeight()
+{
+	return m_worldHeight;
+}
+
+float Application::getAspectRatioWidth()
+{
+	return m_worldWidth;
 }

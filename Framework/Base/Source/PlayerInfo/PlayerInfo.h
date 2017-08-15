@@ -170,6 +170,9 @@ public:
 	/*Get KO Count*/
 	int getKO_Count(void);
 
+	/*Render Player Health*/
+	void renderPlayerHealth();
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;

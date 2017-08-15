@@ -40,12 +40,16 @@ using namespace std;
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
+Mesh* TEMPDEPTHQUAD;
+Mesh* TEMPSPHERE;
+Mesh* TEMPQUAD;
+
 SceneText::SceneText()
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
-	, m_worldHeight(0.f)
-	, m_worldWidth(0.f)
+	//, m_worldHeight(0.f)
+	//, m_worldWidth(0.f)
 {
 }
 
@@ -63,11 +67,12 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
-	////Calculating aspect ratio
-	//m_worldHeight = 100.f;
+	//Calculating aspect ratio
+	Application::GetInstance().setAspectRatioHeight(100.f);
+	Application::GetInstance().setAspectRatioWidth(Application::GetInstance().getAspectRatioHeight() * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight());
 	//m_worldWidth = m_worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
-	m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
-	m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
+	//m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
+	//m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
 
 	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
@@ -155,7 +160,7 @@ void SceneText::Init()
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	lights[0]->position.Set(0, 0, 2);
+	lights[0]->position.Set(-6, 2, 0);
 	lights[0]->color.Set(1, 1, 1);
 	lights[0]->power = 1;
 	lights[0]->kC = 1.f;
@@ -169,7 +174,7 @@ void SceneText::Init()
 
 	lights[1] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[1]", lights[1]);
-	lights[1]->type = Light::LIGHT_DIRECTIONAL;
+	lights[1]->type = Light::LIGHT_POINT;
 	lights[1]->position.Set(1, 1, 0);
 	lights[1]->color.Set(1, 1, 0.5f);
 	lights[1]->power = 0.4f;
@@ -202,7 +207,7 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
 	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
-	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//calibri.tga");
+	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//comic.tga");
 	MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
 
 	/*Enemy Turret*/
@@ -267,6 +272,9 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GAMEOVER", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("GAMEOVER")->textureID = LoadTGA("Image//GAMEOVER.tga");
 
+	/*Player Health Bar Color*/
+	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
+
 	// Create entities into the scene
 	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
@@ -274,6 +282,7 @@ void SceneText::Init()
 	//Create::Entity("ring", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 
 	groundEntity = Create::Ground("snowGround", "snowGround");
+	groundEntity->SetLight(true);
 
 //	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f), true);
@@ -306,7 +315,7 @@ void SceneText::Init()
 	float halfFontSize = fontSize / 2.0f;
 	for (int i = 0; i < 30; ++i)
 	{
-		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(1.0f, 0.f,0.0f));
+		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth + fontSize, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(1.0f, 0.f,0.0f));
 	}
 
 	for (int i = 0; i < 17; ++i)
@@ -347,7 +356,7 @@ void SceneText::Init()
 	/*Load Highscore*/
 	OptionsManager::GetInstance()->loadHighscore("Data//highscore.txt");
 	primaryWeapon = playerInfo->getPrimaryWeapon();
-	cout << "Primary Weapon From Scene: " << primaryWeapon << endl;
+	// << "Primary Weapon From Scene: " << primaryWeapon << endl;
 	weaponManager = playerInfo->getWeaponManager();
 
 	/*Initialise Sounds*/
@@ -359,15 +368,24 @@ void SceneText::Init()
 	CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
 	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
 	/*Shadow*/
-	//DepthFBO::GetInstance()->Init(1024, 1024);
+	DepthFBO::GetInstance()->Init(1024, 1024);
 	//m_lightDepthFBO.Init(1024, 1024);
+
+	TEMPDEPTHQUAD = MeshBuilder::GetInstance()->GenerateQuad("TEMPDEPTH", Color(1, 0, 1), 1);
+	TEMPDEPTHQUAD->textureID = DepthFBO::GetInstance()->GetTexture();
+	TEMPSPHERE = MeshBuilder::GetInstance()->GenerateSphere("TEMPSPHERE", Color(1, 1, 1), 10, 10, 1);
+	TEMPQUAD = MeshBuilder::GetInstance()->GenerateQuad("TEMPQUADGROUND", Color(1, 1, 1), 1);
 }
 
 void SceneText::Update(double dt)
 {
 	//Calculating aspect ratio
-	m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
-	m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
+	Application::GetInstance().setAspectRatioHeight(100.f);
+	Application::GetInstance().setAspectRatioWidth(Application::GetInstance().getAspectRatioHeight() * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight());
+	//m_worldHeight = 100.f;
+	//m_worldWidth = m_worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
+	//m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
+	//m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
 
 	static bool pause = false;
 
@@ -397,9 +415,9 @@ void SceneText::Update(double dt)
 			/*Create random health power-up for player.*/
 			createHealth(dt);
 
-			cout << "Light Position X: " << lights[0]->position.x << endl;
-			cout << "Light Position Y: " << lights[0]->position.x << endl;
-			cout << "Light Position Z: " << lights[0]->position.x << endl;
+			//cout << "Light Position X: " << lights[0]->position.x << endl;
+			//cout << "Light Position Y: " << lights[0]->position.y << endl;
+			//cout << "Light Position Z: " << lights[0]->position.z << endl;
 
 			if (KeyboardController::GetInstance()->IsKeyDown('I'))
 				lights[0]->position.z += 100.f * dt;
@@ -414,10 +432,10 @@ void SceneText::Update(double dt)
 				lights[0]->position.x -= 100.f * dt;
 
 			if (KeyboardController::GetInstance()->IsKeyDown('U'))
-				lights[0]->position.x -= 100.f * dt;
+				lights[0]->position.y -= 100.f * dt;
 
 			if (KeyboardController::GetInstance()->IsKeyDown('O'))
-				lights[0]->position.x += 100.f * dt;
+				lights[0]->position.y += 100.f * dt;
 
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
 			{
@@ -528,60 +546,6 @@ void SceneText::Render()
 {
 	RenderPassGPass();
 	RenderPassMain();
-	///*Debug*/
-	////CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	//if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) <= 0)
-	//{
-	//	Mesh* modelMesh;
-	//	modelMesh = MeshBuilder::GetInstance()->GetMesh("GAMEOVER");
-	//	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	//	modelStack.PushMatrix();
-	//	modelStack.Translate(0.f, 0.f, 0.f);
-	//	modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
-	//	modelStack.Scale(400.f, 300.f, 1.f);
-	//	RenderHelper::RenderMesh(modelMesh);
-	//	modelStack.PopMatrix();
-	//}
-
-	//currProg->UpdateInt("fogParam.enabled", 1);
-	//GraphicsManager::GetInstance()->UpdateLightUniforms();
-	////playerInfo->setHealth(playerInfo->getHealth() - 10);
-	//// Setup 3D pipeline then render 3D
-	//GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	//GraphicsManager::GetInstance()->AttachCamera(&camera);
-
-	//EntityManager::GetInstance()->Render();
-	//currProg->UpdateInt("fogParam.enabled", 0);
-	//// Enable blend mode
-	//glEnable(GL_BLEND);
-
-	//// Setup 2D pipeline then render 2D
-	//int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	//int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
-	//GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
-	//GraphicsManager::GetInstance()->DetachCamera();
-	//EntityManager::GetInstance()->RenderUI();
-
-	//// Render Camera Effects
-	//theCameraEffects->RenderUI();
-
-	//// Render Minimap
-	//theMinimap->RenderUI();
-
-	///*Render Weapon*/
-	//renderWeapon();
-
-	///*Render Weapon UI*/
-	//renderWeaponUI();
-
-	///*Render Hit*/
-	//if (EntityManager::GetInstance()->getHit())
-	//	renderHit();
-
-	//// Disable blend mode
-	//glDisable(GL_BLEND);
-	
 }
 
 void SceneText::displayControls(void)
@@ -706,37 +670,36 @@ void SceneText::createEnemies(double dt)
 	static float increaseEnemies = 0.f;
 	increaseEnemies += (float)dt;
 
-	static int count = 0;
-	if (count < 2)
+
+	if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
 	{
-		if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
+		Vector3 newPosition(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
+		Vector3 _minAABB(-5.f, 0.f, -5.f);
+		Vector3 _maxAABB(5.f, 5.f, 5.f);
+		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
 		{
-			Vector3 newPosition(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
-			Vector3 _minAABB(-5.f, 0.f, -5.f);
-			Vector3 _maxAABB(5.f, 5.f, 5.f);
-			/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
-			while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
-			{
-				newPosition.Set(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
-			}
-			// Create a CEnemy instance
-			//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
-			anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f));
-			//anEnemy3D->Init();
-			anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
-			anEnemy3D->SetCollider(true);
-			anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
-			CEnemy3D::ATTRIBUTES _attributes;
-			_attributes.MAX_HEALTH = 10.f;
-			_attributes.HEALTH = 10.f;
-			_attributes.ATTACK = 1.f;
-			_attributes.DEFENSE = 1.f;
-			anEnemy3D->setAttributes(_attributes);
-			anEnemy3D->SetTerrain(groundEntity);
-			anEnemy3D->SetLight(true);
-			++count;
+			newPosition.Set(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
 		}
+		// Create a CEnemy instance
+		//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
+		anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f));
+		//anEnemy3D->Init();
+		anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+		anEnemy3D->SetCollider(true);
+		anEnemy3D->SetLight(true);
+		anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
+		CEnemy3D::ATTRIBUTES _attributes;
+		_attributes.MAX_HEALTH = 10.f;
+		_attributes.HEALTH = 10.f;
+		_attributes.ATTACK = 1.f;
+		_attributes.DEFENSE = 1.f;
+		anEnemy3D->setAttributes(_attributes);
+		anEnemy3D->SetTerrain(groundEntity);
+		anEnemy3D->SetLight(true);
+	
 	}
+
 }
 
 void SceneText::createCrates(double dt)
@@ -758,6 +721,7 @@ void SceneText::createCrates(double dt)
 		}
 		CFurniture* crate = Create::Furniture("crate", newPosition, Vector3(5.f, 5.f, 5.f));
 		crate->SetCollider(true);
+		crate->SetLight(true);
 		crate->SetAABB(_maxAABB, _minAABB);
 		crate->SetLight(true);
 		++crateCount;
@@ -782,6 +746,7 @@ void SceneText::createBullets(double dt)
 		}
 		CBullet* bullet = Create::Bullet("POWERUP_BULLET", newPosition, Vector3(5.f, 5.f, 5.f));
 		bullet->SetCollider(true);
+		bullet->SetLight(true);
 		bullet->SetAABB(_maxAABB, _minAABB);
 		bullet->SetItem(EntityBase::BULLET);
 		++bulletCount;
@@ -806,6 +771,7 @@ void SceneText::createHealth(double dt)
 		}
 		CHealth* health = Create::Health("POWERUP_HEALTH", newPosition, Vector3(5.f, 5.f, 5.f));
 		health->SetCollider(true);
+		health->SetLight(true);
 		health->SetAABB(_maxAABB, _minAABB);
 		health->SetItem(EntityBase::HEALTH);
 		++healthCount;
@@ -1013,19 +979,19 @@ void SceneText::RenderPassGPass(void)
 	}
 	else
 	{
-		m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
-	}
-
-	if (lights[1]->type == Light::LIGHT_POINT)
-	{
-		DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
-	}
-	else
-	{
 		DepthFBO::GetInstance()->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
 	}
 
-	m_lightDepthView.SetToLookAt(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z, 0, 0, 0, 0, 1, 0);
+	//if (lights[1]->type == Light::LIGHT_POINT)
+	{
+	//	DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
+	}
+	//else
+	{
+	//	DepthFBO::GetInstance()->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
+	}
+
+	DepthFBO::GetInstance()->m_lightDepthView.SetToLookAt(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z, 0, 0, 0, 0, 1, 0);
 
 
 	RenderWorld();
@@ -1036,7 +1002,8 @@ void SceneText::RenderPassMain(void)
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 800, 600);
-	glViewport(0, 0, m_worldWidth, m_worldHeight);
+	glViewport(0, 0, Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight());
+	//glViewport(0, 0, m_worldWidth, m_worldHeight);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1099,8 +1066,58 @@ void SceneText::RenderPassMain(void)
 
 
 	//RenderMesh(meshList[GEO_AXES], false);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+
+	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	GraphicsManager::GetInstance()->AttachCamera(&camera);
+
+	GraphicsManager::GetInstance()->UpdateLightUniforms();
+
+	/*Debug Quad*/
+	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();
+	ms.PushMatrix();
+	ms.Scale(100, 100, 100);
+	RenderHelper::RenderMesh(TEMPDEPTHQUAD);
+	ms.PopMatrix();*/
+	/*------------------------------------------*/
+
+	//currProg->UpdateInt("fogParam.enabled", 1);
 	RenderWorld();
+	//currProg->UpdateInt("fogParam.enabled", 0);
+
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
+	GraphicsManager::GetInstance()->DetachCamera();
+	EntityManager::GetInstance()->RenderUI();
+
+	/*Render Weapon*/
+	RenderHelper::GetInstance()->renderKOCount();
+	renderWeapon();
+	/*Render KO Count*/
+
+	/*Render Camera Effects*/
+	theCameraEffects->RenderUI();
+
+	/*Render Minimap*/
+	theMinimap->RenderUI();
+
+
+	/*Render Weapon UI*/
+	renderWeaponUI();
+
+	/*Render Hit*/
+	if (EntityManager::GetInstance()->getHit())
+		renderHit();
+	/*Render Player Health Bar*/
+	RenderHelper::GetInstance()->renderPlayerHealth();
+
+
+	glDisable(GL_BLEND);
+	//glEnable(GL_DEPTH_TEST);
 	// Render LightBall
 	//modelStack.PushMatrix();
 	//modelStack.Rotate(lightMove, 0.f, 1.f, 0.f);
@@ -1143,7 +1160,7 @@ void SceneText::RenderWorld(void)
 {
 	/*Debug*/
 	//CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) <= 0)
 	{
 		Mesh* modelMesh;
@@ -1156,57 +1173,27 @@ void SceneText::RenderWorld(void)
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
-
-	currProg->UpdateInt("fogParam.enabled", 1);
-	GraphicsManager::GetInstance()->UpdateLightUniforms();
-	//playerInfo->setHealth(playerInfo->getHealth() - 10);
 	// Setup 3D pipeline then render 3D
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	EntityManager::GetInstance()->Render();
-	currProg->UpdateInt("fogParam.enabled", 0);
-	// Enable blend mode
-	glEnable(GL_BLEND);
 
-	// Setup 2D pipeline then render 2D
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
-	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
-	GraphicsManager::GetInstance()->DetachCamera();
-	EntityManager::GetInstance()->RenderUI();
+	/*Debug Quad for Shadow*/
+	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();
+	ms.PushMatrix();
+	ms.Translate(0, 10, 10);
+	ms.Scale(5, 5, 5);
+	RenderHelper::RenderMeshWithLight(TEMPSPHERE);
+	ms.PopMatrix();
 
-	// Render Camera Effects
-	theCameraEffects->RenderUI();
-
-	// Render Minimap
-	theMinimap->RenderUI();
-
-	/*Render Weapon*/
-	renderWeapon();
-
-	/*Render Weapon UI*/
-	renderWeaponUI();
-
-	/*Render Hit*/
-	if (EntityManager::GetInstance()->getHit())
-		renderHit();
-
-	/*Render KO Count*/
-	renderKO_Count();
-
-	// Disable blend mode
-	glDisable(GL_BLEND);
-}
-
-void SceneText::renderKO_Count(void)
-{
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelStack.PushMatrix();
-	modelStack.Translate(10.f, 10.f, 0.f);
-	modelStack.Scale(100.f, 100.f, 1.f);
-	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), to_string(CPlayerInfo::GetInstance()->getKO_Count()), Color(1.f, 0.f, 0.f));
-	modelStack.PopMatrix();
+	ms.PushMatrix();
+	ms.Translate(0, -8, 0);
+	ms.Rotate(-90, 1, 0, 0);
+	ms.Scale(1000, 1000, 1000);
+	RenderHelper::RenderMeshWithLight(TEMPQUAD);
+	ms.PopMatrix();*/
+	/*--------------------------------------------------------*/
 }
 
 void SceneText::Exit()
@@ -1221,6 +1208,11 @@ void SceneText::Exit()
 		cout << "Unable to drop PlayerInfo class" << endl;
 #endif
 	}
+
+
+	delete TEMPSPHERE;
+	delete TEMPDEPTHQUAD;
+
 
 	// Delete the lights
 	delete lights[0];

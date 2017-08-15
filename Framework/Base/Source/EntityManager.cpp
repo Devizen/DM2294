@@ -374,6 +374,22 @@ EntityManager::~EntityManager()
 		object = nullptr;
 		playerList.pop_back();
 	}
+
+	while (enemyList.size() > 0)
+	{
+		CEnemy3D* object = enemyList.back();
+		delete object;
+		object = nullptr;
+		enemyList.pop_back();
+	}
+
+	while (itemList.size() > 0)
+	{
+		EntityBase* object = itemList.back();
+		delete object;
+		object = nullptr;
+		itemList.pop_back();
+	}
 }
 
 // Check for overlap
