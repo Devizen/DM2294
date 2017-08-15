@@ -181,6 +181,7 @@
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Attributes.cpp">
+    <ClCompile Include="Source\ParticleManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\FileManager.cpp">
@@ -333,6 +334,7 @@
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\Attributes.h">
+    <ClInclude Include="Source\ParticleManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\FileManager.h">

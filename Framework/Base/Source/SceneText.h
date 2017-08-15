@@ -28,6 +28,8 @@ class Controls;
 
 class SceneText : public Scene
 {	
+	//float m_worldHeight;
+	//float m_worldWidth;
 public:
 	SceneText();
 	~SceneText();
@@ -73,10 +75,10 @@ private:
 
 	/*DepthFBO; Shadow*/
 	//DepthFBO m_lightDepthFBO;
-	Mtx44 m_lightDepthProj;
-	Mtx44 m_lightDepthView;
+	//Mtx44 m_lightDepthProj;
+	//Mtx44 m_lightDepthView;
 	/*0 for Render Pass Pre and 1 for Render Pass Main*/
-	int m_renderPass;
+	//int m_renderPass;
 
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo** weaponManager;
@@ -113,6 +115,9 @@ private:
 	void RenderPassGPass(void);
 	void RenderPassMain(void);
 	void RenderWorld(void);
+
+	/*Render KO Count*/
+	void renderKO_Count(void);
 };
 
 #endif

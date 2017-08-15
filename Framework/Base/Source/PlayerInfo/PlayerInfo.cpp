@@ -10,6 +10,13 @@
 #include "../Minimap/Minimap.h"
 #include "../EntityManager.h"
 
+/*Rendering Things; TODO: Shift all rendering stuff to RenderHelper.*/
+#include "MeshBuilder.h"
+#include "GraphicsManager.h"
+#include "RenderHelper.h"
+#include "../Application.h"
+
+
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
 CPlayerInfo *CPlayerInfo::s_instance = 0;
@@ -41,6 +48,7 @@ CPlayerInfo::CPlayerInfo(void)
 	//, health(100)
 	, tookDamage(false)
 	, score(0.f)
+	, KO_Count(0)
 {
 }
 
@@ -1013,4 +1021,31 @@ void CPlayerInfo::setScore(float _score)
 float CPlayerInfo::getScore(void)
 {
 	return score;
+}
+
+void CPlayerInfo::setKO_Count(float _KO_Count)
+{
+	KO_Count = _KO_Count;
+}
+
+int CPlayerInfo::getKO_Count(void)
+{
+	return KO_Count;
+}
+
+void CPlayerInfo::renderPlayerHealth()
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
+	Mtx44& projectionStack = GraphicsManager::GetInstance()->GetProjectionMatrix();
+	projectionStack.SetToOrtho(-80, 80, -60, 60, -10, 10);
+	Mtx44& viewStack = GraphicsManager::GetInstance()->GetViewMatrix();
+	viewStack.SetToIdentity();
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(20.f, 40.f, 0.f);
+	modelStack.Scale((this->getAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth()) * 0.0005f, Application::GetInstance().GetWindowHeight() * 0.01f, 1.f);
+	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
+	modelStack.PopMatrix();
 }

@@ -28,16 +28,18 @@ public:
 
 	int GetWindowHeight();
 	int GetWindowWidth();
+
+	void setAspectRatioHeight(float _height);
+	void setAspectRatioWidth(float _width);
+
+	float getAspectRatioHeight();
+	float getAspectRatioWidth();
 	
 private:
 	Application();
 	~Application();
 
 	static bool IsKeyPressed(unsigned short key);
-
-	// Should make these not hard-coded :P
-	const static int m_window_width = 800;
-	const static int m_window_height = 600;
 
 	//Declare a window object
 	StopWatch m_timer;

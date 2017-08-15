@@ -41,6 +41,7 @@
     <ClCompile Include="Source\OBJMesh.cpp" />
     <ClCompile Include="Source\Options\Controls.cpp" />
     <ClCompile Include="Source\Options\OptionsManager.cpp" />
+    <ClCompile Include="Source\ParticleManager.cpp" />
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
     <ClCompile Include="Source\Projectile\Projectile.cpp" />
     <ClCompile Include="Source\Scene2D\Animation.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="Source\OBJMesh.h" />
     <ClInclude Include="Source\Options\Controls.h" />
     <ClInclude Include="Source\Options\OptionsManager.h" />
+    <ClInclude Include="Source\ParticleManager.h" />
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
     <ClInclude Include="Source\Projectile\Projectile.h" />
     <ClInclude Include="Source\Scene2D\Animation.h" />

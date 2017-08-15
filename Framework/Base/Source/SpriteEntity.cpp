@@ -64,6 +64,8 @@ void SpriteEntity::RenderUI()
 		modelStack.LoadIdentity();
 		modelStack.Translate(position.x, position.y, position.z);
 		modelStack.Scale(scale.x, scale.y, scale.z);
+		RenderHelper::RenderMesh(modelMesh);
+		modelStack.PopMatrix();
 	}
 }
 

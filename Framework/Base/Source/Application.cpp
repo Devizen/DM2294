@@ -20,6 +20,13 @@ GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
+int m_window_width;
+int m_window_height;
+
+/*Aspect Ratio*/
+float m_worldHeight;
+float m_worldWidth;
+
 //Define an error callback
 static void error_callback(int error, const char* description)
 {
@@ -36,6 +43,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 void resize_callback(GLFWwindow* window, int w, int h)
 {
+	m_window_width = w;
+	m_window_height = h;
 	glViewport(0, 0, w, h);
 }
 
@@ -70,8 +79,28 @@ void Application::Init()
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
+																   /*Get Monitor*/
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(m_window_width, m_window_height, "NYP Framework", NULL, NULL);
+	//m_window_width = mode->width;
+	//m_window_height = mode->height;
+	m_window_width = 800;
+	m_window_height = 600;
+
+	/*glfwGetPrimaryMonitor() to set full screen.*/
+	//m_window = glfwCreateWindow(m_window_width, m_window_height, "DM2294", glfwGetPrimaryMonitor(), NULL);
+
+	/*Windowed Full-Screen*/
+	//m_window = glfwCreateWindow(mode->width, mode->height, "DM2294", NULL, NULL);
+
+	/*Windowed Mode*/
+	m_window = glfwCreateWindow(m_window_width, m_window_height, "DM2294", NULL, NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -198,4 +227,24 @@ int Application::GetWindowHeight()
 int Application::GetWindowWidth()
 {
 	return m_window_width;
+}
+
+void Application::setAspectRatioHeight(float _height)
+{
+	m_worldHeight = _height;
+}
+
+void Application::setAspectRatioWidth(float _width)
+{
+	m_worldWidth = _width;
+}
+
+float Application::getAspectRatioHeight()
+{
+	return m_worldHeight;
+}
+
+float Application::getAspectRatioWidth()
+{
+	return m_worldWidth;
 }

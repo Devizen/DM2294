@@ -61,6 +61,9 @@ void EntityManager::Update(double _dt)
 		for (list<CEnemy3D*>::iterator enemyObj = enemyList.begin(); enemyObj != enemyList.end(); ++enemyObj)
 		{
 			CEnemy3D* enemy = (CEnemy3D*)*enemyObj;
+			if (enemy->getPlayerProperty())
+				continue;
+
 			if (CheckProjectileToEnemyCollision(bullet, enemy))
 			{
 				enemy->setHealth(enemy->getHealth() - 1);
@@ -370,6 +373,22 @@ EntityManager::~EntityManager()
 		delete object;
 		object = nullptr;
 		playerList.pop_back();
+	}
+
+	while (enemyList.size() > 0)
+	{
+		CEnemy3D* object = enemyList.back();
+		delete object;
+		object = nullptr;
+		enemyList.pop_back();
+	}
+
+	while (itemList.size() > 0)
+	{
+		EntityBase* object = itemList.back();
+		delete object;
+		object = nullptr;
+		itemList.pop_back();
 	}
 }
 
