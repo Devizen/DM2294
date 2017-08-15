@@ -670,34 +670,38 @@ void SceneText::createEnemies(double dt)
 	static float increaseEnemies = 0.f;
 	increaseEnemies += (float)dt;
 
-
-	if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
+	static int count = 0;
+	if (count < 2)
 	{
-		Vector3 newPosition(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
-		Vector3 _minAABB(-5.f, 0.f, -5.f);
-		Vector3 _maxAABB(5.f, 5.f, 5.f);
-		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
-		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+		if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
 		{
-			newPosition.Set(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
+			Vector3 newPosition(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
+			Vector3 _minAABB(-5.f, 0.f, -5.f);
+			Vector3 _maxAABB(5.f, 5.f, 5.f);
+			/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+			while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+			{
+				newPosition.Set(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
+			}
+			// Create a CEnemy instance
+			//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
+			anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f));
+			//anEnemy3D->Init();
+			anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+			anEnemy3D->SetCollider(true);
+			anEnemy3D->SetLight(true);
+			anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
+			CEnemy3D::ATTRIBUTES _attributes;
+			_attributes.MAX_HEALTH = 10.f;
+			_attributes.HEALTH = 10.f;
+			_attributes.ATTACK = 1.f;
+			_attributes.DEFENSE = 1.f;
+			anEnemy3D->setAttributes(_attributes);
+			anEnemy3D->SetTerrain(groundEntity);
+			anEnemy3D->SetLight(true);
+
+			++count;
 		}
-		// Create a CEnemy instance
-		//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
-		anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f));
-		//anEnemy3D->Init();
-		anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
-		anEnemy3D->SetCollider(true);
-		anEnemy3D->SetLight(true);
-		anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
-		CEnemy3D::ATTRIBUTES _attributes;
-		_attributes.MAX_HEALTH = 10.f;
-		_attributes.HEALTH = 10.f;
-		_attributes.ATTACK = 1.f;
-		_attributes.DEFENSE = 1.f;
-		anEnemy3D->setAttributes(_attributes);
-		anEnemy3D->SetTerrain(groundEntity);
-		anEnemy3D->SetLight(true);
-	
 	}
 
 }
