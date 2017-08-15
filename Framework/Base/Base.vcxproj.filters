@@ -58,6 +58,9 @@
     <Filter Include="Minimap">
       <UniqueIdentifier>{7b57e043-2491-4545-a9b7-6078a432213b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Enemy3D\Patrol">
+      <UniqueIdentifier>{d1c22631-06b4-4f5c-9d7d-91b72da52b22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -212,6 +215,12 @@
     </ClCompile>
     <ClCompile Include="Source\Items\Inventory.cpp">
       <Filter>Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp">
+      <Filter>Enemy3D\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HardwareAbstraction\Gamepad.cpp">
+      <Filter>HardwareAnstraction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -370,6 +379,12 @@
     </ClInclude>
     <ClInclude Include="Source\Items\Inventory.h">
       <Filter>Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Patrol\Patrol.h">
+      <Filter>Enemy3D\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HardwareAbstraction\Gamepad.h">
+      <Filter>HardwareAnstraction</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

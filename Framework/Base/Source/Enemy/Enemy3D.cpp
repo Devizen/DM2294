@@ -25,10 +25,11 @@ CEnemy3D::CEnemy3D(Mesh* _modelMesh)
 	, minAlertBoundary(Vector3(0.f, 0.f, 0.f))
 	, maxAlertBoundary(Vector3(0.f, 0.f, 0.f))
 	, m_pTerrain(NULL)
-	, m_fElapsedTimeBeforeUpdate(0.0f)
+	, m_fElapsedTimeBeforeUpdate(3.0f)
 	, health(3)
 	, state(IDLE)
 	, playerProperty(false)
+	, whoCloser(NONE)
 {
 	this->modelMesh = _modelMesh;
 }
@@ -174,6 +175,13 @@ void CEnemy3D::Update(double dt)
 				viewVector = (targetLower - position).Normalized();
 				distanceBetween = returnNearestEnemy()->GetPos() - GetPos();
 			}
+			else if (!this->getPlayerProperty() && returnNearestEnemy() != nullptr && whoCloser == ENEMY)
+			{
+				/*Offset the y to make it seem as if bullet is hitting face on.*/
+				targetLower.Set(returnNearestEnemy()->GetPos().x, returnNearestEnemy()->GetPos().y, returnNearestEnemy()->GetPos().z);
+				viewVector = (targetLower - position).Normalized();
+				distanceBetween = returnNearestEnemy()->GetPos() - GetPos();
+			}
 
 			shootDelay += static_cast<float>(dt);
 
@@ -181,8 +189,10 @@ void CEnemy3D::Update(double dt)
 			/*Change Y value to spawn bullet at correct position.*/
 			Vector3 newPosition((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y, (distanceBetween.z / 2.f) + this->position.z);
 
-			if (this->getPlayerProperty())
+			if (this->getPlayerProperty() || !this->getPlayerProperty() && whoCloser == ENEMY)
 				newPosition.Set((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y + 2.5f, (distanceBetween.z / 2.f) + this->position.z);
+			//else if (!this->getPlayerProperty() && whoCloser == ENEMY)
+			//	newPosition.Set((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y + 2.5f, (distanceBetween.z / 2.f) + this->position.z);
 			//if (KeyboardController::GetInstance()->IsKeyPressed('M'))
 			//{
 			//	cout << "Target: " << target << endl;
@@ -272,7 +282,12 @@ void CEnemy3D::Render(void)
 	if (state == ALERT)
 	{
 		if (!getPlayerProperty())
-			angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
+		{
+			if (whoCloser == PLAYER)
+				angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
+			else if (whoCloser == ENEMY && returnNearestEnemy() != nullptr)
+				angleToFace = Math::RadianToDegree(atan2(returnNearestEnemy()->GetPos().x - this->position.x, returnNearestEnemy()->GetPos().z - this->position.z));
+		}
 		else if (returnNearestEnemy() != nullptr)
 			angleToFace = Math::RadianToDegree(atan2(returnNearestEnemy()->GetPos().x - this->position.x, returnNearestEnemy()->GetPos().z - this->position.z));
 		modelStack.Rotate(angleToFace, 0.f, 1.f, 0.f);
@@ -322,28 +337,75 @@ bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 
 	if (!this->getPlayerProperty())
 	{
-		Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
-		Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
+		cout << "Enemy Address: " << this << endl;
+		if (EntityManager::GetInstance()->returnEnemy().size() < 2)
+		{
+			cout << "Lesser than Two: " << this << endl;
+			Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
+			Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
 
-		if ((boundaryMin.x < playerMax.x && boundaryMax.x >playerMin.x) &&
-			(boundaryMin.y < playerMax.y && boundaryMax.y >playerMin.y) &&
-			(boundaryMin.z < playerMax.z && boundaryMax.z >playerMin.z))
-			return true;
+			if ((boundaryMin.x < playerMax.x && boundaryMax.x >playerMin.x) &&
+				(boundaryMin.y < playerMax.y && boundaryMax.y >playerMin.y) &&
+				(boundaryMin.z < playerMax.z && boundaryMax.z >playerMin.z))
+				return true;
+			else
+				return false;
+		}
+	
+		else if ((returnNearestEnemy()->GetPos() - this->GetPos()).LengthSquared() < (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() && returnNearestEnemy()->getPlayerProperty())
+		{
+			cout << "Enemy Closer Than Player: " << this << endl;
+			whoCloser = ENEMY;
+			if (returnNearestEnemy() == nullptr)
+				return false;
+			cout << "Nearest Enemy: " << (returnNearestEnemy()->GetPos() - this->GetPos()).LengthSquared() << " Player: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << " " << returnNearestEnemy()->getPlayerProperty()  <<endl;
+			cout << "I AM HERE" << endl;
+			Vector3 objectMin = returnNearestEnemy()->GetMinAABB() + Vector3(returnNearestEnemy()->GetPos().x, -5.f, returnNearestEnemy()->GetPos().z);
+			Vector3 objectMax = returnNearestEnemy()->GetMaxAABB() + Vector3(returnNearestEnemy()->GetPos().x, -5.f, returnNearestEnemy()->GetPos().z);
+
+			if ((boundaryMin.x < objectMax.x && boundaryMax.x >objectMin.x) &&
+				(boundaryMin.y < objectMax.y && boundaryMax.y >objectMin.y) &&
+				(boundaryMin.z < objectMax.z && boundaryMax.z >objectMin.z))
+
+			{
+				cout << "ENEMY INSIDE BOUNDARY" << endl;
+				return true;
+			}
+
+			else
+				return false;
+		}
 		else
-			return false;
+		{
+			cout << "Player Closer than Enemy" << this << endl;
+			cout << "Nearest Enemy: " << (returnNearestEnemy()->GetPos() - this->GetPos()).LengthSquared() << " Player: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << " " << returnNearestEnemy()->getPlayerProperty()<<  endl;
+			Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
+			Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
+
+			whoCloser = PLAYER;
+			if ((boundaryMin.x < playerMax.x && boundaryMax.x >playerMin.x) &&
+				(boundaryMin.y < playerMax.y && boundaryMax.y >playerMin.y) &&
+				(boundaryMin.z < playerMax.z && boundaryMax.z >playerMin.z))
+				return true;
+			else
+				return false;
+		}
 	}
 	else
 	{
 		if (returnNearestEnemy() == nullptr)
 			return false;
 
+		whoCloser = NONE;
 		Vector3 objectMin = returnNearestEnemy()->GetMinAABB() + Vector3( returnNearestEnemy()->GetPos().x, -5.f,  returnNearestEnemy()->GetPos().z);
 		Vector3 objectMax = returnNearestEnemy()->GetMaxAABB() + Vector3( returnNearestEnemy()->GetPos().x, -5.f,  returnNearestEnemy()->GetPos().z);
 
 		if ((boundaryMin.x < objectMax.x && boundaryMax.x >objectMin.x) &&
 			(boundaryMin.y < objectMax.y && boundaryMax.y >objectMin.y) &&
 			(boundaryMin.z < objectMax.z && boundaryMax.z >objectMin.z))
-			return true;							 
+
+			return true;
+
 		else
 			return false;
 	}
@@ -358,10 +420,10 @@ CEnemy3D * CEnemy3D::returnNearestEnemy(void)
 		if (this == (*it))
 			continue;
 
-		if ((*it)->getPlayerProperty())
+		if ((*it)->getPlayerProperty() && this->getPlayerProperty())
 			continue;
 
-
+		/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
 		nearestDistance = ((*it)->GetPos() - this->GetPos()).LengthSquared();
 		enemy = (CEnemy3D*)*it;
 		break;
@@ -373,8 +435,8 @@ CEnemy3D * CEnemy3D::returnNearestEnemy(void)
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
 		/*enemy = (CEnemy3D*)*it;*/
-
-		if ((*it)->getPlayerProperty())
+		/*cout << "Next From " << this << " aim " << (CEnemy3D*)*it << " PLAYER? " << (*it)->getPlayerProperty() << endl;*/
+		if ((*it)->getPlayerProperty() && this->getPlayerProperty())
 			continue;
 
 		if (((*it)->GetPos() - this->GetPos()).LengthSquared() < nearestDistance && this != (*it))
