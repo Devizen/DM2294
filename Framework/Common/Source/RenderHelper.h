@@ -8,6 +8,7 @@ class Mesh;
 
 class RenderHelper : public Singleton <RenderHelper>
 {
+	friend class SceneText;
 public:
 	static void RenderMesh(Mesh* _mesh);
 	static void RenderMeshWithLight(Mesh* _mesh);

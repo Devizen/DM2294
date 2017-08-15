@@ -55,7 +55,6 @@
     <ClCompile Include="Source\Scene2D\Strategy_Kill.cpp" />
     <ClCompile Include="Source\Scene2D\TreasureChest.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
-    <ClCompile Include="Source\Shoe.cpp" />
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
     <ClCompile Include="Source\SoundEngine.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />

@@ -181,14 +181,13 @@
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Attributes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\ParticleManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\FileManager.cpp">
       <Filter>FileManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Shoe.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Items\Armour.cpp">
       <Filter>Equipment</Filter>
@@ -334,6 +333,8 @@
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\Attributes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\ParticleManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
