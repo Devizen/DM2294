@@ -219,6 +219,9 @@
     <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp">
       <Filter>Enemy3D\Patrol</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HardwareAbstraction\Gamepad.cpp">
+      <Filter>HardwareAnstraction</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -379,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy\Patrol\Patrol.h">
       <Filter>Enemy3D\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HardwareAbstraction\Gamepad.h">
+      <Filter>HardwareAnstraction</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

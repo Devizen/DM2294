@@ -23,6 +23,7 @@
     <ClCompile Include="Source\GenericEntity.cpp" />
     <ClCompile Include="Source\GroundEntity.cpp" />
     <ClCompile Include="Source\HardwareAbstraction\Controller.cpp" />
+    <ClCompile Include="Source\HardwareAbstraction\Gamepad.cpp" />
     <ClCompile Include="Source\HardwareAbstraction\Keyboard.cpp" />
     <ClCompile Include="Source\HardwareAbstraction\Mouse.cpp" />
     <ClCompile Include="Source\Items\Armour.cpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="Source\GenericEntity.h" />
     <ClInclude Include="Source\GroundEntity.h" />
     <ClInclude Include="Source\HardwareAbstraction\Controller.h" />
+    <ClInclude Include="Source\HardwareAbstraction\Gamepad.h" />
     <ClInclude Include="Source\HardwareAbstraction\Keyboard.h" />
     <ClInclude Include="Source\HardwareAbstraction\Mouse.h" />
     <ClInclude Include="Source\Items\Armour.h" />
