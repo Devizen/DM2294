@@ -1095,9 +1095,9 @@ void SceneText::RenderPassMain(void)
 	EntityManager::GetInstance()->RenderUI();
 
 	/*Render Weapon*/
-	RenderHelper::GetInstance()->renderKOCount();
 	renderWeapon();
 	/*Render KO Count*/
+	RenderHelper::GetInstance()->renderKOCount();
 
 	/*Render Camera Effects*/
 	theCameraEffects->RenderUI();
