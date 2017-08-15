@@ -1,6 +1,7 @@
 #pragma once
-#include "../GenericEntity.h"
-#include "../GroundEntity.h"
+#include "../../GenericEntity.h"
+#include "../../GroundEntity.h"
+#include "../Enemy3D.h"
 
 #include <vector>
 
@@ -10,8 +11,8 @@ using namespace std;
 
 class Mesh;
 
-class CEnemy3D :
-	public GenericEntity
+class Patrol :
+	public CEnemy3D
 {
 	friend class EntityManager;
 	friend class SceneText;
@@ -30,13 +31,6 @@ class CEnemy3D :
 		ENEMY_ATTACK,
 		ENEMY_DEFENSE,
 	};
-	
-	enum WHO_CLOSER
-	{
-		PLAYER = 0,
-		ENEMY,
-		NONE
-	};
 
 	struct ATTRIBUTES
 	{
@@ -53,14 +47,14 @@ protected:
 	Vector3 target, up;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
-	
+
 	double m_dSpeed;
 	double m_dAcceleration;
-	//float m_fElapsedTimeBeforeUpdate;
+	float m_fElapsedTimeBeforeUpdate;
 
 public:
-	CEnemy3D(Mesh* _modelMesh);
-	virtual ~CEnemy3D();
+	Patrol(Mesh* _modelMesh);
+	virtual ~Patrol();
 
 	void Init(void);
 	// Reset this player instance to default
@@ -153,13 +147,11 @@ private:
 	/*Check if enemy belongs to player.*/
 	bool playerProperty;
 	float shootDelay;
-	float m_fElapsedTimeBeforeUpdate;
-	WHO_CLOSER whoCloser;
 };
 
 namespace Create
 {
-	CEnemy3D* Enemy3D(const std::string& _meshName,
-						const Vector3& _position,
-						const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f));
+	CEnemy3D* Patrol(const std::string& _meshName,
+		const Vector3& _position,
+		const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f));
 };

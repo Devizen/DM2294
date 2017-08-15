@@ -692,8 +692,16 @@ void SceneText::createEnemies(double dt)
 			anEnemy3D->SetLight(true);
 			anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
 			CEnemy3D::ATTRIBUTES _attributes;
-			_attributes.MAX_HEALTH = 10.f;
-			_attributes.HEALTH = 10.f;
+			if (count == 1)
+			{
+				_attributes.MAX_HEALTH = 1000.f;
+				_attributes.HEALTH = 1000.f;
+			}
+			else
+			{
+				_attributes.MAX_HEALTH = 10.f;
+				_attributes.HEALTH = 10.f;
+			}
 			_attributes.ATTACK = 1.f;
 			_attributes.DEFENSE = 1.f;
 			anEnemy3D->setAttributes(_attributes);

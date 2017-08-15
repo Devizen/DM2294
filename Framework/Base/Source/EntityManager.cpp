@@ -61,7 +61,7 @@ void EntityManager::Update(double _dt)
 		for (list<CEnemy3D*>::iterator enemyObj = enemyList.begin(); enemyObj != enemyList.end(); ++enemyObj)
 		{
 			CEnemy3D* enemy = (CEnemy3D*)*enemyObj;
-			if (enemy->getPlayerProperty())
+			if (enemy->getPlayerProperty() && enemy->whoCloser == CEnemy3D::NONE)
 				continue;
 
 			if (CheckProjectileToEnemyCollision(bullet, enemy))
