@@ -4,3 +4,5 @@
 *.tmp
 Framework/Base/Debug/
 *.idb
+Framework/Base/Release/
+Framework/Common/Release/

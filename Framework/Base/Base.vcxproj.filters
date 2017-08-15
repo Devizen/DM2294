@@ -34,9 +34,6 @@
     <Filter Include="HardwareAnstraction">
       <UniqueIdentifier>{6a134e59-fa4e-4823-9e3b-e4969457dd11}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Minimap">
-      <UniqueIdentifier>{7b57e043-2491-4545-a9b7-6078a432213b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="CameraEffects">
       <UniqueIdentifier>{70e3c1bb-10b7-426e-8382-b2bafebb873c}</UniqueIdentifier>
     </Filter>
@@ -48,6 +45,18 @@
     </Filter>
     <Filter Include="PlayerInfo\Projectile">
       <UniqueIdentifier>{e55b5c68-9d98-4cde-ba44-f0d28d0cf437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Equipment">
+      <UniqueIdentifier>{2c9b00e8-1ca5-4f4e-a390-e428afa5b910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileManager">
+      <UniqueIdentifier>{58fbf11e-11ff-4355-8248-fd50ce9f9a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inventory">
+      <UniqueIdentifier>{8305aae4-f9e1-4bc5-8257-7d92774e0f7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minimap">
+      <UniqueIdentifier>{7b57e043-2491-4545-a9b7-6078a432213b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +183,36 @@
     <ClCompile Include="Source\Attributes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\FileManager.cpp">
+      <Filter>FileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shoe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Items\Armour.cpp">
+      <Filter>Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Items\Basic_Sword.cpp">
+      <Filter>Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Items\EquipmentManager.cpp">
+      <Filter>Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Items\Glove.cpp">
+      <Filter>Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Items\Gun.cpp">
+      <Filter>Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Items\Helmet.cpp">
+      <Filter>Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Items\Shoe.cpp">
+      <Filter>Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Items\Inventory.cpp">
+      <Filter>Inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -295,6 +334,39 @@
     </ClInclude>
     <ClInclude Include="Source\Attributes.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FileManager.h">
+      <Filter>FileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\Armour.h">
+      <Filter>Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\Basic_Sword.h">
+      <Filter>Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\Equipment.h">
+      <Filter>Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\EquipmentManager.h">
+      <Filter>Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\Glove.h">
+      <Filter>Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\Gun.h">
+      <Filter>Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\Helmet.h">
+      <Filter>Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\Shoe.h">
+      <Filter>Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\Weapon.h">
+      <Filter>Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items\Inventory.h">
+      <Filter>Inventory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

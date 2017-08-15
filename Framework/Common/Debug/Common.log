@@ -1,0 +1,31 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\marrot-\desktop\nyp\sp3\framework\common\debug\loadtga.obj' because it is being used by another process.
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\marrot-\desktop\nyp\sp3\framework\common\debug\matrixstack.obj' because it is being used by another process.
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\marrot-\desktop\nyp\sp3\framework\common\debug\scenemanager.obj' because it is being used by another process.
+  Win32Input.cpp
+  Vector3.cpp
+  Vector2.cpp
+  Utility.cpp
+  timer.cpp
+  ShaderProgram.cpp
+  SceneManager.cpp
+  RenderHelper.cpp
+  Mtx44.cpp
+  MouseController.cpp
+  MeshBuilder.cpp
+c:\users\marrot-\desktop\nyp\sp3\framework\common\source\meshbuilder.cpp(544): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+c:\users\marrot-\desktop\nyp\sp3\framework\common\source\meshbuilder.cpp(545): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+  Mesh.cpp
+  MatrixStack.cpp
+  MathUtility.cpp
+  LoadTGA.cpp
+  LoadOBJ.cpp
+  LightBase.cpp
+  KeyboardController.cpp
+  GraphicsManager.cpp
+  EntityBase.cpp
+  Generating Code...
+  Compiling...
+  Collider.cpp
+  CameraBase.cpp
+  Generating Code...
+  Common.vcxproj -> C:\Users\Marrot-\Desktop\NYP\SP3\Framework\Debug\Common.lib
