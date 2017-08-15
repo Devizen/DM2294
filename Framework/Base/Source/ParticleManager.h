@@ -4,36 +4,37 @@
 #include "Vector3.h"
 enum particleObject_type
 {
-	P_Fire,
+	P_Water = 0,
 	P_Total
 };
 class ParticleManager
 {
 public:
-	ParticleManager(particleObject_type = P_Fire);
+	ParticleManager(particleObject_type = P_Water);
 	~ParticleManager();
 
 	void updateParticle(double dt);
-	//void getParticle(void);
+	ParticleManager* getParticle(void);
 	void renderParticle(particleObject_type* particle);
-	
 
 private:
 	//Different type of particle object
 	particleObject_type type;
 	//Particle's position
-	Vector3 particlePosition;
+	Vector3 particle_Position;
 	//Particle's velocity/speed
-	Vector3 particleVelocity;
+	Vector3 particle_Velocity;
 	//Particle's size
-	Vector3 particleScale;
+	Vector3 particle_Scale;
 	//Particle's duration before disappearing
-	float particleLifeTime;
+	float particle_LifeTime;
 	//Enable/Disable particle
-	bool particleIsActive;
+	bool particle_IsActive;
 
-	std::vector<particleObject_type> list;
-	int i_particleCount;
+	std::vector<ParticleManager*> list;
+	unsigned MAX_PARTICLES = 1000;
+	int m_particleCount = 0;
+	Vector3 m_gravity = Vector3(0.0f, -9.8f, 0.0f);
 
 };
 
