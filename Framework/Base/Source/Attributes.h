@@ -79,9 +79,29 @@ public:
 	*/
 	void operator= (CAttributes newAttributes);
 
+	//set the level
+	void setLevel(int level);
+
+	//set the speed
+	void setSpeed(int speed);
+
+	//set the gold
+	void setGold(int gold);
+
+	//set the MP
+	void setMP(float mana);
+
+	//set max MP
+	void setMaxMP(float maxMana);
+
+	//set current exp
+	void setEXP(int exp);
+
 private:
 	float MAX_HEALTH;			//To cap player's health / when reseting player's health to this
 	float HEALTH;				//Current health
+	float MAX_MANA;				//cap player's mana
+	float MANA;					//current mana
 	/*const float MAX_ARMOUR;
 	float ARMOUR;*/
 	int MAX_EXP;				//For player to level up once EXP >= MAX_EXP
@@ -90,6 +110,7 @@ private:
 	int LEVEL;					//Level
 	int ATTACK;					//Attack damage
 	int DEFENSE;				//Defense points
+	int SPEED;					//Speed points
 };
 
 #endif

@@ -4,7 +4,7 @@
 #include "EquipmentManager.h"
 #include "Equipment.h"
 
-Armour * Create::theArmour(const std::string & _meshName, string ID)
+Armour * Create::theArmour(const std::string & _meshName, string ID, string attack, string defense, string speed, bool isEquipped)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
@@ -12,8 +12,18 @@ Armour * Create::theArmour(const std::string & _meshName, string ID)
 
 	Armour* result = new Armour(modelMesh);
 	result->SetID(stoi(ID));
+	result->SetAttack(stoi(attack));
+	result->SetDef(stoi(defense));
+	result->SetSpeed(stoi(speed));
 	result->SetType(Equipment::ARMOUR);
 	result->SetName(_meshName);
-	EquipmentManager::GetInstance()->AssignEquipment(result);
+	if (isEquipped)
+	{
+		EquipmentManager::GetInstance()->AssignEquipment(result);
+	}
+	else
+	{
+		Inventory::GetInstance()->assign_storage(result);
+	}
 	Inventory::GetInstance()->assign_storage(result);
 }

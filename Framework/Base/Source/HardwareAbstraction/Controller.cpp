@@ -48,13 +48,13 @@ bool CController::Move_FrontBack(const float deltaTime, const bool direction, co
 }
 
 // Detect and process left / right movement on the controller
-bool CController::Move_LeftRight(const float deltaTime, const bool direction)
+bool CController::Move_LeftRight(const float deltaTime, const bool direction, const float speedMultiplier)
 {
 	if (_CONTROLLER_DEBUG)
 		cout << "CController::Move_LeftRight()" << endl;
 	if (thePlayerInfo)
 	{
-		thePlayerInfo->Move_LeftRight(deltaTime, direction);
+		thePlayerInfo->Move_LeftRight(deltaTime, direction, speedMultiplier);
 	}
 	return false;
 }

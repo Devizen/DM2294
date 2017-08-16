@@ -15,6 +15,7 @@ public:
 	virtual int GetID() { return id; };
 	virtual int GetType() { return type; };
 	virtual string getName() { return name; };
+	virtual bool getEquippedStatus() { return isEquipped; };
 
 	void SetAttack(int newAtt) { attack = newAtt; }
 	void SetDef(int newDef) { defense = newDef; }
@@ -26,5 +27,5 @@ public:
 
 namespace Create
 {
-	Helmet* theHelmet(const std::string& _meshName, string ID);
+	Helmet* theHelmet(const std::string& _meshName, string ID, string attack, string defense, string speed, bool isEquipped);
 };

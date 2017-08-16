@@ -12,12 +12,9 @@ void Inventory::assign_storage(Equipment* object)
 		if (storage[i] == NULL)
 		{
 			storage[i] = object;
-			cout << "Success" << endl;
-
 			break;
 		}
 	}
-
 }
 
 void Inventory::Init()

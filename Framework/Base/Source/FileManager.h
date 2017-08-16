@@ -6,20 +6,49 @@
 #include <iostream>
 #include <fstream>
 #include "Vector3.h"
+#include <vector>
+#include "Attributes.h"
 
+using std::vector;
 using std::string;
 
-class FileManager : public Singleton <FileManager>
+class FileManager : public Singleton <FileManager>, public CAttributes
 {
 	friend Singleton<FileManager>;
+
+	struct EQ_Info
+	{
+		string name;
+		string eqAtk;
+		string eqDef;
+		string eqSpeed;
+		string eqId;
+		string eqType;
+		bool isEquipped;
+	}; 
+	EQ_Info theEQInfo;
+
+	//string eqAtk;
+	//string eqDef;
+	//string eqSpeed;
+	//string eqId;
+	//string eqType;
+	//string eqName;
+
+	vector<EQ_Info>masterList;
 
 public:
 	FileManager() {};
 	~FileManager() {};
 
-	bool ReadFile(const string myFile);
-	void EditFile(const string myFile);
+	bool ReadPlayerFile(const string myFile);
+	bool ReadWeaponFile(const string myFile);
+	bool ReadAABBFile(const string myFile);
+	bool ReadLevelFile(const string myFile);
+	
+	//bool ReadFile(const string myFile);
 
+	void EditFile(const string myFile);
 	Vector3 Token2Vector(string token);
 	double Token2Double(string token);
 	bool Token2Bool(string token);

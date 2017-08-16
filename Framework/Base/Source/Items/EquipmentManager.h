@@ -9,8 +9,9 @@ class Equipment;
 class EquipmentManager : public Singleton <EquipmentManager>
 {
 	friend Singleton<EquipmentManager>;
-	list<Equipment*> EqList;
+	Equipment* EqList[];
+
 public:
 	void AssignEquipment(Equipment* newEQ);
-	list<Equipment*>&getEqList(void);
+	Equipment** ReturnList();
 };

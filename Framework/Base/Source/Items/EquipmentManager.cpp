@@ -3,11 +3,17 @@
 
 void EquipmentManager::AssignEquipment(Equipment * newEQ)
 {
-	EqList.push_back(newEQ);
+	for (int i = 0; i < 12; i++)
+	{
+		if (EqList[i] == NULL)
+		{
+			EqList[i] = newEQ;
+			break;
+		}
+	}
 }
 
-list<Equipment*>& EquipmentManager::getEqList(void)
+Equipment ** EquipmentManager::ReturnList()
 {
 	return EqList;
 }
-

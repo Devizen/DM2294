@@ -133,3 +133,33 @@ void CAttributes::operator=(CAttributes newAttributes)
 	this->EXP = newAttributes.getAttribute(TYPE_EXP);
 	this->LEVEL = newAttributes.getAttribute(TYPE_LEVEL);
 }
+
+void CAttributes::setLevel(int level)
+{
+	LEVEL = level;
+}
+
+void CAttributes::setSpeed(int speed)
+{
+	SPEED = speed;
+}
+
+void CAttributes::setGold(int gold)
+{
+	GOLD = gold;
+}
+
+void CAttributes::setMP(float mana)
+{
+	MANA = mana;
+}
+
+void CAttributes::setMaxMP(float maxMana)
+{
+	MAX_MANA = maxMana;
+}
+
+void CAttributes::setEXP(int exp)
+{
+	EXP = exp;
+}
