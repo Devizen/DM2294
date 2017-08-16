@@ -379,6 +379,14 @@ void SceneText::Init()
 	TEMPDEPTHQUAD->textureID = DepthFBO::GetInstance()->GetTexture();
 	TEMPSPHERE = MeshBuilder::GetInstance()->GenerateSphere("TEMPSPHERE", Color(1, 1, 1), 10, 10, 1);
 	TEMPQUAD = MeshBuilder::GetInstance()->GenerateQuad("TEMPQUADGROUND", Color(1, 1, 1), 1);
+
+	ParticleManager* particleManager = ParticleManager::GetInstance();
+	vector<ParticleManager*>particleList = particleManager->getParticleList();
+	for (int i = 0; i < particleManager->getMaximumParticles(); ++i)
+	{
+		particleManager->pushParticle(particleObject_type::P_Water);
+	}
+	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 }
 
 void SceneText::Update(double dt)
@@ -534,6 +542,8 @@ void SceneText::Update(double dt)
 
 			// Update camera effects
 			theCameraEffects->Update(dt);
+
+			ParticleManager::GetInstance()->updateParticle(dt);
 		}
 	}
 	else
@@ -1211,6 +1221,8 @@ void SceneText::RenderWorld(void)
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	EntityManager::GetInstance()->Render();
+
+	ParticleManager::GetInstance()->renderAllParticle();
 
 	/*Debug Quad for Shadow*/
 	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();

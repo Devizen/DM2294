@@ -6,3 +6,9 @@ Framework/Base/Debug/
 *.idb
 Framework/Base/Release/
 Framework/Common/Release/
+*.obj
+Framework/Common/
+Framework/Debug/
+Framework/Release/Base.pdb
+Framework/Release/Base.exe
+Framework/.vs/NYP_Framework/v14/.suo

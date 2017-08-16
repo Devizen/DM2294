@@ -1,5 +1,6 @@
 #include "FileManager.h"
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include "Vector3.h"
 
@@ -179,21 +180,25 @@ bool FileManager::ReadPlayerFile(const string myFile)
 					//add to player exp
 					setEXP(stof(tempData));
 				}
+
+				++nextData;
 			}
+			nextData = 0;
 		}
 	}
 
 	return false;
 }
 
-bool FileManager::ReadWeaponFile(const string myFile)
+bool FileManager::ReadWeaponFile( string myFile)
 {
-	ifstream file(myFile);
+	ifstream file;
 	static int count = 0;
 	string data = "";
 	string tempData = "";
 	int nextData = 0;
 	bool skipFirstLine = false;
+	file.open(myFile);
 
 	if (file.is_open())
 	{
@@ -221,7 +226,7 @@ bool FileManager::ReadWeaponFile(const string myFile)
 							break;
 						}
 					}
-					theEQInfo.eqAtk = tempData;
+					theEQInfo.name = tempData;
 				}
 
 				if (nextData == 1)
@@ -238,7 +243,8 @@ bool FileManager::ReadWeaponFile(const string myFile)
 							break;
 						}
 					}
-					theEQInfo.eqDef = tempData;
+
+					theEQInfo.eqAtk = tempData;
 				}
 
 				if (nextData == 2)
@@ -255,7 +261,8 @@ bool FileManager::ReadWeaponFile(const string myFile)
 							break;
 						}
 					}
-					theEQInfo.eqSpeed = tempData;
+
+					theEQInfo.eqDef = tempData;
 				}
 
 				if (nextData == 3)
@@ -272,7 +279,8 @@ bool FileManager::ReadWeaponFile(const string myFile)
 							break;
 						}
 					}
-					theEQInfo.eqId = tempData;
+
+					theEQInfo.eqSpeed = tempData;
 				}
 
 				if (nextData == 4)
@@ -289,7 +297,8 @@ bool FileManager::ReadWeaponFile(const string myFile)
 							break;
 						}
 					}
-					theEQInfo.eqType = tempData;
+
+					theEQInfo.eqId = tempData;
 				}
 
 				if (nextData == 5)
@@ -306,7 +315,7 @@ bool FileManager::ReadWeaponFile(const string myFile)
 							break;
 						}
 					}
-					theEQInfo.name = tempData;
+					theEQInfo.eqType = tempData;
 				}
 
 				if (nextData == 6)
@@ -325,14 +334,45 @@ bool FileManager::ReadWeaponFile(const string myFile)
 					}
 					theEQInfo.isEquipped = stoi(tempData);
 				}
+
+				tempData = "";
+				++nextData;
 			}
 			masterList.push_back(theEQInfo);
+			nextData = 0;
+			tempData = "";
 		}
+		return true;
+	}
+	else
+	{
+		cout << "GG" << endl;
+		return false;
 	}
 }
 
 void FileManager::EditFile(const string myFile)
 {
+}
+
+void FileManager::PrintWeaponFile()
+{
+	for (vector<FileManager::EQ_Info>::iterator it = masterList.begin(); it != masterList.end(); ++it)
+	{
+		FileManager::EQ_Info store = (FileManager::EQ_Info)(*it);
+		cout << store.name << ", "
+			<< store.eqAtk << ", "
+			<< store.eqDef << ", "
+			<< store.eqSpeed << ", "
+			<< store.eqId << ", "
+			<< store.isEquipped << ", "
+			<< store.eqType << endl;
+	}
+}
+
+vector<FileManager::EQ_Info> FileManager::returnMasterList()
+{
+	return masterList;
 }
 
 //Vector3 FileManager::Token2Vector(string token)

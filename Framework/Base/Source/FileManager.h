@@ -25,8 +25,7 @@ class FileManager : public Singleton <FileManager>, public CAttributes
 		string eqId;
 		string eqType;
 		bool isEquipped;
-	}; 
-	EQ_Info theEQInfo;
+	}theEQInfo;
 
 	//string eqAtk;
 	//string eqDef;
@@ -42,16 +41,21 @@ public:
 	~FileManager() {};
 
 	bool ReadPlayerFile(const string myFile);
-	bool ReadWeaponFile(const string myFile);
+	bool ReadWeaponFile( string myFile);
 	bool ReadAABBFile(const string myFile);
 	bool ReadLevelFile(const string myFile);
 	
 	//bool ReadFile(const string myFile);
 
 	void EditFile(const string myFile);
+
+	void PrintWeaponFile();
+
 	Vector3 Token2Vector(string token);
 	double Token2Double(string token);
 	bool Token2Bool(string token);
+
+	vector<EQ_Info> returnMasterList();
 };
 
 #endif
