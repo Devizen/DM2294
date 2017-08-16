@@ -3,6 +3,13 @@
 #include <sstream>
 #include "Vector3.h"
 
+#include "Items\Armour.h"
+#include "Items\Basic_Sword.h"
+#include "Items\Glove.h"
+#include "Items\Gun.h"
+#include "Items\Helmet.h"
+#include "Items\Shoe.h"
+
 using std::cout;
 using std::endl;
 using std::ifstream;
@@ -177,6 +184,151 @@ bool FileManager::ReadPlayerFile(const string myFile)
 	}
 
 	return false;
+}
+
+bool FileManager::ReadWeaponFile(const string myFile)
+{
+	ifstream file(myFile);
+	static int count = 0;
+	string data = "";
+	string tempData = "";
+	int nextData = 0;
+	bool skipFirstLine = false;
+
+	if (file.is_open())
+	{
+		while (getline(file, data))
+		{
+			if (!skipFirstLine)
+			{
+				skipFirstLine = true;
+				continue;
+			}
+
+			for (int i = 0; i < data.size(); ++i)
+			{
+				if (nextData == 0)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEQInfo.eqAtk = tempData;
+				}
+
+				if (nextData == 1)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEQInfo.eqDef = tempData;
+				}
+
+				if (nextData == 2)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEQInfo.eqSpeed = tempData;
+				}
+
+				if (nextData == 3)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEQInfo.eqId = tempData;
+				}
+
+				if (nextData == 4)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEQInfo.eqType = tempData;
+				}
+
+				if (nextData == 5)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEQInfo.name = tempData;
+				}
+
+				if (nextData == 6)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEQInfo.isEquipped = stoi(tempData);
+				}
+			}
+			masterList.push_back(theEQInfo);
+		}
+	}
 }
 
 void FileManager::EditFile(const string myFile)

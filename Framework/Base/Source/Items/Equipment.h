@@ -8,7 +8,7 @@ using std::string;
 class Equipment : public Singleton <Equipment>
 {
 public:
-	Equipment() : attack(0), defense(0), speed(0), id(0), quality(0), type(0) {} ;
+	Equipment() : attack(0), defense(0), speed(0), id(0), quantity(0), type(0) {} ;
 	~Equipment() {};
 
 	virtual int GetAttack() = 0;
@@ -17,6 +17,7 @@ public:
 	virtual int GetID() = 0;
 	virtual int GetType() = 0;
 	virtual string getName() = 0;
+	virtual bool getEquippedStatus() = 0;
 
 	enum EQUIPMENT_TYPE
 	{
@@ -35,7 +36,8 @@ protected:
 	int defense;
 	int speed;
 	int id;
-	int quality;
+	int quantity;
 	int type;
 	string name;
+	bool isEquipped;
 };

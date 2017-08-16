@@ -11,7 +11,7 @@
 using std::cout;
 using std::endl;
 
-Glove * Create::theGlove(const std::string & _meshName, string ID)
+Glove * Create::theGlove(const std::string & _meshName, string ID, string attack, string defense, string speed, bool isEquipped)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
@@ -19,9 +19,18 @@ Glove * Create::theGlove(const std::string & _meshName, string ID)
 
 	Glove* result = new Glove(modelMesh);
 	result->SetID(stoi(ID));
+	result->SetAttack(stoi(attack));
+	result->SetDef(stoi(defense));
+	result->SetSpeed(stoi(speed)); 
 	result->SetType(Equipment::GLOVE);
 	result->SetName(_meshName);
 	cout << "Address in Create: " << result << endl;
-	EquipmentManager::GetInstance()->AssignEquipment(result);
-	Inventory::GetInstance()->assign_storage(result);
+	if (isEquipped)
+	{
+		EquipmentManager::GetInstance()->AssignEquipment(result);
+	}
+	else
+	{
+		Inventory::GetInstance()->assign_storage(result);
+	}
 }
