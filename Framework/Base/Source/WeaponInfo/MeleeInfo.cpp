@@ -6,14 +6,14 @@
 using namespace std;
 
 CMeleeInfo::CMeleeInfo()
-	: magRounds(1)
+	: /*magRounds(1)
 	, maxMagRounds(1)
 	, totalRounds(8)
-	, maxTotalRounds(8)
-	, timeBetweenShots(0.5)
+	, maxTotalRounds(8)*/
+	timeBetweenShots(0.5)
 	, elapsedTime(0.0)
-	, bFire(true)
-	, defaultMaxTotalRounds(0)
+	, bFire(true)/*
+	, defaultMaxTotalRounds(0)*/
 {
 }
 
@@ -21,55 +21,55 @@ CMeleeInfo::CMeleeInfo()
 CMeleeInfo::~CMeleeInfo()
 {
 }
+//
+//// Set the number of ammunition in the magazine for this player
+//void CMeleeInfo::SetMagRound(const int magRounds)
+//{
+//	this->magRounds = magRounds;
+//}
+//
+//// Set the maximum number of ammunition in the magazine for this weapon
+//void CMeleeInfo::SetMaxMagRound(const int magRounds)
+//{
+//	this->magRounds = magRounds;
+//}
+//
+//// The current total number of rounds currently carried by this player
+//void CMeleeInfo::SetTotalRound(const int totalRounds)
+//{
+//	this->totalRounds = totalRounds;
+//}
+//
+//// The max total number of rounds currently carried by this player
+//void CMeleeInfo::SetMaxTotalRound(const int maxTotalRounds)
+//{
+//	this->maxTotalRounds = maxTotalRounds;
+//}
 
-// Set the number of ammunition in the magazine for this player
-void CMeleeInfo::SetMagRound(const int magRounds)
-{
-	this->magRounds = magRounds;
-}
-
-// Set the maximum number of ammunition in the magazine for this weapon
-void CMeleeInfo::SetMaxMagRound(const int magRounds)
-{
-	this->magRounds = magRounds;
-}
-
-// The current total number of rounds currently carried by this player
-void CMeleeInfo::SetTotalRound(const int totalRounds)
-{
-	this->totalRounds = totalRounds;
-}
-
-// The max total number of rounds currently carried by this player
-void CMeleeInfo::SetMaxTotalRound(const int maxTotalRounds)
-{
-	this->maxTotalRounds = maxTotalRounds;
-}
-
-
-// Get the number of ammunition in the magazine for this player
-int CMeleeInfo::GetMagRound(void) const
-{
-	return magRounds;
-}
-
-// Get the maximum number of ammunition in the magazine for this weapon
-int CMeleeInfo::GetMaxMagRound(void) const
-{
-	return maxMagRounds;
-}
-
-// Get the current total number of rounds currently carried by this player
-int CMeleeInfo::GetTotalRound(void) const
-{
-	return totalRounds;
-}
-
-// Get the max total number of rounds currently carried by this player
-int CMeleeInfo::GetMaxTotalRound(void) const
-{
-	return maxTotalRounds;
-}
+//
+//// Get the number of ammunition in the magazine for this player
+//int CMeleeInfo::GetMagRound(void) const
+//{
+//	return magRounds;
+//}
+//
+//// Get the maximum number of ammunition in the magazine for this weapon
+//int CMeleeInfo::GetMaxMagRound(void) const
+//{
+//	return maxMagRounds;
+//}
+//
+//// Get the current total number of rounds currently carried by this player
+//int CMeleeInfo::GetTotalRound(void) const
+//{
+//	return totalRounds;
+//}
+//
+//// Get the max total number of rounds currently carried by this player
+//int CMeleeInfo::GetMaxTotalRound(void) const
+//{
+//	return maxTotalRounds;
+//}
 
 // Set the time between shots
 void CMeleeInfo::SetTimeBetweenShots(const double timeBetweenShots)
@@ -110,14 +110,14 @@ bool CMeleeInfo::GetCanFire(void) const
 // Initialise this instance to default values
 void CMeleeInfo::Init(void)
 {
-	// The number of ammunition in a magazine for this weapon
-	magRounds = 1;
-	// The maximum number of ammunition for this magazine for this weapon
-	maxMagRounds = 1;
-	// The current total number of rounds currently carried by this player
-	totalRounds = 8;
-	// The max total number of rounds currently carried by this player
-	maxTotalRounds = 8;
+	//// The number of ammunition in a magazine for this weapon
+	//magRounds = 1;
+	//// The maximum number of ammunition for this magazine for this weapon
+	//maxMagRounds = 1;
+	//// The current total number of rounds currently carried by this player
+	//totalRounds = 8;
+	//// The max total number of rounds currently carried by this player
+	//maxTotalRounds = 8;
 
 	// The time between shots
 	timeBetweenShots = 0.f;
@@ -144,8 +144,9 @@ void CMeleeInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sourc
 	if (bFire)
 	{
 		// If there is still ammo in the magazine, then fire
-		if (magRounds > 0)
+		/*if (magRounds > 0)
 		{
+		}*/
 			Vector3 distanceBetween(target - position);
 			distanceBetween *= 3.f;
 			distanceBetween += position;
@@ -158,59 +159,58 @@ void CMeleeInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sourc
 			aProjectile->SetCollider(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
 			bFire = false;
-			magRounds--;
-		}
+			//magRounds--;
 	}
 }
 
-// Reload this weapon
-void CMeleeInfo::Reload(void)
-{
-	if (magRounds < maxMagRounds)
-	{
-		if (maxMagRounds - magRounds <= totalRounds)
-		{
-			CSoundEngine::GetInstance()->PlayASound("RELOAD");
-			/*Changed reloading system to hold and reload.*/
-			totalRounds--;
-			magRounds++;
-
-			//totalRounds -= maxMagRounds - magRounds;
-			//magRounds = maxMagRounds;
-		}
-		else
-		{
-			/*Add everything into magRounds.*/
-			magRounds += totalRounds;
-			totalRounds = 0;
-		}
-	}
-}
-
-// Add rounds
-void CMeleeInfo::AddRounds(const int newRounds)
-{
-	if (totalRounds + newRounds > maxTotalRounds)
-		totalRounds = maxTotalRounds;
-	else
-		totalRounds += newRounds;
-}
-
-// Print Self
-void CMeleeInfo::PrintSelf(void)
-{
-	cout << "CMeleeInfo::PrintSelf()" << endl;
-	cout << "========================" << endl;
-	cout << "magRounds\t\t:\t" << magRounds << endl;
-	cout << "maxMagRounds\t\t:\t" << maxMagRounds << endl;
-	cout << "totalRounds\t\t:\t" << totalRounds << endl;
-	cout << "maxTotalRounds\t\t:\t" << maxTotalRounds << endl;
-	cout << "timeBetweenShots\t:\t" << timeBetweenShots << endl;
-	cout << "elapsedTime\t\t:\t" << elapsedTime << endl;
-	cout << "bFire\t\t:\t" << bFire << endl;
-}
-
-int CMeleeInfo::getDefaultMaxTotalRounds(void)
-{
-	return defaultMaxTotalRounds;
-}
+//// Reload this weapon
+//void CMeleeInfo::Reload(void)
+//{
+//	if (magRounds < maxMagRounds)
+//	{
+//		if (maxMagRounds - magRounds <= totalRounds)
+//		{
+//			CSoundEngine::GetInstance()->PlayASound("RELOAD");
+//			/*Changed reloading system to hold and reload.*/
+//			totalRounds--;
+//			magRounds++;
+//
+//			//totalRounds -= maxMagRounds - magRounds;
+//			//magRounds = maxMagRounds;
+//		}
+//		else
+//		{
+//			/*Add everything into magRounds.*/
+//			magRounds += totalRounds;
+//			totalRounds = 0;
+//		}
+//	}
+//}
+//
+//// Add rounds
+//void CMeleeInfo::AddRounds(const int newRounds)
+//{
+//	if (totalRounds + newRounds > maxTotalRounds)
+//		totalRounds = maxTotalRounds;
+//	else
+//		totalRounds += newRounds;
+//}
+//
+//// Print Self
+//void CMeleeInfo::PrintSelf(void)
+//{
+//	cout << "CMeleeInfo::PrintSelf()" << endl;
+//	cout << "========================" << endl;
+//	cout << "magRounds\t\t:\t" << magRounds << endl;
+//	cout << "maxMagRounds\t\t:\t" << maxMagRounds << endl;
+//	cout << "totalRounds\t\t:\t" << totalRounds << endl;
+//	cout << "maxTotalRounds\t\t:\t" << maxTotalRounds << endl;
+//	cout << "timeBetweenShots\t:\t" << timeBetweenShots << endl;
+//	cout << "elapsedTime\t\t:\t" << elapsedTime << endl;
+//	cout << "bFire\t\t:\t" << bFire << endl;
+//}
+//
+//int CMeleeInfo::getDefaultMaxTotalRounds(void)
+//{
+//	return defaultMaxTotalRounds;
+//}
