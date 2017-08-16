@@ -19,7 +19,7 @@ public:
 	// Detect and process front / back movement on the controller
 	virtual bool Move_FrontBack(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	// Detect and process left / right movement on the controller
-	virtual bool Move_LeftRight(const float deltaTime, const bool direction);
+	virtual bool Move_LeftRight(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	// Detect and process look up / down on the controller
 	virtual bool Look_UpDown(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	// Detect and process look left / right on the controller
