@@ -4,7 +4,7 @@
 #include "Equipment.h"
 #include "Inventory.h"
 
-Basic_Sword * Create::theSword(const std::string & _meshName, string ID)
+Basic_Sword * Create::theSword(const std::string & _meshName, string ID, string attack, bool isEquipped)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
@@ -12,8 +12,16 @@ Basic_Sword * Create::theSword(const std::string & _meshName, string ID)
 
 	Basic_Sword* result = new Basic_Sword(modelMesh);
 	result->SetID(stoi(ID));
+	result->SetAttack(stoi(attack));
 	result->SetType(Equipment::SWORD);
 	result->SetName(_meshName);
-	EquipmentManager::GetInstance()->AssignEquipment(result);
-	Inventory::GetInstance()->assign_storage(result);
+
+	if (isEquipped)
+	{
+		EquipmentManager::GetInstance()->AssignEquipment(result);
+	}
+	else
+	{
+		Inventory::GetInstance()->assign_storage(result);
+	}
 }
