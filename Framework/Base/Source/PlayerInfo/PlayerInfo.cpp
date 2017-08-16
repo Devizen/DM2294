@@ -93,6 +93,8 @@ void CPlayerInfo::Init(void)
 	maxBoundary.Set(1,1,1);
 	minBoundary.Set(-1, -1, -1);
 
+	freeLookViewVector.Set(0, 0, 0);
+
 	// Set the pistol as the primary weapon
 	primaryWeapon = new CPistol();
 	primaryWeapon->Init();
@@ -604,28 +606,33 @@ bool CPlayerInfo::Move_FrontBack(const float deltaTime, const bool direction, co
 
 	Vector3 viewVector = (target - position).Normalized();
 
+	if ((theCurrentPosture == STAND) && (!KeyboardController::GetInstance()->IsKeyDown(VK_LMENU)))
+	{
+		freeLookViewVector = viewVector;
+	}
+
 	if (direction)
 	{
 
 		if ((theCurrentPosture == STAND) && (KeyboardController::GetInstance()->IsKeyDown(VK_SHIFT)))
-			ghostPosition += viewVector * (float)m_dSpeed * 2.0f * (float)deltaTime;
+			ghostPosition += freeLookViewVector * (float)m_dSpeed * 2.0f * (float)deltaTime;
 		else if (theCurrentPosture == CROUCH)
-			ghostPosition += viewVector * (float)m_dSpeed * 0.75f * (float)deltaTime;
+			ghostPosition += freeLookViewVector * (float)m_dSpeed * 0.75f * (float)deltaTime;
 		else if (theCurrentPosture == PRONE)
-			ghostPosition += viewVector * (float)m_dSpeed * 0.25f * (float)deltaTime;
+			ghostPosition += freeLookViewVector * (float)m_dSpeed * 0.25f * (float)deltaTime;
 		else
-			ghostPosition += viewVector * (float)m_dSpeed * (float)deltaTime;
+			ghostPosition += freeLookViewVector * (float)m_dSpeed * (float)deltaTime;
 
 		if (!EntityManager::GetInstance()->CheckAABBCollision(ghostMinAABB, ghostMaxAABB,ghostPosition))
 		{
 			if ((theCurrentPosture == STAND) && (KeyboardController::GetInstance()->IsKeyDown(VK_SHIFT)))
-				position += viewVector * (float)m_dSpeed * 2.0f * (float)deltaTime;
+				position += freeLookViewVector * (float)m_dSpeed * 2.0f * (float)deltaTime;
 			else if (theCurrentPosture == CROUCH)
-				position += viewVector * (float)m_dSpeed * 0.75f * (float)deltaTime;
+				position += freeLookViewVector * (float)m_dSpeed * 0.75f * (float)deltaTime;
 			else if (theCurrentPosture == PRONE)
-				position += viewVector * (float)m_dSpeed * 0.25f * (float)deltaTime;
+				position += freeLookViewVector * (float)m_dSpeed * 0.25f * (float)deltaTime;
 			else
-				position += viewVector * (float)m_dSpeed * (float)deltaTime;
+				position += freeLookViewVector * (float)m_dSpeed * (float)deltaTime;
 
 			//	 Constrain the position
 			Constrain();

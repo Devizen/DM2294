@@ -35,6 +35,10 @@
 /*Sound*/
 #include "SoundEngine.h"
 
+/*Enemies*/
+#include "Enemy\Enemy3D.h"
+#include "Enemy\Patrol\Patrol.h"
+
 #include <iostream>
 using namespace std;
 
@@ -375,6 +379,14 @@ void SceneText::Init()
 	TEMPDEPTHQUAD->textureID = DepthFBO::GetInstance()->GetTexture();
 	TEMPSPHERE = MeshBuilder::GetInstance()->GenerateSphere("TEMPSPHERE", Color(1, 1, 1), 10, 10, 1);
 	TEMPQUAD = MeshBuilder::GetInstance()->GenerateQuad("TEMPQUADGROUND", Color(1, 1, 1), 1);
+
+	ParticleManager* particleManager = ParticleManager::GetInstance();
+	vector<ParticleManager*>particleList = particleManager->getParticleList();
+	for (int i = 0; i < particleManager->getMaximumParticles(); ++i)
+	{
+		particleManager->pushParticle(particleObject_type::P_Water);
+	}
+	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 }
 
 void SceneText::Update(double dt)
@@ -530,6 +542,8 @@ void SceneText::Update(double dt)
 
 			// Update camera effects
 			theCameraEffects->Update(dt);
+
+			ParticleManager::GetInstance()->updateParticle(dt);
 		}
 	}
 	else
@@ -667,50 +681,59 @@ void SceneText::renderWeaponUI(void)
 
 void SceneText::createEnemies(double dt)
 {
-	static float increaseEnemies = 0.f;
-	increaseEnemies += (float)dt;
+	static bool once = false;
 
-	static int count = 0;
-	if (count < 2)
+	if (!once)
 	{
-		if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
+		srand(time(NULL));
+		CPatrol* enemy = Create::Patrol("cube", Vector3(0.f, 0.f, 0.f), Vector3(10.f, 10.f, 10.f));
+		for (int i = 0; i < 10; ++i)
 		{
-			Vector3 newPosition(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
-			Vector3 _minAABB(-5.f, 0.f, -5.f);
-			Vector3 _maxAABB(5.f, 5.f, 5.f);
-			/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
-			while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
-			{
-				newPosition.Set(Math::RandFloatMinMax(-50.f, 50.f), 0.f, Math::RandFloatMinMax(-50.f, 50.f));
-			}
-			// Create a CEnemy instance
-			//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
-			anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f));
-			//anEnemy3D->Init();
-			anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
-			anEnemy3D->SetCollider(true);
-			anEnemy3D->SetLight(true);
-			anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
-			CEnemy3D::ATTRIBUTES _attributes;
-			if (count == 1)
-			{
-				_attributes.MAX_HEALTH = 1000.f;
-				_attributes.HEALTH = 1000.f;
-			}
-			else
-			{
-				_attributes.MAX_HEALTH = 10.f;
-				_attributes.HEALTH = 10.f;
-			}
-			_attributes.ATTACK = 1.f;
-			_attributes.DEFENSE = 1.f;
-			anEnemy3D->setAttributes(_attributes);
-			anEnemy3D->SetTerrain(groundEntity);
-			anEnemy3D->SetLight(true);
-
-			++count;
+			enemy->addWaypoint(Vector3(Math::RandFloatMinMax(-50.f, 50.f), /*Math::RandFloatMinMax(0.f, 10.f)*/ 0.f, Math::RandFloatMinMax(-50.f, 50.f)));
 		}
+		enemy->SetLight(true);
+		once = true;
 	}
+
+	/*Tower*/
+	//static float increaseEnemies = 0.f;
+	//increaseEnemies += (float)dt;
+
+	//static int count = 0;
+	//if (count < 100)
+	//{
+	//	if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
+	//	{
+	//		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+	//		Vector3 _minAABB(-5.f, 0.f, -5.f);
+	//		Vector3 _maxAABB(5.f, 5.f, 5.f);
+	//		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
+	//		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
+	//		{
+	//			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+	//		}
+	//		// Create a CEnemy instance
+	//		//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
+	//		anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f), Enemy_Type::ENEMY_BEHAVIOR::TOWER);
+	//		//anEnemy3D->Init();
+	//		anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	//		anEnemy3D->SetCollider(true);
+	//		anEnemy3D->SetLight(true);
+	//		anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
+	//		CEnemy3D::ATTRIBUTES _attributes;
+
+	//		_attributes.MAX_HEALTH = 10.f;
+	//		_attributes.HEALTH = 10.f;
+	//		
+	//		_attributes.ATTACK = 1.f;
+	//		_attributes.DEFENSE = 1.f;
+	//		anEnemy3D->setAttributes(_attributes);
+	//		anEnemy3D->SetTerrain(groundEntity);
+	//		anEnemy3D->SetLight(true);
+
+	//		++count;
+	//	}
+	//}
 
 }
 
@@ -1098,6 +1121,8 @@ void SceneText::RenderPassMain(void)
 	RenderWorld();
 	//currProg->UpdateInt("fogParam.enabled", 0);
 
+
+
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
@@ -1108,28 +1133,34 @@ void SceneText::RenderPassMain(void)
 
 	/*Render Weapon*/
 	renderWeapon();
-	/*Render KO Count*/
-	RenderHelper::GetInstance()->renderKOCount();
 
-	/*Render Camera Effects*/
+	//*Render Camera Effects*/
 	theCameraEffects->RenderUI();
+
+	//*Render Weapon UI*/
+	renderWeaponUI();
+
+	//*Render Hit*/
+	if (EntityManager::GetInstance()->getHit())
+		renderHit();
+
+
+	glEnable(GL_DEPTH_TEST);
 
 	/*Render Minimap*/
 	theMinimap->RenderUI();
 
-
-	/*Render Weapon UI*/
-	renderWeaponUI();
-
-	/*Render Hit*/
-	if (EntityManager::GetInstance()->getHit())
-		renderHit();
-	/*Render Player Health Bar*/
+	/*2D Render*/
+	glDisable(GL_DEPTH_TEST);
+	//*Render KO Count*/
+	RenderHelper::GetInstance()->renderKOCount();
+	//*Render Player Health Bar*/
 	RenderHelper::GetInstance()->renderPlayerHealth();
 
-
+	/*3D Render*/
+	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	//glEnable(GL_DEPTH_TEST);
+	
 	// Render LightBall
 	//modelStack.PushMatrix();
 	//modelStack.Rotate(lightMove, 0.f, 1.f, 0.f);
@@ -1190,6 +1221,8 @@ void SceneText::RenderWorld(void)
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	EntityManager::GetInstance()->Render();
+
+	ParticleManager::GetInstance()->renderAllParticle();
 
 	/*Debug Quad for Shadow*/
 	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();

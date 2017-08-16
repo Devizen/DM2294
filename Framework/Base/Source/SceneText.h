@@ -15,6 +15,7 @@
 #include "CameraEffects\CameraEffects.h"
 #include "HardwareAbstraction\Mouse.h"
 #include "DepthFBO.h"
+#include "ParticleManager.h"
 
 class ShaderProgram;
 class SceneManager;
