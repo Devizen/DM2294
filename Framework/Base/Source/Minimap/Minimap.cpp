@@ -5,6 +5,7 @@
 #include "GL\glew.h"
 #include "MeshBuilder.h"
 #include "..\Enemy\Enemy3D.h"
+#include "../Application.h"
 
 CMinimap::CMinimap(void)
 	: m_cMinimap_Background(NULL)
@@ -143,10 +144,15 @@ void CMinimap::RenderUI()
 	if (mode == MODE_3D)
 		return;
 
+	//int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+	//int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	//GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
+
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 
 	// Push the current transformation into the modelStack
 	modelStack.PushMatrix();
+
 		// Translate the current transformation
 		modelStack.Translate(position.x, position.y, position.z);
 		// Scale the current transformation
@@ -234,10 +240,24 @@ void CMinimap::RenderUI()
 		Vector3 direction = (-CPlayerInfo::GetInstance()->GetPos() + CPlayerInfo::GetInstance()->GetTarget()).Normalize();
 		float angle = Math::RadianToDegree(atan2f(direction.z - displacement.z, direction.x - displacement.x));
 		angle = Math::RadianToDegree(acos(direction.Normalized().Dot(displacement.Normalized())));
-		Vector3 rotateAboutAxis = direction.Cross(displacement).Normalize();
+
+		Vector3 rotateAboutAxis(1.f, 1.f, 1.f);
+
+		try {
+			rotateAboutAxis = direction.Cross(displacement).Normalize();
+		}
+		catch (std::exception &e) {
+			std::cout << "Divide by Zero" << std::endl;
+		}
 		displacement *= 0.1f;
-		modelStack.Rotate(angle, 0.f, 0.f, rotateAboutAxis.y);
-		modelStack.Rotate(90.f, 0.f, 0.f, 1);
+		/*This is to throw Divide By Zero that happens when the player and enemy position aligns.*/
+		try {
+			modelStack.Rotate(angle, 0.f, 0.f, rotateAboutAxis.y);
+		}
+		catch (std::exception &e) {
+			std::cout << "Divide by Zero" << std::endl;
+		}
+		modelStack.Rotate(90.f, 0.f, 0.f, 1.f);
 		modelStack.Translate(length / 8.f, 0, 0);
 		modelStack.Scale(10, 10, 10);
 		RenderHelper::RenderMesh(modelMesh);
