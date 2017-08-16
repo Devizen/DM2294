@@ -43,6 +43,7 @@ void RenderHelper::RenderMesh(Mesh* _mesh)
 
 		return;
 	}
+	g->SetActiveShader("default");
 	MVP = GraphicsManager::GetInstance()->GetProjectionMatrix() * GraphicsManager::GetInstance()->GetViewMatrix() * GraphicsManager::GetInstance()->GetModelStack().Top();
 	ShaderProgram* currProg = GraphicsManager::GetInstance()->GetActiveShader();
 	currProg->UpdateMatrix44("MVP", &MVP.a[0]);
@@ -230,5 +231,4 @@ void RenderHelper::renderKOCount(void)
 	modelStack.Scale(Application::GetInstance().getAspectRatioWidth() * 0.1f, Application::GetInstance().getAspectRatioWidth() * 0.1f, 1.f);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "KO:" + to_string(CPlayerInfo::GetInstance()->getKO_Count()), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
-
 }

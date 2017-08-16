@@ -280,6 +280,11 @@ void EntityManager::AddEnemy(CEnemy3D * _newEntity)
 	enemyList.push_back(_newEntity);
 }
 
+void EntityManager::AddPatrolEnemy(Patrol * _newEntity)
+{
+	patrolList.push_back(_newEntity);
+}
+
 void EntityManager::AddItem(EntityBase * _newEntity)
 {
 	itemList.push_back(_newEntity);

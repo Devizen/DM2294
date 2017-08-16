@@ -1,6 +1,8 @@
 #pragma once
 #include "../GenericEntity.h"
 #include "../GroundEntity.h"
+#include "Enemy_Type.h"
+#include "../Attributes.h"
 
 #include <vector>
 
@@ -11,18 +13,12 @@ using namespace std;
 class Mesh;
 
 class CEnemy3D :
-	public GenericEntity
+	public GenericEntity,
+	public Enemy_Type,
+	public CAttributes
 {
 	friend class EntityManager;
 	friend class SceneText;
-
-	enum AI_STATE
-	{
-		IDLE = 0,
-		ALERT,
-		DEAD,
-		RECOVERY,
-	};
 
 	enum ATTRIBUTE_TYPES
 	{
@@ -62,9 +58,19 @@ public:
 	CEnemy3D(Mesh* _modelMesh);
 	virtual ~CEnemy3D();
 
-	void Init(void);
+	enum AI_STATE
+	{
+		IDLE = 0,
+		ALERT,
+		DEAD,
+		RECOVERY,
+		PATROL
+	};
+
+
+	virtual void Init(void);
 	// Reset this player instance to default
-	void Reset(void);
+	virtual void Reset(void);
 
 	// Set position
 	void SetPos(const Vector3& pos);
@@ -87,12 +93,12 @@ public:
 	GroundEntity* GetTerrain(void);
 
 	// Update
-	void Update(double dt = 0.0333f);
+	virtual void Update(double dt = 0.0333f);
 
 	// Constrain the position within the borders
 	void Constrain(void);
 	// Render
-	void Render(void);
+	virtual void Render(void);
 
 	/*Set Health*/
 	void setHealth(int _health);
@@ -105,7 +111,7 @@ public:
 	int getState(void);
 
 	/*Check if player is inside defined boundary around enemy.*/
-	bool checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary);
+	virtual bool checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary);
 
 	/*Return nearest enemy*/
 	CEnemy3D* returnNearestEnemy(void);
@@ -136,13 +142,18 @@ public:
 	bool getPlayerProperty(void);
 
 	/*Set Shoot Delay*/
-	void setShootDelay(float _shootDelay);
+	virtual void setShootDelay(float _shootDelay);
 
 	/*Get Player Property*/
-	float getShootDelay(void);
+	virtual float getShootDelay(void);
 
 	/*Render Health Bar*/
-	void renderHealthBar(void);
+	virtual void renderHealthBar(void);
+
+	/*Update for Patrol Behavior*/
+	void updatePatrol(double dt);
+	/*Update for Tower Behavior*/
+	void updateTower(double dt);
 private:
 	ATTRIBUTES attributes;
 	int health;

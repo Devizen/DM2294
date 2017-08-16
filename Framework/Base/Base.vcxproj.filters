@@ -59,7 +59,7 @@
       <UniqueIdentifier>{7b57e043-2491-4545-a9b7-6078a432213b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Enemy3D\Patrol">
-      <UniqueIdentifier>{d1c22631-06b4-4f5c-9d7d-91b72da52b22}</UniqueIdentifier>
+      <UniqueIdentifier>{2b125580-86a5-4d95-b0db-6cafde7fa78a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -216,11 +216,14 @@
     <ClCompile Include="Source\Items\Inventory.cpp">
       <Filter>Inventory</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp">
-      <Filter>Enemy3D\Patrol</Filter>
-    </ClCompile>
     <ClCompile Include="Source\HardwareAbstraction\Gamepad.cpp">
       <Filter>HardwareAnstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Enemy_Type.cpp">
+      <Filter>Enemy3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp">
+      <Filter>Enemy3D\Patrol</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -380,11 +383,14 @@
     <ClInclude Include="Source\Items\Inventory.h">
       <Filter>Inventory</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Enemy\Patrol\Patrol.h">
-      <Filter>Enemy3D\Patrol</Filter>
-    </ClInclude>
     <ClInclude Include="Source\HardwareAbstraction\Gamepad.h">
       <Filter>HardwareAnstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Enemy_Type.h">
+      <Filter>Enemy3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Patrol\Patrol.h">
+      <Filter>Enemy3D\Patrol</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

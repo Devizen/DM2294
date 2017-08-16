@@ -15,6 +15,7 @@ class CProjectile;
 class CFurniture;
 class CEnemy3D;
 class CPlayerInfo;
+class Patrol;
 
 class EntityManager : public Singleton<EntityManager>
 {
@@ -29,6 +30,7 @@ public:
 	void AddFixed(CFurniture* _newEntity);
 	void AddPlayer(CPlayerInfo* _newEntity);
 	void AddEnemy(CEnemy3D* _newEntity);
+	void AddPatrolEnemy(Patrol* _newEntity);
 	void AddItem(EntityBase* _newEntity);
 	bool RemoveEntity(EntityBase* _existingEntity);
 	bool RemoveEnemy(CEnemy3D* _existingEntity);
@@ -72,6 +74,7 @@ private:
 	std::list<CPlayerInfo*> playerList;
 	std::list<CEnemy3D*> enemyList;
 	std::list<EntityBase*>itemList;
+	std::list<Patrol*>patrolList;
 
 	bool hit;
 };
