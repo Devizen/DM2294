@@ -58,8 +58,13 @@
     <Filter Include="Enemy3D\Patrol">
       <UniqueIdentifier>{2b125580-86a5-4d95-b0db-6cafde7fa78a}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
+    <Filter Include="Map_Editor">
+      <UniqueIdentifier>{065952a4-708b-4fc0-9a73-c93baec6b8f6}</UniqueIdentifier>
+=======
     <Filter Include="Options\Scene2D">
       <UniqueIdentifier>{373b0346-ef0f-444d-94b4-47543aaa8fd8}</UniqueIdentifier>
+>>>>>>> 51f2e5025fca70e3007a76bf3a202a0ea98c80e9
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp">
       <Filter>Enemy3D\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Map_Editor\Map_Editor.cpp">
+      <Filter>Map_Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -391,6 +399,9 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy\Patrol\Patrol.h">
       <Filter>Enemy3D\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Map_Editor\Map_Editor.h">
+      <Filter>Map_Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

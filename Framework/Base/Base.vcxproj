@@ -37,6 +37,7 @@
     <ClCompile Include="Source\Items\Shoe.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Map_Editor\Map_Editor.cpp" />
     <ClCompile Include="Source\Minimap\Minimap.cpp" />
     <ClCompile Include="Source\Object\Bullet.cpp" />
     <ClCompile Include="Source\Object\Furniture.cpp" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Source\Items\Shoe.h" />
     <ClInclude Include="Source\Items\Weapon.h" />
     <ClInclude Include="Source\Light.h" />
+    <ClInclude Include="Source\Map_Editor\Map_Editor.h" />
     <ClInclude Include="Source\Minimap\Minimap.h" />
     <ClInclude Include="Source\Object\Bullet.h" />
     <ClInclude Include="Source\Object\Furniture.h" />

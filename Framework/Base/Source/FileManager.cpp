@@ -349,6 +349,7 @@ bool FileManager::ReadWeaponFile( string myFile)
 		cout << "GG" << endl;
 		return false;
 	}
+	return true;
 }
 
 void FileManager::EditFile(const string myFile)

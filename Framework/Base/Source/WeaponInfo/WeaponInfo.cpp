@@ -157,6 +157,7 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 															_source);
 			aProjectile->SetCollider(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+			aProjectile->bulletOriginated = CProjectile::FROM_PLAYER;
 			bFire = false;
 			magRounds--;
 		}

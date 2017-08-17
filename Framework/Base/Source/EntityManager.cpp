@@ -64,10 +64,12 @@ void EntityManager::Update(double _dt)
 			if (enemy->getPlayerProperty() && enemy->whoCloser == CEnemy3D::NONE)
 				continue;
 
+			if (enemy->getPlayerProperty() && bullet->bulletOriginated == CProjectile::FROM_PLAYER)
+				continue;
+
 			if (CheckProjectileToEnemyCollision(bullet, enemy))
 			{
-				enemy->setHealth(enemy->getHealth() - 1);
-				--enemy->attributes.HEALTH;
+				enemy->deductHealthBy(1);
 				bullet->SetStatus(false);
 				hit = true;
 			}
