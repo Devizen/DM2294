@@ -384,6 +384,14 @@ void SceneText::Init()
 	TEMPDEPTHQUAD->textureID = DepthFBO::GetInstance()->GetTexture();
 	TEMPSPHERE = MeshBuilder::GetInstance()->GenerateSphere("TEMPSPHERE", Color(1, 1, 1), 10, 10, 1);
 	TEMPQUAD = MeshBuilder::GetInstance()->GenerateQuad("TEMPQUADGROUND", Color(1, 1, 1), 1);
+
+	ParticleManager* particleManager = ParticleManager::GetInstance();
+	vector<ParticleManager*>particleList = particleManager->getParticleList();
+	for (int i = 0; i < particleManager->getMaximumParticles(); ++i)
+	{
+		particleManager->pushParticle(particleObject_type::P_Water);
+	}
+	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 }
 
 void SceneText::Update(double dt)
@@ -541,12 +549,16 @@ void SceneText::Update(double dt)
 			// Update camera effects
 			theCameraEffects->Update(dt);
 
+
 			/*Map Editor*/
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD7) && !Map_Editor::GetInstance()->mapEditing)
 				Map_Editor::GetInstance()->mapEditing = true;
 
 			if (Map_Editor::GetInstance()->mapEditing)
 				Map_Editor::GetInstance()->updateOption(dt);
+
+			ParticleManager::GetInstance()->updateParticle(dt);
+
 		}
 	}
 	else
@@ -1227,8 +1239,12 @@ void SceneText::RenderWorld(void)
 
 	EntityManager::GetInstance()->Render();
 
+
 	if (Map_Editor::GetInstance()->mapEditing)
 		Map_Editor::GetInstance()->renderObject();
+
+	ParticleManager::GetInstance()->renderAllParticle();
+
 
 	/*Debug Quad for Shadow*/
 	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();

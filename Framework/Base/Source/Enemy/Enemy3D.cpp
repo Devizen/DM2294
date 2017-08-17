@@ -350,6 +350,7 @@ bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 			Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
 			Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
 
+			whoCloser = PLAYER;
 			if ((boundaryMin.x < playerMax.x && boundaryMax.x >playerMin.x) &&
 				(boundaryMin.y < playerMax.y && boundaryMax.y >playerMin.y) &&
 				(boundaryMin.z < playerMax.z && boundaryMax.z >playerMin.z))

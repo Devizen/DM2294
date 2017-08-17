@@ -84,7 +84,7 @@ void ParticleManager::renderParticle()
 	{
 	case P_Water:
 		Mesh* modelMesh;
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("PISTOL");
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("cube");
 		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 		modelStack.PushMatrix();
 		modelStack.Translate(particle_Position.x, particle_Position.y, particle_Position.z);

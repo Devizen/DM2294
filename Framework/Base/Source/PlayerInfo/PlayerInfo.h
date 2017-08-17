@@ -177,6 +177,7 @@ private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;
 	Vector3 maxBoundary, minBoundary;
+	Vector3 freeLookViewVector;
 	GroundEntity* m_pTerrain;
 
 	double m_dSpeed;
