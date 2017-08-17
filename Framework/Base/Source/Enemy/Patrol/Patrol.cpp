@@ -18,34 +18,9 @@ CPatrol::CPatrol(Mesh * _modelMesh)
 CPatrol::~CPatrol()
 {
 }
-
 void CPatrol::Init(void)
 {
-	// Set the default values
-	defaultPosition.Set(0, 0, 10);
-	defaultTarget.Set(0, 0, 0);
-	defaultUp.Set(0, 1, 0);
-
-	// Set the current values
-	//position.Set(10.0f, 0.0f, 0.0f);
-	//target.Set(10.0f, 0.0f, 450.0f);
-	//up.Set(0.0f, 1.0f, 0.0f);
-	position.Set(position.x, position.y, position.z);
-	target.Set(10.0f, 0.0f, 450.0f);
-	up.Set(0.0f, 1.0f, 0.0f);
-
-	// Set Boundary
-	maxBoundary.Set(1, 1, 1);
-	minBoundary.Set(-1, -1, -1);
-
-	// Set speed
-	m_dSpeed = 10.0;
-
-	// Add to EntityManager
-	EntityManager::GetInstance()->AddEntity(this);
-
 }
-
 // Reset this player instance to default
 void CPatrol::Reset(void)
 {
@@ -70,9 +45,14 @@ void CPatrol::Update(double dt)
 		{
 			Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
 		
-			position += displacement.Normalized() * (float)dt * 20.f;
-			position.x += displacement.Normalized().x * (float)dt * 20.f;
-			position.z += displacement.Normalized().z * (float)dt * 20.f;
+			try
+			{
+				position += displacement.Normalized() * (float)dt * 20.f;
+			}
+			catch (exception e)
+			{
+				/*Divide By Zero does no harm to this situation because it will only happen when there is only 1 waypoint and the enemy is on top, thus, can be left unresolved.*/
+			}
 
 			if (displacement.LengthSquared() <= 20.f)
 				waypointToGo = ((waypointToGo == waypoint.size() - 1) ? 0 : ++waypointToGo);
@@ -84,6 +64,7 @@ void CPatrol::Update(double dt)
 			Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
 			Vector3 displacement(positionWithoutY - this->GetPos());
 
+			/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
 			if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
 				position += displacement.Normalized() * (float)dt * 20.f;
 		}
@@ -121,8 +102,8 @@ void CPatrol::Render(void)
 		RenderHelper::RenderMeshWithLight(modelMesh);
 	modelStack.PopMatrix();
 
-	//if (attributes.HEALTH > 0.f)
-	//	renderHealthBar();
+	if (getAttribute(CAttributes::TYPE_HEALTH) > 0.f)
+		renderHealthBar();
 }
 
 
@@ -153,10 +134,10 @@ float CPatrol::getShootDelay(void)
 	return shootDelay;
 }
 
-void CPatrol::renderHealthBar(void)
-{
-
-}
+//void CPatrol::renderHealthBar(void)
+//{
+//
+//}
 
 void CPatrol::increaseWaypointToGo(void)
 {

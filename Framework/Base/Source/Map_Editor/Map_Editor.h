@@ -13,6 +13,8 @@ using std::ostringstream;
 
 class CPatrol;
 class CEnemy3D;
+class CHorde;
+
 class Map_Editor : public Singleton<Map_Editor>
 {
 public:
@@ -44,6 +46,7 @@ public:
 	{
 		ROBOT = 0,
 		TOWER,
+		HORDE,
 		ENEMY_OBJECT_NONE
 	};
 
@@ -54,10 +57,12 @@ public:
 	bool mapEditing;
 	/*Render the objects out for visual reference.*/
 	void renderObject(void);
-	/*Update the options*/
+	/*Update the options.*/
 	void renderOption(void);
-	/*Update the options*/
+	/*Update the options.*/
 	void updateOption(double dt);
+	/*Reset options.*/
+	void resetOption(void);
 
 	OBJECT_TYPE objectType;
 	ENVIRONMENT_OBJECT environmentObject;
@@ -87,7 +92,10 @@ public:
 
 	/*Enemy Object to add waypoint.*/
 	CPatrol* _enemy;
+	/*Enemy turrent to change variables.*/
 	CEnemy3D* turret;
+	/*Enemy Horde to change variables.*/
+	CEnemy3D* _horde;
 private:
 
 protected:

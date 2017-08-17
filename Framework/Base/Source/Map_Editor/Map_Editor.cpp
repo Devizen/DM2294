@@ -12,10 +12,12 @@
 #include "../PlayerInfo/PlayerInfo.h"
 /*For maintaing aspect ratio.*/
 #include "../Application.h"
-/*To create Objects*/
+/*To create Objects.*/
 #include "../Object/Furniture.h"
-/*To create Enemies*/
+/*To create Enemies.*/
 #include "../Enemy/Patrol/Patrol.h"
+/*To create Horde.*/
+#include "../Enemy/Horde/Horde.h"
 /*For using string*/
 #include <string>
 
@@ -103,6 +105,48 @@ void Map_Editor::renderObject(void)
 						modelStack.PopMatrix();
 						break;
 					}
+
+					case HORDE:
+					{
+						Vector3 _leftPosition(_displacement.x - (_scale.x * _scale.z * 2.f), _displacement.y, _displacement.z);
+						Vector3 _rightPosition(_displacement.x + (_scale.x * _scale.z * 2.f), _displacement.y, _displacement.z);
+						Vector3 _upPosition(_displacement.x, _displacement.y, _displacement.z + (_scale.x * _scale.z * 2.f));
+						Vector3 _downPosition(_displacement.x, _displacement.y, _displacement.z - (_scale.x * _scale.z * 2.f));
+
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
+						modelStack.PopMatrix();
+
+						modelStack.PushMatrix();
+						modelStack.Translate(_leftPosition.x, _leftPosition.y, _leftPosition.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
+						modelStack.PopMatrix();
+
+						modelStack.PushMatrix();
+						modelStack.Translate(_rightPosition.x, _rightPosition.y, _rightPosition.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
+						modelStack.PopMatrix();
+
+						modelStack.PushMatrix();
+						modelStack.Translate(_upPosition.x, _upPosition.y, _upPosition.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
+						modelStack.PopMatrix();
+
+						modelStack.PushMatrix();
+						modelStack.Translate(_downPosition.x, _downPosition.y, _downPosition.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
+						modelStack.PopMatrix();
+
+
+						break;
+					}
 				}
 				break;
 			}
@@ -149,6 +193,9 @@ void Map_Editor::renderOption(void)
 
 	if (enemyObject == TOWER)
 		s_EnemyObject = "Tower";
+
+	if (enemyObject == HORDE)
+		s_EnemyObject = "Horde";
 
 	if (enemyObject == ENEMY_OBJECT_NONE)
 		s_EnemyObject = "None";
@@ -232,6 +279,9 @@ void Map_Editor::updateOption(double dt)
 			{
 				cout << "Enemy Object: " << enemyObject << endl;
 				if (enemyObject == ENEMY_OBJECT_NONE)
+					enemyObject = HORDE;
+
+				else if (enemyObject == HORDE)
 					enemyObject = TOWER;
 
 				else if (enemyObject == TOWER)
@@ -277,6 +327,9 @@ void Map_Editor::updateOption(double dt)
 					enemyObject = TOWER;
 
 				else if (enemyObject == TOWER)
+					enemyObject = HORDE;
+
+				else if (enemyObject == HORDE)
 					enemyObject = ENEMY_OBJECT_NONE;
 			}
 		}
@@ -353,7 +406,7 @@ void Map_Editor::updateOption(double dt)
 				if (!addWaypoint)
 				{
 					_enemy = Create::Patrol("ROBOT", _displacement, _scale);
-					_enemy->SetAABB(Vector3(_scale.x, _scale.y * 1.7f, _scale.z), Vector3(-_scale.x, -_scale.y * 1.7f, -_scale.z));
+					_enemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 					_enemy->SetLight(true);
 					addWaypoint = true;
 				}
@@ -378,6 +431,22 @@ void Map_Editor::updateOption(double dt)
 				turret->setPlayerProperty(false);
 				turret->SetLight(true);
 			}
+
+			else if (enemyObject == HORDE)
+			{
+				cout << "Create Displacement: " << _displacement << endl;
+				_horde = Create::Horde("ROBOT", _displacement, _scale);
+			}
 		}
+		if (!addWaypoint)
+			resetOption();
 	}
+}
+
+void Map_Editor::resetOption(void)
+{
+	optionSelectionLevel = OBJECT_SELECT;
+	objectType = OBJECT_TYPE_NONE;
+	environmentObject = ENVIRONMENT_OBJECT_NONE;
+	enemyObject = ENEMY_OBJECT_NONE;
 }

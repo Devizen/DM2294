@@ -15,6 +15,7 @@ CMinimap::CMinimap(void)
 	, m_cMinimap_Stencil(NULL)
 	, m_iAngle(-90)
 	, mode(MODE_2D)
+	, enlargedMap(false)
 {
 	Init();
 }
@@ -224,6 +225,18 @@ void CMinimap::RenderUI()
 
 	modelStack.PopMatrix();
 
+	if (enlargedMap)
+	{
+		Mesh* modelMesh;
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("MINIMAP_ENLARGED");
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		modelStack.PushMatrix();
+		modelStack.Translate(0.f, 0.f, 0.f);
+		//modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
+		modelStack.Scale(500.f, 500.f, 0.f);
+		RenderHelper::RenderMesh(modelMesh);
+		modelStack.PopMatrix();
+	}
 	// Render enemies
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
@@ -231,12 +244,15 @@ void CMinimap::RenderUI()
 
 		Vector3 displacement = -CPlayerInfo::GetInstance()->GetPos() + enemy->GetPos();
 		float length = displacement.Length();
-		if (displacement.Length() > 300.f)
-			continue;
-
+		if (!enlargedMap)
+		{
+			if (displacement.Length() > 300.f)
+				continue;
+		}
 		Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh("ENEMY");
 		modelStack.PushMatrix();
-		modelStack.Translate(this->position.x, this->position.y, 0.f);
+		if (!enlargedMap)
+			modelStack.Translate(this->position.x, this->position.y, 0.f);
 		Vector3 direction = (-CPlayerInfo::GetInstance()->GetPos() + CPlayerInfo::GetInstance()->GetTarget()).Normalize();
 		float angle = Math::RadianToDegree(atan2f(direction.z - displacement.z, direction.x - displacement.x));
 		angle = Math::RadianToDegree(acos(direction.Normalized().Dot(displacement.Normalized())));
@@ -258,7 +274,11 @@ void CMinimap::RenderUI()
 			std::cout << "Divide by Zero" << std::endl;
 		}
 		modelStack.Rotate(90.f, 0.f, 0.f, 1.f);
-		modelStack.Translate(length / 8.f, 0, 0);
+		
+		if (!enlargedMap)
+			modelStack.Translate(length / 8.f, 0, 0);
+		else
+			modelStack.Translate(length / 5.f, 0, 0);
 		modelStack.Scale(10, 10, 10);
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();

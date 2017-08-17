@@ -17,6 +17,7 @@
     <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\Enemy\Enemy3D.cpp" />
     <ClCompile Include="Source\Enemy\Enemy_Type.cpp" />
+    <ClCompile Include="Source\Enemy\Horde\Horde.cpp" />
     <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FileManager.cpp" />
@@ -74,6 +75,7 @@
     <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\Enemy\Enemy3D.h" />
     <ClInclude Include="Source\Enemy\Enemy_Type.h" />
+    <ClInclude Include="Source\Enemy\Horde\Horde.h" />
     <ClInclude Include="Source\Enemy\Patrol\Patrol.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FileManager.h" />
