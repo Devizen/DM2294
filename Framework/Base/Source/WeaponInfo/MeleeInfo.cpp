@@ -139,7 +139,7 @@ void CMeleeInfo::Update(const double dt)
 }
 
 // Discharge this weapon
-void CMeleeInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
+void CMeleeInfo::Slash(Vector3 position, Vector3 target, CPlayerInfo* _source)
 {
 	if (bFire)
 	{
@@ -153,8 +153,8 @@ void CMeleeInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sourc
 			CProjectile* aProjectile = Create::Projectile("sphere", 
 				distanceBetween,
 															(target - position).Normalized(), /*Direction*/
-															2.0f, /*Lifespan of Bullet*/
-															800.0f, /*Speed*/
+															0.1f, /*Lifespan of Bullet*/
+															80.0f, /*Speed*/
 															_source);
 			aProjectile->SetCollider(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
