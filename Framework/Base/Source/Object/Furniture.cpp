@@ -55,10 +55,10 @@ CFurniture* Create::Furniture(const std::string& _meshName, const Vector3& _posi
 
 	CFurniture* result = new CFurniture(modelMesh);
 	/*Align to ground*/
-	Vector3 newPosition = _position;
-	newPosition.y -= 10.f;
+	//Vector3 newPosition = _position;
+	//newPosition.y -= 10.f;
 
-	result->SetPosition(newPosition);
+	result->SetPosition(_position);
 	result->SetScale(_scale);
 	result->SetCollider(true);
 	EntityManager::GetInstance()->AddFixed(result);

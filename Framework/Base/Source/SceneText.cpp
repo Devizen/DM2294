@@ -39,6 +39,12 @@
 #include "Enemy\Enemy3D.h"
 #include "Enemy\Patrol\Patrol.h"
 
+#include "Inventory.h"
+#include "Items\Helmet.h"
+
+/*Map Editor*/
+#include "Map_Editor\Map_Editor.h"
+
 #include <iostream>
 using namespace std;
 
@@ -276,6 +282,15 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GAMEOVER", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("GAMEOVER")->textureID = LoadTGA("Image//GAMEOVER.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("INVENTORY", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("INVENTORY")->textureID = LoadTGA("Image//Inventory.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("EMPHELM", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("EMPHELM")->textureID = LoadTGA("Image//EmperorHelmet.tga");
+
+	/*Robot Troop*/
+	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT", "OBJ//ROBOT.obj");
+	MeshBuilder::GetInstance()->GetMesh("ROBOT")->textureID = LoadTGA("Image//ROBOT.tga"); 
 	/*Player Health Bar Color*/
 	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
 
@@ -328,7 +343,7 @@ void SceneText::Init()
 	}
 
 
-
+	Inventory::GetInstance()->Init();
 	// Hardware Abstraction
 	theKeyboard = new CKeyboard();
 	theKeyboard->Create(playerInfo);
@@ -387,6 +402,7 @@ void SceneText::Init()
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
 	cout << "Particle List Size in Scene: " << particleList.size() << endl;
+	openInventory = false;
 }
 
 void SceneText::Update(double dt)
@@ -400,7 +416,24 @@ void SceneText::Update(double dt)
 	//m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
 
 	static bool pause = false;
+	static int renderOnce = 0;
 
+	if (KeyboardController::GetInstance()->IsKeyPressed('I'))
+	{
+		OptionsManager::GetInstance()->setEditingState(true);
+		openInventory = true;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed('U'))
+	{
+		OptionsManager::GetInstance()->setEditingState(false);
+		openInventory = false;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed('K'))
+	{
+		Create::theHelmet("EMPHELM", "0", "0", "0", "0", 0);
+	}
 
 	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) > 0)
 	{
@@ -493,6 +526,7 @@ void SceneText::Update(double dt)
 				}
 
 				weaponType << weaponName;
+				textObj[4]->SetPosition(Vector3(-360.f, -220.f, 0.f));
 				textObj[4]->SetText(weaponType.str());
 				printInterval = 0.f;
 			}
@@ -500,6 +534,7 @@ void SceneText::Update(double dt)
 			/*Display weapon info.*/
 			std::ostringstream ss;
 			ss << weaponManager[playerInfo->GetWeapon()]->GetMagRound() << "/" << weaponManager[playerInfo->GetWeapon()]->GetTotalRound();
+			textObj[5]->SetPosition(Vector3(-350.f, -200.f, 0.f));
 			textObj[5]->SetText(ss.str());
 
 			/*Display player health.*/
@@ -543,7 +578,16 @@ void SceneText::Update(double dt)
 			// Update camera effects
 			theCameraEffects->Update(dt);
 
+
+			/*Map Editor*/
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD7) && !Map_Editor::GetInstance()->mapEditing)
+				Map_Editor::GetInstance()->mapEditing = true;
+
+			if (Map_Editor::GetInstance()->mapEditing)
+				Map_Editor::GetInstance()->updateOption(dt);
+
 			ParticleManager::GetInstance()->updateParticle(dt);
+
 		}
 	}
 	else
@@ -629,7 +673,7 @@ void SceneText::renderWeapon(void)
 	modelStack.PushMatrix();
 	if (playerInfo->GetWeapon() == 0)
 	{
-		modelStack.Translate(250.f, -240.f, 0.f);
+		modelStack.Translate(300.f, -250.f, 0.f);
 		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
 		{
 			CSoundEngine::GetInstance()->PlayASound("PISTOL");
@@ -639,7 +683,7 @@ void SceneText::renderWeapon(void)
 	}
 	if (playerInfo->GetWeapon() == 1)
 	{
-		modelStack.Translate(250.f, -240.f, 0.f);
+		modelStack.Translate(250.f, -250.f, 0.f);
 		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
 		{
 			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
@@ -663,14 +707,14 @@ void SceneText::renderWeaponUI(void)
 	modelStack.PushMatrix();
 	if (playerInfo->GetWeapon() == 0)
 	{
-		modelStack.Translate(-350.0f, -250.0f, 0.f);
+		modelStack.Translate(-330.f, -150.f, 0.f);
 		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
 		modelStack.Scale(50.0f, 50.0f, 1.f);
 	}
 	if (playerInfo->GetWeapon() == 1)
 	{
-		modelStack.Translate(-350.0f, -250.0f, 0.f);
+		modelStack.Translate(-330.f, -150.f, 0.f);
 		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
 		modelStack.Scale(100.0f, 40.0f, 1.f);
@@ -681,19 +725,20 @@ void SceneText::renderWeaponUI(void)
 
 void SceneText::createEnemies(double dt)
 {
-	static bool once = false;
+	//static bool once = false;
 
-	if (!once)
-	{
-		srand(time(NULL));
-		CPatrol* enemy = Create::Patrol("cube", Vector3(0.f, 0.f, 0.f), Vector3(10.f, 10.f, 10.f));
-		for (int i = 0; i < 10; ++i)
-		{
-			enemy->addWaypoint(Vector3(Math::RandFloatMinMax(-50.f, 50.f), /*Math::RandFloatMinMax(0.f, 10.f)*/ 0.f, Math::RandFloatMinMax(-50.f, 50.f)));
-		}
-		enemy->SetLight(true);
-		once = true;
-	}
+	//if (!once)
+	//{
+	//	srand(time(NULL));
+	//	CPatrol* enemy = Create::Patrol("ROBOT", Vector3(50.f, -10.f, 0.f), Vector3(3.f, 3.f, 3.f));
+	//	enemy->SetAABB(Vector3(3.f, 7.f, 3.f), Vector3(-3.f, -7.f, -3.f));
+	//	//for (int i = 0; i < 10; ++i)
+	//	//{
+	//	//	enemy->addWaypoint(Vector3(Math::RandFloatMinMax(-50.f, 50.f), /*Math::RandFloatMinMax(0.f, 10.f)*/ -10.f, Math::RandFloatMinMax(-50.f, 50.f)));
+	//	//}
+	//	enemy->SetLight(true);
+	//	once = true;
+	//}
 
 	/*Tower*/
 	//static float increaseEnemies = 0.f;
@@ -707,6 +752,7 @@ void SceneText::createEnemies(double dt)
 	//		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
 	//		Vector3 _minAABB(-5.f, 0.f, -5.f);
 	//		Vector3 _maxAABB(5.f, 5.f, 5.f);
+	//		Vector3 _scale(3.f, 3.f, 3.f);
 	//		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
 	//		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
 	//		{
@@ -714,21 +760,17 @@ void SceneText::createEnemies(double dt)
 	//		}
 	//		// Create a CEnemy instance
 	//		//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
-	//		anEnemy3D = Create::Enemy3D("turret", newPosition, Vector3(0.1f, 0.1f, 0.1f), Enemy_Type::ENEMY_BEHAVIOR::TOWER);
+	//		anEnemy3D = Create::Enemy3D("turret", newPosition, _scale);
 	//		//anEnemy3D->Init();
 	//		anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	//		anEnemy3D->SetCollider(true);
 	//		anEnemy3D->SetLight(true);
-	//		anEnemy3D->SetAABB(Vector3(5.f, 0.f, 5.f), Vector3(-5.f, -5.f, -5.f));
-	//		CEnemy3D::ATTRIBUTES _attributes;
-
-	//		_attributes.MAX_HEALTH = 10.f;
-	//		_attributes.HEALTH = 10.f;
-	//		
-	//		_attributes.ATTACK = 1.f;
-	//		_attributes.DEFENSE = 1.f;
-	//		anEnemy3D->setAttributes(_attributes);
-	//		anEnemy3D->SetTerrain(groundEntity);
+	//		anEnemy3D->SetAABB(Vector3(_scale.x, 0.f, _scale.z), Vector3(-_scale.x, -5.f, -_scale.z));
+	//		anEnemy3D->setMaxHealthTo(10.f);
+	//		anEnemy3D->setHealthTo(10.f);
+	//		anEnemy3D->setAttackTo(1.f);
+	//		anEnemy3D->setDefenseTo(1.f);
+	//		//anEnemy3D->SetTerrain(groundEntity);
 	//		anEnemy3D->SetLight(true);
 
 	//		++count;
@@ -746,13 +788,13 @@ void SceneText::createCrates(double dt)
 	if (crateCount < increaseCrates / 2.f)
 	{
 
-		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), -10.f, Math::RandFloatMinMax(-350.f, 350.f));
 		Vector3 _minAABB(-6.f, -6.f, -6.f);
 		Vector3 _maxAABB(6.f, 6.f, 6.f);
 		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
 		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
 		{
-			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
+			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), -10.f, Math::RandFloatMinMax(-350.f, 350.f));
 		}
 		CFurniture* crate = Create::Furniture("crate", newPosition, Vector3(5.f, 5.f, 5.f));
 		crate->SetCollider(true);
@@ -1144,18 +1186,100 @@ void SceneText::RenderPassMain(void)
 	if (EntityManager::GetInstance()->getHit())
 		renderHit();
 
+	if (openInventory)
+	{
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+
+		// Push the current transformation into the modelStack
+		modelStack.PushMatrix();
+		// Translate the current transformation
+		//modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.5, Application::GetInstance().GetWindowHeight() * 0.5, 0);
+		// Scale the current transformation
+		modelStack.Scale(500, 500, 1);
+
+		// Push the current transformation into the modelStack
+		modelStack.PushMatrix();
+		// Display the Avatar
+		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("INVENTORY"));
+		modelStack.PopMatrix();
+
+		modelStack.PopMatrix();
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (Inventory::GetInstance()->ReturnType()[i] != NULL)
+			{
+				modelStack.PushMatrix();
+				// Translate the current transformation
+				modelStack.Translate(-180 + i * 118, 135, 0);
+				// Scale the current transformation
+				modelStack.Scale(80, 80, 1);
+
+				// Push the current transformation into the modelStack
+				modelStack.PushMatrix();
+				// Display the Avatar
+				RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh(Inventory::GetInstance()->ReturnType()[i]->getName()));
+				modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
+		}
+
+		for (int i = 4; i < 8; i++)
+		{
+			int j = i - 4;
+			if (Inventory::GetInstance()->ReturnType()[i] != NULL)
+			{
+				modelStack.PushMatrix();
+				// Translate the current transformation
+				modelStack.Translate(-180 + j * 118, 0, 0);
+				// Scale the current transformation
+				modelStack.Scale(80, 80, 1);
+
+				// Push the current transformation into the modelStack
+				modelStack.PushMatrix();
+				// Display the Avatar
+				RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh(Inventory::GetInstance()->ReturnType()[i]->getName()));
+				modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
+		}
+
+		for (int i = 8; i < 12; i++)
+		{
+			int j = i - 8;
+			if (Inventory::GetInstance()->ReturnType()[i] != NULL)
+			{
+				modelStack.PushMatrix();
+				// Translate the current transformation
+				modelStack.Translate(-180 + j * 118, -140, 0);
+				// Scale the current transformation
+				modelStack.Scale(80, 80, 1);
+
+				// Push the current transformation into the modelStack
+				modelStack.PushMatrix();
+				// Display the Avatar
+				RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh(Inventory::GetInstance()->ReturnType()[i]->getName()));
+				modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
+		}
+	}
 
 	glEnable(GL_DEPTH_TEST);
 
 	/*Render Minimap*/
 	theMinimap->RenderUI();
 
-	/*2D Render*/
+	/*Render on Screen*/
 	glDisable(GL_DEPTH_TEST);
 	//*Render KO Count*/
 	RenderHelper::GetInstance()->renderKOCount();
 	//*Render Player Health Bar*/
 	RenderHelper::GetInstance()->renderPlayerHealth();
+
+	/*Render Map Editor Options.*/
+	if (Map_Editor::GetInstance()->mapEditing)
+		Map_Editor::GetInstance()->renderOption();
 
 	/*3D Render*/
 	glEnable(GL_DEPTH_TEST);
@@ -1222,7 +1346,12 @@ void SceneText::RenderWorld(void)
 
 	EntityManager::GetInstance()->Render();
 
+
+	if (Map_Editor::GetInstance()->mapEditing)
+		Map_Editor::GetInstance()->renderObject();
+
 	ParticleManager::GetInstance()->renderAllParticle();
+
 
 	/*Debug Quad for Shadow*/
 	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();

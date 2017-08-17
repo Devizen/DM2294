@@ -17,6 +17,7 @@
 #include "SceneText.h"
 
 GLFWwindow* m_window;
+
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
@@ -247,4 +248,9 @@ float Application::getAspectRatioHeight()
 float Application::getAspectRatioWidth()
 {
 	return m_worldWidth;
+}
+
+void Application::GetCursorPos(double *xpos, double *ypos)
+{
+	glfwGetCursorPos(m_window, xpos, ypos);
 }

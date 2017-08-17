@@ -58,7 +58,7 @@ void CPatrol::Reset(void)
 // Update
 void CPatrol::Update(double dt)
 {
-	cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
+	//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
 	if ((CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() < 100.f * 100.f && checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
 		state = ALERT;
 	else
@@ -70,7 +70,9 @@ void CPatrol::Update(double dt)
 		{
 			Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
 		
-			position += displacement.Normalized() * (float)dt * 50.f;
+			position += displacement.Normalized() * (float)dt * 20.f;
+			position.x += displacement.Normalized().x * (float)dt * 20.f;
+			position.z += displacement.Normalized().z * (float)dt * 20.f;
 
 			if (displacement.LengthSquared() <= 20.f)
 				waypointToGo = ((waypointToGo == waypoint.size() - 1) ? 0 : ++waypointToGo);
@@ -79,10 +81,11 @@ void CPatrol::Update(double dt)
 		}
 		case ALERT:
 		{
-			Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());
+			Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
+			Vector3 displacement(positionWithoutY - this->GetPos());
 
-			if (displacement.LengthSquared() > scale.LengthSquared())
-				position += displacement.Normalized() * (float)dt * 50.f;
+			if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
+				position += displacement.Normalized() * (float)dt * 20.f;
 		}
 	}
 }
@@ -93,6 +96,23 @@ void CPatrol::Render(void)
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
+	if (state == CEnemy3D::AI_STATE::ALERT)
+	{
+		try {
+			angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
+		}
+
+		catch (string Error)
+		{
+			cout << "Divide by Zero" << endl;
+		}
+	}
+	else
+	{
+		Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
+		angleToFace = Math::RadianToDegree(atan2(displacement.x, displacement.z));
+	}
+	modelStack.Rotate(angleToFace, 0.f, 1.f, 0.f);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 
 	if (!light)
@@ -138,6 +158,20 @@ void CPatrol::renderHealthBar(void)
 
 }
 
+void CPatrol::increaseWaypointToGo(void)
+{
+	++waypointToGo;
+}
+
+void CPatrol::setToZeroWaypointToGo(void)
+{
+	waypointToGo = 0;
+}
+
+void CPatrol::addWaypoint(Vector3 _waypointToGo)
+{
+	waypoint.push_back(_waypointToGo);
+}
 
 CPatrol* Create::Patrol(const std::string& _meshName,
 	const Vector3& _position,
@@ -148,13 +182,12 @@ CPatrol* Create::Patrol(const std::string& _meshName,
 		return nullptr;
 
 	CPatrol* result = new CPatrol(modelMesh);
-	Vector3 newPosition(_position.x, _position.y - _scale.y, _position.z);
-	result->SetPosition(newPosition);
+	result->SetPosition(_position);
 	result->SetScale(_scale);
 	result->SetCollider(true);
 	result->setPlayerProperty(false);
 	result->waypointToGo = 0;
-	result->waypoint.push_back(newPosition);
+	result->waypoint.push_back(_position);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }
