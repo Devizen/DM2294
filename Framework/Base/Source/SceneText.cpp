@@ -311,6 +311,10 @@ void SceneText::Init()
 	/*Player Health Bar Color*/
 	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
 
+	/*Minimap Enlarged*/
+	MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_ENLARGED", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MINIMAP_ENLARGED")->textureID = LoadTGA("Image//MINIMAP_ENLARGED.tga");
+
 	// Create entities into the scene
 	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
@@ -496,23 +500,23 @@ void SceneText::Update(double dt)
 			//cout << "Light Position Y: " << lights[0]->position.y << endl;
 			//cout << "Light Position Z: " << lights[0]->position.z << endl;
 
-			if (KeyboardController::GetInstance()->IsKeyDown('I'))
-				lights[0]->position.z += 100.f * dt;
+			//if (KeyboardController::GetInstance()->IsKeyDown('I'))
+			//	lights[0]->position.z += 100.f * dt;
 
-			if (KeyboardController::GetInstance()->IsKeyDown('K'))
-				lights[0]->position.z -= 100.f * dt;
+			//if (KeyboardController::GetInstance()->IsKeyDown('K'))
+			//	lights[0]->position.z -= 100.f * dt;
 
-			if (KeyboardController::GetInstance()->IsKeyDown('L'))
-				lights[0]->position.x += 100.f * dt;
+			//if (KeyboardController::GetInstance()->IsKeyDown('L'))
+			//	lights[0]->position.x += 100.f * dt;
 
-			if (KeyboardController::GetInstance()->IsKeyDown('J'))
-				lights[0]->position.x -= 100.f * dt;
+			//if (KeyboardController::GetInstance()->IsKeyDown('J'))
+			//	lights[0]->position.x -= 100.f * dt;
 
-			if (KeyboardController::GetInstance()->IsKeyDown('U'))
-				lights[0]->position.y -= 100.f * dt;
+			//if (KeyboardController::GetInstance()->IsKeyDown('U'))
+			//	lights[0]->position.y -= 100.f * dt;
 
-			if (KeyboardController::GetInstance()->IsKeyDown('O'))
-				lights[0]->position.y += 100.f * dt;
+			//if (KeyboardController::GetInstance()->IsKeyDown('O'))
+			//	lights[0]->position.y += 100.f * dt;
 
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
 			{
@@ -620,6 +624,14 @@ void SceneText::Update(double dt)
 
 			ParticleManager::GetInstance()->updateParticle(dt);
 
+
+			if (KeyboardController::GetInstance()->IsKeyPressed('M'))
+			{
+				if (theMinimap->enlargedMap)
+					theMinimap->enlargedMap = false;
+				else
+					theMinimap->enlargedMap = true;
+			}
 		}
 	}
 	else

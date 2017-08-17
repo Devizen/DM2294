@@ -72,6 +72,8 @@ public:
 
 	virtual void RenderUI();
 
+	/*To check if player enlarged the minimap.*/
+	bool enlargedMap;
 protected:
 	// Rotation from First Angle
 	int m_iAngle;

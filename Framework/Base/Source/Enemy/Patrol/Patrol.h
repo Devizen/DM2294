@@ -34,7 +34,7 @@ public:
 	virtual float getShootDelay(void);
 
 	/*Render Health Bar*/
-	virtual void renderHealthBar(void);
+	//virtual void renderHealthBar(void);
 
 	/*Increase waypointToGo*/
 	void increaseWaypointToGo(void);
