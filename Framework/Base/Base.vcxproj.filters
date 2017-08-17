@@ -58,13 +58,14 @@
     <Filter Include="Enemy3D\Patrol">
       <UniqueIdentifier>{2b125580-86a5-4d95-b0db-6cafde7fa78a}</UniqueIdentifier>
     </Filter>
-
     <Filter Include="Map_Editor">
       <UniqueIdentifier>{065952a4-708b-4fc0-9a73-c93baec6b8f6}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="Options\Scene2D">
       <UniqueIdentifier>{373b0346-ef0f-444d-94b4-47543aaa8fd8}</UniqueIdentifier>
-
+    </Filter>
+    <Filter Include="Enemy3D\Horde">
+      <UniqueIdentifier>{b78d823c-8489-4f9f-9722-daf37a0806a0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +233,15 @@
     </ClCompile>
     <ClCompile Include="Source\Map_Editor\Map_Editor.cpp">
       <Filter>Map_Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Horde\Horde.cpp">
+      <Filter>Enemy3D\Horde</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\MeleeInfo.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\Knife.cpp">
+      <Filter>WeaponInfo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -402,6 +412,15 @@
     </ClInclude>
     <ClInclude Include="Source\Map_Editor\Map_Editor.h">
       <Filter>Map_Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Horde\Horde.h">
+      <Filter>Enemy3D\Horde</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\MeleeInfo.h">
+      <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\Knife.h">
+      <Filter>WeaponInfo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

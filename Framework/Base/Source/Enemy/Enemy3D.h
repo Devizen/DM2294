@@ -147,7 +147,6 @@ public:
 
 	/*Render Health Bar*/
 	virtual void renderHealthBar(void);
-
 	///*Update for Patrol Behavior*/
 	//void updatePatrol(double dt);
 	///*Update for Tower Behavior*/

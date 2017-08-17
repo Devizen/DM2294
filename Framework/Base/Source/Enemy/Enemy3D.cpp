@@ -172,14 +172,16 @@ void CEnemy3D::Update(double dt)
 			if (this->getPlayerProperty() && returnNearestEnemy() != nullptr)
 			{
 				/*Offset the y to make it seem as if bullet is hitting face on.*/
-				targetLower.Set(returnNearestEnemy()->GetPos().x, returnNearestEnemy()->GetPos().y, returnNearestEnemy()->GetPos().z);
+				/*Firing at enemies.*/
+				targetLower.Set(returnNearestEnemy()->GetPos().x, returnNearestEnemy()->GetPos().y + 5.f, returnNearestEnemy()->GetPos().z);
 				viewVector = (targetLower - position).Normalized();
 				distanceBetween = returnNearestEnemy()->GetPos() - GetPos();
 			}
 			else if (!this->getPlayerProperty() && returnNearestEnemy() != nullptr && whoCloser == ENEMY)
 			{
 				/*Offset the y to make it seem as if bullet is hitting face on.*/
-				targetLower.Set(returnNearestEnemy()->GetPos().x, returnNearestEnemy()->GetPos().y, returnNearestEnemy()->GetPos().z);
+				/*Firing at enemies that converted to player.*/
+				targetLower.Set(returnNearestEnemy()->GetPos().x, returnNearestEnemy()->GetPos().y + 5.f, returnNearestEnemy()->GetPos().z);
 				viewVector = (targetLower - position).Normalized();
 				distanceBetween = returnNearestEnemy()->GetPos() - GetPos();
 			}
@@ -189,7 +191,7 @@ void CEnemy3D::Update(double dt)
 
 			/*Change Y value to spawn bullet at correct position.*/
 			Vector3 newPosition((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y, (distanceBetween.z / 2.f) + this->position.z);
-
+			/*Aim the player.*/
 			if (this->getPlayerProperty() || !this->getPlayerProperty() && whoCloser == ENEMY)
 				newPosition.Set((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y + 2.5f, (distanceBetween.z / 2.f) + this->position.z);
 			//else if (!this->getPlayerProperty() && whoCloser == ENEMY)
@@ -541,7 +543,7 @@ void CEnemy3D::renderHealthBar(void)
 	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), furtherDisplacement.z);
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
-	modelStack.Scale(MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 1.f);
+	modelStack.Scale(MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.000001f);
 	MeshBuilder::GetInstance()->GenerateCube("cube", Color(0.f, 0.f, 0.0f), 1.f);
 	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
 	modelStack.PopMatrix();
@@ -553,7 +555,7 @@ void CEnemy3D::renderHealthBar(void)
 	/*Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());*/
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
-	modelStack.Scale((getAttribute(CAttributes::TYPE_HEALTH) / getAttribute(CAttributes::TYPE_MAXHEALTH)) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 1.f);
+	modelStack.Scale((getAttribute(CAttributes::TYPE_HEALTH) / getAttribute(CAttributes::TYPE_MAXHEALTH)) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.000001f);
 
 	/*Set health bar to green colour before damage.*/
 	if (getAttribute(CAttributes::TYPE_HEALTH) / getAttribute(CAttributes::TYPE_MAXHEALTH) == 1)

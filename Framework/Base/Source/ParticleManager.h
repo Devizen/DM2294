@@ -25,6 +25,7 @@ public:
 	int getMaximumParticles(void) const;
 	vector<ParticleManager*>&getParticleList(void);
 	void pushParticle(particleObject_type type);
+	void deleteParticle();
 private:
 	//Different type of particle object
 	particleObject_type type;
