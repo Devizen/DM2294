@@ -3,6 +3,7 @@
 #include "../FPSCamera.h"
 #include "../GroundEntity.h"
 #include "../WeaponInfo/WeaponInfo.h"
+#include "../WeaponInfo/MeleeInfo.h"
 #include "Collider\Collider.h"
 #include "../Attributes.h"
 
@@ -196,7 +197,7 @@ private:
 	FPSCamera* attachedCamera;
 
 	CWeaponInfo* primaryWeapon;
-	CWeaponInfo* secondaryWeapon;
+	CMeleeInfo* secondaryWeapon;
 
 	// Scrollable weapon switching
 	CWeaponInfo** weaponManager;

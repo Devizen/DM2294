@@ -87,7 +87,7 @@ void CMeleeInfo::Slash(Vector3 position, Vector3 target, CPlayerInfo* _source)
 		CProjectile* aProjectile = Create::Projectile("sphere", 
 			distanceBetween,
 														(target - position).Normalized(), /*Direction*/
-														0.012f, /*Lifespan of Bullet*/
+														0.03f, /*Lifespan of Bullet*/
 														800.0f, /*Speed*/
 														_source);
 		aProjectile->SetCollider(true);
