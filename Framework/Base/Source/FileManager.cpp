@@ -328,7 +328,9 @@ bool FileManager::ReadWeaponFile(const string myFile)
 			}
 			masterList.push_back(theEQInfo);
 		}
+		return true;
 	}
+	return true;
 }
 
 void FileManager::EditFile(const string myFile)

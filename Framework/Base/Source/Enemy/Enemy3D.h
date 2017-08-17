@@ -3,7 +3,6 @@
 #include "../GroundEntity.h"
 #include "Enemy_Type.h"
 #include "../Attributes.h"
-
 #include <vector>
 
 #define MAX_HEALTH_SCALE 10.f
@@ -14,7 +13,6 @@ class Mesh;
 
 class CEnemy3D :
 	public GenericEntity,
-	public Enemy_Type,
 	public CAttributes
 {
 	friend class EntityManager;
@@ -34,13 +32,13 @@ class CEnemy3D :
 		NONE
 	};
 
-	struct ATTRIBUTES
-	{
-		float MAX_HEALTH;
-		float HEALTH;
-		int ATTACK;
-		int DEFENSE;
-	};
+	//struct ATTRIBUTES
+	//{
+	//	float MAX_HEALTH;
+	//	float HEALTH;
+	//	int ATTACK;
+	//	int DEFENSE;
+	//};
 
 protected:
 	Mesh* modelMesh;
@@ -129,11 +127,11 @@ public:
 	/*Get Portable DT*/
 	double getPortableDT(void);
 
-	/*Set Attributes*/
-	void setAttributes(ATTRIBUTES _attributes);
+	///*Set Attributes*/
+	//void setAttributes(ATTRIBUTES _attributes);
 
-	/*Get Attributes*/
-	float getAttributes(ATTRIBUTE_TYPES type);
+	///*Get Attributes*/
+	//float getAttributes(ATTRIBUTE_TYPES type);
 
 	/*Set Player Property*/
 	void setPlayerProperty(bool _playerProperty);
@@ -150,12 +148,12 @@ public:
 	/*Render Health Bar*/
 	virtual void renderHealthBar(void);
 
-	/*Update for Patrol Behavior*/
-	void updatePatrol(double dt);
-	/*Update for Tower Behavior*/
-	void updateTower(double dt);
+	///*Update for Patrol Behavior*/
+	//void updatePatrol(double dt);
+	///*Update for Tower Behavior*/
+	//void updateTower(double dt);
 private:
-	ATTRIBUTES attributes;
+	//ATTRIBUTES attributes;
 	int health;
 	AI_STATE state;
 	Vector3 minAlertBoundary, maxAlertBoundary;

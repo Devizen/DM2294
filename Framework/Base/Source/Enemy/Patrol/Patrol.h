@@ -36,6 +36,15 @@ public:
 	/*Render Health Bar*/
 	virtual void renderHealthBar(void);
 
+	/*Increase waypointToGo*/
+	void increaseWaypointToGo(void);
+	/*Set waypointToGo to Zero*/
+	void setToZeroWaypointToGo(void);
+
+	void addWaypoint(Vector3 _waypointToGo);
+
+	int waypointToGo;
+	vector<Vector3>waypoint;
 private:
 	Vector3 minAlertBoundary, maxAlertBoundary;
 	double portableDT;

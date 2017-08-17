@@ -12,6 +12,7 @@ CProjectile::CProjectile(void)
 	, m_fLifetime(-1.0f)
 	, m_fSpeed(10.0f)
 	, theSource(NULL)
+	, bulletOriginated(FROM_NONE)
 {
 }
 
@@ -22,6 +23,7 @@ CProjectile::CProjectile(Mesh* _modelMesh)
 	, m_fLifetime(-1)
 	, m_fSpeed(10.0f)
 	, theSource(NULL)
+	, bulletOriginated(FROM_NONE)
 {
 }
 

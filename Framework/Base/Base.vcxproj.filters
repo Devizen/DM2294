@@ -61,6 +61,9 @@
     <Filter Include="Enemy3D\Patrol">
       <UniqueIdentifier>{2b125580-86a5-4d95-b0db-6cafde7fa78a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map_Editor">
+      <UniqueIdentifier>{065952a4-708b-4fc0-9a73-c93baec6b8f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -224,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp">
       <Filter>Enemy3D\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Map_Editor\Map_Editor.cpp">
+      <Filter>Map_Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -391,6 +397,9 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy\Patrol\Patrol.h">
       <Filter>Enemy3D\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Map_Editor\Map_Editor.h">
+      <Filter>Map_Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

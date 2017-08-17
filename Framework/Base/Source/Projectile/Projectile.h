@@ -42,6 +42,15 @@ public:
 	virtual void Update(double dt = 0.0333f);
 	// Render this projectile
 	virtual void Render(void);
+
+	enum BULLET_ORIGINATED
+	{
+		FROM_PLAYER = 0,
+		FROM_ENEMY,
+		FROM_NONE
+	};
+
+	enum BULLET_ORIGINATED bulletOriginated;
 protected:
 	// The model mesh for this projectile
 	Mesh* modelMesh;
