@@ -71,8 +71,8 @@ void CPatrol::Update(double dt)
 			Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
 		
 			position += displacement.Normalized() * (float)dt * 20.f;
-			position.x += displacement.Normalized().x * (float)dt * 20.f;
-			position.z += displacement.Normalized().z * (float)dt * 20.f;
+			//position.x += displacement.Normalized().x * (float)dt * 20.f;
+			//position.z += displacement.Normalized().z * (float)dt * 20.f;
 
 			if (displacement.LengthSquared() <= 20.f)
 				waypointToGo = ((waypointToGo == waypoint.size() - 1) ? 0 : ++waypointToGo);

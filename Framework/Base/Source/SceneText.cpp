@@ -1,5 +1,6 @@
 #include "SceneText.h"
 #include "GL\glew.h"
+#include "GLFW\glfw3.h"
 
 #include "shader.hpp"
 #include "MeshBuilder.h"
@@ -41,6 +42,7 @@
 
 #include "Inventory.h"
 #include "Items\Helmet.h"
+#include "FileManager.h"
 
 /*Map Editor*/
 #include "Map_Editor\Map_Editor.h"
@@ -288,6 +290,21 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("EMPHELM", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("EMPHELM")->textureID = LoadTGA("Image//EmperorHelmet.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("BHELM", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("BHELM")->textureID = LoadTGA("Image//BasicHelmet.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("BARMOR", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("BARMOR")->textureID = LoadTGA("Image//BasicArmor.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("BGLOVE", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("BGLOVE")->textureID = LoadTGA("Image//BasicGlove.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("BSHOE", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("BSHOE")->textureID = LoadTGA("Image//BasicShoe.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("SELECTION", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SELECTION")->textureID = LoadTGA("Image//Selection.tga");
+
 	/*Robot Troop*/
 	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT", "OBJ//ROBOT.obj");
 	MeshBuilder::GetInstance()->GetMesh("ROBOT")->textureID = LoadTGA("Image//ROBOT.tga"); 
@@ -343,7 +360,6 @@ void SceneText::Init()
 	}
 
 
-	Inventory::GetInstance()->Init();
 	// Hardware Abstraction
 	theKeyboard = new CKeyboard();
 	theKeyboard->Create(playerInfo);
@@ -402,7 +418,10 @@ void SceneText::Init()
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
 	cout << "Particle List Size in Scene: " << particleList.size() << endl;
+	Inventory::GetInstance()->Init();
+
 	openInventory = false;
+	FileManager::GetInstance()->init();
 }
 
 void SceneText::Update(double dt)
@@ -430,9 +449,22 @@ void SceneText::Update(double dt)
 		openInventory = false;
 	}
 
+	if (openInventory)
+	{
+		FileManager::GetInstance()->update(dt);
+	}
+
+	//if (KeyboardController::GetInstance()->IsKeyDown('O')) {
+	//	Mtx44 rotate;
+	//	rotate.SetToRotation(90 * dt, 1, 0, 0);
+	//	lights[0]->position = rotate * lights[0]->position;
+	//}
+
 	if (KeyboardController::GetInstance()->IsKeyPressed('K'))
 	{
-		Create::theHelmet("EMPHELM", "0", "0", "0", "0", 0);
+		FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
+		FileManager::GetInstance()->CreateWeapon();
+		//cout << _msize(Inventory::GetInstance()->ReturnType()) << endl;
 	}
 
 	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) > 0)
@@ -1188,81 +1220,7 @@ void SceneText::RenderPassMain(void)
 
 	if (openInventory)
 	{
-		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-
-		// Push the current transformation into the modelStack
-		modelStack.PushMatrix();
-		// Translate the current transformation
-		//modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.5, Application::GetInstance().GetWindowHeight() * 0.5, 0);
-		// Scale the current transformation
-		modelStack.Scale(500, 500, 1);
-
-		// Push the current transformation into the modelStack
-		modelStack.PushMatrix();
-		// Display the Avatar
-		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("INVENTORY"));
-		modelStack.PopMatrix();
-
-		modelStack.PopMatrix();
-
-		for (int i = 0; i < 4; i++)
-		{
-			if (Inventory::GetInstance()->ReturnType()[i] != NULL)
-			{
-				modelStack.PushMatrix();
-				// Translate the current transformation
-				modelStack.Translate(-180 + i * 118, 135, 0);
-				// Scale the current transformation
-				modelStack.Scale(80, 80, 1);
-
-				// Push the current transformation into the modelStack
-				modelStack.PushMatrix();
-				// Display the Avatar
-				RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh(Inventory::GetInstance()->ReturnType()[i]->getName()));
-				modelStack.PopMatrix();
-				modelStack.PopMatrix();
-			}
-		}
-
-		for (int i = 4; i < 8; i++)
-		{
-			int j = i - 4;
-			if (Inventory::GetInstance()->ReturnType()[i] != NULL)
-			{
-				modelStack.PushMatrix();
-				// Translate the current transformation
-				modelStack.Translate(-180 + j * 118, 0, 0);
-				// Scale the current transformation
-				modelStack.Scale(80, 80, 1);
-
-				// Push the current transformation into the modelStack
-				modelStack.PushMatrix();
-				// Display the Avatar
-				RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh(Inventory::GetInstance()->ReturnType()[i]->getName()));
-				modelStack.PopMatrix();
-				modelStack.PopMatrix();
-			}
-		}
-
-		for (int i = 8; i < 12; i++)
-		{
-			int j = i - 8;
-			if (Inventory::GetInstance()->ReturnType()[i] != NULL)
-			{
-				modelStack.PushMatrix();
-				// Translate the current transformation
-				modelStack.Translate(-180 + j * 118, -140, 0);
-				// Scale the current transformation
-				modelStack.Scale(80, 80, 1);
-
-				// Push the current transformation into the modelStack
-				modelStack.PushMatrix();
-				// Display the Avatar
-				RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh(Inventory::GetInstance()->ReturnType()[i]->getName()));
-				modelStack.PopMatrix();
-				modelStack.PopMatrix();
-			}
-		}
+		FileManager::GetInstance()->RenderWeapon();
 	}
 
 	glEnable(GL_DEPTH_TEST);
