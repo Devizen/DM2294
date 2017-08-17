@@ -16,6 +16,16 @@ class FileManager : public Singleton <FileManager>, public CAttributes
 {
 	friend Singleton<FileManager>;
 
+	//string eqAtk;
+	//string eqDef;
+	//string eqSpeed;
+	//string eqId;
+	//string eqType;
+	//string eqName;
+
+	int pressCountX;
+	int pressCountY;
+
 	struct EQ_Info
 	{
 		string name;
@@ -26,19 +36,13 @@ class FileManager : public Singleton <FileManager>, public CAttributes
 		string eqType;
 		bool isEquipped;
 	}theEQInfo;
-
-	//string eqAtk;
-	//string eqDef;
-	//string eqSpeed;
-	//string eqId;
-	//string eqType;
-	//string eqName;
-
 	vector<EQ_Info>masterList;
 
 public:
 	FileManager() {};
 	~FileManager() {};
+
+	void init();
 
 	bool ReadPlayerFile(const string myFile);
 	bool ReadWeaponFile( string myFile);
@@ -48,8 +52,13 @@ public:
 	//bool ReadFile(const string myFile);
 
 	void EditFile(const string myFile);
+	void RenderWeapon();
+	void DeleteWeapon();
+
+	void update(double dt);
 
 	void PrintWeaponFile();
+	void CreateWeapon();
 
 	Vector3 Token2Vector(string token);
 	double Token2Double(string token);
