@@ -49,7 +49,11 @@ void ParticleManager::updateParticle(double dt)
 		}
 
 		if (particle->particle_Position.y <= -10.f)
+		{
 			particle->particle_IsActive = false;
+			m_particleCount--;
+			cout << m_particleCount << endl;
+		}
 	}
 }
 
@@ -130,6 +134,17 @@ void ParticleManager::pushParticle(particleObject_type type)
 	particleList.push_back(particle);
 }
 
+void ParticleManager::deleteParticle()
+{
+	while (particleList.size()>0)
+	{
+		ParticleManager* particle = particleList.back();
+		delete particle;
+		particleList.pop_back();
+	}
+}
+
+
 //Updates needed in scene
 /*Init*/
 //ParticleManager* particleManager = ParticleManager::GetInstance();
@@ -143,3 +158,6 @@ void ParticleManager::pushParticle(particleObject_type type)
 //ParticleManager::GetInstance()->updateParticle(dt);
 /*Renderworld*/
 //ParticleManager::GetInstance()->renderAllParticle();
+/*Exit*/
+//ParticleManager* particleManager = ParticleManager::GetInstance();
+//ParticleManager::GetInstance()->deleteParticle();

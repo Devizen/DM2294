@@ -7,6 +7,7 @@
 #include "../Projectile/Projectile.h"
 #include "../WeaponInfo/Pistol.h"
 #include "../WeaponInfo/AssaultRifle.h"
+#include "../WeaponInfo/Knife.h"
 #include "../Minimap/Minimap.h"
 #include "../EntityManager.h"
 
@@ -99,6 +100,9 @@ void CPlayerInfo::Init(void)
 	primaryWeapon = new CPistol();
 	primaryWeapon->Init();
 	cout << "Primary Weapon From Player: " << primaryWeapon << endl;
+
+	secondaryWeapon = new CKnife();
+	secondaryWeapon->Init();
 
 	weaponManager = new CWeaponInfo*[m_iNumOfWeapon];
 	weaponManager[0] = new CPistol();
@@ -520,7 +524,6 @@ void CPlayerInfo::Update(double dt)
 		secondaryWeapon->Update(dt);
 	if (weaponManager[m_iCurrentWeapon])
 		weaponManager[m_iCurrentWeapon]->Update(dt);
-
 	//if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != m_iCurrentWeapon)
 	//{
 	//	if ((MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) >= 0) &&
@@ -879,7 +882,7 @@ bool CPlayerInfo::DischargeSecondaryWeapon(const float deltaTime)
 		/*Add the additional distance with original position.*/
 		newPosition += position;
 
-		secondaryWeapon->Discharge(position, target, this);
+		secondaryWeapon->Slash(position, target, this);
 		return true;
 	}
 
