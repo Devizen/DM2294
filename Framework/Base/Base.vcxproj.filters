@@ -237,6 +237,12 @@
     <ClCompile Include="Source\Enemy\Horde\Horde.cpp">
       <Filter>Enemy3D\Horde</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\MeleeInfo.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\Knife.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -409,6 +415,12 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy\Horde\Horde.h">
       <Filter>Enemy3D\Horde</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\MeleeInfo.h">
+      <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\Knife.h">
+      <Filter>WeaponInfo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -65,6 +65,8 @@
     <ClCompile Include="Source\SpriteEntity.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
     <ClCompile Include="Source\WeaponInfo\AssaultRifle.cpp" />
+    <ClCompile Include="Source\WeaponInfo\Knife.cpp" />
+    <ClCompile Include="Source\WeaponInfo\MeleeInfo.cpp" />
     <ClCompile Include="Source\WeaponInfo\Pistol.cpp" />
     <ClCompile Include="Source\WeaponInfo\WeaponInfo.cpp" />
   </ItemGroup>
@@ -124,6 +126,8 @@
     <ClInclude Include="Source\SpriteEntity.h" />
     <ClInclude Include="Source\TextEntity.h" />
     <ClInclude Include="Source\WeaponInfo\AssaultRifle.h" />
+    <ClInclude Include="Source\WeaponInfo\Knife.h" />
+    <ClInclude Include="Source\WeaponInfo\MeleeInfo.h" />
     <ClInclude Include="Source\WeaponInfo\Pistol.h" />
     <ClInclude Include="Source\WeaponInfo\WeaponInfo.h" />
   </ItemGroup>
