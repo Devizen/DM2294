@@ -119,6 +119,8 @@ private:
 
 	/*Render KO Count*/
 	void renderKO_Count(void);
+
+	bool openInventory;
 };
 
 #endif
