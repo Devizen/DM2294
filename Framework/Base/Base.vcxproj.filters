@@ -58,13 +58,13 @@
     <Filter Include="Enemy3D\Patrol">
       <UniqueIdentifier>{2b125580-86a5-4d95-b0db-6cafde7fa78a}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
+
     <Filter Include="Map_Editor">
       <UniqueIdentifier>{065952a4-708b-4fc0-9a73-c93baec6b8f6}</UniqueIdentifier>
-=======
+	</Filter>
     <Filter Include="Options\Scene2D">
       <UniqueIdentifier>{373b0346-ef0f-444d-94b4-47543aaa8fd8}</UniqueIdentifier>
->>>>>>> 51f2e5025fca70e3007a76bf3a202a0ea98c80e9
+
     </Filter>
   </ItemGroup>
   <ItemGroup>
