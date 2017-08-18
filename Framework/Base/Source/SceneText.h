@@ -121,6 +121,7 @@ private:
 	void renderKO_Count(void);
 
 	bool openInventory;
+	bool openEQ;
 };
 
 #endif

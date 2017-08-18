@@ -28,5 +28,5 @@ public:
 
 namespace Create
 {
-	Gun* theGun(const std::string& _meshName, string ID, string attack, string defense, string speed, bool isEquipped);
+	Gun* theGun(const std::string& _meshName, string ID, string attack, bool isEquipped);
 };
