@@ -1,0 +1,13 @@
+diff a/Framework/Base/Base.vcxproj.filters b/Framework/Base/Base.vcxproj.filters	(rejected hunks)
+@@ -243,11 +243,6 @@
+     <ClCompile Include="Source\WeaponInfo\Knife.cpp">
+       <Filter>WeaponInfo</Filter>
+     </ClCompile>
+-    <ClCompile Include="Source\Cinematic\Cinematic.cpp">
+-      <Filter>Cinematic</Filter>
+-    </ClCompile>
+-    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
+-      <Filter>Enemy3D\Pathfinding</Filter>
+     <ClCompile Include="Source\Items\Inventory.cpp">
+       <Filter>Inventory</Filter>
+     </ClCompile>

@@ -16,6 +16,7 @@
     <ClCompile Include="Source\CameraEffects\CameraEffects.cpp" />
     <ClCompile Include="Source\Cinematic\Cinematic.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
+    <ClCompile Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.cpp" />
     <ClCompile Include="Source\Enemy\Enemy3D.cpp" />
     <ClCompile Include="Source\Enemy\Enemy_Type.cpp" />
     <ClCompile Include="Source\Enemy\Horde\Horde.cpp" />
@@ -78,6 +79,7 @@
     <ClInclude Include="Source\CameraEffects\CameraEffects.h" />
     <ClInclude Include="Source\Cinematic\Cinematic.h" />
     <ClInclude Include="Source\DepthFBO.h" />
+    <ClInclude Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.h" />
     <ClInclude Include="Source\Enemy\Enemy3D.h" />
     <ClInclude Include="Source\Enemy\Enemy_Type.h" />
     <ClInclude Include="Source\Enemy\Horde\Horde.h" />

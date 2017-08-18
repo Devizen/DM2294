@@ -34,7 +34,9 @@ public:
 
 	float getAspectRatioHeight();
 	float getAspectRatioWidth();
-	
+
+	int m_window_width;
+	int m_window_height;
 private:
 	Application();
 	~Application();

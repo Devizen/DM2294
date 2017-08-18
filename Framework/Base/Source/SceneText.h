@@ -23,6 +23,7 @@ class TextEntity;
 class SpriteEntity;
 class Light;
 class DepthFBO;
+class CCinematic;
 
 /*Forward Declaration*/
 class Controls;
@@ -48,6 +49,7 @@ private:
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;
 	FPSCamera camera;
+	CCinematic* cinematic;
 	TextEntity* textObj[30];
 	Light* lights[2];
 
@@ -122,6 +124,9 @@ private:
 
 	bool openInventory;
 	bool openEQ;
+
+	/*Cinematic*/
+	bool cinematicMode;
 };
 
 #endif

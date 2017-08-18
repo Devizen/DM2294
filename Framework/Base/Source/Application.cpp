@@ -21,9 +21,6 @@ GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
-int m_window_width;
-int m_window_height;
-
 /*Aspect Ratio*/
 float m_worldHeight;
 float m_worldWidth;
@@ -44,8 +41,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 void resize_callback(GLFWwindow* window, int w, int h)
 {
-	m_window_width = w;
-	m_window_height = h;
+	Application::GetInstance().m_window_width = w;
+	Application::GetInstance().m_window_height = h;
 	glViewport(0, 0, w, h);
 }
 
