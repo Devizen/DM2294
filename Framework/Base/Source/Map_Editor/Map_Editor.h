@@ -14,6 +14,7 @@ using std::ostringstream;
 class CPatrol;
 class CEnemy3D;
 class CHorde;
+class CAnimatedEnemy;
 
 class Map_Editor : public Singleton<Map_Editor>
 {
@@ -50,6 +51,15 @@ public:
 		ENEMY_OBJECT_NONE
 	};
 
+	/*Track last option*/
+	enum LAST_CREATED_TYPE
+	{
+		CREATED_ENVIRONMENT = 0,
+		CREATED_ENEMY,
+		CREATED_ENEMY_HORDE,
+		CREATED_NONE
+	};
+
 	Map_Editor();
 	~Map_Editor();
 
@@ -63,11 +73,16 @@ public:
 	void updateOption(double dt);
 	/*Reset options.*/
 	void resetOption(void);
+	/*Removing last object created*/
+	void removeLastCreated(void);
 
 	OBJECT_TYPE objectType;
 	ENVIRONMENT_OBJECT environmentObject;
 	ENEMY_OBJECT enemyObject;
 	OPTION_SELECTION_LEVEL optionSelectionLevel;
+
+	LAST_CREATED_TYPE lastCreatedType;
+
 	/*For saving the original displacement.*/
 	Vector3 _displacement;
 	/*For tuning the displacement.*/
@@ -91,7 +106,7 @@ public:
 	bool addWaypoint;
 
 	/*Enemy Object to add waypoint.*/
-	CPatrol* _enemy;
+	CAnimatedEnemy* _enemy;
 	/*Enemy turrent to change variables.*/
 	CEnemy3D* turret;
 	/*Enemy Horde to change variables.*/

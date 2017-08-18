@@ -33,6 +33,17 @@ void CPatrol::Reset(void)
 // Update
 void CPatrol::Update(double dt)
 {
+	if (checkCollision())
+	{
+		position = previousPosition;
+		cout << "COLLIDED" << endl;
+	}
+	else
+	{
+		previousPosition = position;
+		cout << "NO COLLISION" << endl;
+	}
+
 	//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
 	if ((CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() < 100.f * 100.f && checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
 		state = ALERT;

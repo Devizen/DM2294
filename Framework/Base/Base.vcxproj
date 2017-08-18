@@ -14,10 +14,12 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Attributes.cpp" />
     <ClCompile Include="Source\CameraEffects\CameraEffects.cpp" />
+    <ClCompile Include="Source\Cinematic\Cinematic.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\Enemy\Enemy3D.cpp" />
     <ClCompile Include="Source\Enemy\Enemy_Type.cpp" />
     <ClCompile Include="Source\Enemy\Horde\Horde.cpp" />
+    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp" />
     <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FileManager.cpp" />
@@ -74,10 +76,12 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Attributes.h" />
     <ClInclude Include="Source\CameraEffects\CameraEffects.h" />
+    <ClInclude Include="Source\Cinematic\Cinematic.h" />
     <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\Enemy\Enemy3D.h" />
     <ClInclude Include="Source\Enemy\Enemy_Type.h" />
     <ClInclude Include="Source\Enemy\Horde\Horde.h" />
+    <ClInclude Include="Source\Enemy\Pathfinding\Pathfinding.h" />
     <ClInclude Include="Source\Enemy\Patrol\Patrol.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FileManager.h" />
