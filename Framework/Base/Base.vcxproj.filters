@@ -240,6 +240,9 @@
     <ClCompile Include="Source\Map_Editor\Map_Editor.cpp">
       <Filter>Map_Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\Knife.cpp">
+      <Filter>WeaponInfo</Filter>
+	</ClCompile>
     <ClCompile Include="Source\Enemy\Horde\Horde.cpp">
       <Filter>Enemy3D\Horde</Filter>
     </ClCompile>
@@ -425,6 +428,9 @@
     <ClInclude Include="Source\Map_Editor\Map_Editor.h">
       <Filter>Map_Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\Knife.h">
+      <Filter>WeaponInfo</Filter>
+	  </ClInclude>
     <ClInclude Include="Source\Enemy\Horde\Horde.h">
       <Filter>Enemy3D\Horde</Filter>
     </ClInclude>

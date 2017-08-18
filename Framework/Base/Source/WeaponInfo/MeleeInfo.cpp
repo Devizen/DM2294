@@ -62,6 +62,8 @@ void CMeleeInfo::Init(void)
 	elapsedTime = timeBetweenShots;
 	// Boolean flag to indicate if weapon can fire now
 	bFire = true;
+	// Range (life time == melee range)
+	meleeRange = 0.03f;
 }
 
 // Update the elapsed time
@@ -81,17 +83,19 @@ void CMeleeInfo::Slash(Vector3 position, Vector3 target, CPlayerInfo* _source)
 	if (bFire)
 	{
 		//Place holder for melee system (stabbing style)
+
 		Vector3 distanceBetween(target - position);
 		distanceBetween *= 3.f;
 		distanceBetween += position;
 		CProjectile* aProjectile = Create::Projectile("sphere", 
-			distanceBetween,
+														distanceBetween,
 														(target - position).Normalized(), /*Direction*/
-														0.03f, /*Lifespan of Bullet*/
+														meleeRange, /*Lifespan of Bullet*/
 														800.0f, /*Speed*/
 														_source);
 		aProjectile->SetCollider(true);
 		aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-		bFire = false;
+		/*bFire = false;*/
+		cout << "MELLEEEEE" << endl;
 	}
 }

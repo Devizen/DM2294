@@ -17,7 +17,8 @@ protected:
 	double elapsedTime;
 	// Boolean flag to indicate if weapon can fire now
 	bool bFire;
-
+	// Range (life time == melee range)
+	float meleeRange;
 public:
 	// Set the time between shots
 	virtual void SetTimeBetweenShots(const double timeBetweenShots);

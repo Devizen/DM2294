@@ -56,6 +56,9 @@ void CPatrol::Update(double dt)
 		{
 			Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
 		
+
+			position += displacement.Normalized() * (float)dt * 20.f;
+
 			try
 			{
 				position += displacement.Normalized() * (float)dt * 20.f;
@@ -64,6 +67,7 @@ void CPatrol::Update(double dt)
 			{
 				/*Divide By Zero does no harm to this situation because it will only happen when there is only 1 waypoint and the enemy is on top, thus, can be left unresolved.*/
 			}
+
 
 			if (displacement.LengthSquared() <= 20.f)
 				waypointToGo = ((waypointToGo == waypoint.size() - 1) ? 0 : ++waypointToGo);
