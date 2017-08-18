@@ -424,22 +424,13 @@
     <ClInclude Include="Source\Map_Editor\Map_Editor.h">
       <Filter>Map_Editor</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="Source\WeaponInfo\Knife.h">
       <Filter>WeaponInfo</Filter>
-=======
     <ClInclude Include="Source\Enemy\Horde\Horde.h">
       <Filter>Enemy3D\Horde</Filter>
->>>>>>> c74b4ebf8d00dc663f7e1497cf107efbcc3550ff
     </ClInclude>
     <ClInclude Include="Source\WeaponInfo\MeleeInfo.h">
       <Filter>WeaponInfo</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
-    <ClInclude Include="Source\WeaponInfo\Knife.h">
-      <Filter>WeaponInfo</Filter>
-    </ClInclude>
->>>>>>> c74b4ebf8d00dc663f7e1497cf107efbcc3550ff
   </ItemGroup>
 </Project>
