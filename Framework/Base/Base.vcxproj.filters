@@ -70,6 +70,12 @@
     <Filter Include="Enemy3D\AnimatedEnemy">
       <UniqueIdentifier>{ec05c582-8451-4a49-8aef-1c1481474aa2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cinematic">
+      <UniqueIdentifier>{00ae35a7-4ffe-49eb-8621-89f08341829b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy3D\Pathfinding">
+      <UniqueIdentifier>{178cc0db-5fb7-4f2a-ae34-9aa7c026d261}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -248,6 +254,12 @@
     </ClCompile>
     <ClCompile Include="Source\WeaponInfo\Knife.cpp">
       <Filter>WeaponInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Cinematic\Cinematic.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
+      <Filter>Enemy3D\Pathfinding</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.cpp">
       <Filter>Enemy3D\AnimatedEnemy</Filter>
@@ -430,6 +442,15 @@
     </ClInclude>
     <ClInclude Include="Source\WeaponInfo\MeleeInfo.h">
       <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\Knife.h">
+      <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Cinematic\Cinematic.h">
+      <Filter>Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Pathfinding\Pathfinding.h">
+      <Filter>Enemy3D\Pathfinding</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.h">
       <Filter>Enemy3D\AnimatedEnemy</Filter>
