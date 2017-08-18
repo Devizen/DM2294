@@ -67,6 +67,9 @@
     <Filter Include="Enemy3D\Horde">
       <UniqueIdentifier>{b78d823c-8489-4f9f-9722-daf37a0806a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Enemy3D\AnimatedEnemy">
+      <UniqueIdentifier>{ec05c582-8451-4a49-8aef-1c1481474aa2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -236,7 +239,7 @@
     </ClCompile>
     <ClCompile Include="Source\WeaponInfo\Knife.cpp">
       <Filter>WeaponInfo</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Source\Enemy\Horde\Horde.cpp">
       <Filter>Enemy3D\Horde</Filter>
     </ClCompile>
@@ -245,6 +248,9 @@
     </ClCompile>
     <ClCompile Include="Source\WeaponInfo\Knife.cpp">
       <Filter>WeaponInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.cpp">
+      <Filter>Enemy3D\AnimatedEnemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,12 +424,15 @@
     </ClInclude>
     <ClInclude Include="Source\WeaponInfo\Knife.h">
       <Filter>WeaponInfo</Filter>
-	  </ClInclude>
+    </ClInclude>
     <ClInclude Include="Source\Enemy\Horde\Horde.h">
       <Filter>Enemy3D\Horde</Filter>
     </ClInclude>
     <ClInclude Include="Source\WeaponInfo\MeleeInfo.h">
       <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.h">
+      <Filter>Enemy3D\AnimatedEnemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
