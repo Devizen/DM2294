@@ -33,57 +33,95 @@ void CPatrol::Reset(void)
 // Update
 void CPatrol::Update(double dt)
 {
-	if (checkCollision())
-	{
-		position = previousPosition;
-		cout << "COLLIDED" << endl;
-	}
-	else
-	{
-		previousPosition = position;
-		cout << "NO COLLISION" << endl;
-	}
+	_enemy = this;
 
-	//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
-	if ((CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() < 100.f * 100.f && checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
-		state = ALERT;
-	else
-		state = PATROL;
-
-	switch (state)
+	if (!pathFindingMode)
 	{
-		case PATROL:
+		if (checkCollision())
 		{
-			Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
+			position = previousPosition;
+			cout << "COLLIDED" << endl;
+			pathFindingMode = true;
+		}
+		else
+		{
+			previousPosition = position;
+			cout << "NO COLLISION" << endl;
+		}
+
+		//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
+		if ((CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() < 100.f * 100.f && checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+			state = ALERT;
+		else
+			state = PATROL;
+
+		switch (state)
+		{
+			case PATROL:
+			{
+				Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
 		
 
-			position += displacement.Normalized() * (float)dt * 20.f;
+				//position += displacement.Normalized() * (float)dt * 20.f;
 
-			try
-			{
-				position += displacement.Normalized() * (float)dt * 20.f;
+				try
+				{
+					position += displacement.Normalized() * (float)dt * 20.f;
+				}
+				catch (exception e)
+				{
+					/*Divide By Zero does no harm to this situation because it will only happen when there is only 1 waypoint and the enemy is on top, thus, can be left unresolved.*/
+				}
+
+
+				if (displacement.LengthSquared() <= 20.f)
+					waypointToGo = ((waypointToGo == waypoint.size() - 1) ? 0 : ++waypointToGo);
+
+				break;
 			}
-			catch (exception e)
+			case ALERT:
 			{
-				/*Divide By Zero does no harm to this situation because it will only happen when there is only 1 waypoint and the enemy is on top, thus, can be left unresolved.*/
+				cout << "ALERT FIND" << endl;
+				Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
+				Vector3 displacement(positionWithoutY - this->GetPos());
+
+				/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
+				if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
+					position += displacement.Normalized() * (float)dt * 20.f;
 			}
-
-
-			if (displacement.LengthSquared() <= 20.f)
-				waypointToGo = ((waypointToGo == waypoint.size() - 1) ? 0 : ++waypointToGo);
-
-			break;
-		}
-		case ALERT:
-		{
-			Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
-			Vector3 displacement(positionWithoutY - this->GetPos());
-
-			/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
-			if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
-				position += displacement.Normalized() * (float)dt * 20.f;
 		}
 	}
+	else
+	{
+		//static bool once = false;
+		//if (!once)
+		//{
+		//	once = true;
+			static bool checked = false;
+			if (!checked)
+			{
+				targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
+				updatePathfinding(position, scale, dt);
+				checked = true;
+			}
+			cout << "Displacement to Nearest Path: " << (nearestPath() - position).LengthSquared() << endl;
+			//if ((nearestPath() - position).LengthSquared() > 0.1f)
+			//	position += (nearestPath() - position).Normalized() * (float)dt * 20.f;
+			if ((nearestPath() - position).LengthSquared() > 0.1f)
+				position += (nearestPath() - position).Normalized() * (float)dt * 20.f;
+			else
+			{
+				while (path.size() > 0)
+				{
+					path.pop_back();
+				}
+				pathFindingMode = false;
+				checked = false;
+				nearestPath().SetZero();
+			}
+			cout << "PATH FIND" << endl;
+		}
+	//}
 }
 
 // Render
@@ -108,6 +146,12 @@ void CPatrol::Render(void)
 		Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
 		angleToFace = Math::RadianToDegree(atan2(displacement.x, displacement.z));
 	}
+
+	if (pathFindingMode)
+	{
+		Vector3 displacement(nearestPath() - this->GetPos());
+		angleToFace = Math::RadianToDegree(atan2(displacement.x, displacement.z));
+	}
 	modelStack.Rotate(angleToFace, 0.f, 1.f, 0.f);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 
@@ -119,6 +163,24 @@ void CPatrol::Render(void)
 
 	if (getAttribute(CAttributes::TYPE_HEALTH) > 0.f)
 		renderHealthBar();
+
+	if (pathFindingMode)
+	{
+		for (vector<Vector3>::iterator it = path.begin(); it != path.end(); ++it)
+		{
+			Vector3 _position = (Vector3)*it;
+		
+			modelStack.PushMatrix();
+			modelStack.Translate(_position.x, _position.y, _position.z);
+			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
+			modelStack.PopMatrix();
+		}
+
+		modelStack.PushMatrix();
+		modelStack.Translate(nearestPosition.x, nearestPosition.y, nearestPosition.z);
+		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("ENEMY"));
+		modelStack.PopMatrix();
+	}
 }
 
 

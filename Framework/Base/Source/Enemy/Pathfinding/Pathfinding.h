@@ -28,6 +28,9 @@ if ((nodePosition - enemyPos).LengthSquared() < f_nearestDistance)
 
 using std::vector;
 
+class CEnemy3D;
+class CPlayerInfo;
+
 class Pathfinding/* : public Singleton<Pathfinding>*/
 {
 public:
@@ -36,11 +39,19 @@ public:
 	/*Switching to path finding mode from normal movement mode.*/
 	bool pathFindingMode;
 	/*Move the object according to path finding positions.*/
-	void updatePathfinding(double dt);
+	void updatePathfinding(Vector3 _position, Vector3 _scale, double dt);
 	/*Check if path finding positions collides with enemy and object.*/
-	void checkPathCollision(void);
+	void checkPathCollision(Vector3 _scale);
+	/*Return nearest path to object.*/
+	Vector3 nearestPath(void);
 	/*Vector3 vector to store all the positions near object.*/
-	
+	vector<Vector3>path;
+	/*A target object position.*/
+	Vector3 targetObjectPosition;
+
+	Vector3 nearestPosition;
+	CEnemy3D* _enemy;
+	CPlayerInfo* _player;
 private:
 protected:
 };

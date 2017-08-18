@@ -113,6 +113,7 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 	Vector3 _target = _destination - _position;
 	cout << "Position: " << _position << endl;
 	cout << "Destination: " << _destination << endl;
+	target = Vector3(0.f, 0.f, 0.f);
 	try
 	{
 		cout << "Displacement: " << (_destination - _position).Length() << endl;

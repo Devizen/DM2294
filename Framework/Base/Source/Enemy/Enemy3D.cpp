@@ -1,4 +1,5 @@
 #include "Enemy3D.h"
+#include "../Object/Furniture.h"
 #include "../EntityManager.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
@@ -576,6 +577,7 @@ void CEnemy3D::renderHealthBar(void)
 
 bool CEnemy3D::checkCollision(void)
 {
+	/*Boundary was multiplied by 2.f in order to factor in the boundary that the point does not have.*/
 	list<CEnemy3D*>enemyList = EntityManager::GetInstance()->returnEnemy();
 	list<CFurniture*>fixedList = EntityManager::GetInstance()->returnFixed();
 
@@ -586,8 +588,8 @@ bool CEnemy3D::checkCollision(void)
 		if (this == enemy)
 			continue;
 
-		Vector3 minBoundary = enemy->GetPos() + enemy->GetMinAABB();
-		Vector3 maxBoundary = enemy->GetPos() + enemy->GetMaxAABB();
+		Vector3 minBoundary = enemy->GetPos() + (enemy->GetMinAABB() * 2.f);
+		Vector3 maxBoundary = enemy->GetPos() + (enemy->GetMaxAABB() * 2.f);
 
 		if (position >= minBoundary && position <= maxBoundary)
 			return true;
@@ -597,10 +599,11 @@ bool CEnemy3D::checkCollision(void)
 
 	for (list<CFurniture*>::iterator it = fixedList.begin(); it != fixedList.end(); ++it)
 	{
-		CEnemy3D* enemy = (CEnemy3D*)*it;
+		CFurniture* object = (CFurniture*)*it;
+	
 
-		Vector3 minBoundary = enemy->GetPos() + enemy->GetMinAABB();
-		Vector3 maxBoundary = enemy->GetPos() + enemy->GetMaxAABB();
+		Vector3 minBoundary = object->GetPosition() + (object->GetMinAABB() * 2.f);
+		Vector3 maxBoundary = object->GetPosition() + (object->GetMaxAABB() * 2.f);
 
 		if (position >= minBoundary && position <= maxBoundary)
 			return true;
