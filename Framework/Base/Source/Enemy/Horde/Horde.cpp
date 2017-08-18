@@ -48,7 +48,17 @@ void CHorde::Update(double dt)
 			Vector3 displacement(defaultPosition - this->GetPos());
 
 			if (displacement.LengthSquared() > 0.f)
-				position += displacement.Normalized() * (float)dt * 20.f;
+			{
+				try
+				{
+					position += displacement.Normalized() * (float)dt * 20.f;
+				}
+
+				catch (exception e)
+				{
+
+				}
+			}
 
 			break;
 		}

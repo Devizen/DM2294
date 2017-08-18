@@ -50,6 +50,15 @@ public:
 		ENEMY_OBJECT_NONE
 	};
 
+	/*Track last option*/
+	enum LAST_CREATED_TYPE
+	{
+		CREATED_ENVIRONMENT = 0,
+		CREATED_ENEMY,
+		CREATED_ENEMY_HORDE,
+		CREATED_NONE
+	};
+
 	Map_Editor();
 	~Map_Editor();
 
@@ -63,11 +72,16 @@ public:
 	void updateOption(double dt);
 	/*Reset options.*/
 	void resetOption(void);
+	/*Removing last object created*/
+	void removeLastCreated(void);
 
 	OBJECT_TYPE objectType;
 	ENVIRONMENT_OBJECT environmentObject;
 	ENEMY_OBJECT enemyObject;
 	OPTION_SELECTION_LEVEL optionSelectionLevel;
+
+	LAST_CREATED_TYPE lastCreatedType;
+
 	/*For saving the original displacement.*/
 	Vector3 _displacement;
 	/*For tuning the displacement.*/

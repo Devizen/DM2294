@@ -18,6 +18,8 @@
 #include "../Enemy/Patrol/Patrol.h"
 /*To create Horde.*/
 #include "../Enemy/Horde/Horde.h"
+/*To access objects in list for removal.*/
+#include "../EntityManager.h"
 /*For using string*/
 #include <string>
 
@@ -39,6 +41,7 @@ Map_Editor::Map_Editor() :
 	, addWaypoint(false)
 	, _enemy(nullptr)
 	, turret(nullptr)
+	, lastCreatedType(CREATED_NONE)
 {
 }
 
@@ -366,6 +369,11 @@ void Map_Editor::updateOption(double dt)
 		_scale.z -= 1.f;
 	}
 
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD9))
+		addWaypoint = false;
+
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD0))
+		removeLastCreated();
 	//if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD8))
 	//	_displacementModifier += _player->GetTarget() - _player->GetPos();
 
@@ -382,7 +390,7 @@ void Map_Editor::updateOption(double dt)
 	if (_scale.z < 1.f)
 		_scale.z = 1.f;
 
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
 	{
 		if (objectType == ENVIRONMENT)
 		{
@@ -397,6 +405,7 @@ void Map_Editor::updateOption(double dt)
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_scale, -_scale);
+				lastCreatedType = CREATED_ENVIRONMENT;
 			}
 		}
 		else if (objectType == ENEMY)
@@ -409,12 +418,10 @@ void Map_Editor::updateOption(double dt)
 					_enemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 					_enemy->SetLight(true);
 					addWaypoint = true;
+					lastCreatedType = CREATED_ENEMY;
 				}
 				else
 					_enemy->addWaypoint(_displacement);
-
-				if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD9))
-					addWaypoint = false;
 			}
 			else if (enemyObject == TOWER)
 			{
@@ -430,12 +437,14 @@ void Map_Editor::updateOption(double dt)
 				turret->setDefenseTo(1.f);
 				turret->setPlayerProperty(false);
 				turret->SetLight(true);
+				lastCreatedType = CREATED_ENEMY;
 			}
 
 			else if (enemyObject == HORDE)
 			{
 				cout << "Create Displacement: " << _displacement << endl;
 				_horde = Create::Horde("ROBOT", _displacement, _scale);
+				lastCreatedType = CREATED_ENEMY_HORDE;
 			}
 		}
 		if (!addWaypoint)
@@ -449,4 +458,38 @@ void Map_Editor::resetOption(void)
 	objectType = OBJECT_TYPE_NONE;
 	environmentObject = ENVIRONMENT_OBJECT_NONE;
 	enemyObject = ENEMY_OBJECT_NONE;
+}
+
+void Map_Editor::removeLastCreated(void)
+{
+	if (lastCreatedType == CREATED_ENVIRONMENT)
+	{
+		CFurniture* object = EntityManager::GetInstance()->returnFixed().back();
+		delete object;
+		object = nullptr;
+
+		EntityManager::GetInstance()->returnFixed().pop_back();
+	}
+	else if (lastCreatedType == CREATED_ENEMY)
+	{
+		CEnemy3D* object = EntityManager::GetInstance()->returnEnemy().back();
+		delete object;
+		object = nullptr;
+
+		EntityManager::GetInstance()->returnEnemy().pop_back();
+	}
+	else if (lastCreatedType == CREATED_ENEMY_HORDE)
+	{
+		for (int i = 0; i < 5; ++i)
+		{
+			CEnemy3D* object = EntityManager::GetInstance()->returnEnemy().back();
+			delete object;
+			object = nullptr;
+
+			EntityManager::GetInstance()->returnEnemy().pop_back();
+		}
+	}
+
+	lastCreatedType = CREATED_NONE;
+	addWaypoint = false;
 }

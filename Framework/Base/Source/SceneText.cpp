@@ -45,6 +45,9 @@
 /*Map Editor*/
 #include "Map_Editor\Map_Editor.h"
 
+/*Cinematic Camera*/
+#include "Cinematic\Cinematic.h"
+
 #include <iostream>
 using namespace std;
 
@@ -58,6 +61,7 @@ SceneText::SceneText()
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
+	, cinematicMode(false)
 	//, m_worldHeight(0.f)
 	//, m_worldWidth(0.f)
 {
@@ -67,6 +71,7 @@ SceneText::SceneText(SceneManager* _sceneMgr)
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
+	, cinematicMode(false)
 {
 	_sceneMgr->AddScene("Start", this);
 }
@@ -208,6 +213,8 @@ void SceneText::Init()
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
+	cinematic = new CCinematic();
+	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
@@ -456,13 +463,13 @@ void SceneText::Update(double dt)
 			EntityManager::GetInstance()->Update(dt);
 			clearKeyDisplay();
 			/*Create random enemies around the map.*/
-			createEnemies(dt);
+			//createEnemies(dt);
 			/*Create random crates for player to hide behind.*/
-			createCrates(dt);
+			//createCrates(dt);
 			/*Create random bullet power-up for player.*/
-			createBullets(dt);
+			//createBullets(dt);
 			/*Create random health power-up for player.*/
-			createHealth(dt);
+			//createHealth(dt);
 
 			//cout << "Light Position X: " << lights[0]->position.x << endl;
 			//cout << "Light Position Y: " << lights[0]->position.y << endl;
@@ -568,11 +575,17 @@ void SceneText::Update(double dt)
 			}
 
 			// Hardware Abstraction
-			theKeyboard->Read(dt);
-			theMouse->Read(dt);
+			if (!cinematicMode)
+			{
+				theKeyboard->Read(dt);
+				theMouse->Read(dt);
 
-			// Update the player position and other details based on keyboard and mouse inputs
-			playerInfo->Update(dt);
+				// Update the player position and other details based on keyboard and mouse inputs
+				playerInfo->Update(dt);
+			}
+
+			//// Update the player position and other details based on keyboard and mouse inputs
+			//playerInfo->Update(dt);
 
 			// Update NPC
 			//enemyInfo->Update(dt);
@@ -599,6 +612,51 @@ void SceneText::Update(double dt)
 					theMinimap->enlargedMap = false;
 				else
 					theMinimap->enlargedMap = true;
+			}
+
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
+			{
+				cinematic->SetCameraPos(camera.GetCameraPos());
+				cinematic->SetCameraTarget(camera.GetCameraTarget());
+				cinematic->SetCameraUp(camera.GetCameraUp());
+				cout << "Attached Camera" << endl;
+				playerInfo->DetachCamera();
+				playerInfo->AttachCamera(&camera);
+				cinematicMode = false;
+				cinematic->numberOfPositions = 0;
+			}
+
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RSHIFT))
+			{
+				cinematic->SetCameraPos(camera.GetCameraPos());
+				cinematic->SetCameraTarget(camera.GetCameraTarget());
+				cinematic->SetCameraUp(camera.GetCameraUp());
+
+				cout << "Attached Cinematic" << endl;
+				playerInfo->DetachCamera();
+				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
+				cinematicMode = true;
+			}
+
+			if (cinematicMode)
+			{
+				if (cinematic->numberOfPositions == 0)
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 200.f, 200.f), 100.f, dt);
+				else if (cinematic->numberOfPositions == 1)
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 200.f, 100.f), 100.f, dt);
+				else if (cinematic->numberOfPositions == 2)
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 0.f, 0.f), 100.f, dt);
+				else if (cinematic->numberOfPositions == 3)
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 2000.f, 0.f), 500.f, dt);
+				else if (cinematic->numberOfPositions == 4)
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, -2000.f, 0.f), 1000.f, dt);
+
+				cinematic->Update(dt);
+				camera.SetCameraPos(cinematic->GetCameraPos());
+				camera.SetCameraTarget(cinematic->GetCameraTarget());
+				camera.SetCameraUp(cinematic->GetCameraUp());
+
+				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
 		}
 	}

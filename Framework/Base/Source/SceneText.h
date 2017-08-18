@@ -17,6 +17,8 @@
 #include "DepthFBO.h"
 #include "ParticleManager.h"
 
+/*Cinematic Camera*/
+class CCinematic;
 class ShaderProgram;
 class SceneManager;
 class TextEntity;
@@ -48,6 +50,7 @@ private:
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;
 	FPSCamera camera;
+	CCinematic* cinematic;
 	TextEntity* textObj[30];
 	Light* lights[2];
 
@@ -121,6 +124,9 @@ private:
 	void renderKO_Count(void);
 
 	bool openInventory;
+
+	/*Cinematic Camera Boolean*/
+	bool cinematicMode;
 };
 
 #endif

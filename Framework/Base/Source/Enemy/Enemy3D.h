@@ -3,6 +3,7 @@
 #include "../GroundEntity.h"
 #include "Enemy_Type.h"
 #include "../Attributes.h"
+#include "Pathfinding\Pathfinding.h"
 #include <vector>
 
 #define MAX_HEALTH_SCALE 10.f
@@ -13,7 +14,8 @@ class Mesh;
 
 class CEnemy3D :
 	public GenericEntity,
-	public CAttributes
+	public CAttributes,
+	public Pathfinding
 {
 	friend class EntityManager;
 	friend class SceneText;
@@ -151,6 +153,11 @@ public:
 	//void updatePatrol(double dt);
 	///*Update for Tower Behavior*/
 	//void updateTower(double dt);
+
+	/*Checking collision with enemy and object.*/
+	bool checkCollision(void);
+
+	Vector3 previousPosition;
 private:
 	//ATTRIBUTES attributes;
 	int health;

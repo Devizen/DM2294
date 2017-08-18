@@ -31,6 +31,7 @@ CEnemy3D::CEnemy3D(Mesh* _modelMesh)
 	, state(IDLE)
 	, playerProperty(false)
 	, whoCloser(NONE)
+	, previousPosition(0.f, 0.f, 0.f)
 {
 	this->modelMesh = _modelMesh;
 }
@@ -571,6 +572,43 @@ void CEnemy3D::renderHealthBar(void)
 	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
 
 	modelStack.PopMatrix();
+}
+
+bool CEnemy3D::checkCollision(void)
+{
+	list<CEnemy3D*>enemyList = EntityManager::GetInstance()->returnEnemy();
+	list<CFurniture*>fixedList = EntityManager::GetInstance()->returnFixed();
+
+	for (list<CEnemy3D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+		CEnemy3D* enemy = (CEnemy3D*)*it;
+
+		if (this == enemy)
+			continue;
+
+		Vector3 minBoundary = enemy->GetPos() + enemy->GetMinAABB();
+		Vector3 maxBoundary = enemy->GetPos() + enemy->GetMaxAABB();
+
+		if (position >= minBoundary && position <= maxBoundary)
+			return true;
+		else
+			continue;
+	}
+
+	for (list<CFurniture*>::iterator it = fixedList.begin(); it != fixedList.end(); ++it)
+	{
+		CEnemy3D* enemy = (CEnemy3D*)*it;
+
+		Vector3 minBoundary = enemy->GetPos() + enemy->GetMinAABB();
+		Vector3 maxBoundary = enemy->GetPos() + enemy->GetMaxAABB();
+
+		if (position >= minBoundary && position <= maxBoundary)
+			return true;
+		else
+			continue;
+	}
+
+	return false;
 }
 
 CEnemy3D* Create::Enemy3D(const std::string& _meshName,
