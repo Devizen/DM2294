@@ -18,6 +18,8 @@
 #include "../Enemy/Patrol/Patrol.h"
 /*To create Horde.*/
 #include "../Enemy/Horde/Horde.h"
+/*To create animated robot*/
+#include "../Enemy/AnimatedEnemy/AnimatedEnemy.h"
 /*To access objects in list for removal.*/
 #include "../EntityManager.h"
 /*For using string*/
@@ -414,14 +416,18 @@ void Map_Editor::updateOption(double dt)
 			{
 				if (!addWaypoint)
 				{
-					_enemy = Create::Patrol("ROBOT", _displacement, _scale);
+					_enemy = Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head", _displacement, _scale);
 					_enemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 					_enemy->SetLight(true);
 					addWaypoint = true;
 					lastCreatedType = CREATED_ENEMY;
 				}
-				else
-					_enemy->addWaypoint(_displacement);
+				//else
+					//_enemy->addWaypoint(_displacement);
+
+				if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD9))
+					addWaypoint = false;
+
 			}
 			else if (enemyObject == TOWER)
 			{

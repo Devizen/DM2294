@@ -14,6 +14,7 @@ using std::ostringstream;
 class CPatrol;
 class CEnemy3D;
 class CHorde;
+class CAnimatedEnemy;
 
 class Map_Editor : public Singleton<Map_Editor>
 {
@@ -105,7 +106,7 @@ public:
 	bool addWaypoint;
 
 	/*Enemy Object to add waypoint.*/
-	CPatrol* _enemy;
+	CAnimatedEnemy* _enemy;
 	/*Enemy turrent to change variables.*/
 	CEnemy3D* turret;
 	/*Enemy Horde to change variables.*/

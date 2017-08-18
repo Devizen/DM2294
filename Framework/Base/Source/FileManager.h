@@ -23,8 +23,6 @@ class FileManager : public Singleton <FileManager>, public CAttributes
 	//string eqType;
 	//string eqName;
 
-	int pressCountX;
-	int pressCountY;
 
 	struct EQ_Info
 	{
@@ -52,12 +50,9 @@ public:
 	//bool ReadFile(const string myFile);
 
 	void EditFile(const string myFile);
-	void RenderWeapon();
-	void DeleteWeapon();
-
-	void update(double dt);
 
 	void PrintWeaponFile();
+
 	void CreateWeapon();
 
 	Vector3 Token2Vector(string token);

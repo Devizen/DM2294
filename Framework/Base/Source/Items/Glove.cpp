@@ -24,7 +24,6 @@ Glove * Create::theGlove(const std::string & _meshName, string ID, string attack
 	result->SetSpeed(stoi(speed)); 
 	result->SetType(Equipment::GLOVE);
 	result->SetName(_meshName);
-	cout << "Address in Create: " << result << endl;
 	if (isEquipped)
 	{
 		EquipmentManager::GetInstance()->AssignEquipment(result);

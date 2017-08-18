@@ -38,11 +38,13 @@
 
 /*Enemies*/
 #include "Enemy\Enemy3D.h"
+#include "Enemy/AnimatedEnemy/AnimatedEnemy.h"
 #include "Enemy\Patrol\Patrol.h"
 
-#include "Inventory.h"
+#include "Items\Inventory.h"
 #include "Items\Helmet.h"
 #include "FileManager.h"
+#include "Items\EquipmentManager.h"
 
 /*Map Editor*/
 #include "Map_Editor\Map_Editor.h"
@@ -294,6 +296,9 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("INVENTORY", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("INVENTORY")->textureID = LoadTGA("Image//Inventory.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("EQWINDOW", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("EQWINDOW")->textureID = LoadTGA("Image//Equipment.tga");
+
 	MeshBuilder::GetInstance()->GenerateQuad("EMPHELM", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("EMPHELM")->textureID = LoadTGA("Image//EmperorHelmet.tga");
 
@@ -315,6 +320,19 @@ void SceneText::Init()
 	/*Robot Troop*/
 	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT", "OBJ//ROBOT.obj");
 	MeshBuilder::GetInstance()->GetMesh("ROBOT")->textureID = LoadTGA("Image//ROBOT.tga"); 
+
+	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_CORE", "OBJ//Robot_Torso.obj");
+	MeshBuilder::GetInstance()->GetMesh("ROBOT_CORE")->textureID = LoadTGA("Image//ROBOT.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_LeftArm", "OBJ//Robot_LeftArm.obj");
+	MeshBuilder::GetInstance()->GetMesh("ROBOT_LeftArm")->textureID = LoadTGA("Image//ROBOT.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_RightArm", "OBJ//Robot_RightArm.obj");
+	MeshBuilder::GetInstance()->GetMesh("ROBOT_RightArm")->textureID = LoadTGA("Image//ROBOT.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_LeftLeg", "OBJ//Robot_LeftLeg.obj");
+	MeshBuilder::GetInstance()->GetMesh("ROBOT_LeftLeg")->textureID = LoadTGA("Image//ROBOT.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_RightLeg", "OBJ//Robot_RightLeg.obj");
+	MeshBuilder::GetInstance()->GetMesh("ROBOT_RightLeg")->textureID = LoadTGA("Image//ROBOT.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_Head", "OBJ//Robot_Head.obj");
+	MeshBuilder::GetInstance()->GetMesh("ROBOT_Head")->textureID = LoadTGA("Image//ROBOT.tga");
 	/*Player Health Bar Color*/
 	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
 
@@ -432,7 +450,9 @@ void SceneText::Init()
 	Inventory::GetInstance()->Init();
 
 	openInventory = false;
+	openEQ = false;
 	FileManager::GetInstance()->init();
+	EquipmentManager::GetInstance()->Init();
 }
 
 void SceneText::Update(double dt)
@@ -448,21 +468,33 @@ void SceneText::Update(double dt)
 	static bool pause = false;
 	static int renderOnce = 0;
 
-	if (KeyboardController::GetInstance()->IsKeyPressed('I'))
+	if (KeyboardController::GetInstance()->IsKeyPressed('I') && !openEQ)
 	{
 		OptionsManager::GetInstance()->setEditingState(true);
 		openInventory = true;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed('E') && !openInventory)
+	{
+		OptionsManager::GetInstance()->setEditingState(true);
+		openEQ = true;
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('U'))
 	{
 		OptionsManager::GetInstance()->setEditingState(false);
 		openInventory = false;
+		openEQ = false;
 	}
 
 	if (openInventory)
 	{
-		FileManager::GetInstance()->update(dt);
+		Inventory::GetInstance()->Update(dt);
+	}
+
+	if (openEQ)
+	{
+		EquipmentManager::GetInstance()->Update(dt);
 	}
 
 	//if (KeyboardController::GetInstance()->IsKeyDown('O')) {
@@ -1193,7 +1225,7 @@ void SceneText::RenderPassMain(void)
 	//pass light depth texture 
 	DepthFBO::GetInstance()->BindForReading(GL_TEXTURE8);
 	currProg->UpdateInt("shadowMap", 8);
-	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	//GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 
 	// Camera matrix
 	GraphicsManager::GetInstance()->GetViewMatrix().SetToIdentity();
@@ -1248,7 +1280,7 @@ void SceneText::RenderPassMain(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 
-	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	GraphicsManager::GetInstance()->SetPerspectiveProjection(70.f, (float)Application::GetInstance().m_window_width / (float)Application::GetInstance().m_window_height, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
@@ -1290,7 +1322,12 @@ void SceneText::RenderPassMain(void)
 
 	if (openInventory)
 	{
-		FileManager::GetInstance()->RenderWeapon();
+		Inventory::GetInstance()->RenderWeapon();
+	}
+
+	if (openEQ)
+	{
+		EquipmentManager::GetInstance()->Render();
 	}
 
 	glEnable(GL_DEPTH_TEST);
@@ -1369,7 +1406,7 @@ void SceneText::RenderWorld(void)
 		modelStack.PopMatrix();
 	}
 	// Setup 3D pipeline then render 3D
-	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	//GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	EntityManager::GetInstance()->Render();
