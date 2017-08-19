@@ -227,15 +227,17 @@ void CAnimatedEnemy::Update(double dt)
 		static bool checked = false;
 		if (!checked)
 		{
+			Vector3 positionWithoutY(position.x, -10.f, position.z);
 			targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
-			updatePathfinding(position, scale, dt);
+			updatePathfinding(positionWithoutY, scale, dt);
+			nearestPosition = nearestPath();
 			checked = true;
 		}
-		cout << "Displacement to Nearest Path: " << (nearestPath() - position).LengthSquared() << endl;
+		//cout << "Displacement to Nearest Path: " << (nearestPosition - position).LengthSquared() << endl;
 		//if ((nearestPath() - position).LengthSquared() > 0.1f)
 		//	position += (nearestPath() - position).Normalized() * (float)dt * 20.f;
-		if ((nearestPath() - position).LengthSquared() > 0.1f)
-			position += (nearestPath() - position).Normalized() * (float)dt * 20.f;
+		if ((nearestPosition - position).LengthSquared() > 250.f)
+			position += (nearestPosition - position).Normalized() * (float)dt * 50.f;
 		else
 		{
 			while (path.size() > 0)
@@ -245,8 +247,9 @@ void CAnimatedEnemy::Update(double dt)
 			pathFindingMode = false;
 			checked = false;
 			nearestPath().SetZero();
+			previousPosition = position;
 		}
-		cout << "PATH FIND" << endl;
+		//cout << "PATH FIND" << endl;
 	}
 	//}
 	////CEnemy3D::Update(dt);
@@ -319,7 +322,7 @@ void CAnimatedEnemy::Render(void)
 	}
 	else if (pathFindingMode)
 	{
-		Vector3 displacement(nearestPath() - this->GetPos());
+		Vector3 displacement(/*nearestPath()*/nearestPosition - this->GetPos());
 		angleToFace = Math::RadianToDegree(atan2(displacement.x, displacement.z));
 	}
 	else if (state == CEnemy3D::AI_STATE::ALERT)
@@ -401,14 +404,18 @@ void CAnimatedEnemy::Render(void)
 		{
 			Vector3 _position = (Vector3)*it;
 
+			if (_position == Vector3(/*nearestPath().x*/nearestPosition.x, -10.f, /*nearestPath().z*/nearestPosition.z))
+				continue;
+			//cout << _position <<  " and " << nearestPath() << endl;
+
 			modelStack.PushMatrix();
 			modelStack.Translate(_position.x, _position.y, _position.z);
-			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
+			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("PATH"));
 			modelStack.PopMatrix();
 		}
 
 		modelStack.PushMatrix();
-		modelStack.Translate(nearestPosition.x, nearestPosition.y, nearestPosition.z);
+		modelStack.Translate(nearestPosition.x, -10.f, nearestPosition.z);
 		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("ENEMY"));
 		modelStack.PopMatrix();
 	}
@@ -704,6 +711,7 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->SetScale(_scale);
 	result->SetCollider(true);
 	result->setPlayerProperty(false);
+	result->setSpeed(50);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }

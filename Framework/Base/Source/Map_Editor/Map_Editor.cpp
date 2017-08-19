@@ -400,13 +400,13 @@ void Map_Editor::updateOption(double dt)
 				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
-				cout << "_minAABB: " << _minAABB << endl;
-				cout << "_maxAABB: " << _maxAABB << endl;
 				CFurniture* crate = Create::Furniture("crate", _displacement, _scale);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB* 2.f, _minAABB);
-				crate->SetPosition(Vector3(0.f, -10.f, 0.f));
+				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
+				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
+				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
 				lastCreatedType = CREATED_ENVIRONMENT;
 			}
 		}

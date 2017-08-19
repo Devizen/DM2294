@@ -580,6 +580,8 @@ bool CEnemy3D::checkCollision(void)
 	/*Boundary was multiplied by 2.f in order to factor in the boundary that the point does not have.*/
 	list<CEnemy3D*>enemyList = EntityManager::GetInstance()->returnEnemy();
 	list<CFurniture*>fixedList = EntityManager::GetInstance()->returnFixed();
+	Vector3 positionWithoutYMin(position.x + GetMinAABB().x, -10.f, position.z + GetMinAABB().z);
+	Vector3 positionWithoutYMax(position.x + GetMaxAABB().x, -10.f, position.z + GetMaxAABB().z);
 
 	for (list<CEnemy3D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 	{
@@ -591,7 +593,7 @@ bool CEnemy3D::checkCollision(void)
 		Vector3 minBoundary = enemy->GetPos() + (enemy->GetMinAABB() * 2.f);
 		Vector3 maxBoundary = enemy->GetPos() + (enemy->GetMaxAABB() * 2.f);
 
-		if (position >= minBoundary && position <= maxBoundary)
+		if (positionWithoutYMax >= minBoundary && positionWithoutYMin <= maxBoundary)
 			return true;
 		else
 			continue;
@@ -605,7 +607,7 @@ bool CEnemy3D::checkCollision(void)
 		Vector3 minBoundary = object->GetPosition() + (object->GetMinAABB() * 2.f);
 		Vector3 maxBoundary = object->GetPosition() + (object->GetMaxAABB() * 2.f);
 
-		if (position >= minBoundary && position <= maxBoundary)
+		if (positionWithoutYMax >= minBoundary && positionWithoutYMin <= maxBoundary)
 			return true;
 		else
 			continue;
@@ -614,8 +616,8 @@ bool CEnemy3D::checkCollision(void)
 	Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + CPlayerInfo::GetInstance()->GetPos();
 	Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + CPlayerInfo::GetInstance()->GetPos();
 
-	cout << position << " >= " << playerMin << " && " << position << " <= " << playerMax << endl;
-	if (position >= playerMin && position <= playerMax)
+	//cout << position << " >= " << playerMin << " && " << position << " <= " << playerMax << endl;
+	if (positionWithoutYMax >= playerMin && positionWithoutYMin <= playerMax)
 		return true;
 
 	return false;

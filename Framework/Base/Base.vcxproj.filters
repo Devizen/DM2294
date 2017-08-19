@@ -261,11 +261,11 @@
     <ClCompile Include="Source\Cinematic\Cinematic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.cpp">
       <Filter>Enemy3D\AnimatedEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
+      <Filter>Enemy3D\Pathfinding</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
       <Filter>Enemy3D\Pathfinding</Filter>

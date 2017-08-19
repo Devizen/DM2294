@@ -81,20 +81,20 @@ CPlayerInfo::~CPlayerInfo(void)
 void CPlayerInfo::Init(void)
 {
 	// Set the default values
-	defaultPosition.Set(0,0,10);
-	defaultTarget.Set(0,0,0);
+	defaultPosition.Set(1,0,0);
+	defaultTarget.Set(0,0,1);
 	defaultUp.Set(0,1,0);
 
 	// Set the current values
-	position.Set(0, 0, 10);
-	target.Set(0, 0, 0);
+	position.Set(1, 0, 0);
+	target.Set(0, 0, 1);
 	up.Set(0, 1, 0);
 
 	// Set Boundary
 	maxBoundary.Set(1,1,1);
 	minBoundary.Set(-1, -1, -1);
 
-	freeLookViewVector.Set(0, 0, 0);
+	freeLookViewVector.Set(1, 0, 0);
 
 	// Set the pistol as the primary weapon
 	primaryWeapon = new CPistol();

@@ -436,7 +436,7 @@ bool EntityManager::CheckAABBCollision(Vector3 _minAABB, Vector3 _maxAABB, Vecto
 		Vector3 furnitureMin = furniture->GetMinAABB() + furniture->GetPosition();
 		Vector3 furnitureMax = furniture->GetMaxAABB() + furniture->GetPosition();
 
-		if (playerMin <= furnitureMax && playerMin >= furnitureMin)
+		if (playerMin < furnitureMax && playerMin > furnitureMin)
 			return true;
 		else
 			continue;

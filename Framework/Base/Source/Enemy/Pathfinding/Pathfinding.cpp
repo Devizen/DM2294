@@ -46,7 +46,7 @@ void Pathfinding::checkPathCollision(Vector3 _scale)
 		{
 			CFurniture* object = (CFurniture*)*objIt;
 
-			cout << "Object to Path Distance" << (pathToGo - object->GetPosition()).LengthSquared() << endl;
+			//cout << "Object to Path Distance " << (pathToGo - object->GetPosition()).LengthSquared() << endl;
 			if ((pathToGo - object->GetPosition()).LengthSquared() < 200.f)
 			{
 				it = path.erase(it);
@@ -117,27 +117,34 @@ Vector3 Pathfinding::nearestPath(void)
 	if (path.size() > 0)
 		nearest = path.back();
 
-	nearest.y = _enemy->GetPos().y;
+	//nearest.y = _enemy->GetPos().y;
 	float currentRelativeDistance = 0.f;
 	float nextRelativeDistance = 0.f;
-	targetObjectPosition.y = _enemy->GetPos().y;
+	targetObjectPosition.y = -10.f;
 	currentRelativeDistance = (targetObjectPosition - nearest).LengthSquared();
 
 	for (vector<Vector3>::iterator it = path.begin(); it != path.end(); ++it)
 	{
 		Vector3 nextPath = (Vector3)*it;
 
+		//cout << "Object to Path Distance " << (targetObjectPosition - nextPath).LengthSquared() << endl;
+
 		if (nextPath == nearest)
 			continue;
 
-		nextPath.y = _enemy->GetPos().y;
+		//nextPath.y = _enemy->GetPos().y;
 		nextRelativeDistance = (targetObjectPosition - nextPath).LengthSquared();
 
 		if (nextRelativeDistance < currentRelativeDistance)
+		{
 			nearest = nextPath;
+			currentRelativeDistance = nextRelativeDistance;
+		}
 	}
 	/*Debug use.*/
 	//nearest.y = _enemy->GetPos().y;
 	nearestPosition = nearest;
+
+	//cout << "Object to Nearest Distance " << (targetObjectPosition - nearest).LengthSquared() << endl;
 	return nearest;
 }
