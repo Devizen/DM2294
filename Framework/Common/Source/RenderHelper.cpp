@@ -189,22 +189,18 @@ void RenderHelper::renderPlayerHealth(void)
 {
 	CPlayerInfo* player = CPlayerInfo::GetInstance();
 	/*Calculating the alignment offset of health bar. Value is based on the scaling.*/
-	float healthBarOffset = CPlayerInfo::GetInstance()->getAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().getAspectRatioWidth() * 0.005f;
+	float healthBarOffset = CPlayerInfo::GetInstance()->getAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth() * 0.005f;
 
-	/*Set to 2D*/
-	Mtx44 ortho;
-	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
-	Mtx44& projectionStack = GraphicsManager::GetInstance()->GetProjectionMatrix();
-	projectionStack.SetToOrtho(-80, 80, -60, 60, -10, 10);
-	Mtx44& viewStack = GraphicsManager::GetInstance()->GetViewMatrix();
-	viewStack.SetToIdentity();
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
 
 	/*Translate the health bar to the left bottom of screen with offset that align the health bar.*/
-	modelStack.Translate(-75.f + (healthBarOffset) * 0.5f, -50.f, 0.f);
-	modelStack.Scale(CPlayerInfo::GetInstance()->getAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().getAspectRatioWidth() * 0.005f, Application::GetInstance().getAspectRatioHeight() * 0.05f, 1.f);
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+		modelStack.Translate((-Application::GetInstance().GetWindowWidth() * 0.49f) + (healthBarOffset) * 0.5f, -Application::GetInstance().GetWindowHeight() * 0.4f, 0.f);
+	else
+		modelStack.Translate((-Application::GetInstance().GetWindowWidth() * 0.49f) + (healthBarOffset) * 0.5f, -Application::GetInstance().GetWindowHeight() * 0.35f, 0.f);
+	modelStack.Scale(CPlayerInfo::GetInstance()->getAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth() * 0.005f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
 	
 	/*Changing the health bar colour according to player health left %. 100% == Green, > 20% == Yellow and below 20% == Red.*/
 	if (player->getAttribute(CAttributes::TYPE_HEALTH) == player->getAttribute(CAttributes::TYPE_MAXHEALTH))
@@ -219,16 +215,13 @@ void RenderHelper::renderPlayerHealth(void)
 
 void RenderHelper::renderKOCount(void)
 {
-	Mtx44 ortho;
-	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
-	Mtx44& projectionStack = GraphicsManager::GetInstance()->GetProjectionMatrix();
-	projectionStack.SetToOrtho(-80, 80, -60, 60, -10, 10);
-	Mtx44& viewStack = GraphicsManager::GetInstance()->GetViewMatrix();
-	viewStack.SetToIdentity();
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
-	modelStack.Translate(50.f, -20.f, 0.f);
-	modelStack.Scale(Application::GetInstance().getAspectRatioWidth() * 0.1f, Application::GetInstance().getAspectRatioWidth() * 0.1f, 1.f);
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+		modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.3f, -Application::GetInstance().GetWindowHeight() * 0.2f, 0.f);
+	else
+		modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.3f, -Application::GetInstance().GetWindowHeight() * 0.1f, 0.f);
+	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.1f, Application::GetInstance().GetWindowWidth() * 0.1f, 1.f);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "KO:" + to_string(CPlayerInfo::GetInstance()->getKO_Count()), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 }

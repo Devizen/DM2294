@@ -73,6 +73,9 @@
     <Filter Include="Enemy3D\AnimatedEnemy">
       <UniqueIdentifier>{deb7c554-f0c6-4305-962d-b7e446a40abd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Enemy3D\Pathfinding">
+      <UniqueIdentifier>{1a4cf7cc-2fbd-42ba-a67f-8385424eff46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -261,11 +264,11 @@
     <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.cpp">
       <Filter>Enemy3D\AnimatedEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
+      <Filter>Enemy3D\Pathfinding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -446,14 +449,14 @@
     <ClInclude Include="Source\Items\Inventory.h">
       <Filter>Inventory</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Enemy\Pathfinding\Pathfinding.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Cinematic\Cinematic.h">
       <Filter>Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.h">
       <Filter>Enemy3D\AnimatedEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Pathfinding\Pathfinding.h">
+      <Filter>Enemy3D\Pathfinding</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

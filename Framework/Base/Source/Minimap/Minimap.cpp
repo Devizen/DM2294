@@ -47,8 +47,8 @@ CMinimap::~CMinimap(void)
 bool CMinimap::Init(void)
 {
 	m_iAngle = -90;
-	position.Set(335.f, 235.f, 0.0f);
-	scale.Set(100.0f, 100.0f, 100.0f);
+	position.Set(Application::GetInstance().GetWindowWidth() * 0.4f, Application::GetInstance().GetWindowHeight() * 0.4f, 0.0f);
+	scale.Set(Application::GetInstance().GetWindowWidth() * 0.1f, Application::GetInstance().GetWindowWidth() * 0.1f, Application::GetInstance().GetWindowWidth() * 0.1f);
 
 	return true;
 }
@@ -144,6 +144,14 @@ void CMinimap::RenderUI()
 {
 	if (mode == MODE_3D)
 		return;
+
+	/*Translating base on aspect raio 4:3 and 16:9*/
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+		position.Set(Application::GetInstance().GetWindowWidth() * 0.4f, Application::GetInstance().GetWindowHeight() * 0.4f, 0.0f);
+	else
+		position.Set(Application::GetInstance().GetWindowWidth() * 0.4f, Application::GetInstance().GetWindowHeight() * 0.35f, 0.0f);
+
+	scale.Set(Application::GetInstance().GetWindowWidth() * 0.1f, Application::GetInstance().GetWindowWidth() * 0.1f, Application::GetInstance().GetWindowWidth() * 0.1f);
 
 	//int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
 	//int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;

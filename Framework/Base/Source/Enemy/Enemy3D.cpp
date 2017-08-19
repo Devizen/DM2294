@@ -611,6 +611,13 @@ bool CEnemy3D::checkCollision(void)
 			continue;
 	}
 
+	Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + CPlayerInfo::GetInstance()->GetPos();
+	Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + CPlayerInfo::GetInstance()->GetPos();
+
+	cout << position << " >= " << playerMin << " && " << position << " <= " << playerMax << endl;
+	if (position >= playerMin && position <= playerMax)
+		return true;
+
 	return false;
 }
 
@@ -629,6 +636,8 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 	result->SetScale(_scale);
 	result->SetCollider(true);
 	result->setPlayerProperty(false);
+	result->SetLight(true);
+	result->SetAABB(_scale * 2.f, -_scale * 2.f);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }

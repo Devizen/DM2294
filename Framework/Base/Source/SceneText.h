@@ -127,6 +127,9 @@ private:
 
 	/*Cinematic*/
 	bool cinematicMode;
+
+	float windowHeight;
+	float windowWidth;
 };
 
 #endif

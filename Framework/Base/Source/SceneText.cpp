@@ -66,6 +66,8 @@ SceneText::SceneText()
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
 	, cinematicMode(false)
+	, windowHeight(0.f)
+	, windowWidth(0.f)
 	//, m_worldHeight(0.f)
 	//, m_worldWidth(0.f)
 {
@@ -87,8 +89,10 @@ SceneText::~SceneText()
 void SceneText::Init()
 {
 	//Calculating aspect ratio
-	Application::GetInstance().setAspectRatioHeight(100.f);
-	Application::GetInstance().setAspectRatioWidth(Application::GetInstance().getAspectRatioHeight() * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight());
+	windowHeight = Application::GetInstance().GetWindowHeight();
+	windowWidth = Application::GetInstance().GetWindowWidth();
+	//Application::GetInstance().setAspectRatioHeight(100.f);
+	//Application::GetInstance().setAspectRatioWidth(Application::GetInstance().getAspectRatioHeight() * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight());
 	//m_worldWidth = m_worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
 	//m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
 	//m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
@@ -376,16 +380,16 @@ void SceneText::Init()
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
-	float fontSize = 25.0f;
+	float fontSize = Application::GetInstance().GetWindowWidth() * 0.025f;
 	float halfFontSize = fontSize / 2.0f;
 	for (int i = 0; i < 30; ++i)
 	{
-		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth + fontSize, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(1.0f, 0.f,0.0f));
+		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth + fontSize, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f), Color(1.0f, 0.f,0.0f));
 	}
 
 	for (int i = 0; i < 17; ++i)
 	{
-		controlText[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, (-halfWindowHeight / 2) + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.f, 0.f, 0.0f));
+		controlText[i] = Create::Text2DObject("text", Vector3(-windowWidth * 0.25f, (-windowHeight * 0.255f) + fontSize*i + halfFontSize, 0.0f), "", Vector3(windowWidth * 0.03f, windowWidth * 0.03f, 1.f), Color(0.f, 0.f, 0.0f));
 	}
 
 
@@ -458,15 +462,27 @@ void SceneText::Init()
 void SceneText::Update(double dt)
 {
 	//Calculating aspect ratio
-	Application::GetInstance().setAspectRatioHeight(100.f);
-	Application::GetInstance().setAspectRatioWidth(Application::GetInstance().getAspectRatioHeight() * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight());
-	//m_worldHeight = 100.f;
-	//m_worldWidth = m_worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
-	//m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
-	//m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
+	windowHeight = Application::GetInstance().GetWindowHeight();
+	windowWidth = Application::GetInstance().GetWindowWidth();
 
 	static bool pause = false;
 	static int renderOnce = 0;
+
+	for (int i = 0; i < 17; ++i)
+	{
+		float fontSize;
+		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+			fontSize = Application::GetInstance().GetWindowWidth() * 0.025f;
+		else
+			fontSize = Application::GetInstance().GetWindowWidth() * 0.02f;
+
+		float halfFontSize = fontSize / 2.0f;
+		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+			controlText[i]->SetPosition(Vector3(-windowWidth * 0.25f, (-windowHeight * 0.255f) + fontSize*i + halfFontSize, 0.0f));
+		else
+			controlText[i]->SetPosition(Vector3(-windowWidth * 0.25f, (-windowHeight * 0.3f) + fontSize*i + halfFontSize, 0.0f));
+		controlText[i]->SetScale(Vector3(windowWidth * 0.03f, windowWidth * 0.03f, 1.f));
+	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('I') && !openEQ)
 	{
@@ -600,36 +616,46 @@ void SceneText::Update(double dt)
 					//weaponUI = Create::Sprite2DObject("PISTOL", Vector3(-350.0f, -250.0f, 0.f), Vector3(50.0f, 50.0f, 50.0f), true);
 				}
 
+
 				weaponType << weaponName;
-				textObj[4]->SetPosition(Vector3(-360.f, -220.f, 0.f));
+				if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+					textObj[4]->SetPosition(Vector3(-windowWidth * 0.45f, -windowHeight * 0.3f, 0.f));
+				else
+					textObj[4]->SetPosition(Vector3(-windowWidth * 0.45f, -windowHeight * 0.25f, 0.f));
 				textObj[4]->SetText(weaponType.str());
+				textObj[4]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 				printInterval = 0.f;
 			}
 
 			/*Display weapon info.*/
 			std::ostringstream ss;
 			ss << weaponManager[playerInfo->GetWeapon()]->GetMagRound() << "/" << weaponManager[playerInfo->GetWeapon()]->GetTotalRound();
-			textObj[5]->SetPosition(Vector3(-350.f, -200.f, 0.f));
+			if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+				textObj[5]->SetPosition(Vector3(-windowWidth * 0.45f, -windowHeight * 0.35f, 0.f));
+			else
+				textObj[5]->SetPosition(Vector3(-windowWidth * 0.45f, -windowHeight * 0.3f, 0.f));
+			textObj[5]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[5]->SetText(ss.str());
 
-			/*Display player health.*/
-			ss.str("");
-			ss << "Health:" << playerInfo->getAttribute(CAttributes::TYPE_HEALTH);
-			textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
-			textObj[23]->SetText(ss.str());
+			///*Display player health.*/
+			//ss.str("");
+			//ss << "Health:" << playerInfo->getAttribute(CAttributes::TYPE_HEALTH);
+			//textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
+			//textObj[23]->SetText(ss.str());
 
 			/*Display score*/
 			ss.str("");
 			ss << "Score:" << playerInfo->getScore();
-			textObj[24]->SetPosition(Vector3(textObj[23]->GetPosition().x + 325.f, textObj[23]->GetPosition().y, textObj[23]->GetPosition().z));
+			textObj[24]->SetPosition(Vector3(-windowHeight * 0.1f, windowHeight * 0.48f, 0.f));
+			textObj[24]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[24]->SetColor(Color(1.f, 0.f, 0.f));
 			textObj[24]->SetText(ss.str());
 
-			ss.str("");
-			ss << "Highscore:" << OptionsManager::GetInstance()->getHighscore();
-			textObj[25]->SetPosition(Vector3(textObj[24]->GetPosition().x- 200.f, textObj[24]->GetPosition().y -570.f, textObj[24]->GetPosition().z));
-			textObj[25]->SetColor(Color(1.f, 0.f, 0.f));
-			textObj[25]->SetText(ss.str());
+			//ss.str("");
+			//ss << "Highscore:" << OptionsManager::GetInstance()->getHighscore();
+			//textObj[25]->SetPosition(Vector3(textObj[24]->GetPosition().x- 200.f, textObj[24]->GetPosition().y -570.f, textObj[24]->GetPosition().z));
+			//textObj[25]->SetColor(Color(1.f, 0.f, 0.f));
+			//textObj[25]->SetText(ss.str());
 
 
 			if (playerInfo->getScore() > OptionsManager::GetInstance()->getHighscore())
@@ -807,23 +833,31 @@ void SceneText::renderWeapon(void)
 	modelStack.PushMatrix();
 	if (playerInfo->GetWeapon() == 0)
 	{
-		modelStack.Translate(300.f, -250.f, 0.f);
+		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.4f, 0.f);
+		else
+			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
+
 		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
 		{
 			CSoundEngine::GetInstance()->PlayASound("PISTOL");
 			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
 		}
-		modelStack.Scale(290.f, 200.f, 50.f);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.3f, Application::GetInstance().GetWindowWidth() * 0.2f, 1.f);
 	}
 	if (playerInfo->GetWeapon() == 1)
 	{
-		modelStack.Translate(250.f, -250.f, 0.f);
+		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.4f, 0.f);
+		else
+			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
+
 		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
 		{
 			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
 		}
-		modelStack.Scale(400.f, 250.f, 1.f);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.3f, Application::GetInstance().GetWindowWidth() * 0.2f, 1.f);
 	}
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();
@@ -841,17 +875,25 @@ void SceneText::renderWeaponUI(void)
 	modelStack.PushMatrix();
 	if (playerInfo->GetWeapon() == 0)
 	{
-		modelStack.Translate(-330.f, -150.f, 0.f);
+		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.225f, 0.f);
+		else
+			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.1525f, 0.f);
+
 		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-		modelStack.Scale(50.0f, 50.0f, 1.f);
+		modelStack.Scale(windowWidth * 0.05f, windowWidth * 0.05f, 1.f);
 	}
 	if (playerInfo->GetWeapon() == 1)
 	{
-		modelStack.Translate(-330.f, -150.f, 0.f);
+		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.225f, 0.f);
+		else
+			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.1525f, 0.f);
+
 		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-		modelStack.Scale(100.0f, 40.0f, 1.f);
+		modelStack.Scale(windowWidth * 0.1f, windowWidth * 0.04f, 1.f);
 	}
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();
@@ -1184,6 +1226,7 @@ void SceneText::RenderPassGPass(void)
 
 	/*glUseProgram(g);*/
 
+
 	if (lights[0]->type == Light::LIGHT_DIRECTIONAL)
 	{
 		DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
@@ -1297,14 +1340,26 @@ void SceneText::RenderPassMain(void)
 	RenderWorld();
 	//currProg->UpdateInt("fogParam.enabled", 0);
 
-
-
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
 	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
+	if (OptionsManager::GetInstance()->getEditingState())
+	{
+		Mesh* modelMesh;
+		modelMesh = MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 1.0f), 1.0f);
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		modelStack.PushMatrix();
+		modelStack.Translate(0.f ,0.f, 0.f);
+		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.55f, Application::GetInstance().GetWindowWidth() * 0.55f, 1.f);
+		else
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.55f, Application::GetInstance().GetWindowWidth() * 0.4f, 1.f);
+		RenderHelper::RenderMesh(modelMesh);
+		modelStack.PopMatrix();
+	}
 	EntityManager::GetInstance()->RenderUI();
 
 	/*Render Weapon*/
@@ -1330,13 +1385,6 @@ void SceneText::RenderPassMain(void)
 		EquipmentManager::GetInstance()->Render();
 	}
 
-	glEnable(GL_DEPTH_TEST);
-
-	/*Render Minimap*/
-	theMinimap->RenderUI();
-
-	/*Render on Screen*/
-	glDisable(GL_DEPTH_TEST);
 	//*Render KO Count*/
 	RenderHelper::GetInstance()->renderKOCount();
 	//*Render Player Health Bar*/
@@ -1345,47 +1393,17 @@ void SceneText::RenderPassMain(void)
 	/*Render Map Editor Options.*/
 	if (Map_Editor::GetInstance()->mapEditing)
 		Map_Editor::GetInstance()->renderOption();
+	glEnable(GL_DEPTH_TEST);
+
+	/*Render Minimap*/
+	theMinimap->RenderUI();
+
+	/*Render on Screen*/
+	glDisable(GL_DEPTH_TEST);
 
 	/*3D Render*/
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	
-	// Render LightBall
-	//modelStack.PushMatrix();
-	//modelStack.Rotate(lightMove, 0.f, 1.f, 0.f);
-	//modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
-	//RenderMesh(meshList[GEO_LIGHTBALL], false);
-	//modelStack.PopMatrix();
-
-	//// Render the crosshair
-	//RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
-
-	//if (debugInfo)
-	//{
-	//	std::ostringstream ss;
-	//	ss.precision(5);
-	//	ss << "Particles: " << m_particleCount;
-	//	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 1.5, 15);
-
-
-	//	ss.str("");
-	//	ss.precision(5);
-	//	ss << "FPS: " << fps;
-	//	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 1.5, 12);
-
-	//	std::ostringstream ss1;
-	//	ss1.precision(4);
-	//	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	//	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 1.5, 9);
-
-	//	std::string xPosition = "X: " + to_string((int)camera.position.x);
-	//	std::string yPosition = "Y: " + to_string((int)camera.position.y);
-	//	std::string zPosition = "Z: " + to_string((int)camera.position.z);
-
-	//	RenderTextOnScreen(meshList[GEO_TEXT], xPosition, Color(0, 1, 0), 3, 1.5, 6);
-	//	RenderTextOnScreen(meshList[GEO_TEXT], yPosition, Color(0, 1, 0), 3, 1.5, 3);
-	//	RenderTextOnScreen(meshList[GEO_TEXT], zPosition, Color(0, 1, 0), 3, 1.5, 0);
-	//}
 }
 
 void SceneText::RenderWorld(void)

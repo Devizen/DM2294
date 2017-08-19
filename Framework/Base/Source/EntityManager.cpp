@@ -427,21 +427,16 @@ bool EntityManager::CheckSphereCollision(CProjectile *ThisEntity, CFurniture *Th
 // Check if this entity collided with another entity, but both must have collider
 bool EntityManager::CheckAABBCollision(Vector3 _minAABB, Vector3 _maxAABB, Vector3 _position)
 {
-	Vector3 playerMin = _minAABB + _position;
-	Vector3 playerMax = _maxAABB + _position;
+	Vector3 playerMin = /*_minAABB + */Vector3(_position.x, -10.f, _position.z);
+	Vector3 playerMax = /*_maxAABB + */_position;
 
 	for (list<CFurniture*>::iterator thatObj = fixedList.begin(); thatObj != fixedList.end(); ++thatObj)
 	{
 		CFurniture* furniture = (CFurniture*)*thatObj;
-		Vector3 furnitureMin = furniture->GetMinAABB() + Vector3(furniture->GetPosition().x, -5.f, furniture->GetPosition().z);
-		Vector3 furnitureMax = furniture->GetMaxAABB() + Vector3(furniture->GetPosition().x, -5.f, furniture->GetPosition().z);
+		Vector3 furnitureMin = furniture->GetMinAABB() + furniture->GetPosition();
+		Vector3 furnitureMax = furniture->GetMaxAABB() + furniture->GetPosition();
 
-		//cout << playerMin << " and " << playerMax << endl;
-		//cout << furnitureMin << " and " << furnitureMax << endl;
-
-		if ((playerMin.x < furnitureMax.x && playerMax.x > furnitureMin.x) &&
-			(playerMin.y < furnitureMax.y && playerMax.y > furnitureMin.y) &&
-			(playerMin.z < furnitureMax.z && playerMax.z > furnitureMin.z))
+		if (playerMin <= furnitureMax && playerMin >= furnitureMin)
 			return true;
 		else
 			continue;
@@ -456,9 +451,7 @@ bool EntityManager::CheckAABBCollision(Vector3 _minAABB, Vector3 _maxAABB, Vecto
 		//cout << playerMin << " and " << playerMax << endl;
 		//cout << enemyMin << " and " << enemyMax << endl;
 
-		if ((playerMin.x < enemyMax.x && playerMax.x > enemyMin.x) &&
-			(playerMin.y < enemyMax.y && playerMax.y > enemyMin.y) &&
-			(playerMin.z < enemyMax.z && playerMax.z > enemyMin.z))
+		if (playerMin < enemyMax && playerMax > enemyMin)
 			return true;
 		else
 			continue;
@@ -702,12 +695,10 @@ bool EntityManager::CheckProjectileCollision(CProjectile * thisEntity, CFurnitur
 	Vector3 projectileMin = thisEntity->GetMinAABB() + thisEntity->GetPosition();
 	Vector3 projectileMax = thisEntity->GetMaxAABB() + thisEntity->GetPosition();
 
-	Vector3 furnitureMin = thatEntity->GetMinAABB() + Vector3(thatEntity->GetPosition().x, -5.f, thatEntity->GetPosition().z);
-	Vector3 furnitureMax = thatEntity->GetMaxAABB() + Vector3(thatEntity->GetPosition().x, -5.f, thatEntity->GetPosition().z);
+	Vector3 furnitureMin = thatEntity->GetMinAABB() + thatEntity->GetPosition();
+	Vector3 furnitureMax = thatEntity->GetMaxAABB() + thatEntity->GetPosition();
 
-	if ((projectileMin.x < furnitureMax.x && projectileMax.x > furnitureMin.x) &&
-		(projectileMin.y < furnitureMax.y && projectileMax.y > furnitureMin.y) &&
-		(projectileMin.z < furnitureMax.z && projectileMax.z > furnitureMin.z))
+	if (projectileMin <= furnitureMax && projectileMax >= furnitureMin)
 		return true;
 	else
 		return false;

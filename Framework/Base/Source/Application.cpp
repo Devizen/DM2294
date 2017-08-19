@@ -21,10 +21,6 @@ GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
-/*Aspect Ratio*/
-float m_worldHeight;
-float m_worldWidth;
-
 //Define an error callback
 static void error_callback(int error, const char* description)
 {
@@ -217,34 +213,14 @@ void Application::MouseScrollCallbacks(GLFWwindow* window, double xoffset, doubl
 	MouseController::GetInstance()->UpdateMouseScroll(xoffset, yoffset);
 }
 
-int Application::GetWindowHeight()
+float Application::GetWindowHeight()
 {
-	return m_window_height;
+	return static_cast<float>(m_window_height);
 }
 
-int Application::GetWindowWidth()
+float Application::GetWindowWidth()
 {
-	return m_window_width;
-}
-
-void Application::setAspectRatioHeight(float _height)
-{
-	m_worldHeight = _height;
-}
-
-void Application::setAspectRatioWidth(float _width)
-{
-	m_worldWidth = _width;
-}
-
-float Application::getAspectRatioHeight()
-{
-	return m_worldHeight;
-}
-
-float Application::getAspectRatioWidth()
-{
-	return m_worldWidth;
+	return static_cast<float>(m_window_width);
 }
 
 void Application::GetCursorPos(double *xpos, double *ypos)

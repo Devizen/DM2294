@@ -161,6 +161,10 @@ void Map_Editor::renderObject(void)
 
 void Map_Editor::renderOption(void)
 {
+	//Calculating aspect ratio
+	float windowHeight = Application::GetInstance().GetWindowHeight();
+	float windowWidth = Application::GetInstance().GetWindowWidth();
+
 	static string s_OptionSelectionLevel = "";
 	static string s_ObjectType = "";
 	static string s_EnvironmentObject = "";
@@ -210,34 +214,28 @@ void Map_Editor::renderOption(void)
 	ss_EnvironmentObject.str(s_EnvironmentObject);
 	ss_EnemyObject.str(s_EnemyObject);
 
-	Mtx44 ortho;
-	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
-	Mtx44& projectionStack = GraphicsManager::GetInstance()->GetProjectionMatrix();
-	projectionStack.SetToOrtho(-80, 80, -60, 60, -10, 10);
-	Mtx44& viewStack = GraphicsManager::GetInstance()->GetViewMatrix();
-	viewStack.SetToIdentity();
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
-	modelStack.Translate(-75.f, 50.f, 0.f);
-	modelStack.Scale(Application::GetInstance().getAspectRatioWidth() * 0.05f, Application::GetInstance().getAspectRatioWidth() * 0.05f, 1.f);
+	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.4f, 0.f);
+	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Option Selection Level:" + ss_OptionSelectLevel.str(), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-75.f, 45.f, 0.f);
-	modelStack.Scale(Application::GetInstance().getAspectRatioWidth() * 0.05f, Application::GetInstance().getAspectRatioWidth() * 0.05f, 1.f);
+	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.35f, 0.f);
+	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Object Type:" + ss_ObjectType.str(), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-75.f, 40.f, 0.f);
-	modelStack.Scale(Application::GetInstance().getAspectRatioWidth() * 0.05f, Application::GetInstance().getAspectRatioWidth() * 0.05f, 1.f);
+	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.3f, 0.f);
+	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Environment Object:" + ss_EnvironmentObject.str(), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-75.f, 35.f, 0.f);
-	modelStack.Scale(Application::GetInstance().getAspectRatioWidth() * 0.05f, Application::GetInstance().getAspectRatioWidth() * 0.05f, 1.f);
+	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.25f, 0.f);
+	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Enemy Object:" + ss_EnemyObject.str(), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 }
@@ -400,13 +398,15 @@ void Map_Editor::updateOption(double dt)
 			{
 				cout << "CREATED" << endl;
 				cout << "Displacement: " << _displacement << endl;
-				Vector3 _minAABB(-6.f, -6.f, -6.f);
-				Vector3 _maxAABB(6.f, 6.f, 6.f);
-
+				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
+				Vector3 _maxAABB(_scale);
+				cout << "_minAABB: " << _minAABB << endl;
+				cout << "_maxAABB: " << _maxAABB << endl;
 				CFurniture* crate = Create::Furniture("crate", _displacement, _scale);
 				crate->SetCollider(true);
 				crate->SetLight(true);
-				crate->SetAABB(_scale, -_scale);
+				crate->SetAABB(_maxAABB* 2.f, _minAABB);
+				crate->SetPosition(Vector3(0.f, -10.f, 0.f));
 				lastCreatedType = CREATED_ENVIRONMENT;
 			}
 		}
@@ -434,15 +434,10 @@ void Map_Editor::updateOption(double dt)
 				cout << "Create Displacement: " << _displacement << endl;
 				turret = Create::Enemy3D("turret", _displacement, _scale);
 				turret->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
-				turret->SetCollider(true);
-				turret->SetLight(true);
-				turret->SetAABB(_scale, -_scale);
 				turret->setMaxHealthTo(10.f);
 				turret->setHealthTo(10.f);
 				turret->setAttackTo(1.f);
 				turret->setDefenseTo(1.f);
-				turret->setPlayerProperty(false);
-				turret->SetLight(true);
 				lastCreatedType = CREATED_ENEMY;
 			}
 

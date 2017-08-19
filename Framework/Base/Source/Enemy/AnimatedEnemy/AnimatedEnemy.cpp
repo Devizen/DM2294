@@ -157,34 +157,126 @@ void CAnimatedEnemy::Reset(void)
 // Update
 void CAnimatedEnemy::Update(double dt)
 {
-	//CEnemy3D::Update(dt);
-	if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
-		state = ALERT;
+	_enemy = this;
+	//cout << "Enemy Min: " << position + minAABB << endl;
+	//cout << "Enemy Max: " << position + maxAABB << endl;
+	if (!pathFindingMode)
+	{
+		if (checkCollision())
+		{
+			position = previousPosition;
+			cout << "COLLIDED" << endl;
+			pathFindingMode = true;
+		}
+		else
+		{
+			previousPosition = position;
+			cout << "NO COLLISION" << endl;
+		}
+
+		//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
+		if ((CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() < 100.f * 100.f && checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+			state = ALERT;
+		else
+			state = PATROL;
+
+		switch (state)
+		{
+		//case PATROL:
+		//{
+		//	Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
+
+
+		//	//position += displacement.Normalized() * (float)dt * 20.f;
+
+		//	try
+		//	{
+		//		position += displacement.Normalized() * (float)dt * 20.f;
+		//	}
+		//	catch (exception e)
+		//	{
+		//		/*Divide By Zero does no harm to this situation because it will only happen when there is only 1 waypoint and the enemy is on top, thus, can be left unresolved.*/
+		//	}
+
+
+		//	if (displacement.LengthSquared() <= 20.f)
+		//		waypointToGo = ((waypointToGo == waypoint.size() - 1) ? 0 : ++waypointToGo);
+
+		//	break;
+		//}
+			case ALERT:
+			{
+				cout << "ALERT FIND" << endl;
+				Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
+				Vector3 displacement(positionWithoutY - this->GetPos());
+
+				/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
+				if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
+					position += displacement.Normalized() * (float)dt * 20.f;
+
+				break;
+			}
+		}
+	}
 	else
-		state = IDLE;
-
-	switch (state)
 	{
-	case IDLE:
-	{
-		Vector3 displacement(defaultPosition - this->GetPos());
-
-		if (displacement.LengthSquared() > 0.f)
-			position += displacement.Normalized() * (float)dt * 20.f;
-
-		break;
+		//static bool once = false;
+		//if (!once)
+		//{
+		//	once = true;
+		static bool checked = false;
+		if (!checked)
+		{
+			targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
+			updatePathfinding(position, scale, dt);
+			checked = true;
+		}
+		cout << "Displacement to Nearest Path: " << (nearestPath() - position).LengthSquared() << endl;
+		//if ((nearestPath() - position).LengthSquared() > 0.1f)
+		//	position += (nearestPath() - position).Normalized() * (float)dt * 20.f;
+		if ((nearestPath() - position).LengthSquared() > 0.1f)
+			position += (nearestPath() - position).Normalized() * (float)dt * 20.f;
+		else
+		{
+			while (path.size() > 0)
+			{
+				path.pop_back();
+			}
+			pathFindingMode = false;
+			checked = false;
+			nearestPath().SetZero();
+		}
+		cout << "PATH FIND" << endl;
 	}
-	case ALERT:
-	{
-		Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
-		Vector3 displacement(positionWithoutY - this->GetPos());
+	//}
+	////CEnemy3D::Update(dt);
+	//if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+	//	state = ALERT;
+	//else
+	//	state = IDLE;
 
-		if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
-			position += displacement.Normalized() * (float)dt * 20.f;
+	//switch (state)
+	//{
+	//	case IDLE:
+	//	{
+	//		Vector3 displacement(defaultPosition - this->GetPos());
 
-		break;
-	}
-	}
+	//		if (displacement.LengthSquared() > 0.f)
+	//			position += displacement.Normalized() * (float)dt * 20.f;
+
+	//		break;
+	//	}
+	//	case ALERT:
+	//	{
+	//		Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
+	//		Vector3 displacement(positionWithoutY - this->GetPos());
+
+	//		if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
+	//			position += displacement.Normalized() * (float)dt * 20.f;
+
+	//		break;
+	//	}
+	//}
 }
 
 // Constrain the position within the borders
@@ -224,6 +316,11 @@ void CAnimatedEnemy::Render(void)
 		{
 			cout << "Divide by Zero" << endl;
 		}
+	}
+	else if (pathFindingMode)
+	{
+		Vector3 displacement(nearestPath() - this->GetPos());
+		angleToFace = Math::RadianToDegree(atan2(displacement.x, displacement.z));
 	}
 	else if (state == CEnemy3D::AI_STATE::ALERT)
 	{
@@ -297,6 +394,24 @@ void CAnimatedEnemy::Render(void)
 
 	if (getAttribute(CAttributes::TYPE_HEALTH) > 0.f)
 		renderHealthBar();
+
+	if (pathFindingMode)
+	{
+		for (vector<Vector3>::iterator it = path.begin(); it != path.end(); ++it)
+		{
+			Vector3 _position = (Vector3)*it;
+
+			modelStack.PushMatrix();
+			modelStack.Translate(_position.x, _position.y, _position.z);
+			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
+			modelStack.PopMatrix();
+		}
+
+		modelStack.PushMatrix();
+		modelStack.Translate(nearestPosition.x, nearestPosition.y, nearestPosition.z);
+		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("ENEMY"));
+		modelStack.PopMatrix();
+	}
 }
 //
 //void CAnimatedEnemy::setHealth(int _health)
