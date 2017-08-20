@@ -1,4 +1,8 @@
 #include "Attributes.h"
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 CAttributes::CAttributes()
 	: MAX_HEALTH(100.f)
@@ -9,6 +13,7 @@ CAttributes::CAttributes()
 	, EXP(0)
 	, MAX_EXP(1)
 	, LEVEL(1)
+	,SPEED(10.f)
 {
 }
 
@@ -164,4 +169,28 @@ void CAttributes::setMaxMP(float maxMana)
 void CAttributes::setEXP(int exp)
 {
 	EXP = exp;
+}
+
+void CAttributes::printAttributes()
+{
+	cout << "Health: " << HEALTH << endl;
+	cout << "Attack: " << ATTACK << endl;
+	cout << "Defense: " << DEFENSE << endl;
+	cout << "Speed: " << SPEED << endl;
+	cout << endl;
+}
+
+void CAttributes::addAttack(int newAttack)
+{
+	ATTACK += newAttack;
+}
+
+void CAttributes::addDefence(int newDefence)
+{
+	DEFENSE = newDefence;
+}
+
+void CAttributes::addSpeed(int newSpeed)
+{
+	SPEED = newSpeed;
 }

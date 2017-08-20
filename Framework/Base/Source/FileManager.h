@@ -7,12 +7,12 @@
 #include <fstream>
 #include "Vector3.h"
 #include <vector>
-#include "Attributes.h"
+#include "Items\Equipment.h"
 
 using std::vector;
 using std::string;
 
-class FileManager : public Singleton <FileManager>, public CAttributes
+class FileManager : public Singleton <FileManager>
 {
 	friend Singleton<FileManager>;
 
@@ -35,6 +35,7 @@ class FileManager : public Singleton <FileManager>, public CAttributes
 		bool isEquipped;
 	}theEQInfo;
 	vector<EQ_Info>masterList;
+	vector<Equipment*> eqlist;
 
 public:
 	FileManager() {};
@@ -50,6 +51,7 @@ public:
 	//bool ReadFile(const string myFile);
 
 	void EditFile(const string myFile);
+	void EditWeaponFile(const string myFile);
 
 	void PrintWeaponFile();
 

@@ -16,6 +16,7 @@ class EquipmentManager : public Singleton <EquipmentManager>
 public:
 	void AssignEquipment(Equipment* newEQ);
 	void UnEquip(int countX, int countY);
+	void AddAttributes();
 	Equipment** ReturnList();
 
 	void Init();

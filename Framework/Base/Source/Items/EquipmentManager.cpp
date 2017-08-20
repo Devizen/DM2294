@@ -6,6 +6,7 @@
 #include "KeyboardController.h"
 #include "../FileManager.h"
 #include "Inventory.h"
+#include "../Attributes.h"
 
 using std::cout;
 using std::endl;
@@ -71,6 +72,7 @@ void EquipmentManager::UnEquip(int countX, int countY)
 			if (EqList[i]->GetType() == TypeToUnEquip)
 			{
 				PosToUnequip = i;
+
 				break;
 			}
 		}
@@ -89,12 +91,32 @@ void EquipmentManager::UnEquip(int countX, int countY)
 
 	//merge_sort(EqList, 0, count-1);
 	//EqList[PosToUnEquip] = NULL;
-	for (int i = PosToUnequip; i < 6 - 1; i++)
+	//for (int i = PosToUnequip; i < 6 - 1; i++)
+	//{
+	//	Equipment* temp = EqList[i + 1];
+	//	EqList[i] = temp;
+	//}
+	EqList[PosToUnequip] = NULL;
+}
+
+void EquipmentManager::AddAttributes()
+{
+	for (int i = 0; i < 6; i++)
 	{
-		Equipment* temp = EqList[i + 1];
-		EqList[i] = temp;
+		if (EqList[i] != NULL)
+		{
+			if (EqList[i]->GetType() >= 0 && EqList[i]->GetType() <= 3)
+			{
+				CAttributes::GetInstance()->addAttack(EqList[i]->GetAttack());
+				CAttributes::GetInstance()->addDefence(EqList[i]->GetDefense());
+				CAttributes::GetInstance()->addSpeed(EqList[i]->GetSpeed());
+			}
+			else
+			{
+				CAttributes::GetInstance()->addAttack(EqList[i]->GetAttack());
+			}
+		}
 	}
-	EqList[5] = NULL;
 }
 
 Equipment ** EquipmentManager::ReturnList()

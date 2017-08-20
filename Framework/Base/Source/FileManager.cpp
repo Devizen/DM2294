@@ -16,10 +16,13 @@
 #include "Items\Gun.h"
 #include "Items\Helmet.h"
 #include "Items\Shoe.h"
+#include "Attributes.h"
+#include "Items\EquipmentManager.h"
 
 using std::cout;
 using std::endl;
 using std::ifstream;
+using std::ofstream;
 using std::getline;
 
 void FileManager::init()
@@ -63,7 +66,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player hp
-					setHealthTo(stof(tempData));
+					CAttributes::GetInstance()->setHealthTo(stof(tempData));
 				}
 
 				if (nextData == 1)
@@ -81,7 +84,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player MP
-					setMP(stof(tempData));
+					CAttributes::GetInstance()->setMP(stof(tempData));
 				}
 
 				if (nextData == 2)
@@ -99,7 +102,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Attack
-					setAttackTo(stoi(tempData));
+					CAttributes::GetInstance()->setAttackTo(stoi(tempData));
 				}
 
 				if (nextData == 3)
@@ -117,7 +120,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Def
-					setDefenseTo(stof(tempData));
+					CAttributes::GetInstance()->setDefenseTo(stof(tempData));
 				}
 
 				if (nextData == 4)
@@ -135,7 +138,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player speed
-					setSpeed(stoi(tempData));
+					CAttributes::GetInstance()->setSpeed(stoi(tempData));
 				}
 
 				if (nextData == 5)
@@ -153,7 +156,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Gold
-					setGold(stoi(tempData));
+					CAttributes::GetInstance()->setGold(stoi(tempData));
 				}
 
 				if (nextData == 6)
@@ -171,7 +174,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Level
-					setLevel(stoi(tempData));
+					CAttributes::GetInstance()->setLevel(stoi(tempData));
 				}
 
 				if (nextData == 7)
@@ -189,7 +192,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player exp
-					setEXP(stof(tempData));
+					CAttributes::GetInstance()->setEXP(stof(tempData));
 				}
 
 				++nextData;
@@ -365,6 +368,45 @@ bool FileManager::ReadWeaponFile( string myFile)
 
 void FileManager::EditFile(const string myFile)
 {
+}
+
+void FileManager::EditWeaponFile(const string myFile)
+{
+	ofstream File;
+	File.open(myFile);
+	File << "Name,Attack,Defense,Speed,ID,Type,Equipped\n";
+	for (int i = 0; i < 6; i++)
+	{
+		if (EquipmentManager::GetInstance()->ReturnList()[i] != NULL)
+		{
+			Equipment* temp = EquipmentManager::GetInstance()->ReturnList()[i];
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << "\n";
+		}
+	}
+
+	for (int i = 0; i < 12; i++)
+	{
+		cout << "IN" << endl;
+
+		if (Inventory::GetInstance()->ReturnType()[i] != NULL)
+		{
+			Equipment* temp = Inventory::GetInstance()->ReturnType()[i];
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << "\n";
+		}
+	}
+	File.close();
 }
 
 void FileManager::PrintWeaponFile()

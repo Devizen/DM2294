@@ -57,6 +57,9 @@
 #include "Text_Display\Text_Manager\Text_Manager.h"
 
 #include <iostream>
+
+#include "Attributes.h"
+
 using namespace std;
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
@@ -252,6 +255,7 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(0, 0, 0), 18, 36, 0.5f);
 	MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 	MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("cubeBox", Color(1.0f, 0.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("ENEMY", Color(1.0f, 0.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("PATH", Color(0.f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
@@ -504,9 +508,13 @@ void SceneText::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed('U'))
 	{
 		OptionsManager::GetInstance()->setEditingState(false);
+
+		FileManager::GetInstance()->EditWeaponFile("Files//Inventory.csv");
 		openInventory = false;
 		openEQ = false;
 	}
+
+	//CAttributes::GetInstance()->printAttributes();
 
 	if (openInventory)
 	{
@@ -528,7 +536,9 @@ void SceneText::Update(double dt)
 	{
 		FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 		FileManager::GetInstance()->CreateWeapon();
-		//cout << _msize(Inventory::GetInstance()->ReturnType()) << endl;
+		EquipmentManager::GetInstance()->AddAttributes();
+
+		cout << "IN" << endl;
 	}
 
 	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) > 0)
@@ -735,16 +745,35 @@ void SceneText::Update(double dt)
 
 			if (cinematicMode)
 			{
+				static bool completed = false;
 				if (cinematic->numberOfPositions == 0)
+				{
+					cinematic->targetType = C_Target;
 					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 200.f, 200.f), 100.f, dt);
+				}
 				else if (cinematic->numberOfPositions == 1)
+				{
+					cinematic->targetType = C_Destination;
 					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 200.f, 100.f), 100.f, dt);
+				}
 				else if (cinematic->numberOfPositions == 2)
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 0.f, 0.f), 100.f, dt);
-				else if (cinematic->numberOfPositions == 3)
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 2000.f, 0.f), 500.f, dt);
-				else if (cinematic->numberOfPositions == 4)
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, -2000.f, 0.f), 1000.f, dt);
+				{
+					cinematic->targetType = C_Destination;
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 100.f, 0.f), 100.f, dt);
+					completed = true;
+					if (completed)
+					{
+						cinematic->SetCameraPos(camera.GetCameraPos());
+						cinematic->SetCameraTarget(camera.GetCameraTarget());
+						cinematic->SetCameraUp(camera.GetCameraUp());
+						cout << "Attached Camera" << endl;
+						playerInfo->DetachCamera();
+						playerInfo->AttachCamera(&camera);
+						cinematicMode = false;
+						cinematic->numberOfPositions = 0;
+					}
+
+				}
 
 				cinematic->Update(dt);
 				camera.SetCameraPos(cinematic->GetCameraPos());
@@ -1584,6 +1613,9 @@ void SceneText::Exit()
 	//	delete camera;
 	//	camera = nullptr;
 	//}
+
+	ParticleManager* particleManager = ParticleManager::GetInstance();
+	ParticleManager::GetInstance()->deleteParticle();
 
 	while (theObjects.size() > 0)
 	{

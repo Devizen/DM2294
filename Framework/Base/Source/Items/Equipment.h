@@ -17,7 +17,9 @@ public:
 	virtual int GetID() = 0;
 	virtual int GetType() = 0;
 	virtual string getName() = 0;
-	virtual bool getEquippedStatus() = 0;
+	virtual int getEquippedStatus() = 0;
+
+	void setStatus(bool newStat) { isEquipped = newStat; };
 
 	enum EQUIPMENT_TYPE
 	{
