@@ -34,7 +34,25 @@ class FileManager : public Singleton <FileManager>
 		string eqType;
 		bool isEquipped;
 	}theEQInfo;
+
+	struct OBJinfo
+	{
+		string type;
+		float posX;
+		float posY;
+		float posZ;
+
+		float minAABBx;
+		float minAABBy;
+		float minAABBz;
+
+		float maxAABBx;
+		float maxAABBy;
+		float maxAABBz;
+	}theOBJinfo;
+
 	vector<EQ_Info>masterList;
+	vector<OBJinfo>objlist;
 	vector<Equipment*> eqlist;
 
 public:
@@ -45,7 +63,7 @@ public:
 
 	bool ReadPlayerFile(const string myFile);
 	bool ReadWeaponFile( string myFile);
-	bool ReadAABBFile(const string myFile);
+	bool ReadOBJFile(const string myFile);
 	bool ReadLevelFile(const string myFile);
 	
 	//bool ReadFile(const string myFile);
