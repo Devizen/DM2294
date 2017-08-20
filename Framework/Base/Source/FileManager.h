@@ -7,12 +7,11 @@
 #include <fstream>
 #include "Vector3.h"
 #include <vector>
-#include "Attributes.h"
 
 using std::vector;
 using std::string;
 
-class FileManager : public Singleton <FileManager>, public CAttributes
+class FileManager : public Singleton <FileManager>
 {
 	friend Singleton<FileManager>;
 

@@ -53,6 +53,9 @@
 #include "Cinematic\Cinematic.h"
 
 #include <iostream>
+
+#include "Attributes.h"
+
 using namespace std;
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
@@ -500,9 +503,12 @@ void SceneText::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed('U'))
 	{
 		OptionsManager::GetInstance()->setEditingState(false);
+
 		openInventory = false;
 		openEQ = false;
 	}
+
+	CAttributes::GetInstance()->printAttributes();
 
 	if (openInventory)
 	{
@@ -524,7 +530,9 @@ void SceneText::Update(double dt)
 	{
 		FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 		FileManager::GetInstance()->CreateWeapon();
-		//cout << _msize(Inventory::GetInstance()->ReturnType()) << endl;
+		EquipmentManager::GetInstance()->AddAttributes();
+
+		cout << "IN" << endl;
 	}
 
 	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) > 0)

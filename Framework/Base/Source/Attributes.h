@@ -1,7 +1,9 @@
 #ifndef ATTRIBUTES_H
 #define ATTRIBUTES_H
 
-class CAttributes
+#include "SingletonTemplate.h"
+
+class CAttributes : public Singleton <CAttributes>
 {
 public:
 	CAttributes();
@@ -96,6 +98,12 @@ public:
 
 	//set current exp
 	void setEXP(int exp);
+
+	void printAttributes();
+
+	void addAttack(int newAttack);
+	void addDefence(int newDefence);
+	void addSpeed(int newSpeed);
 
 private:
 	float MAX_HEALTH;			//To cap player's health / when reseting player's health to this

@@ -16,6 +16,7 @@
 #include "Items\Gun.h"
 #include "Items\Helmet.h"
 #include "Items\Shoe.h"
+#include "Attributes.h"
 
 using std::cout;
 using std::endl;
@@ -63,7 +64,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player hp
-					setHealthTo(stof(tempData));
+					CAttributes::GetInstance()->setHealthTo(stof(tempData));
 				}
 
 				if (nextData == 1)
@@ -81,7 +82,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player MP
-					setMP(stof(tempData));
+					CAttributes::GetInstance()->setMP(stof(tempData));
 				}
 
 				if (nextData == 2)
@@ -99,7 +100,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Attack
-					setAttackTo(stoi(tempData));
+					CAttributes::GetInstance()->setAttackTo(stoi(tempData));
 				}
 
 				if (nextData == 3)
@@ -117,7 +118,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Def
-					setDefenseTo(stof(tempData));
+					CAttributes::GetInstance()->setDefenseTo(stof(tempData));
 				}
 
 				if (nextData == 4)
@@ -135,7 +136,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player speed
-					setSpeed(stoi(tempData));
+					CAttributes::GetInstance()->setSpeed(stoi(tempData));
 				}
 
 				if (nextData == 5)
@@ -153,7 +154,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Gold
-					setGold(stoi(tempData));
+					CAttributes::GetInstance()->setGold(stoi(tempData));
 				}
 
 				if (nextData == 6)
@@ -171,7 +172,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Level
-					setLevel(stoi(tempData));
+					CAttributes::GetInstance()->setLevel(stoi(tempData));
 				}
 
 				if (nextData == 7)
@@ -189,7 +190,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player exp
-					setEXP(stof(tempData));
+					CAttributes::GetInstance()->setEXP(stof(tempData));
 				}
 
 				++nextData;

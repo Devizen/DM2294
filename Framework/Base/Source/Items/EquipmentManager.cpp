@@ -6,6 +6,7 @@
 #include "KeyboardController.h"
 #include "../FileManager.h"
 #include "Inventory.h"
+#include "../Attributes.h"
 
 using std::cout;
 using std::endl;
@@ -75,7 +76,7 @@ void EquipmentManager::UnEquip(int countX, int countY)
 			}
 		}
 	}
-
+	//EqList[PosToUnequip]->
 	Inventory::GetInstance()->assign_storage(EqList[PosToUnequip]);
 
 	//cout << "Unequip: " << PosToUnEquip << endl;
@@ -95,6 +96,26 @@ void EquipmentManager::UnEquip(int countX, int countY)
 		EqList[i] = temp;
 	}
 	EqList[5] = NULL;
+}
+
+void EquipmentManager::AddAttributes()
+{
+	for (int i = 0; i < 6; i++)
+	{
+		if (EqList[i] != NULL)
+		{
+			if (EqList[i]->GetType() >= 0 && EqList[i]->GetType() <= 3)
+			{
+				CAttributes::GetInstance()->addAttack(EqList[i]->GetAttack());
+				CAttributes::GetInstance()->addDefence(EqList[i]->GetDefense());
+				CAttributes::GetInstance()->addSpeed(EqList[i]->GetSpeed());
+			}
+			else
+			{
+				CAttributes::GetInstance()->addAttack(EqList[i]->GetAttack());
+			}
+		}
+	}
 }
 
 Equipment ** EquipmentManager::ReturnList()
