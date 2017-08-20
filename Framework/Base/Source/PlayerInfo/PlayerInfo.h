@@ -4,7 +4,7 @@
 #include "../GroundEntity.h"
 #include "../WeaponInfo/WeaponInfo.h"
 #include "../WeaponInfo/MeleeInfo.h"
-#include "../WeaponInfo/SlashInfo.h"
+//#include "../WeaponInfo/SlashInfo.h"
 #include "Collider\Collider.h"
 #include "../Attributes.h"
 

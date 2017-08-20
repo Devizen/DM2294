@@ -242,7 +242,7 @@ void CAnimatedEnemy::Update(double dt)
 				pathFindingMode = false;
 				scanned = false;
 				nearestPosition.SetZero();
-				previousPosition = position;
+				position = previousPosition;
 			}
 		}
 		//cout << "Nearest Position: " << nearestPosition << endl;
