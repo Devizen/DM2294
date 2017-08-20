@@ -1,6 +1,7 @@
 #include "Cinematic.h"
 #include "MouseController.h"
 #include "KeyboardController.h"
+//#include "../EntityManager.h"
 
 #include <iostream>
 
@@ -110,22 +111,53 @@ void CCinematic::SetCameraUp(Vector3 up)
 
 void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _speed, double dt)
 {
-	Vector3 _target = _destination - _position;
-	cout << "Position: " << _position << endl;
-	cout << "Destination: " << _destination << endl;
-	target = Vector3(0.f, 0.f, 0.f);
-	try
+	switch (targetType)
 	{
-		cout << "Displacement: " << (_destination - _position).Length() << endl;
-		if ((_destination - _position).Length() >= 50.f)
-			position += _target.Normalized() * _speed * (float)dt;
-		else 
-			++numberOfPositions;
-	}
-	catch (exception e)
+	case C_Target:
 	{
+		Vector3 _target = _destination - _position;
+		cout << "Position: " << _position << endl;
+		cout << "Destination: " << _destination << endl;
+		target = Vector3(0,0,0);
+		try
+		{
+			cout << "Displacement: " << (_destination - _position).Length() << endl;
+			if ((_destination - _position).Length() >= 50.f)
+				position += _target.Normalized() * _speed * (float)dt;
+			else
+				++numberOfPositions;
+		}
+		catch (exception e)
+		{
 
+		}
 	}
+		break;
+	case C_Destination:
+	{
+		Vector3 _target = _destination - _position;
+		cout << "Position: " << _position << endl;
+		cout << "Destination: " << _destination << endl;
+		cout << "Target: " << target << endl;
+		target = _destination;
+		try
+		{
+			cout << "Displacement: " << (_destination - _position).Length() << endl;
+			if ((_destination - _position).Length() >= 50.f)
+				position += _target.Normalized() * _speed * (float)dt;
+			else
+				++numberOfPositions;
+		}
+		catch (exception e)
+		{
+
+		}
+	}
+		break;
+	default:
+		break;
+	}
+	
 }
 
 void CCinematic::Reset()

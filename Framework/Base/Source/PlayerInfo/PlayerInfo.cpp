@@ -882,7 +882,8 @@ bool CPlayerInfo::DischargeSecondaryWeapon(const float deltaTime)
 		/*Add the additional distance with original position.*/
 		newPosition += position;
 
-		secondaryWeapon->Slash(position, target, this);
+		//secondaryWeapon->StabEnemy(newPosition, targetVector, this);
+		secondaryWeapon->SlashEnemy(newPosition, targetVector, this);
 		return true;
 	}
 

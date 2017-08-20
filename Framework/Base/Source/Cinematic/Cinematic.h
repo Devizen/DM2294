@@ -3,6 +3,12 @@
 
 #include "CameraBase.h"
 
+enum cinematicTarget
+{
+	C_Target = 0,
+	C_Destination
+};
+
 class CCinematic : public CameraBase, public std::exception
 {
 public:
@@ -25,6 +31,8 @@ public:
 	void moveCamera(Vector3 _position, Vector3 _destination, float _speed, double dt);
 
 	int numberOfPositions;
+
+	cinematicTarget targetType;
 
 private:
 	Vector3 position;

@@ -78,7 +78,7 @@ void CMeleeInfo::Update(const double dt)
 }
 
 // Discharge this weapon
-void CMeleeInfo::Slash(Vector3 position, Vector3 target, CPlayerInfo* _source)
+void CMeleeInfo::StabEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source)
 {
 	if (bFire)
 	{
@@ -98,4 +98,20 @@ void CMeleeInfo::Slash(Vector3 position, Vector3 target, CPlayerInfo* _source)
 		/*bFire = false;*/
 		cout << "MELLEEEEE" << endl;
 	}
+}
+
+void CMeleeInfo::SlashEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source)
+{
+	Vector3 distance(target - position);
+	distance *= 3.f;
+	distance += position;
+	CProjectile* aTriggerBox = Create::Projectile("cubeBox",
+		distance,
+		(target - position).Normalized(),
+		0.5f,
+		0.0f,
+		_source);
+	aTriggerBox->SetCollider(true);
+	aTriggerBox->SetAABB(Vector3(8.0f, 0.5f, 4.0f), Vector3(-8.0f, -0.5f, -4.0f));
+	cout << "SLASHED" << endl;
 }

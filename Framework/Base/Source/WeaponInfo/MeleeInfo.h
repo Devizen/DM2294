@@ -39,5 +39,7 @@ public:
 	// Update the elapsed time
 	void Update(const double dt);
 	// Discharge this weapon
-	void Slash(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
+	void StabEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
+
+	void SlashEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
 };
