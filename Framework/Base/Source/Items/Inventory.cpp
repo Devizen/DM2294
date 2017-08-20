@@ -6,6 +6,7 @@
 #include "RenderHelper.h"
 #include "KeyboardController.h"
 #include "../FileManager.h"
+#include "EquipmentManager.h"
 
 using std::cout;
 using std::endl;
@@ -64,14 +65,20 @@ void Inventory::Update(double dt)
 		pressCountY = 0;
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed('E'))
+	if (KeyboardController::GetInstance()->IsKeyPressed('F'))
 	{
 		DeleteWeapon();
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed('E'))
+	{
+		EquipWeapon();
 	}
 }
 
 void Inventory::assign_storage(Equipment* object)
 {
+	object->setStatus(false);
 	static int count = 0;
 	for (int i = 0; i < 12; i++)
 	{
@@ -180,4 +187,12 @@ void Inventory::DeleteWeapon()
 {
 	int PosToDelete = pressCountX + (pressCountY * 4);
 	remove_storage(PosToDelete);
+}
+
+void Inventory::EquipWeapon()
+{
+	int PosToEquip = pressCountX + (pressCountY * 4);
+	storage[PosToEquip]->setStatus(true);
+	EquipmentManager::GetInstance()->AssignEquipment(storage[PosToEquip]);
+	remove_storage(PosToEquip);
 }

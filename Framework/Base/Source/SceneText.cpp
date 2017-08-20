@@ -504,11 +504,12 @@ void SceneText::Update(double dt)
 	{
 		OptionsManager::GetInstance()->setEditingState(false);
 
+		FileManager::GetInstance()->EditWeaponFile("Files//Inventory.csv");
 		openInventory = false;
 		openEQ = false;
 	}
 
-	CAttributes::GetInstance()->printAttributes();
+	//CAttributes::GetInstance()->printAttributes();
 
 	if (openInventory)
 	{
