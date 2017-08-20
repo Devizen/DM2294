@@ -67,6 +67,8 @@
     <ClCompile Include="Source\SoundEngine.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
+    <ClCompile Include="Source\Text_Display\Text\Text.cpp" />
+    <ClCompile Include="Source\Text_Display\Text_Manager\Text_Manager.cpp" />
     <ClCompile Include="Source\WeaponInfo\AssaultRifle.cpp" />
     <ClCompile Include="Source\WeaponInfo\Knife.cpp" />
     <ClCompile Include="Source\WeaponInfo\MeleeInfo.cpp" />
@@ -131,6 +133,8 @@
     <ClInclude Include="Source\SoundEngine.h" />
     <ClInclude Include="Source\SpriteEntity.h" />
     <ClInclude Include="Source\TextEntity.h" />
+    <ClInclude Include="Source\Text_Display\Text\Text.h" />
+    <ClInclude Include="Source\Text_Display\Text_Manager\Text_Manager.h" />
     <ClInclude Include="Source\WeaponInfo\AssaultRifle.h" />
     <ClInclude Include="Source\WeaponInfo\Knife.h" />
     <ClInclude Include="Source\WeaponInfo\MeleeInfo.h" />

@@ -52,6 +52,10 @@
 /*Cinematic Camera*/
 #include "Cinematic\Cinematic.h"
 
+/*DIsplaying Text*/
+#include "Text_Display\Text\Text.h"
+#include "Text_Display\Text_Manager\Text_Manager.h"
+
 #include <iostream>
 using namespace std;
 
@@ -749,6 +753,13 @@ void SceneText::Update(double dt)
 
 				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
+
+			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
+				Create::Text("text", "Hello World Test Message.", 0.f, 2.f, CText::TEXT_BATTLE);
+
+			/*Update text display.*/
+			if (Text_Manager::GetInstance()->returnTextList().size() > 0)
+				Text_Manager::GetInstance()->updateText(dt);
 		}
 	}
 	else
@@ -1394,6 +1405,11 @@ void SceneText::RenderPassMain(void)
 	/*Render Map Editor Options.*/
 	if (Map_Editor::GetInstance()->mapEditing)
 		Map_Editor::GetInstance()->renderOption();
+
+	/*Render text display.*/
+	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
+		Text_Manager::GetInstance()->renderText();
+
 	glEnable(GL_DEPTH_TEST);
 
 	/*Render Minimap*/

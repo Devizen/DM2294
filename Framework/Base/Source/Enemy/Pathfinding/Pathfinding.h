@@ -48,10 +48,16 @@ public:
 	vector<Vector3>path;
 	/*A target object position.*/
 	Vector3 targetObjectPosition;
-
+	/*Position for checking if the object is close to the target.*/
 	Vector3 nearestPosition;
+	/*Position to ignore the Y value for checking because some object Y-axis is not at -10.f.*/
+	Vector3 positionWithoutY;
+	/*Fixed direction to go to target normalized.*/
+	Vector3 directionToGo;
 	CEnemy3D* _enemy;
 	CPlayerInfo* _player;
+
+	bool scanned;
 private:
 protected:
 };

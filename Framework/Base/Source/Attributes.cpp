@@ -45,6 +45,8 @@ float CAttributes::getAttribute(ATTRIBUTE_TYPES type)
 		return this->MAX_EXP;
 	case TYPE_MAXHEALTH:
 		return this->MAX_HEALTH;
+	case TYPE_SPEED:
+		return this->SPEED;
 	case TYPE_GOLD:
 		return this->GOLD;
 	}

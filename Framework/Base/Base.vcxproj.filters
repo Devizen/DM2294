@@ -76,6 +76,15 @@
     <Filter Include="Enemy3D\Pathfinding">
       <UniqueIdentifier>{1a4cf7cc-2fbd-42ba-a67f-8385424eff46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Text_Display">
+      <UniqueIdentifier>{639de436-410f-4a64-8296-a3500276fd25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text_Display\Text_Manager">
+      <UniqueIdentifier>{c1f6c7b5-10f1-4429-a31e-ed70ee1215a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text_Display\Text">
+      <UniqueIdentifier>{723c2f04-a0cf-448f-a4c9-a3330afd6088}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -270,6 +279,12 @@
     <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
       <Filter>Enemy3D\Pathfinding</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Text_Display\Text\Text.cpp">
+      <Filter>Text_Display\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Text_Display\Text_Manager\Text_Manager.cpp">
+      <Filter>Text_Display\Text_Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -457,6 +472,12 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy\Pathfinding\Pathfinding.h">
       <Filter>Enemy3D\Pathfinding</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Text_Display\Text\Text.h">
+      <Filter>Text_Display\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Text_Display\Text_Manager\Text_Manager.h">
+      <Filter>Text_Display\Text_Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

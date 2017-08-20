@@ -212,7 +212,7 @@ void CAnimatedEnemy::Update(double dt)
 
 				/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
 				if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
-					position += displacement.Normalized() * (float)dt * 20.f;
+					position += displacement.Normalized() * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
 
 				break;
 			}
@@ -224,29 +224,44 @@ void CAnimatedEnemy::Update(double dt)
 		//if (!once)
 		//{
 		//	once = true;
-		static bool checked = false;
-		if (!checked)
+		if (!scanned)
 		{
-			Vector3 positionWithoutY(position.x, -10.f, position.z);
+			positionWithoutY.Set(position.x, -10.f, position.z);
 			targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
 			updatePathfinding(positionWithoutY, scale, dt);
 			nearestPosition = nearestPath();
-			checked = true;
+			cout << "Nearest Path: " << nearestPosition << endl;
+			cout << "Position: " << position << endl;
+			scanned = true;
+			try
+			{
+				directionToGo = (nearestPosition - position).Normalized();
+			}
+			catch (exception e)
+			{
+				pathFindingMode = false;
+				scanned = false;
+				nearestPosition.SetZero();
+				previousPosition = position;
+			}
 		}
-		//cout << "Displacement to Nearest Path: " << (nearestPosition - position).LengthSquared() << endl;
+		//cout << "Nearest Position: " << nearestPosition << endl;
+		//cout << "Displacement to Nearest Path: " << (nearestPosition - Vector3(position.x, -10.f, position.z)).LengthSquared() << endl;
 		//if ((nearestPath() - position).LengthSquared() > 0.1f)
 		//	position += (nearestPath() - position).Normalized() * (float)dt * 20.f;
-		if ((nearestPosition - position).LengthSquared() > 250.f)
-			position += (nearestPosition - position).Normalized() * (float)dt * 50.f;
+		if ((nearestPosition - Vector3(position.x, -10.f, position.z)).LengthSquared() >  0.1f)
+			position += directionToGo * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
 		else
 		{
 			while (path.size() > 0)
 			{
 				path.pop_back();
+				cout << "REMOVING" << endl;
 			}
 			pathFindingMode = false;
-			checked = false;
-			nearestPath().SetZero();
+			scanned = false;
+			//nearestPath().SetZero();
+			nearestPosition.SetZero();
 			previousPosition = position;
 		}
 		//cout << "PATH FIND" << endl;
@@ -711,7 +726,7 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->SetScale(_scale);
 	result->SetCollider(true);
 	result->setPlayerProperty(false);
-	result->setSpeed(50);
+	result->setSpeed(30);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }

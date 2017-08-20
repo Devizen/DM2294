@@ -590,8 +590,14 @@ bool CEnemy3D::checkCollision(void)
 		if (this == enemy)
 			continue;
 
-		Vector3 minBoundary = enemy->GetPos() + (enemy->GetMinAABB() * 2.f);
-		Vector3 maxBoundary = enemy->GetPos() + (enemy->GetMaxAABB() * 2.f);
+		//Vector3 minBoundary = enemy->GetPos() + (enemy->GetMinAABB() * 2.f);
+		//Vector3 maxBoundary = enemy->GetPos() + (enemy->GetMaxAABB() * 2.f);
+
+		Vector3 minBoundary(enemy->GetPos().x + (enemy->GetMinAABB().x * 2.f), -10.f, enemy->GetPos().z + (enemy->GetMinAABB().z * 2.f));
+		Vector3 maxBoundary(enemy->GetPos().x + (enemy->GetMaxAABB().x * 2.f), -10.f, enemy->GetPos().z + (enemy->GetMaxAABB().z * 2.f));
+																			
+		//Vector3 positionWithoutYMin(position.x + GetMinAABB().x, -10.f, position.z + GetMinAABB().z);
+		//Vector3 positionWithoutYMax(position.x + GetMaxAABB().x, -10.f, position.z + GetMaxAABB().z);
 
 		if (positionWithoutYMax >= minBoundary && positionWithoutYMin <= maxBoundary)
 			return true;

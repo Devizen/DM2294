@@ -15,6 +15,7 @@ public:
 		TYPE_EXP,
 		TYPE_MAXEXP,
 		TYPE_MAXHEALTH,
+		TYPE_SPEED,
 		TYPE_GOLD,
 	};
 

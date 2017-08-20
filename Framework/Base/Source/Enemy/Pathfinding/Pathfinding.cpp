@@ -9,6 +9,10 @@ Pathfinding::Pathfinding() :
 	pathFindingMode(false)
 	, path(0.f)
 	, targetObjectPosition(0.f, 0.f, 0.f)
+	, nearestPosition(0.f, 0.f, 0.f)
+	, positionWithoutY(0.f, 0.f, 0.f)
+	, directionToGo(0.f, 0.f, 0.f)
+	, scanned(false)
 {
 }
 
@@ -54,11 +58,44 @@ void Pathfinding::checkPathCollision(Vector3 _scale)
 				break;
 			}
 		}
+
 		if (!erased)
 			++it;
 
 		erased = false;
 	}
+
+	/*Reset variable just in case.*/
+	erased = false;
+	for (vector<Vector3>::iterator it = path.begin(); it != path.end();)
+	{
+		Vector3 pathToGo = (Vector3)*it;
+
+		for (list<CEnemy3D*>::iterator enIt = enemyList.begin(); enIt != enemyList.end(); ++enIt)
+		{
+			CEnemy3D* enemy = (CEnemy3D*)*enIt;
+
+			if (enemy == this)
+				continue;
+
+			//cout << "Displacement: " << (pathToGo - Vector3(enemy->GetPos().x, -10.f, enemy->GetPos().z)).LengthSquared() << endl;
+
+			if ((pathToGo - Vector3(enemy->GetPos().x, -10.f, enemy->GetPos().z)).LengthSquared() < 200.f)
+			{
+				it = path.erase(it);
+				erased = true;
+				break;;
+			}
+			else
+				continue;;
+		}
+
+		if (!erased)
+			++it;
+
+		erased = false;
+	}
+
 
 	/*for (vector<Vector3>::iterator it = path.begin(); it != path.end();)
 	{
