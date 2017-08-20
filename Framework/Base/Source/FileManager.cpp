@@ -17,10 +17,12 @@
 #include "Items\Helmet.h"
 #include "Items\Shoe.h"
 #include "Attributes.h"
+#include "Items\EquipmentManager.h"
 
 using std::cout;
 using std::endl;
 using std::ifstream;
+using std::ofstream;
 using std::getline;
 
 void FileManager::init()
@@ -366,6 +368,45 @@ bool FileManager::ReadWeaponFile( string myFile)
 
 void FileManager::EditFile(const string myFile)
 {
+}
+
+void FileManager::EditWeaponFile(const string myFile)
+{
+	ofstream File;
+	File.open(myFile);
+	File << "Name,Attack,Defense,Speed,ID,Type,Equipped\n";
+	for (int i = 0; i < 6; i++)
+	{
+		if (EquipmentManager::GetInstance()->ReturnList()[i] != NULL)
+		{
+			Equipment* temp = EquipmentManager::GetInstance()->ReturnList()[i];
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << "\n";
+		}
+	}
+
+	for (int i = 0; i < 12; i++)
+	{
+		cout << "IN" << endl;
+
+		if (Inventory::GetInstance()->ReturnType()[i] != NULL)
+		{
+			Equipment* temp = Inventory::GetInstance()->ReturnType()[i];
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << "\n";
+		}
+	}
+	File.close();
 }
 
 void FileManager::PrintWeaponFile()

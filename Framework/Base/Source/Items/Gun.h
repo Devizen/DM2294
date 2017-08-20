@@ -16,7 +16,17 @@ public:
 	virtual int GetID() { return id; };
 	virtual int GetType() { return type; };
 	virtual string getName() { return name; };
-	virtual bool getEquippedStatus() { return isEquipped; };
+	virtual int getEquippedStatus()
+	{
+		if (isEquipped == true)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	};
 
 	void SetAttack(int newAtt) { attack = newAtt; }
 	void SetDef(int newDef) { defense = newDef; }
@@ -24,6 +34,8 @@ public:
 	void SetID(int newID) { id = newID; }
 	void SetType(int newType) { type = newType; }
 	void SetName(string newName) { name = newName; }
+	void setStatus(bool newStat) { isEquipped = newStat; };
+
 };
 
 namespace Create

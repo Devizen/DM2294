@@ -72,11 +72,12 @@ void EquipmentManager::UnEquip(int countX, int countY)
 			if (EqList[i]->GetType() == TypeToUnEquip)
 			{
 				PosToUnequip = i;
+
 				break;
 			}
 		}
 	}
-	//EqList[PosToUnequip]->
+
 	Inventory::GetInstance()->assign_storage(EqList[PosToUnequip]);
 
 	//cout << "Unequip: " << PosToUnEquip << endl;
@@ -90,12 +91,12 @@ void EquipmentManager::UnEquip(int countX, int countY)
 
 	//merge_sort(EqList, 0, count-1);
 	//EqList[PosToUnEquip] = NULL;
-	for (int i = PosToUnequip; i < 6 - 1; i++)
-	{
-		Equipment* temp = EqList[i + 1];
-		EqList[i] = temp;
-	}
-	EqList[5] = NULL;
+	//for (int i = PosToUnequip; i < 6 - 1; i++)
+	//{
+	//	Equipment* temp = EqList[i + 1];
+	//	EqList[i] = temp;
+	//}
+	EqList[PosToUnequip] = NULL;
 }
 
 void EquipmentManager::AddAttributes()

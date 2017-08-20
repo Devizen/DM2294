@@ -27,5 +27,6 @@ public:
 	void remove_storage(int position);
 	void RenderWeapon();
 	void DeleteWeapon();
+	void EquipWeapon();
 	bool empty;
 };
