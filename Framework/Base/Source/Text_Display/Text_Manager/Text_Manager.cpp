@@ -4,6 +4,11 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 #include "../../Application.h"
+#include "KeyboardController.h"
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 Text_Manager::Text_Manager()
 {
@@ -64,6 +69,62 @@ void Text_Manager::updateText(double dt)
 							text = nullptr;
 							textList.pop_back();
 							break;
+						}
+					}
+				}
+				else if (text->textType == CText::TEXT_CONVERSATION)
+				{
+					static string storeText = text->message;
+					static int count = 0;
+					static bool erase = false;
+					if (!erase)
+					{
+						text->message = "";
+						erase = true;
+					}
+					text->durationElapsed += static_cast<float>(dt);
+
+					if (text->durationElapsed >= 0.05f && text->message.size() != storeText.size())
+					{
+						text->durationElapsed = 0.f;
+						text->message += storeText[count];
+						++count;
+						//cout << "Count: " << count << " and Message: " << text->message << endl;
+					}
+					//cout << "Message Length: " << storeText.length() << endl;
+
+					if (text->message.size() >= storeText.size())
+					{
+						if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
+						{
+							text->activateText = false;
+
+							if (textList.size() > 0)
+							{
+								CText* tempText = textList.back();
+
+								/*Move the first text to the last in vector.*/
+								textList.back() = text;
+								/*First text change to last text.*/
+								text = tempText;
+								/*Remove first text.*/
+								delete text;
+								text = nullptr;
+								textList.pop_back();
+								/*Move last text back to the default position.*/
+								textList.back() = tempText;
+								/*Resets variables so that it will re-calculate.*/
+								erase = false;
+								count = 0;
+								break;
+							}
+							else
+							{
+								delete text;
+								text = nullptr;
+								textList.pop_back();
+								break;
+							}
 						}
 					}
 				}
@@ -128,6 +189,22 @@ void Text_Manager::renderText(void)
 				else if (text->textType == CText::TEXT_CONVERSATION)
 				{
 
+					MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 2.f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+
+					Mesh* modelMesh;
+					modelMesh = MeshBuilder::GetInstance()->GenerateCube("cube", Color(0.f, 0.f, 0.f), 1.0f);
+					RenderHelper::RenderMesh(modelMesh);
+					modelStack.PopMatrix();
+
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					RenderHelper::RenderText(text->modelMesh, text->message, Color(1.f, 0.f, 0.f));
+					modelStack.PopMatrix();
 				}
 			}
 			break;

@@ -30,6 +30,7 @@ public:
 	float translateBackground;
 	float scaleText;
 	float scaleBackground;
+
 };
 
 namespace Create
