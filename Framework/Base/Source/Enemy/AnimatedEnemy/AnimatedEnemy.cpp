@@ -5,16 +5,22 @@
 #include"../../EntityManager.h"
 
 CAnimatedEnemy::CAnimatedEnemy(Mesh* _core,
-								Mesh* _leftArm,
-								Mesh* _rightArm,
-								Mesh* _leftLeg,
-								Mesh* _rightLeg,
-								Mesh* _head)
+	Mesh* _leftArm,
+	Mesh* _rightArm,
+	Mesh* _leftLeg,
+	Mesh* _rightLeg,
+	Mesh* _head)
 	:CEnemy3D(NULL)
 	, minAlertBoundary(Vector3(-100.f, -50.f, -100.f))
 	, maxAlertBoundary(Vector3(100.f, 50.f, 100.f))
 	, m_fElapsedTimeBeforeUpdate(3.0f)
 	, state(PATROL)
+	, leftArmRotation(0.f)
+	, rightArmRotation(0.f)
+	, leftLegRotation(0.f)
+	, rightLegRotation(0.f)
+	, bArmRotationPositive(true)
+	, bLegRotationPositive(true)
 {
 	this->modelMesh[0] = _core;
 	this->modelMesh[1] = _leftArm;
@@ -23,7 +29,6 @@ CAnimatedEnemy::CAnimatedEnemy(Mesh* _core,
 	this->modelMesh[4] = _rightLeg;
 	this->modelMesh[5] = _head;
 }
-
 
 CAnimatedEnemy::~CAnimatedEnemy()
 {
@@ -35,12 +40,7 @@ void CAnimatedEnemy::Init(void)
 	defaultTarget.Set(0, 0, 0);
 	defaultUp.Set(0, 1, 0);
 
-	// Set the current values
-	//position.Set(10.0f, 0.0f, 0.0f);
-	//target.Set(10.0f, 0.0f, 450.0f);
-	//up.Set(0.0f, 1.0f, 0.0f);
 	position.Set(position.x, position.y, position.z);
-	cout << "Init Position : " << position << endl;
 	target.Set(10.0f, 0.0f, 450.0f);
 	up.Set(0.0f, 1.0f, 0.0f);
 
@@ -55,14 +55,9 @@ void CAnimatedEnemy::Init(void)
 	state = IDLE;
 
 	/*Init rotation values for animation*/
-	leftArmRotation = 0;
-	bLeftArmRotationPositive = true;
-	rightArmRotation = 0;
-	bRightArmRotationPositive = false;
-	leftLegRotation = 0;
-	bLeftLegRotationPositive = true;
-	rightLegRotation = 0;
-	bRightLegRotationPositive = false;
+	rotationSetZero();
+	bArmRotationPositive = true;
+	bLegRotationPositive = true;
 
 	// Add to EntityManager
 	EntityManager::GetInstance()->AddEntity(this);
@@ -163,47 +158,79 @@ void CAnimatedEnemy::Reset(void)
 //{
 //	return m_pTerrain;
 //}
-
+/*
+Updates rotational values for arms and legs
+*/
 void CAnimatedEnemy::UpdatesRotationValue(double dt)
 {
+	/*
+	Checks current rotational values
+	*/
+
+	/*
+	Limits arm rotation between -45.f - 45.f degrees
+	*/
 	if (leftArmRotation <= -45.f)
 	{
-		bLeftArmRotationPositive = true;
+		bArmRotationPositive = true;
 	}
 	else if (leftArmRotation >= 45.f)
 	{
-		bLeftArmRotationPositive = false;
+		bArmRotationPositive = false;
+	}
+	/*
+	Limits leg rotation between -30.f - 30.f degrees
+	*/
+	if (leftLegRotation <= -30.f)
+	{
+		bLegRotationPositive = true;
+	}
+	else if (leftLegRotation >= 30.f)
+	{
+		bLegRotationPositive = false;
 	}
 
-	if (leftLegRotation <= -45.f)
-	{
-		bLeftLegRotationPositive = true;
-	}
-	else if (leftLegRotation >= 45.f)
-	{
-		bLeftLegRotationPositive = false;
-	}
+	float rotationSpeed = 100.f; //Speed of rotation
 
-	if (bLeftArmRotationPositive)
+	/*
+	updating of rotation values
+	*/
+	/*
+	Left arm rotates the opposite direction as right arm
+	*/
+	if (bArmRotationPositive)
 	{
-		leftArmRotation += 90.f*dt;
-		rightArmRotation -= 90.f*dt;
+		leftArmRotation += rotationSpeed*dt;
+		rightArmRotation -= rotationSpeed*dt;
 	}
 	else
 	{
-		leftArmRotation -= 90.f*dt;
-		rightArmRotation += 90.f*dt;
+		leftArmRotation -= rotationSpeed*dt;
+		rightArmRotation += rotationSpeed*dt;
 	}
-	if (bLeftLegRotationPositive)
+	/*
+	Left leg rotates the opposite direction as right leg
+	*/
+	if (bLegRotationPositive)
 	{
-		leftLegRotation += 90.f*dt;
-		rightLegRotation -= 90.f*dt;
+		leftLegRotation += rotationSpeed*dt;
+		rightLegRotation -= rotationSpeed*dt;
 	}
 	else
 	{
-		leftLegRotation -= 90.f*dt;
-		rightLegRotation += 90.f*dt;
+		leftLegRotation -= rotationSpeed*dt;
+		rightLegRotation += rotationSpeed*dt;
 	}
+}
+/*
+Set rotation values to zero
+*/
+void CAnimatedEnemy::rotationSetZero()
+{
+	leftArmRotation = 0.f;
+	rightArmRotation = 0.f;
+	leftLegRotation = 0.f;
+	rightLegRotation = 0.f;
 }
 // Update
 void CAnimatedEnemy::Update(double dt)
@@ -216,6 +243,7 @@ void CAnimatedEnemy::Update(double dt)
 		if (checkCollision())
 		{
 			position = previousPosition;
+
 #ifdef _DEBUG
 			cout << "COLLIDED" << endl;
 #endif
@@ -240,10 +268,7 @@ void CAnimatedEnemy::Update(double dt)
 		//case PATROL:
 		//{
 		//	Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
-
-
 		//	//position += displacement.Normalized() * (float)dt * 20.f;
-
 		//	try
 		//	{
 		//		position += displacement.Normalized() * (float)dt * 20.f;
@@ -252,16 +277,13 @@ void CAnimatedEnemy::Update(double dt)
 		//	{
 		//		/*Divide By Zero does no harm to this situation because it will only happen when there is only 1 waypoint and the enemy is on top, thus, can be left unresolved.*/
 		//	}
-
-
 		//	if (displacement.LengthSquared() <= 20.f)
 		//		waypointToGo = ((waypointToGo == waypoint.size() - 1) ? 0 : ++waypointToGo);
-
 		//	break;
 		//}
 			case ALERT:
 			{
-				cout << "ALERT FIND" << endl;
+				//cout << "ALERT FIND" << endl;
 				Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
 				Vector3 displacement(positionWithoutY - this->GetPos());
 
@@ -285,8 +307,8 @@ void CAnimatedEnemy::Update(double dt)
 			targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
 			updatePathfinding(positionWithoutY, scale, dt);
 			nearestPosition = nearestPath();
-			cout << "Nearest Path: " << nearestPosition << endl;
-			cout << "Position: " << position << endl;
+			/*cout << "Nearest Path: " << nearestPosition << endl;
+			cout << "Position: " << position << endl;*/
 			scanned = true;
 			try
 			{
@@ -311,7 +333,7 @@ void CAnimatedEnemy::Update(double dt)
 			while (path.size() > 0)
 			{
 				path.pop_back();
-				cout << "REMOVING" << endl;
+				//cout << "REMOVING" << endl;
 			}
 			pathFindingMode = false;
 			scanned = false;
@@ -327,31 +349,28 @@ void CAnimatedEnemy::Update(double dt)
 	//	state = ALERT;
 	//else
 	//	state = IDLE;
-
 	//switch (state)
 	//{
 	//	case IDLE:
 	//	{
 	//		Vector3 displacement(defaultPosition - this->GetPos());
-
 	//		if (displacement.LengthSquared() > 0.f)
 	//			position += displacement.Normalized() * (float)dt * 20.f;
-
 	//		break;
 	//	}
 	//	case ALERT:
 	//	{
 	//		Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
 	//		Vector3 displacement(positionWithoutY - this->GetPos());
-
 	//		if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
 	//			position += displacement.Normalized() * (float)dt * 20.f;
-
 	//		break;
 	//	}
 	//}
-
-	UpdatesRotationValue(dt);
+	if (state != PATROL)
+		UpdatesRotationValue(dt);
+	else
+		rotationSetZero();
 }
 
 // Constrain the position within the borders
@@ -436,23 +455,23 @@ void CAnimatedEnemy::Render(void)
 		switch (i)
 		{
 		case 1:
-			modelStack.Translate(/*position.x +*/ scale.x * 0.6f, 0, 0);
+			modelStack.Translate(scale.x * 0.6f, 0, 0);
 			modelStack.Rotate(leftArmRotation, 1, 0, 0);
 			break;
 		case 2:
-			modelStack.Translate(/*position.x*/ - scale.x * 0.6f, 0, 0);
+			modelStack.Translate(- scale.x * 0.6f, 0, 0);
 			modelStack.Rotate(rightArmRotation, 1, 0, 0);
 			break;
 		case 3:
-			modelStack.Translate(/*position.x +*/ scale.x * 0.4f, /*position.y*/ - scale.y * 0.8f, 0);
+			modelStack.Translate(scale.x * 0.4f, -scale.y * 0.8f, 0);
 			modelStack.Rotate(leftLegRotation, 1, 0, 0);
 			break;
 		case 4:
-			modelStack.Translate(/*position.x*/ - scale.x * 0.38f, /*position.y*/ - scale.y * 0.8f, 0);
+			modelStack.Translate(-scale.x * 0.38f, -scale.y * 0.8f, 0);
 			modelStack.Rotate(rightLegRotation, 1, 0, 0);
 			break;
 		case 5:
-			modelStack.Translate(0, /*position.y +*/ scale.y * 0.3f, 0);
+			modelStack.Translate(0, scale.y * 0.3f, 0);
 			break;
 		}
 		

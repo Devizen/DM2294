@@ -19,7 +19,6 @@
 
 #include "../Enemy/Patrol/Patrol.h"
 
-
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
 CPlayerInfo *CPlayerInfo::s_instance = 0;
@@ -876,18 +875,18 @@ bool CPlayerInfo::DischargePrimaryWeapon(const float deltaTime)
 bool CPlayerInfo::DischargeSecondaryWeapon(const float deltaTime)
 {
 	if (secondaryWeapon)
-	{
+	{ 
 		/*Get the direction as a magnitude; moves spawning point to front of camera.*/
 		Vector3 newPosition = target - position;
 		/*Increase the position even further.*/
 		newPosition *= 3.f;
 		/*Create a new direction based on this new position.*/
-		Vector3 targetVector((newPosition.x * 2.f) + position.x, (newPosition.y * 2.f) + position.y, (newPosition.z * 2.f) + position.z);
+		//Vector3 targetVector((newPosition.x * 2.f) + position.x, ((newPosition.y * 2.f) + (position.y += 10*(float)deltaTime)), (newPosition.z * 2.f) + position.z);
 		/*Add the additional distance with original position.*/
 		newPosition += position;
 
 		//secondaryWeapon->StabEnemy(newPosition, targetVector, this);
-		secondaryWeapon->SlashEnemy(newPosition, targetVector, this);
+		secondaryWeapon->SlashEnemy(position, newPosition, this);
 		return true;
 	}
 
@@ -1070,7 +1069,43 @@ void CPlayerInfo::resetAttribute()
 	setHealthTo(100);
 	setAttackTo(0);
 	setDefenseTo(0);
-	setSpeed(0);
+	setSpeed(10);
+}
+
+void CPlayerInfo::RenderAttribute()
+{
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	string message = "HP: ";
+	message += to_string((int)getAttribute(TYPE_HEALTH));
+	modelStack.PushMatrix();
+	modelStack.Translate(-180, 180.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	message = "Atk: ";
+	message += to_string((int)getAttribute(TYPE_ATTACK));
+	modelStack.PushMatrix();
+	modelStack.Translate(-180, 150.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	message = "Def: ";
+	message += to_string((int)getAttribute(TYPE_DEFENSE));
+	modelStack.PushMatrix();
+	modelStack.Translate(-180, 120.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	message = "Spd: ";
+	message += to_string((int)getAttribute(TYPE_SPEED));
+	modelStack.PushMatrix();
+	modelStack.Translate(-180, 90.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
 }
 
 void CPlayerInfo::setLockedOn(void)

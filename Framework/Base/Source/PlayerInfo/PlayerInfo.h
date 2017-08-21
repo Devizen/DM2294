@@ -179,6 +179,7 @@ public:
 
 	void resetAttribute();
 
+
 	/*Lock On System*/
 	void setLockedOn(void);
 	void setLockedOn(bool _lockedOn);
@@ -186,6 +187,9 @@ public:
 	CEnemy3D* getLockedOnPosition(void);
 	vector<CEnemy3D*>&returnLockOnList(void);
 	CEnemy3D* getEnemyPositionToLockOn(void);
+
+	/*Render Attribute*/
+	void RenderAttribute();
 
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;

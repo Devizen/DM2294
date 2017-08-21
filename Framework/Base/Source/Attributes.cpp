@@ -187,10 +187,10 @@ void CAttributes::addAttack(int newAttack)
 
 void CAttributes::addDefence(int newDefence)
 {
-	DEFENSE = newDefence;
+	DEFENSE += newDefence;
 }
 
 void CAttributes::addSpeed(int newSpeed)
 {
-	SPEED = newSpeed;
+	SPEED += newSpeed;
 }
