@@ -658,6 +658,7 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 	result->setPlayerProperty(false);
 	result->SetLight(true);
 	result->SetAABB(_scale * 2.f, -_scale * 2.f);
+	result->setDefaultPosition(_position);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }
