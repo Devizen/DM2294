@@ -175,6 +175,8 @@ public:
 	/*Render Player Health*/
 	void renderPlayerHealth();
 
+	void resetAttribute();
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;

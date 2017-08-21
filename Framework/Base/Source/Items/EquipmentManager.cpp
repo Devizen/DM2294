@@ -6,7 +6,7 @@
 #include "KeyboardController.h"
 #include "../FileManager.h"
 #include "Inventory.h"
-#include "../Attributes.h"
+#include "../PlayerInfo/PlayerInfo.h"
 
 using std::cout;
 using std::endl;
@@ -71,14 +71,14 @@ void EquipmentManager::UnEquip(int countX, int countY)
 		{
 			if (EqList[i]->GetType() == TypeToUnEquip)
 			{
+				cout << "EQ TYPE: " << EqList[i]->GetType() << endl;
 				PosToUnequip = i;
-
+				Inventory::GetInstance()->assign_storage(EqList[PosToUnequip]);
+				EqList[PosToUnequip] = NULL;
 				break;
 			}
 		}
 	}
-
-	Inventory::GetInstance()->assign_storage(EqList[PosToUnequip]);
 
 	//cout << "Unequip: " << PosToUnEquip << endl;
 	//for (int i = 0; i < 6; i++)
@@ -96,7 +96,7 @@ void EquipmentManager::UnEquip(int countX, int countY)
 	//	Equipment* temp = EqList[i + 1];
 	//	EqList[i] = temp;
 	//}
-	EqList[PosToUnequip] = NULL;
+	
 }
 
 void EquipmentManager::AddAttributes()
@@ -107,13 +107,13 @@ void EquipmentManager::AddAttributes()
 		{
 			if (EqList[i]->GetType() >= 0 && EqList[i]->GetType() <= 3)
 			{
-				CAttributes::GetInstance()->addAttack(EqList[i]->GetAttack());
-				CAttributes::GetInstance()->addDefence(EqList[i]->GetDefense());
-				CAttributes::GetInstance()->addSpeed(EqList[i]->GetSpeed());
+				CPlayerInfo::GetInstance()->addAttack(EqList[i]->GetAttack());
+				CPlayerInfo::GetInstance()->addDefence(EqList[i]->GetDefense());
+				CPlayerInfo::GetInstance()->addSpeed(EqList[i]->GetSpeed());
 			}
 			else
 			{
-				CAttributes::GetInstance()->addAttack(EqList[i]->GetAttack());
+				CPlayerInfo::GetInstance()->addAttack(EqList[i]->GetAttack());
 			}
 		}
 	}

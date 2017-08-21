@@ -10,7 +10,7 @@ using namespace std;
 
 class Mesh;
 
-class CAnimatedEnemy: public CEnemy3D
+class CAnimatedEnemy : public CEnemy3D
 {
 	friend class EntityManager;
 	//friend class SceneText;
@@ -21,7 +21,7 @@ class CAnimatedEnemy: public CEnemy3D
 		ENEMY_ATTACK,
 		ENEMY_DEFENSE,
 	};
-	
+
 	enum WHO_CLOSER
 	{
 		PLAYER = 0,
@@ -52,18 +52,18 @@ protected:
 	Vector3 target, up;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
-	
+
 	double m_dSpeed;
 	double m_dAcceleration;
 	//float m_fElapsedTimeBeforeUpdate;
 
 public:
 	CAnimatedEnemy(Mesh* _core,
-					Mesh* _leftArm,
-					Mesh* _rightArm,
-					Mesh* _leftLeg,
-					Mesh* _rightLeg,
-					Mesh* _head);
+		Mesh* _leftArm,
+		Mesh* _rightArm,
+		Mesh* _leftLeg,
+		Mesh* _rightLeg,
+		Mesh* _head);
 	virtual ~CAnimatedEnemy();
 
 	enum AI_STATE
@@ -95,6 +95,8 @@ public:
 	//Vector3 GetUp(void) const;
 	//// Get the terrain for the player info
 	//GroundEntity* GetTerrain(void);
+
+	void UpdatesRotationValue(double dt);
 
 	// Update
 	virtual void Update(double dt = 0.0333f);
@@ -157,16 +159,25 @@ private:
 	float shootDelay;
 	float m_fElapsedTimeBeforeUpdate;
 	WHO_CLOSER whoCloser;
+	float leftArmRotation;
+	bool bLeftArmRotationPositive;
+	float rightArmRotation;
+	bool bRightArmRotationPositive;
+	float leftLegRotation;
+	bool bLeftLegRotationPositive;
+	float rightLegRotation;
+	bool bRightLegRotationPositive;
 };
 
 namespace Create
 {
 	CAnimatedEnemy* AnimatedEnemy(const std::string& _core,
-						const std::string& _leftArm,
-						const std::string& _rightArm,
-						const std::string& _leftLeg,
-						const std::string& _rightLeg,
-						const std::string& _Head,
-						const Vector3& _position,
-						const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f));
+		const std::string& _leftArm,
+		const std::string& _rightArm,
+		const std::string& _leftLeg,
+		const std::string& _rightLeg,
+		const std::string& _Head,
+		const Vector3& _position,
+		const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f));
 };
+

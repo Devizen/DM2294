@@ -1,9 +1,7 @@
 #ifndef ATTRIBUTES_H
 #define ATTRIBUTES_H
 
-#include "SingletonTemplate.h"
-
-class CAttributes : public Singleton <CAttributes>
+class CAttributes
 {
 public:
 	CAttributes();

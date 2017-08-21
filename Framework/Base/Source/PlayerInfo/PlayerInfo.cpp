@@ -1060,3 +1060,11 @@ void CPlayerInfo::renderPlayerHealth()
 	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
 	modelStack.PopMatrix();
 }
+
+void CPlayerInfo::resetAttribute()
+{
+	setHealthTo(100);
+	setAttackTo(0);
+	setDefenseTo(0);
+	setSpeed(0);
+}

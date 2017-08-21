@@ -54,6 +54,16 @@ void CAnimatedEnemy::Init(void)
 	/*Set State*/
 	state = IDLE;
 
+	/*Init rotation values for animation*/
+	leftArmRotation = 0;
+	bLeftArmRotationPositive = true;
+	rightArmRotation = 0;
+	bRightArmRotationPositive = false;
+	leftLegRotation = 0;
+	bLeftLegRotationPositive = true;
+	rightLegRotation = 0;
+	bRightLegRotationPositive = false;
+
 	// Add to EntityManager
 	EntityManager::GetInstance()->AddEntity(this);
 
@@ -154,6 +164,47 @@ void CAnimatedEnemy::Reset(void)
 //	return m_pTerrain;
 //}
 
+void CAnimatedEnemy::UpdatesRotationValue(double dt)
+{
+	if (leftArmRotation <= -45.f)
+	{
+		bLeftArmRotationPositive = true;
+	}
+	else if (leftArmRotation >= 45.f)
+	{
+		bLeftArmRotationPositive = false;
+	}
+
+	if (leftLegRotation <= -45.f)
+	{
+		bLeftLegRotationPositive = true;
+	}
+	else if (leftLegRotation >= 45.f)
+	{
+		bLeftLegRotationPositive = false;
+	}
+
+	if (bLeftArmRotationPositive)
+	{
+		leftArmRotation += 90.f*dt;
+		rightArmRotation -= 90.f*dt;
+	}
+	else
+	{
+		leftArmRotation -= 90.f*dt;
+		rightArmRotation += 90.f*dt;
+	}
+	if (bLeftLegRotationPositive)
+	{
+		leftLegRotation += 90.f*dt;
+		rightLegRotation -= 90.f*dt;
+	}
+	else
+	{
+		leftLegRotation -= 90.f*dt;
+		rightLegRotation += 90.f*dt;
+	}
+}
 // Update
 void CAnimatedEnemy::Update(double dt)
 {
@@ -295,6 +346,8 @@ void CAnimatedEnemy::Update(double dt)
 	//		break;
 	//	}
 	//}
+
+	UpdatesRotationValue(dt);
 }
 
 // Constrain the position within the borders
@@ -380,15 +433,19 @@ void CAnimatedEnemy::Render(void)
 		{
 		case 1:
 			modelStack.Translate(/*position.x +*/ scale.x * 0.6f, 0, 0);
+			modelStack.Rotate(leftArmRotation, 1, 0, 0);
 			break;
 		case 2:
 			modelStack.Translate(/*position.x*/ - scale.x * 0.6f, 0, 0);
+			modelStack.Rotate(rightArmRotation, 1, 0, 0);
 			break;
 		case 3:
 			modelStack.Translate(/*position.x +*/ scale.x * 0.4f, /*position.y*/ - scale.y * 0.8f, 0);
+			modelStack.Rotate(leftLegRotation, 1, 0, 0);
 			break;
 		case 4:
 			modelStack.Translate(/*position.x*/ - scale.x * 0.38f, /*position.y*/ - scale.y * 0.8f, 0);
+			modelStack.Rotate(rightLegRotation, 1, 0, 0);
 			break;
 		case 5:
 			modelStack.Translate(0, /*position.y +*/ scale.y * 0.3f, 0);

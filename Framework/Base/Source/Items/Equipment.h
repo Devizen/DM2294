@@ -19,7 +19,7 @@ public:
 	virtual string getName() = 0;
 	virtual int getEquippedStatus() = 0;
 
-	void setStatus(bool newStat) { isEquipped = newStat; };
+	virtual void setStatus(bool newStat) = 0;
 
 	enum EQUIPMENT_TYPE
 	{

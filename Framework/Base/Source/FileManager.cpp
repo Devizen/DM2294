@@ -19,6 +19,8 @@
 #include "Attributes.h"
 #include "Items\EquipmentManager.h"
 
+#include "PlayerInfo\PlayerInfo.h"
+
 using std::cout;
 using std::endl;
 using std::ifstream;
@@ -66,7 +68,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player hp
-					CAttributes::GetInstance()->setHealthTo(stof(tempData));
+					CPlayerInfo::GetInstance()->setHealthTo(stof(tempData));
 				}
 
 				if (nextData == 1)
@@ -84,7 +86,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player MP
-					CAttributes::GetInstance()->setMP(stof(tempData));
+					CPlayerInfo::GetInstance()->setMP(stof(tempData));
 				}
 
 				if (nextData == 2)
@@ -102,7 +104,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Attack
-					CAttributes::GetInstance()->setAttackTo(stoi(tempData));
+					CPlayerInfo::GetInstance()->setAttackTo(stoi(tempData));
 				}
 
 				if (nextData == 3)
@@ -120,7 +122,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Def
-					CAttributes::GetInstance()->setDefenseTo(stof(tempData));
+					CPlayerInfo::GetInstance()->setDefenseTo(stof(tempData));
 				}
 
 				if (nextData == 4)
@@ -138,7 +140,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player speed
-					CAttributes::GetInstance()->setSpeed(stoi(tempData));
+					CPlayerInfo::GetInstance()->setSpeed(stoi(tempData));
 				}
 
 				if (nextData == 5)
@@ -156,7 +158,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Gold
-					CAttributes::GetInstance()->setGold(stoi(tempData));
+					CPlayerInfo::GetInstance()->setGold(stoi(tempData));
 				}
 
 				if (nextData == 6)
@@ -174,7 +176,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Level
-					CAttributes::GetInstance()->setLevel(stoi(tempData));
+					CPlayerInfo::GetInstance()->setLevel(stoi(tempData));
 				}
 
 				if (nextData == 7)
@@ -192,7 +194,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player exp
-					CAttributes::GetInstance()->setEXP(stof(tempData));
+					CPlayerInfo::GetInstance()->setEXP(stof(tempData));
 				}
 
 				++nextData;
@@ -585,6 +587,8 @@ void FileManager::EditWeaponFile(const string myFile)
 				<< temp->GetID() << ","
 				<< temp->GetType() << ","
 				<< temp->getEquippedStatus() << "\n";
+
+			cout << "Equipped Status: " << temp->getEquippedStatus() << endl;
 		}
 	}
 
