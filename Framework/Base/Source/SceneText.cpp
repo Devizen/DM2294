@@ -508,14 +508,13 @@ void SceneText::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed('U'))
 	{
 		OptionsManager::GetInstance()->setEditingState(false);
-		CPlayerInfo::GetInstance()->resetAttribute();
-		EquipmentManager::GetInstance()->AddAttributes();
+
 		FileManager::GetInstance()->EditWeaponFile("Files//Inventory.csv");
 		openInventory = false;
 		openEQ = false;
 	}
 
-	CPlayerInfo::GetInstance()->printAttributes();
+	//CAttributes::GetInstance()->printAttributes();
 
 	if (openInventory)
 	{
@@ -537,6 +536,7 @@ void SceneText::Update(double dt)
 	{
 		FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 		FileManager::GetInstance()->CreateWeapon();
+		EquipmentManager::GetInstance()->AddAttributes();
 
 		cout << "IN" << endl;
 	}
