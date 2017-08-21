@@ -787,7 +787,7 @@ void SceneText::Update(double dt)
 				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Conversation Message that Prints.", 0.f, 2.f, CText::TEXT_CONVERSATION);
+				Create::Text("text", "Hello World Test Conversation Message that Prints.It also goes to the second line.\nThere's also a third line.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 
 			/*Update text display.*/
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)

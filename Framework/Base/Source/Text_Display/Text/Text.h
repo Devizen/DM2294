@@ -1,10 +1,12 @@
 #ifndef TEXT_H
 #define TEXT_H
 
+#include <vector>
 #include <string>
 
 class Mesh;
 
+using std::vector;
 using std::string;
 
 class CText
@@ -30,7 +32,7 @@ public:
 	float translateBackground;
 	float scaleText;
 	float scaleBackground;
-
+	vector<string>textConversation;
 };
 
 namespace Create

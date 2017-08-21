@@ -77,6 +77,8 @@ void Text_Manager::updateText(double dt)
 					static string storeText = text->message;
 					static int count = 0;
 					static bool erase = false;
+					static int lineCount = 0;
+					static int characterCount = 0;
 					if (!erase)
 					{
 						text->message = "";
@@ -84,12 +86,34 @@ void Text_Manager::updateText(double dt)
 					}
 					text->durationElapsed += static_cast<float>(dt);
 
-					if (text->durationElapsed >= 0.05f && text->message.size() != storeText.size())
+					if (text->durationElapsed >= 0.025f && text->message.size() != storeText.size())
 					{
 						text->durationElapsed = 0.f;
 						text->message += storeText[count];
+						++characterCount;
+
+						if (text->message[count] == '\n')
+						{
+							++lineCount;
+							characterCount = 0;
+							++count;
+						}
+
+						if (characterCount <= 50 && lineCount == 0)
+							text->textConversation[0] += storeText[count];
+						else if (characterCount <= 50 && lineCount == 1)
+							text->textConversation[1] += storeText[count];
+						else if (characterCount <= 50 && lineCount == 2)
+							text->textConversation[2] += storeText[count];
+
+						if (characterCount == 50)
+						{
+							characterCount = 0;
+							++lineCount;
+						}
+
 						++count;
-						//cout << "Count: " << count << " and Message: " << text->message << endl;
+						cout << "Count: " << count << " and Message: " << text->textConversation[0] << endl;
 					}
 					//cout << "Message Length: " << storeText.length() << endl;
 
@@ -116,6 +140,8 @@ void Text_Manager::updateText(double dt)
 								/*Resets variables so that it will re-calculate.*/
 								erase = false;
 								count = 0;
+								lineCount = 0;
+								characterCount = 0;
 								break;
 							}
 							else
@@ -193,7 +219,7 @@ void Text_Manager::renderText(void)
 
 					modelStack.PushMatrix();
 					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
-					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 2.f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 2.f, Application::GetInstance().GetWindowWidth() * 0.12f, 1.f);
 
 					Mesh* modelMesh;
 					modelMesh = MeshBuilder::GetInstance()->GenerateCube("cube", Color(0.f, 0.f, 0.f), 1.0f);
@@ -201,9 +227,21 @@ void Text_Manager::renderText(void)
 					modelStack.PopMatrix();
 
 					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, Application::GetInstance().GetWindowHeight() * 0.05f, 0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					RenderHelper::RenderText(text->modelMesh, text->textConversation[0], Color(1.f, 0.f, 0.f));
+					modelStack.PopMatrix();
+
+					modelStack.PushMatrix();
 					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
 					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
-					RenderHelper::RenderText(text->modelMesh, text->message, Color(1.f, 0.f, 0.f));
+					RenderHelper::RenderText(text->modelMesh, text->textConversation[1], Color(1.f, 0.f, 0.f));
+					modelStack.PopMatrix();
+
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, -Application::GetInstance().GetWindowHeight() * 0.05f, 0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					RenderHelper::RenderText(text->modelMesh, text->textConversation[2], Color(1.f, 0.f, 0.f));
 					modelStack.PopMatrix();
 				}
 			}
