@@ -64,7 +64,7 @@ bool CController::Look_UpDown(const float deltaTime, const bool direction, const
 {
 	if (_CONTROLLER_DEBUG)
 		cout << "CController::Look_UpDown()" << endl;
-	if (thePlayerInfo)
+	if (thePlayerInfo && !thePlayerInfo->getLockedOn())
 	{
 		thePlayerInfo->Look_UpDown(deltaTime, direction, speedMultiplier);
 	}
@@ -76,7 +76,7 @@ bool CController::Look_LeftRight(const float deltaTime, const bool direction, co
 {
 	if (_CONTROLLER_DEBUG)
 		cout << "CController::Look_LeftRight()" << endl;
-	if (thePlayerInfo)
+	if (thePlayerInfo && !thePlayerInfo->getLockedOn())
 	{
 		thePlayerInfo->Look_LeftRight(deltaTime, direction, speedMultiplier);
 	}

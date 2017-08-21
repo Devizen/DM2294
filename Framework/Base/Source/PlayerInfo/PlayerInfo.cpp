@@ -17,6 +17,8 @@
 #include "RenderHelper.h"
 #include "../Application.h"
 
+#include "../Enemy/Patrol/Patrol.h"
+
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -50,6 +52,8 @@ CPlayerInfo::CPlayerInfo(void)
 	, tookDamage(false)
 	, score(0.f)
 	, KO_Count(0)
+	, lockedOn(false)
+	, enemyPositionToLockOn(nullptr)
 {
 }
 
@@ -1067,4 +1071,70 @@ void CPlayerInfo::resetAttribute()
 	setAttackTo(0);
 	setDefenseTo(0);
 	setSpeed(0);
+}
+
+void CPlayerInfo::setLockedOn(void)
+{
+	if (!lockedOn)
+	{
+		list<CEnemy3D*>enemyList = EntityManager::GetInstance()->returnEnemy();
+
+		for (list<CEnemy3D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+		{
+			CEnemy3D* enemy = (CEnemy3D*)*it;
+			Vector3 enemyWithoutYAxis(enemy->GetPos().x, -10.f, enemy->GetPos().x);
+			Vector3 playerWithoutYAxis(this->position.x, -10.f, this->position.z);
+			cout << (enemyWithoutYAxis - playerWithoutYAxis).LengthSquared() << endl;
+			if ((enemyWithoutYAxis - playerWithoutYAxis).LengthSquared() > 15000.f)
+				continue;
+
+			lockOnList.push_back(enemy);
+			enemyPositionToLockOn = lockOnList.back();
+		}
+
+		for (vector<CEnemy3D*>::iterator it = lockOnList.begin(); it != lockOnList.end(); ++it)
+		{
+			if (enemyPositionToLockOn == nullptr)
+				break;
+
+			CEnemy3D* enemyPosition = (CEnemy3D*)*it;
+
+			Vector3 enemyWithoutYAxis(enemyPosition->GetPos().x, -10.f, enemyPosition->GetPos().x);
+			Vector3 playerWithoutYAxis(this->position.x, -10.f, this->position.z);
+
+			if ((enemyWithoutYAxis - playerWithoutYAxis).LengthSquared() < (Vector3(enemyPositionToLockOn->GetPos().x, -10.f, enemyPositionToLockOn->GetPos().z) - playerWithoutYAxis).LengthSquared())
+				enemyPositionToLockOn = enemyPosition;
+		}
+		if (enemyPositionToLockOn != nullptr)
+			lockedOn = true;
+	}
+}
+
+void CPlayerInfo::setLockedOn(bool _lockedOn)
+{
+	enemyPositionToLockOn = nullptr;
+	lockedOn = _lockedOn;
+}
+
+bool CPlayerInfo::getLockedOn(void)
+{
+	return lockedOn;
+}
+
+CEnemy3D* CPlayerInfo::getLockedOnPosition(void)
+{
+	if (lockedOn)
+	{
+		return enemyPositionToLockOn;
+	}
+}
+
+vector<CEnemy3D*>& CPlayerInfo::returnLockOnList(void)
+{
+	return lockOnList;
+}
+
+CEnemy3D* CPlayerInfo::getEnemyPositionToLockOn(void)
+{
+	return enemyPositionToLockOn;
 }

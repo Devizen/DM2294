@@ -753,12 +753,12 @@ void SceneText::Update(double dt)
 				}
 				else if (cinematic->numberOfPositions == 1)
 				{
-					cinematic->targetType = C_Destination;
+					cinematic->targetType = C_Target;
 					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 200.f, 100.f), 100.f, dt);
 				}
 				else if (cinematic->numberOfPositions == 2)
 				{
-					cinematic->targetType = C_Destination;
+					cinematic->targetType = C_Target;
 					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 100.f, 0.f), 100.f, dt);
 					completed = true;
 					if (completed)
@@ -789,9 +789,31 @@ void SceneText::Update(double dt)
 			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
 				Create::Text("text", "Hello World Test Conversation Message that Prints.It also goes to the second line.\nThere's also a third line.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 
+			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
+				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
+
 			/*Update text display.*/
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)
 				Text_Manager::GetInstance()->updateText(dt);
+
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_TAB))
+			{
+				if (!playerInfo->getLockedOn())
+				{
+					playerInfo->setLockedOn();
+					playerInfo->getLockedOnPosition();
+				}
+				else
+				{
+					playerInfo->setLockedOn(false);
+					playerInfo->SetTarget(camera.GetCameraTarget());
+				}
+			}
+
+			if (playerInfo->getLockedOn())
+				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
+					playerInfo->SetTarget(playerInfo->getEnemyPositionToLockOn()->GetPos());
+
 		}
 	}
 	else

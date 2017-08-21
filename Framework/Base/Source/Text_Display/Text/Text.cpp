@@ -4,6 +4,7 @@
 
 CText::CText(Mesh * _modelMesh) :
 	modelMesh(_modelMesh)
+	, storedMessage("")
 	, message("")
 	, durationElapsed(0.f)
 	, maxDuration(0.f)
@@ -29,10 +30,12 @@ CText * Create::Text(const std::string & _meshName, string _message, float _dura
 
 	CText* text = new CText(_modelMesh);
 	text->message = _message;
-	for (unsigned i = 0; i < 3; ++i)
-	{
-		text->textConversation.push_back("");
-	}
+	if (_textType == CText::TEXT_CONVERSATION)
+		for (unsigned i = 0; i < 3; ++i)
+		{
+			text->textConversation.push_back("");
+		}
+
 	text->durationElapsed = _durationElapsed;
 	text->maxDuration = _maxDuration;
 	text->textType = _textType;

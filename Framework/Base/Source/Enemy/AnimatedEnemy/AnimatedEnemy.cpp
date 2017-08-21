@@ -216,13 +216,17 @@ void CAnimatedEnemy::Update(double dt)
 		if (checkCollision())
 		{
 			position = previousPosition;
+#ifdef _DEBUG
 			cout << "COLLIDED" << endl;
+#endif
 			pathFindingMode = true;
 		}
 		else
 		{
 			previousPosition = position;
-			cout << "NO COLLISION" << endl;
+#ifdef _DEBUG
+			cout << "NO COLLISION" << endl; 
+#endif
 		}
 
 		//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;

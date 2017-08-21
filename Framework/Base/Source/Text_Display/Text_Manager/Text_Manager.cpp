@@ -79,11 +79,39 @@ void Text_Manager::updateText(double dt)
 					static bool erase = false;
 					static int lineCount = 0;
 					static int characterCount = 0;
+					bool preventCancel = false;
+
 					if (!erase)
 					{
+						storeText = text->message;
 						text->message = "";
 						erase = true;
 					}
+
+					/*Display entire message.*/
+					if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && text->message.size() != storeText.size())
+					{
+						text->textConversation[0] = "";
+						text->textConversation[1] = "";
+						text->textConversation[2] = "";
+
+						int count = 0;
+						int nextVector = 0;
+						for (size_t i = 0; i < storeText.size(); ++i)
+						{
+							text->textConversation[nextVector] += storeText[i];
+							if (count >= 50)
+							{
+								count = 0;
+								++nextVector;
+								continue;
+							}
+							++count;
+						}
+						text->message = storeText;
+						preventCancel = true;
+					}
+
 					text->durationElapsed += static_cast<float>(dt);
 
 					if (text->durationElapsed >= 0.025f && text->message.size() != storeText.size())
@@ -92,19 +120,18 @@ void Text_Manager::updateText(double dt)
 						text->message += storeText[count];
 						++characterCount;
 
-						if (text->message[count] == '\n')
-						{
-							++lineCount;
-							characterCount = 0;
-							++count;
-						}
-
 						if (characterCount <= 50 && lineCount == 0)
 							text->textConversation[0] += storeText[count];
 						else if (characterCount <= 50 && lineCount == 1)
 							text->textConversation[1] += storeText[count];
 						else if (characterCount <= 50 && lineCount == 2)
 							text->textConversation[2] += storeText[count];
+
+						if (text->message[count] == '\n')
+						{
+							++lineCount;
+							characterCount = 0;
+						}
 
 						if (characterCount == 50)
 						{
@@ -114,34 +141,52 @@ void Text_Manager::updateText(double dt)
 
 						++count;
 						cout << "Count: " << count << " and Message: " << text->textConversation[0] << endl;
+						cout << "Count: " << count << " and Message: " << text->textConversation[1] << endl;
+						cout << "Count: " << count << " and Message: " << text->textConversation[2] << endl;
 					}
-					//cout << "Message Length: " << storeText.length() << endl;
+					cout << "Original Length: " << storeText.length() << " and " << "Message Length: " << text->message.size() << endl;
 
 					if (text->message.size() >= storeText.size())
 					{
-						if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
+						if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !preventCancel)
 						{
 							text->activateText = false;
 
 							if (textList.size() > 0)
 							{
-								CText* tempText = textList.back();
-
-								/*Move the first text to the last in vector.*/
-								textList.back() = text;
-								/*First text change to last text.*/
-								text = tempText;
-								/*Remove first text.*/
-								delete text;
-								text = nullptr;
-								textList.pop_back();
-								/*Move last text back to the default position.*/
-								textList.back() = tempText;
 								/*Resets variables so that it will re-calculate.*/
 								erase = false;
 								count = 0;
 								lineCount = 0;
 								characterCount = 0;
+								storeText = "";
+
+								CText* _text = textList.back();
+								delete text;
+								text = nullptr;
+
+								
+								textList.pop_back();
+								//CText* tempText = textList.back();
+
+								///*Remove the strings in vector.*/
+								//while (tempText->textConversation.size() != 0)
+								//{
+								//	tempText->textConversation.pop_back();
+
+								//}
+
+								///*Move the first text to the last in vector.*/
+								//textList.back() = text;
+								///*First text change to last text.*/
+								//text = tempText;
+
+								///*Remove first text.*/
+								//delete text;
+								//text = nullptr;
+								//textList.pop_back();
+								///*Move last text back to the default position.*/
+								//textList.back() = tempText;
 								break;
 							}
 							else

@@ -7,10 +7,12 @@
 //#include "../WeaponInfo/SlashInfo.h"
 #include "Collider\Collider.h"
 #include "../Attributes.h"
+#include "../Enemy/Patrol/Patrol.h"
 
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
 using namespace std;
 
 class CPlayerInfo : public CCollider, public CAttributes
@@ -177,6 +179,14 @@ public:
 
 	void resetAttribute();
 
+	/*Lock On System*/
+	void setLockedOn(void);
+	void setLockedOn(bool _lockedOn);
+	bool getLockedOn(void);
+	CEnemy3D* getLockedOnPosition(void);
+	vector<CEnemy3D*>&returnLockOnList(void);
+	CEnemy3D* getEnemyPositionToLockOn(void);
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;
@@ -217,6 +227,12 @@ private:
 
 	/*KO Count*/
 	int KO_Count;
+
+	/*Lock On System*/
+	bool lockedOn;
+	CEnemy3D* enemyPositionToLockOn;
+	vector<CEnemy3D*>lockOnList;
+
 public:
 	// Camera Sway
 	float m_fCameraSwayAngle;

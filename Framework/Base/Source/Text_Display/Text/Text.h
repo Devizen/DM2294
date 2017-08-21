@@ -22,6 +22,7 @@ public:
 		TEXT_NONE
 	};
 
+	string storedMessage;
 	string message;
 	float durationElapsed;
 	float maxDuration;
