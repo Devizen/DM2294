@@ -13,6 +13,7 @@ CText::CText(Mesh * _modelMesh) :
 	, translateBackground(0.f)
 	, scaleText(0.f)
 	, scaleBackground(0.f)
+	, textConversation(NULL)
 {
 }
 
@@ -28,6 +29,10 @@ CText * Create::Text(const std::string & _meshName, string _message, float _dura
 
 	CText* text = new CText(_modelMesh);
 	text->message = _message;
+	for (unsigned i = 0; i < 3; ++i)
+	{
+		text->textConversation.push_back("");
+	}
 	text->durationElapsed = _durationElapsed;
 	text->maxDuration = _maxDuration;
 	text->textType = _textType;
