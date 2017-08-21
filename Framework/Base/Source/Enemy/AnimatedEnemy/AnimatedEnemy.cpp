@@ -14,13 +14,14 @@ CAnimatedEnemy::CAnimatedEnemy(Mesh* _core,
 	, minAlertBoundary(Vector3(-100.f, -50.f, -100.f))
 	, maxAlertBoundary(Vector3(100.f, 50.f, 100.f))
 	, m_fElapsedTimeBeforeUpdate(3.0f)
-	, state(PATROL)
+	, state(IDLE)
 	, leftArmRotation(0.f)
 	, rightArmRotation(0.f)
 	, leftLegRotation(0.f)
 	, rightLegRotation(0.f)
 	, bArmRotationPositive(true)
 	, bLegRotationPositive(true)
+	, playerProperty(false)
 {
 	this->modelMesh[0] = _core;
 	this->modelMesh[1] = _leftArm;
@@ -235,163 +236,217 @@ void CAnimatedEnemy::rotationSetZero()
 // Update
 void CAnimatedEnemy::Update(double dt)
 {
-	_enemy = this;
-	//cout << "Enemy Min: " << position + minAABB << endl;
-	//cout << "Enemy Max: " << position + maxAABB << endl;
-	if (!pathFindingMode)
-	{
-		if (checkCollision())
-		{
-			position = previousPosition;
-
-#ifdef _DEBUG
-			cout << "COLLIDED" << endl;
-#endif
-			pathFindingMode = true;
-		}
-		else
-		{
-			previousPosition = position;
-#ifdef _DEBUG
-			cout << "NO COLLISION" << endl; 
-#endif
-		}
-
-		//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
-		if ((CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() < 100.f * 100.f && checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
-			state = ALERT;
-		else
-			state = PATROL;
-
-		switch (state)
-		{
-		//case PATROL:
-		//{
-		//	Vector3 displacement(waypoint[waypointToGo] - this->GetPos());
-		//	//position += displacement.Normalized() * (float)dt * 20.f;
-		//	try
-		//	{
-		//		position += displacement.Normalized() * (float)dt * 20.f;
-		//	}
-		//	catch (exception e)
-		//	{
-		//		/*Divide By Zero does no harm to this situation because it will only happen when there is only 1 waypoint and the enemy is on top, thus, can be left unresolved.*/
-		//	}
-		//	if (displacement.LengthSquared() <= 20.f)
-		//		waypointToGo = ((waypointToGo == waypoint.size() - 1) ? 0 : ++waypointToGo);
-		//	break;
-		//}
-			case ALERT:
-			{
-				//cout << "ALERT FIND" << endl;
-				Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
-				Vector3 displacement(positionWithoutY - this->GetPos());
-
-				/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
-				if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
-					position += displacement.Normalized() * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
-
-				break;
-			}
-		}
-	}
-	else
-	{
-		//static bool once = false;
-		//if (!once)
-		//{
-		//	once = true;
-		if (!scanned)
-		{
-			positionWithoutY.Set(position.x, -10.f, position.z);
-			targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
-			updatePathfinding(positionWithoutY, scale, dt);
-			nearestPosition = nearestPath();
-			/*cout << "Nearest Path: " << nearestPosition << endl;
-			cout << "Position: " << position << endl;*/
-			scanned = true;
-			try
-			{
-				directionToGo = (nearestPosition - position).Normalized();
-			}
-			catch (exception e)
-			{
-				pathFindingMode = false;
-				scanned = false;
-				nearestPosition.SetZero();
-				position = previousPosition;
-			}
-		}
-		//cout << "Nearest Position: " << nearestPosition << endl;
-		//cout << "Displacement to Nearest Path: " << (nearestPosition - Vector3(position.x, -10.f, position.z)).LengthSquared() << endl;
-		//if ((nearestPath() - position).LengthSquared() > 0.1f)
-		//	position += (nearestPath() - position).Normalized() * (float)dt * 20.f;
-		if ((nearestPosition - Vector3(position.x, -10.f, position.z)).LengthSquared() >  0.1f)
-			position += directionToGo * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
-		else
-		{
-			while (path.size() > 0)
-			{
-				path.pop_back();
-				//cout << "REMOVING" << endl;
-			}
-			pathFindingMode = false;
-			scanned = false;
-			//nearestPath().SetZero();
-			nearestPosition.SetZero();
-			previousPosition = position;
-		}
-		//cout << "PATH FIND" << endl;
-	}
-	//}
-	////CEnemy3D::Update(dt);
-	//if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
-	//	state = ALERT;
-	//else
-	//	state = IDLE;
-	//switch (state)
-	//{
-	//	case IDLE:
-	//	{
-	//		Vector3 displacement(defaultPosition - this->GetPos());
-	//		if (displacement.LengthSquared() > 0.f)
-	//			position += displacement.Normalized() * (float)dt * 20.f;
-	//		break;
-	//	}
-	//	case ALERT:
-	//	{
-	//		Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
-	//		Vector3 displacement(positionWithoutY - this->GetPos());
-	//		if (displacement.LengthSquared() > scale.LengthSquared() * 5.f)
-	//			position += displacement.Normalized() * (float)dt * 20.f;
-	//		break;
-	//	}
-	//}
-	if (state != PATROL)
+	/*If the enemy is not at default position, keep it moving.*/
+	if ((defaultPosition - position).LengthSquared() > 250.f)
 		UpdatesRotationValue(dt);
 	else
 		rotationSetZero();
-}
 
-// Constrain the position within the borders
-//void CAnimatedEnemy::Constrain(void)
-//{
-//	// Constrain player within the boundary
-//	if (position.x > maxBoundary.x - 1.0f)
-//		position.x = maxBoundary.x - 1.0f;
-//	if (position.z > maxBoundary.z - 1.0f)
-//		position.z = maxBoundary.z - 1.0f;
-//	if (position.x < minBoundary.x + 1.0f)
-//		position.x = minBoundary.x + 1.0f;
-//	if (position.z < minBoundary.z + 1.0f)
-//		position.z = minBoundary.z + 1.0f;
-//
-//	/*If Y-position is not equal to terrain height at position, 
-//	update Y-position to the terrain height*/
-//	/*Commented out to prevent the Y from changing.*/
-//	//if (position.y != m_pTerrain->GetTerrainHeight(position))
-//	//	position.y = m_pTerrain->GetTerrainHeight(position);
-//}
+	/*Set positions without Y axis displacement for easier calculations.*/
+	Vector3 playerWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
+	Vector3 thisWithoutY(position.x, -10.f, position.z);
+
+	_enemy = this;
+
+	/*If enemy is IDLE, check if player or player object stepped into the boundary.*/
+	if (state == IDLE)
+	{
+		if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+			state = ALERT;
+		else
+		{
+			/*If player is not in boundary and enemy is not at the default location, move it back to default location.*/
+			if (position != defaultPosition)
+			{
+				if (checkCollision())
+				{
+					position = previousPosition;
+					pathFindingMode = true;
+				}
+				else
+					previousPosition = position;
+
+				if (pathFindingMode)
+				{
+					if (!scanned)
+					{
+						positionWithoutY.Set(position.x, -10.f, position.z);
+						targetObjectPosition = defaultPosition;
+						updatePathfinding(positionWithoutY, scale, dt);
+						nearestPosition = nearestPath();
+						scanned = true;
+						try
+						{
+							directionToGo = (nearestPosition - position).Normalized();
+						}
+						catch (exception e)
+						{
+							pathFindingMode = false;
+							scanned = false;
+							nearestPosition.SetZero();
+							position = previousPosition;
+						}
+					}
+
+					if ((nearestPosition - Vector3(position.x, -10.f, position.z)).LengthSquared() > 0.1f)
+					{
+						position += directionToGo * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+						previousPosition = position;
+					}
+					else
+					{
+						while (path.size() > 0)
+						{
+							path.pop_back();
+						}
+						pathFindingMode = false;
+						scanned = false;
+						nearestPosition.SetZero();
+						previousPosition = position;
+					}
+				}
+				else
+				{
+					Vector3 returnToDefaultPosition(defaultPosition - position);
+					position += returnToDefaultPosition.Normalized() * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+				}
+			}
+		}
+
+#ifdef _DEBUG
+		cout << "ALERTED" << endl;
+#endif
+	}
+
+	else if (state == ALERT)
+	{
+		if (!pathFindingMode)
+		{
+			if (checkCollision())
+			{
+				position = previousPosition;
+#ifdef _DEBUG
+				cout << "COLLIDED" << endl;
+#endif
+				pathFindingMode = true;
+			}
+			else
+			{
+				if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+				{
+					Vector3 displacement(playerWithoutY - thisWithoutY);
+
+#ifdef _DEBUG
+					cout << displacement.LengthSquared() << endl;
+#endif
+					/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
+					if (displacement.LengthSquared() > 100.f)
+					{
+						position += displacement.Normalized() * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+						previousPosition = position;
+					}
+					else
+					{
+						state = ATTACK;
+					}
+#ifdef _DEBUG
+					cout << "NO COLLISION" << endl;
+#endif
+				}
+				else
+					state = IDLE;
+			}
+
+		}
+		else if (pathFindingMode)
+			if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+			{
+				/*Check distance to player first before moving.*/
+				if ((playerWithoutY - thisWithoutY).LengthSquared() <= 400.f)
+					state = ATTACK;
+
+				if (!scanned)
+				{
+					positionWithoutY.Set(position.x, -10.f, position.z);
+					targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
+					updatePathfinding(positionWithoutY, scale, dt);
+					nearestPosition = nearestPath();
+					scanned = true;
+					try
+					{
+						directionToGo = (nearestPosition - position).Normalized();
+					}
+					catch (exception e)
+					{
+						pathFindingMode = false;
+						scanned = false;
+						nearestPosition.SetZero();
+						position = previousPosition;
+					}
+				}
+
+				if ((nearestPosition - Vector3(position.x, -10.f, position.z)).LengthSquared() > 0.1f)
+					position += directionToGo * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+				else
+				{
+					while (path.size() > 0)
+					{
+						path.pop_back();
+					}
+					pathFindingMode = false;
+					scanned = false;
+					nearestPosition.SetZero();
+					previousPosition = position;
+				}
+			}
+			else
+				state = IDLE;
+	}
+	else if (state == ATTACK)
+	{
+		if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+		{
+			Vector3 displacement(playerWithoutY - thisWithoutY);
+
+			/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
+			if (displacement.LengthSquared() > 100.f)
+			{
+				position += displacement.Normalized() * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+				previousPosition = position;
+			}
+			else
+				CPlayerInfo::GetInstance()->deductHealthBy(this->getAttribute(CAttributes::TYPE_ATTACK));
+		}
+		else
+			state = IDLE;
+	}
+	/*Update enemy facing direction.*/
+	if (pathFindingMode)
+	{
+		Vector3 displacement(nearestPosition - this->GetPos());
+		angleToFace = Math::RadianToDegree(atan2(displacement.x, displacement.z));
+	}
+	else if (state == IDLE)
+	{
+		try {
+			angleToFace = Math::RadianToDegree(atan2(defaultPosition.x - this->position.x, defaultPosition.z - this->position.z));
+		}
+
+		catch (exception e)
+		{/*Not doing anything because this does not affect any gameplay. It will only make the robot turn 0 degree.*/
+		}
+	}
+	else if (state == ALERT)
+	{
+		try {
+			angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
+		}
+
+		catch (exception e)
+		{ /*Not doing anything because this does not affect any gameplay. It will only make the robot turn 0 degree.*/
+		}
+	}
+}
 
 // Render
 void CAnimatedEnemy::Render(void)
@@ -400,32 +455,33 @@ void CAnimatedEnemy::Render(void)
 	position.y = -10.f + scale.y * 3.8f; //Robot pieces together from the torso, hence displacement needed based on scale 
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
-	if (state == CEnemy3D::AI_STATE::IDLE)
-	{
-		try {
-			angleToFace = Math::RadianToDegree(atan2(defaultPosition.x - this->position.x, defaultPosition.z - this->position.z));
-		}
+	//if (state == IDLE)
+	//{
+	//	try {
+	//		angleToFace = Math::RadianToDegree(atan2(defaultPosition.x - this->position.x, defaultPosition.z - this->position.z));
+	//	}
 
-		catch (string Error)
-		{
-			cout << "Divide by Zero" << endl;
-		}
-	}
-	else if (pathFindingMode)
+	//	catch (string Error)
+	//	{
+	//		//cout << "Divide by Zero" << endl;
+	//	}
+	//}
+	//else 
+	if (pathFindingMode)
 	{
-		Vector3 displacement(/*nearestPath()*/nearestPosition - this->GetPos());
-		angleToFace = Math::RadianToDegree(atan2(displacement.x, displacement.z));
+		//Vector3 displacement(/*nearestPath()*/nearestPosition - this->GetPos());
+		//angleToFace = Math::RadianToDegree(atan2(displacement.x, displacement.z));
 	}
 	else if (state == CEnemy3D::AI_STATE::ALERT)
 	{
-		try {
-			angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
-		}
+		//try {
+		//	angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
+		//}
 
-		catch (string Error)
-		{
-			cout << "Divide by Zero" << endl;
-		}
+		//catch (string Error)
+		//{
+		//	cout << "Divide by Zero" << endl;
+		//}
 	}
 	modelStack.Rotate(angleToFace, 0.f, 1.f, 0.f);
 
@@ -807,6 +863,9 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->SetCollider(true);
 	result->setPlayerProperty(false);
 	result->setSpeed(30);
+	result->setDefaultPosition(_position);
+	result->pathFindingMode = false;
+	result->setAlertBoundary(Vector3(-200.f, -10.f, -200.f), Vector3(200.f, 10.f, 200.f));
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }

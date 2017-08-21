@@ -62,6 +62,7 @@ public:
 	{
 		IDLE = 0,
 		ALERT,
+		ATTACK,
 		DEAD,
 		RECOVERY,
 		PATROL
@@ -82,6 +83,8 @@ public:
 	void SetBoundary(Vector3 max, Vector3 min);
 	// Set the terrain for the player info
 	void SetTerrain(GroundEntity* m_pTerrain);
+	/*Set Default Position*/
+	void setDefaultPosition(Vector3 _defaultPosition);
 
 	// Get position
 	Vector3 GetPos(void) const;
@@ -91,6 +94,9 @@ public:
 	Vector3 GetUp(void) const;
 	// Get the terrain for the player info
 	GroundEntity* GetTerrain(void);
+
+	/*Get Default Position*/
+	Vector3 getDefaultPosition(void);
 
 	// Update
 	virtual void Update(double dt = 0.0333f);

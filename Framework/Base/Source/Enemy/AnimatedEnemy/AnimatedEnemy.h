@@ -48,13 +48,13 @@ protected:
 	*/
 	Mesh* modelMesh[6];
 
-	Vector3 defaultPosition, defaultTarget, defaultUp;
-	Vector3 target, up;
-	Vector3 maxBoundary, minBoundary;
-	GroundEntity* m_pTerrain;
+	//Vector3 defaultPosition, defaultTarget, defaultUp;
+	//Vector3 target, up;
+	//Vector3 maxBoundary, minBoundary;
+	//GroundEntity* m_pTerrain;
 
-	double m_dSpeed;
-	double m_dAcceleration;
+	//double m_dSpeed;
+	//double m_dAcceleration;
 	//float m_fElapsedTimeBeforeUpdate;
 
 public:

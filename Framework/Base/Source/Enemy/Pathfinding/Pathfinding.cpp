@@ -95,56 +95,6 @@ void Pathfinding::checkPathCollision(Vector3 _scale)
 
 		erased = false;
 	}
-
-
-	/*for (vector<Vector3>::iterator it = path.begin(); it != path.end();)
-	{
-		bool erased = false;
-		Vector3 pathToGo = (Vector3)*it;
-
-		Vector3 pathMinBoundary(pathToGo - _scale);
-		Vector3 pathMaxBoundary(pathToGo + _scale);
-
-		for (list<CEnemy3D*>::iterator enIt = enemyList.begin(); enIt != enemyList.end(); ++enIt)
-		{
-			CEnemy3D* enemy = (CEnemy3D*)*enIt;
-
-			Vector3 enemyMinBoundary = enemy->GetPos() + enemy->GetMinAABB();
-			Vector3 enemyMaxBoundary = enemy->GetPos() + enemy->GetMaxAABB();
-
-			if (pathMinBoundary < enemyMaxBoundary && pathMaxBoundary > enemyMinBoundary)
-			{
-				it = path.erase(it);
-				erased = true;
-				break;;
-			}
-			else
-				continue;;
-		}
-
-		if (!erased)
-		{
-			for (list<CFurniture*>::iterator objIt = fixedList.begin(); objIt != fixedList.end(); ++objIt)
-			{
-				CFurniture* fixed = (CFurniture*)*objIt;
-
-				Vector3 fixedMinBoundary = fixed->GetPosition() + fixed->GetMinAABB();
-				Vector3 fixedMaxBoundary = fixed->GetPosition() + fixed->GetMaxAABB();
-
-				if (pathMinBoundary < fixedMaxBoundary && pathMaxBoundary > fixedMinBoundary)
-				{
-					it = path.erase(it);
-					erased = true;
-					break;;
-				}
-				else
-					continue;;
-			}
-		}
-
-		if (!erased)
-			++it;
-	}*/
 }
 
 Vector3 Pathfinding::nearestPath(void)

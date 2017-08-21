@@ -7,7 +7,7 @@ using std::endl;
 CAttributes::CAttributes()
 	: MAX_HEALTH(100.f)
 	, HEALTH(100.f)
-	, ATTACK(0)
+	, ATTACK(1)
 	, DEFENSE(0)
 	, GOLD(0)
 	, EXP(0)
@@ -173,11 +173,11 @@ void CAttributes::setEXP(int exp)
 
 void CAttributes::printAttributes()
 {
-	cout << "Health: " << HEALTH << endl;
-	cout << "Attack: " << ATTACK << endl;
-	cout << "Defense: " << DEFENSE << endl;
-	cout << "Speed: " << SPEED << endl;
-	cout << endl;
+	//cout << "Health: " << HEALTH << endl;
+	//cout << "Attack: " << ATTACK << endl;
+	//cout << "Defense: " << DEFENSE << endl;
+	//cout << "Speed: " << SPEED << endl;
+	//cout << endl;
 }
 
 void CAttributes::addAttack(int newAttack)

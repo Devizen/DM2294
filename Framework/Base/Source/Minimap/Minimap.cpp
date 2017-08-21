@@ -271,7 +271,7 @@ void CMinimap::RenderUI()
 			rotateAboutAxis = direction.Cross(displacement).Normalize();
 		}
 		catch (std::exception &e) {
-			std::cout << "Divide by Zero" << std::endl;
+			//std::cout << "Divide by Zero" << std::endl;
 		}
 		displacement *= 0.1f;
 		/*This is to throw Divide By Zero that happens when the player and enemy position aligns.*/
@@ -279,7 +279,7 @@ void CMinimap::RenderUI()
 			modelStack.Rotate(angle, 0.f, 0.f, rotateAboutAxis.y);
 		}
 		catch (std::exception &e) {
-			std::cout << "Divide by Zero" << std::endl;
+			//std::cout << "Divide by Zero" << std::endl;
 		}
 		modelStack.Rotate(90.f, 0.f, 0.f, 1.f);
 		
