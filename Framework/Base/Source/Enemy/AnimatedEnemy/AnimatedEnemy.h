@@ -66,14 +66,6 @@ public:
 		Mesh* _head);
 	virtual ~CAnimatedEnemy();
 
-	enum AI_STATE
-	{
-		IDLE = 0,
-		ALERT,
-		DEAD,
-		RECOVERY,
-		PATROL
-	};
 	virtual void Init(void);
 	// Reset this player instance to default
 	virtual void Reset(void);
@@ -97,6 +89,7 @@ public:
 	//GroundEntity* GetTerrain(void);
 
 	void UpdatesRotationValue(double dt);
+	void rotationSetZero();
 
 	// Update
 	virtual void Update(double dt = 0.0333f);
@@ -150,7 +143,7 @@ public:
 private:
 	//ATTRIBUTES attributes;
 	int health;
-	AI_STATE state;
+	CEnemy3D::AI_STATE state;
 	Vector3 minAlertBoundary, maxAlertBoundary;
 	double portableDT;
 	float angleToFace;
@@ -160,13 +153,11 @@ private:
 	float m_fElapsedTimeBeforeUpdate;
 	WHO_CLOSER whoCloser;
 	float leftArmRotation;
-	bool bLeftArmRotationPositive;
+	bool bArmRotationPositive;
 	float rightArmRotation;
-	bool bRightArmRotationPositive;
 	float leftLegRotation;
-	bool bLeftLegRotationPositive;
+	bool bLegRotationPositive;
 	float rightLegRotation;
-	bool bRightLegRotationPositive;
 };
 
 namespace Create
