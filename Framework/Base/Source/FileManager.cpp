@@ -585,6 +585,8 @@ void FileManager::EditWeaponFile(const string myFile)
 				<< temp->GetID() << ","
 				<< temp->GetType() << ","
 				<< temp->getEquippedStatus() << "\n";
+
+			cout << "Equipped Status: " << temp->getEquippedStatus() << endl;
 		}
 	}
 

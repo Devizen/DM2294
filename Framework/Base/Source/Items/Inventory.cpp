@@ -78,13 +78,14 @@ void Inventory::Update(double dt)
 
 void Inventory::assign_storage(Equipment* object)
 {
-	object->setStatus(false);
 	static int count = 0;
 	for (int i = 0; i < 12; i++)
 	{
 		if (storage[i] == NULL)
 		{
 			storage[i] = object;
+
+			storage[i]->setStatus(false);
 			count++;
 			cout << count << endl;
 			break;
@@ -115,7 +116,7 @@ void Inventory::remove_storage(int position)
 	//	//storage.pop_back();
 	//	break;
 	//}
-	for (int i = position; i < 12 - 1; i++)
+	for (int i = position; i < 11; i++)
 	{
 		Equipment* temp = storage[i + 1];
 		storage[i] = temp;
@@ -194,5 +195,6 @@ void Inventory::EquipWeapon()
 	int PosToEquip = pressCountX + (pressCountY * 4);
 	storage[PosToEquip]->setStatus(true);
 	EquipmentManager::GetInstance()->AssignEquipment(storage[PosToEquip]);
+	storage[PosToEquip] = NULL;
 	remove_storage(PosToEquip);
 }
