@@ -560,6 +560,8 @@ bool FileManager::ReadOBJFile(const string myFile)
 			}
 		}
 	}
+
+	return true;
 }
 
 void FileManager::EditFile(const string myFile)
