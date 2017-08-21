@@ -7,6 +7,7 @@
 #include "KeyboardController.h"
 #include "../FileManager.h"
 #include "EquipmentManager.h"
+#include "..//PlayerInfo/PlayerInfo.h"
 
 using std::cout;
 using std::endl;
@@ -91,6 +92,8 @@ void Inventory::assign_storage(Equipment* object)
 			break;
 		}
 	}
+	CPlayerInfo::GetInstance()->resetAttribute();
+	EquipmentManager::GetInstance()->AddAttributes();
 }
 
 Equipment** Inventory::ReturnType()
@@ -122,6 +125,9 @@ void Inventory::remove_storage(int position)
 		storage[i] = temp;
 	}
 	storage[11] = NULL;
+
+	CPlayerInfo::GetInstance()->resetAttribute();
+	EquipmentManager::GetInstance()->AddAttributes();
 }
 
 void Inventory::RenderWeapon()

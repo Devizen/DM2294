@@ -49,6 +49,12 @@ class FileManager : public Singleton <FileManager>
 		float maxAABBx;
 		float maxAABBy;
 		float maxAABBz;
+
+		float scalex;
+		float scaley;
+		float scalez;
+
+		float rotateAngle;
 	}theOBJinfo;
 
 	vector<EQ_Info>masterList;
@@ -63,7 +69,7 @@ public:
 
 	bool ReadPlayerFile(const string myFile);
 	bool ReadWeaponFile( string myFile);
-	bool ReadOBJFile(const string myFile);
+	bool ReadMapFile(const string myFile);
 	bool ReadLevelFile(const string myFile);
 	
 	//bool ReadFile(const string myFile);
