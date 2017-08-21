@@ -6,7 +6,7 @@
 #include "KeyboardController.h"
 #include "../FileManager.h"
 #include "Inventory.h"
-#include "../Attributes.h"
+#include "../PlayerInfo/PlayerInfo.h"
 
 using std::cout;
 using std::endl;
@@ -107,13 +107,13 @@ void EquipmentManager::AddAttributes()
 		{
 			if (EqList[i]->GetType() >= 0 && EqList[i]->GetType() <= 3)
 			{
-				CAttributes::GetInstance()->addAttack(EqList[i]->GetAttack());
-				CAttributes::GetInstance()->addDefence(EqList[i]->GetDefense());
-				CAttributes::GetInstance()->addSpeed(EqList[i]->GetSpeed());
+				CPlayerInfo::GetInstance()->addAttack(EqList[i]->GetAttack());
+				CPlayerInfo::GetInstance()->addDefence(EqList[i]->GetDefense());
+				CPlayerInfo::GetInstance()->addSpeed(EqList[i]->GetSpeed());
 			}
 			else
 			{
-				CAttributes::GetInstance()->addAttack(EqList[i]->GetAttack());
+				CPlayerInfo::GetInstance()->addAttack(EqList[i]->GetAttack());
 			}
 		}
 	}
