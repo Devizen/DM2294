@@ -872,18 +872,18 @@ bool CPlayerInfo::DischargePrimaryWeapon(const float deltaTime)
 bool CPlayerInfo::DischargeSecondaryWeapon(const float deltaTime)
 {
 	if (secondaryWeapon)
-	{
+	{ 
 		/*Get the direction as a magnitude; moves spawning point to front of camera.*/
 		Vector3 newPosition = target - position;
 		/*Increase the position even further.*/
 		newPosition *= 3.f;
 		/*Create a new direction based on this new position.*/
-		Vector3 targetVector((newPosition.x * 2.f) + position.x, (newPosition.y * 2.f) + position.y, (newPosition.z * 2.f) + position.z);
+		//Vector3 targetVector((newPosition.x * 2.f) + position.x, ((newPosition.y * 2.f) + (position.y += 10*(float)deltaTime)), (newPosition.z * 2.f) + position.z);
 		/*Add the additional distance with original position.*/
 		newPosition += position;
 
 		//secondaryWeapon->StabEnemy(newPosition, targetVector, this);
-		secondaryWeapon->SlashEnemy(newPosition, targetVector, this);
+		secondaryWeapon->SlashEnemy(position, newPosition, this);
 		return true;
 	}
 

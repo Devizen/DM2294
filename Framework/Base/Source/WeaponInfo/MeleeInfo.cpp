@@ -102,16 +102,39 @@ void CMeleeInfo::StabEnemy(Vector3 position, Vector3 target, CPlayerInfo* _sourc
 
 void CMeleeInfo::SlashEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source)
 {
-	Vector3 distance(target - position);
-	distance *= 3.f;
-	distance += position;
-	CProjectile* aTriggerBox = Create::Projectile("cubeBox",
-		distance,
-		(target - position).Normalized(),
-		0.5f,
-		0.0f,
-		_source);
-	aTriggerBox->SetCollider(true);
-	aTriggerBox->SetAABB(Vector3(8.0f, 0.5f, 4.0f), Vector3(-8.0f, -0.5f, -4.0f));
+	Vector3 topOfPlayer(position.x, position.y * 5.f, position.z); 
+	Vector3 slashDown(target.x - position.x, (target.y ) - (position.y * 4.f), target.z - position.z);
+	float increaseSlashDisplacement = 10.0f;
+	float translateDown = 0.f;
+
+	for (size_t i = 0; i < 100; ++i)
+	{
+		CProjectile* aTriggerBox = Create::Projectile("cubeBox",
+			Vector3(topOfPlayer.x , topOfPlayer.y - translateDown, topOfPlayer.z) + (slashDown.Normalized() * increaseSlashDisplacement),
+			slashDown.Normalized(),
+			0.5,
+			0.0f,
+			_source);
+		aTriggerBox->SetCollider(true);
+		aTriggerBox->SetAABB(Vector3(0.5, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+		
+		if (i < 15)
+			increaseSlashDisplacement += 1.0f;
+		else
+			slashDown.Normalized() -= 1.0f;
+
+		translateDown += 0.1f;
+	}
+	//Vector3 distance(target - position);
+	//distance *= 3.f; 
+	//distance += position; 
+	//CProjectile* aTriggerBox = Create::Projectile("cubeBox",
+	//	distance,
+	//	(target - position).Normalized(),
+	//	0.5f,
+	//	0.0f,
+	//	_source);
+	//aTriggerBox->SetCollider(true);
+	//aTriggerBox->SetAABB(Vector3(8.0f, 0.5f, 4.0f), Vector3(-8.0f, -0.5f, -4.0f));
 	cout << "SLASHED" << endl;
 }
