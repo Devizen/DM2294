@@ -130,6 +130,8 @@ private:
 
 	float windowHeight;
 	float windowWidth;
+
+	double saveMapTime;
 };
 
 #endif

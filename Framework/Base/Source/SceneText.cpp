@@ -472,6 +472,10 @@ void SceneText::Init()
 	openEQ = false;
 	FileManager::GetInstance()->init();
 	EquipmentManager::GetInstance()->Init();
+
+	saveMapTime = 0;
+
+	FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
 }
 
 void SceneText::Update(double dt)
@@ -482,6 +486,14 @@ void SceneText::Update(double dt)
 
 	static bool pause = false;
 	static int renderOnce = 0;
+
+	saveMapTime += dt;
+
+	if (saveMapTime >= 10)
+	{
+		FileManager::GetInstance()->EditMapFile("Files//Level Loader.csv");
+	}
+
 
 	for (int i = 0; i < 17; ++i)
 	{

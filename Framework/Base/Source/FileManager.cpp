@@ -20,6 +20,8 @@
 #include "Items\EquipmentManager.h"
 
 #include "PlayerInfo\PlayerInfo.h"
+#include "EntityManager.h"
+#include "Object\Furniture.h"
 
 using std::cout;
 using std::endl;
@@ -627,9 +629,14 @@ bool FileManager::ReadMapFile(const string myFile)
 					}
 					theOBJinfo.rotateAngle = stof(tempData);
 				}
-			}
 
-			objlist.push_back(theOBJinfo);
+				nextData += 1;
+				tempData = "";
+			}
+			CFurniture* temp = Create::Furniture(theOBJinfo.type, Vector3(theOBJinfo.posX, theOBJinfo.posY, theOBJinfo.posZ), Vector3(theOBJinfo.scalex, theOBJinfo.scaley, theOBJinfo.scalez));
+			temp->SetAABB(Vector3(theOBJinfo.maxAABBx, theOBJinfo.maxAABBy, theOBJinfo.maxAABBz), Vector3(theOBJinfo.minAABBx, theOBJinfo.minAABBy, theOBJinfo.minAABBz));
+			temp->SetRotate(theOBJinfo.rotateAngle);
+			nextData = 0;
 		}
 	}
 
@@ -679,6 +686,31 @@ void FileManager::EditWeaponFile(const string myFile)
 		}
 	}
 	File.close();
+}
+
+void FileManager::EditMapFile(const string myFile)
+{
+	ofstream File;
+	File.open(myFile);
+	File << "Name,posX,posY,posZ,minAABBx,minAABBy,minAABBz,maxAABBx,maxAABBy,maxAABBz,scaleX,scaleY,scaleZ,rotateAngle\n";
+	for (list<CFurniture*>::iterator it = EntityManager::GetInstance()->returnFixed().begin(); it != EntityManager::GetInstance()->returnFixed().end(); ++it)
+	{
+		CFurniture* temp = (CFurniture*)*it;
+		File << temp->GetItem() << ","
+			<< temp->GetPosition().x << ","
+			<< temp->GetPosition().y << ","
+			<< temp->GetPosition().z << ","
+			<< temp->GetMinAABB().x << ","
+			<< temp->GetMinAABB().y << ","
+			<< temp->GetMinAABB().z << ","
+			<< temp->GetMaxAABB().x << ","
+			<< temp->GetMaxAABB().x << ","
+			<< temp->GetMaxAABB().x << ","
+			<< temp->GetScale().x << ","
+			<< temp->GetScale().y << ","
+			<< temp->GetScale().z << ","
+			<< temp->GetRotate() << "\n";
+	}
 }
 
 void FileManager::PrintWeaponFile()

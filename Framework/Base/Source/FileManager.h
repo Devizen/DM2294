@@ -76,6 +76,7 @@ public:
 
 	void EditFile(const string myFile);
 	void EditWeaponFile(const string myFile);
+	void EditMapFile(const string myFile);
 
 	void PrintWeaponFile();
 
