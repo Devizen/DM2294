@@ -366,6 +366,204 @@ bool FileManager::ReadWeaponFile( string myFile)
 	return true;
 }
 
+bool FileManager::ReadOBJFile(const string myFile)
+{
+	ifstream file;
+	static int count = 0;
+	string data = "";
+	string tempData = "";
+	int nextData = 0;
+	bool skipFirstLine = false;
+	file.open(myFile);
+
+	if (file.is_open())
+	{
+		while (getline(file, data))
+		{
+			if (!skipFirstLine)
+			{
+				skipFirstLine = true;
+				continue;
+			}
+
+			for (int i = 0; i < data.size(); ++i)
+			{
+				if (nextData == 0)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.type = tempData;
+				}
+
+				if (nextData == 1)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.posX = stof(tempData);
+				}
+
+				if (nextData == 2)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.posY = stof(tempData);
+				}
+
+				if (nextData == 3)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.posZ = stof(tempData);
+				}
+
+				if (nextData == 4)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.minAABBx = stof(tempData);
+				}
+
+				if (nextData == 5)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.minAABBy = stof(tempData);
+				}
+
+				if (nextData == 6)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.minAABBz = stof(tempData);
+				}
+
+				if (nextData == 7)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.maxAABBx = stof(tempData);
+				}
+
+				if (nextData == 8)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.maxAABBy = stof(tempData);
+				}
+
+				if (nextData == 9)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.maxAABBz = stof(tempData);
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
 void FileManager::EditFile(const string myFile)
 {
 }
