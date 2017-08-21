@@ -79,7 +79,8 @@ void EquipmentManager::UnEquip(int countX, int countY)
 			}
 		}
 	}
-
+	CPlayerInfo::GetInstance()->resetAttribute();
+	AddAttributes();
 	//cout << "Unequip: " << PosToUnEquip << endl;
 	//for (int i = 0; i < 6; i++)
 	//{

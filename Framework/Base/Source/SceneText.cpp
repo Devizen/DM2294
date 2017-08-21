@@ -327,6 +327,12 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("BSHOE", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("BSHOE")->textureID = LoadTGA("Image//BasicShoe.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("BGUN", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("BGUN")->textureID = LoadTGA("Image//BasicGun.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("BSWORD", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("BSWORD")->textureID = LoadTGA("Image//BasicSword.tga");
+
 	MeshBuilder::GetInstance()->GenerateQuad("SELECTION", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("SELECTION")->textureID = LoadTGA("Image//Selection.tga");
 
@@ -508,8 +514,6 @@ void SceneText::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed('U'))
 	{
 		OptionsManager::GetInstance()->setEditingState(false);
-		CPlayerInfo::GetInstance()->resetAttribute();
-		EquipmentManager::GetInstance()->AddAttributes();
 		FileManager::GetInstance()->EditWeaponFile("Files//Inventory.csv");
 		openInventory = false;
 		openEQ = false;
@@ -1427,6 +1431,8 @@ void SceneText::RenderPassMain(void)
 	if (openEQ)
 	{
 		EquipmentManager::GetInstance()->Render();
+		CPlayerInfo::GetInstance()->RenderAttribute();
+
 	}
 
 	//*Render KO Count*/

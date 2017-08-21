@@ -368,7 +368,7 @@ bool FileManager::ReadWeaponFile( string myFile)
 	return true;
 }
 
-bool FileManager::ReadOBJFile(const string myFile)
+bool FileManager::ReadMapFile(const string myFile)
 {
 	ifstream file;
 	static int count = 0;
@@ -559,7 +559,77 @@ bool FileManager::ReadOBJFile(const string myFile)
 					}
 					theOBJinfo.maxAABBz = stof(tempData);
 				}
+
+				if (nextData == 10)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.scalex = stof(tempData);
+				}
+
+				if (nextData == 11)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.scaley = stof(tempData);
+				}
+
+				if (nextData == 12)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.scalez = stof(tempData);
+				}
+
+				if (nextData == 13)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theOBJinfo.rotateAngle = stof(tempData);
+				}
 			}
+
+			objlist.push_back(theOBJinfo);
 		}
 	}
 

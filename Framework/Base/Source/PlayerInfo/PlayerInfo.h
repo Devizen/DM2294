@@ -177,6 +177,8 @@ public:
 
 	void resetAttribute();
 
+	void RenderAttribute();
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;

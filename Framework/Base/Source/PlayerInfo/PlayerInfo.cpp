@@ -17,7 +17,6 @@
 #include "RenderHelper.h"
 #include "../Application.h"
 
-
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
 CPlayerInfo *CPlayerInfo::s_instance = 0;
@@ -1066,5 +1065,41 @@ void CPlayerInfo::resetAttribute()
 	setHealthTo(100);
 	setAttackTo(0);
 	setDefenseTo(0);
-	setSpeed(0);
+	setSpeed(10);
+}
+
+void CPlayerInfo::RenderAttribute()
+{
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	string message = "HP: ";
+	message += to_string((int)getAttribute(TYPE_HEALTH));
+	modelStack.PushMatrix();
+	modelStack.Translate(-180, 180.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	message = "Atk: ";
+	message += to_string((int)getAttribute(TYPE_ATTACK));
+	modelStack.PushMatrix();
+	modelStack.Translate(-180, 150.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	message = "Def: ";
+	message += to_string((int)getAttribute(TYPE_DEFENSE));
+	modelStack.PushMatrix();
+	modelStack.Translate(-180, 120.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	message = "Spd: ";
+	message += to_string((int)getAttribute(TYPE_SPEED));
+	modelStack.PushMatrix();
+	modelStack.Translate(-180, 90.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
 }
