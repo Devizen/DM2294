@@ -352,6 +352,9 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GetMesh("ROBOT_RightLeg")->textureID = LoadTGA("Image//ROBOT.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_Head", "OBJ//Robot_Head.obj");
 	MeshBuilder::GetInstance()->GetMesh("ROBOT_Head")->textureID = LoadTGA("Image//ROBOT.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("TOWER", "OBJ//Tower.obj");
+	MeshBuilder::GetInstance()->GetMesh("TOWER")->textureID = LoadTGA("Image//Tower.tga");
 	/*Player Health Bar Color*/
 	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
 
