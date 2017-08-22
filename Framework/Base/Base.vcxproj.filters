@@ -85,6 +85,15 @@
     <Filter Include="Text_Display\Text">
       <UniqueIdentifier>{723c2f04-a0cf-448f-a4c9-a3330afd6088}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{f9b4fb92-2bc8-4143-a125-2af284736878}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quest">
+      <UniqueIdentifier>{1a6ed068-1218-4159-845f-2a5ba25a34c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quest\Quest_Manager">
+      <UniqueIdentifier>{566ae725-2c21-405c-875a-8a75ad9d389c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -285,6 +294,15 @@
     <ClCompile Include="Source\Text_Display\Text_Manager\Text_Manager.cpp">
       <Filter>Text_Display\Text_Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level\Tutorial.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Quest\Quest.cpp">
+      <Filter>Quest</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Quest\Quest_Manager\Quest_Manager.cpp">
+      <Filter>Quest\Quest_Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -478,6 +496,15 @@
     </ClInclude>
     <ClInclude Include="Source\Text_Display\Text_Manager\Text_Manager.h">
       <Filter>Text_Display\Text_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Tutorial.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Quest\Quest.h">
+      <Filter>Quest</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Quest\Quest_Manager\Quest_Manager.h">
+      <Filter>Quest\Quest_Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -341,6 +341,58 @@ bool EntityManager::getHit(void)
 	return hit;
 }
 
+void EntityManager::removeAllEntities(void)
+{
+	if (entityList.size() > 0)
+	{
+		EntityBase* entity = entityList.back();
+		delete entity;
+		entity = nullptr;
+		entityList.pop_back();
+	}
+
+	if (projectileList.size() > 0)
+	{
+		CProjectile* projectile = projectileList.back();
+		delete projectile;
+		projectile = nullptr;
+		projectileList.pop_back();
+	}
+
+	if (fixedList.size() > 0)
+	{
+		EntityBase* fixed = fixedList.back();
+		delete fixed;
+		fixed = nullptr;
+		fixedList.pop_back();
+	}
+
+	if (enemyList.size() > 0)
+	{
+		CEnemy3D* enemy = enemyList.back();
+		delete enemy;
+		enemy = nullptr;
+		enemyList.pop_back();
+	}
+
+	if (itemList.size() > 0)
+	{
+		EntityBase* item = itemList.back();
+		delete item;
+		item = nullptr;
+		itemList.pop_back();
+	}
+
+	if (patrolList.size() > 0)
+	{
+		Patrol* patrol = patrolList.back();
+		delete patrol;
+		patrol = nullptr;
+		patrolList.pop_back();
+	}
+	//std::list<CPlayerInfo*> playerList;
+}
+
 // Constructor
 EntityManager::EntityManager() :
 	hit(false)
@@ -350,53 +402,53 @@ EntityManager::EntityManager() :
 // Destructor
 EntityManager::~EntityManager()
 {
-	while (entityList.size() > 0)
-	{
-		EntityBase* object = entityList.back();
-		delete object;
-		object = nullptr;
-		entityList.pop_back();
-	}
+	//while (entityList.size() > 0)
+	//{
+	//	EntityBase* object = entityList.back();
+	//	delete object;
+	//	object = nullptr;
+	//	entityList.pop_back();
+	//}
 
-	while (projectileList.size() > 0)
-	{
-		CProjectile* object = projectileList.back();
-		delete object;
-		object = nullptr;
-		projectileList.pop_back();
-	}
+	//while (projectileList.size() > 0)
+	//{
+	//	CProjectile* object = projectileList.back();
+	//	delete object;
+	//	object = nullptr;
+	//	projectileList.pop_back();
+	//}
 
-	while (fixedList.size() > 0)
-	{
-		CFurniture* object = fixedList.back();
-		delete object;
-		object = nullptr;
-		fixedList.pop_back();
-	}
+	//while (fixedList.size() > 0)
+	//{
+	//	CFurniture* object = fixedList.back();
+	//	delete object;
+	//	object = nullptr;
+	//	fixedList.pop_back();
+	//}
 
-	while (playerList.size() > 0)
-	{
-		CPlayerInfo* object = playerList.back();
-		delete object;
-		object = nullptr;
-		playerList.pop_back();
-	}
+	////while (playerList.size() > 0)
+	////{
+	////	CPlayerInfo* object = playerList.back();
+	////	delete object;
+	////	object = nullptr;
+	////	playerList.pop_back();
+	////}
 
-	while (enemyList.size() > 0)
-	{
-		CEnemy3D* object = enemyList.back();
-		delete object;
-		object = nullptr;
-		enemyList.pop_back();
-	}
+	//while (enemyList.size() > 0)
+	//{
+	//	CEnemy3D* object = enemyList.back();
+	//	delete object;
+	//	object = nullptr;
+	//	enemyList.pop_back();
+	//}
 
-	while (itemList.size() > 0)
-	{
-		EntityBase* object = itemList.back();
-		delete object;
-		object = nullptr;
-		itemList.pop_back();
-	}
+	//while (itemList.size() > 0)
+	//{
+	//	EntityBase* object = itemList.back();
+	//	delete object;
+	//	object = nullptr;
+	//	itemList.pop_back();
+	//}
 }
 
 // Check for overlap
