@@ -51,6 +51,9 @@ public:
 
 	/*Get Hit*/
 	bool getHit(void);
+
+	/*Remove all entities.*/
+	void removeAllEntities(void);
 private:
 	EntityManager();
 	virtual ~EntityManager();

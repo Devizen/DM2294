@@ -85,6 +85,9 @@
     <Filter Include="Text_Display\Text">
       <UniqueIdentifier>{723c2f04-a0cf-448f-a4c9-a3330afd6088}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{f9b4fb92-2bc8-4143-a125-2af284736878}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -285,6 +288,9 @@
     <ClCompile Include="Source\Text_Display\Text_Manager\Text_Manager.cpp">
       <Filter>Text_Display\Text_Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level\Tutorial.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -478,6 +484,9 @@
     </ClInclude>
     <ClInclude Include="Source\Text_Display\Text_Manager\Text_Manager.h">
       <Filter>Text_Display\Text_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Tutorial.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

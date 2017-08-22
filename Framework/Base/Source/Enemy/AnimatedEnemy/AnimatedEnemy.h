@@ -144,14 +144,13 @@ private:
 	//ATTRIBUTES attributes;
 	int health;
 	CEnemy3D::AI_STATE state;
-	Vector3 minAlertBoundary, maxAlertBoundary;
 	double portableDT;
 	float angleToFace;
 	/////*Check if enemy belongs to player.*/
 	bool playerProperty;
 	float shootDelay;
 	float m_fElapsedTimeBeforeUpdate;
-	WHO_CLOSER whoCloser;
+	//WHO_CLOSER whoCloser;
 	float leftArmRotation;
 	bool bArmRotationPositive;
 	float rightArmRotation;
