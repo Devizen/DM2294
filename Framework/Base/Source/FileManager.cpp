@@ -22,6 +22,9 @@
 #include "PlayerInfo\PlayerInfo.h"
 #include "EntityManager.h"
 #include "Object\Furniture.h"
+#include "Enemy\AnimatedEnemy\AnimatedEnemy.h"
+#include "Enemy\Enemy3D.h"
+#include "Map_Editor\Map_Editor.h"
 
 using std::cout;
 using std::endl;
@@ -364,7 +367,6 @@ bool FileManager::ReadWeaponFile( string myFile)
 	}
 	else
 	{
-		cout << "GG" << endl;
 		return false;
 	}
 	return true;
@@ -643,8 +645,253 @@ bool FileManager::ReadMapFile(const string myFile)
 	return true;
 }
 
-void FileManager::EditFile(const string myFile)
+bool FileManager::ReadEnemyFile(const string myFile)
 {
+	ifstream file;
+	static int count = 0;
+	string data = "";
+	string tempData = "";
+	int nextData = 0;
+	bool skipFirstLine = false;
+	file.open(myFile);
+
+	if (file.is_open())
+	{
+		while (getline(file, data))
+		{
+			if (!skipFirstLine)
+			{
+				skipFirstLine = true;
+				continue;
+			}
+
+			for (int i = 0; i < data.size(); ++i)
+			{
+				if (nextData == 0)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEnemyInfo.name1 = tempData;
+				}
+
+				if (nextData == 1)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+
+					theEnemyInfo.name2 = tempData;
+				}
+
+				if (nextData == 2)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+
+					theEnemyInfo.name3 = tempData;
+				}
+
+				if (nextData == 3)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+
+					theEnemyInfo.name4 = tempData;
+				}
+
+				if (nextData == 4)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+
+					theEnemyInfo.name5 = tempData;
+				}
+
+				if (nextData == 5)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEnemyInfo.name6 = tempData;
+				}
+
+				if (nextData == 6)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEnemyInfo.displacementX = stof(tempData);
+				}
+
+				if (nextData == 7)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEnemyInfo.displacementY = stof(tempData);
+				}
+
+				if (nextData == 8)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEnemyInfo.displacementZ = stof(tempData);
+				}
+
+				if (nextData == 9)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEnemyInfo.scaleX= stof(tempData);
+				}
+
+				if (nextData == 10)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEnemyInfo.scaleY = stof(tempData);
+				}
+
+				if (nextData == 11)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEnemyInfo.scaleZ = stof(tempData);
+				}
+
+				tempData = "";
+				++nextData;
+			}
+
+			Create::AnimatedEnemy(theEnemyInfo.name1, theEnemyInfo.name2, theEnemyInfo.name3, theEnemyInfo.name4, theEnemyInfo.name5, theEnemyInfo.name6,
+				Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
+				Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+			nextData = 0;
+			tempData = "";
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	return true;
 }
 
 void FileManager::EditWeaponFile(const string myFile)
@@ -710,6 +957,22 @@ void FileManager::EditMapFile(const string myFile)
 			<< temp->GetScale().y << ","
 			<< temp->GetScale().z << ","
 			<< temp->GetRotate() << "\n";
+	}
+}
+
+void FileManager::EditEnemyFile(const string myFile)
+{
+	ofstream File;
+	File.open(myFile);
+	File << "type,displacementx,displacementy,displacementz,scalex,scaley,scalez\n";
+
+	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+	{
+		//CEnemy3D* temp = (CEnemy3D*)*it;
+		//if (Map_Editor::GetInstance()->lastCreatedType == Map_Editor::GetInstance()->CREATED_ENEMY)
+		//{
+		//	temp->get
+		//}
 	}
 }
 
