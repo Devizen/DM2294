@@ -22,6 +22,12 @@ void Inventory::Init()
 
 	pressCountX = 0;
 	pressCountY = 0;
+
+	showDiscardText = false;
+	showEquipText = false;
+
+	EquipTextTime = 0;
+	DiscardTextTime = 0;
 }
 
 void Inventory::Update(double dt)
@@ -69,11 +75,35 @@ void Inventory::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed('F'))
 	{
 		DeleteWeapon();
+		showDiscardText = true;
+		DiscardTextTime = 0;
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('E'))
 	{
 		EquipWeapon();
+		showEquipText = true;
+		EquipTextTime = 0;
+	}
+
+	if (showDiscardText == true)
+	{
+		DiscardTextTime += dt;
+	}
+
+	if (showEquipText == true)
+	{
+		EquipTextTime += dt;
+	}
+
+	if (DiscardTextTime > 1)
+	{
+		showDiscardText = false;
+	}
+
+	if (EquipTextTime > 1)
+	{
+		showEquipText = false;
 	}
 }
 
@@ -128,6 +158,8 @@ void Inventory::remove_storage(int position)
 
 	CPlayerInfo::GetInstance()->resetAttribute();
 	EquipmentManager::GetInstance()->AddAttributes();
+
+
 }
 
 void Inventory::RenderWeapon()
@@ -187,6 +219,28 @@ void Inventory::RenderWeapon()
 			modelStack.PopMatrix();
 			modelStack.PopMatrix();
 		}
+	}
+
+	if (showEquipText)
+	{
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		string message = "Equipped!";
+		modelStack.PushMatrix();
+		modelStack.Translate(100, 180.f, 0.f);
+		modelStack.Scale(35, 35, 35);
+		RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+		modelStack.PopMatrix();
+	}
+
+	if (showDiscardText)
+	{
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		string message = "Discarded!";
+		modelStack.PushMatrix();
+		modelStack.Translate(100, 150.f, 0.f);
+		modelStack.Scale(35, 35, 35);
+		RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+		modelStack.PopMatrix();
 	}
 }
 

@@ -13,6 +13,8 @@ class EquipmentManager : public Singleton <EquipmentManager>
 
 	int pressCountX;
 	int pressCountY;
+	double textTime;
+	bool showText;
 public:
 	void AssignEquipment(Equipment* newEQ);
 	void UnEquip(int countX, int countY);
