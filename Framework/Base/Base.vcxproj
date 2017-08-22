@@ -53,6 +53,8 @@
     <ClCompile Include="Source\ParticleManager.cpp" />
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
     <ClCompile Include="Source\Projectile\Projectile.cpp" />
+    <ClCompile Include="Source\Quest\Quest.cpp" />
+    <ClCompile Include="Source\Quest\Quest_Manager\Quest_Manager.cpp" />
     <ClCompile Include="Source\Scene2D\Animation.cpp" />
     <ClCompile Include="Source\Scene2D\Enemy.cpp" />
     <ClCompile Include="Source\Scene2D\Goodies.cpp" />
@@ -120,6 +122,8 @@
     <ClInclude Include="Source\ParticleManager.h" />
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
     <ClInclude Include="Source\Projectile\Projectile.h" />
+    <ClInclude Include="Source\Quest\Quest.h" />
+    <ClInclude Include="Source\Quest\Quest_Manager\Quest_Manager.h" />
     <ClInclude Include="Source\Scene2D\Animation.h" />
     <ClInclude Include="Source\Scene2D\Enemy.h" />
     <ClInclude Include="Source\Scene2D\Goodies.h" />
