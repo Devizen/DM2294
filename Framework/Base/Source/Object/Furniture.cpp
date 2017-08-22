@@ -72,6 +72,7 @@ CFurniture* Create::Furniture(const std::string& _meshName, const Vector3& _posi
 	//newPosition.y -= 10.f;
 	result->SetName(_meshName);
 	result->SetPosition(_position);
+	result->SetRotate(0.f);
 	result->SetScale(_scale);
 	result->SetCollider(true);
 	result->SetLight(true);
