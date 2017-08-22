@@ -850,8 +850,8 @@ int CPlayerInfo::GetWeapon(void) const
 // Discharge Primary Weapon
 bool CPlayerInfo::DischargePrimaryWeapon(const float deltaTime)
 {
-	//if (primaryWeapon)
-	//	primaryWeapon->Discharge(position, target, this);
+	if (primaryWeapon)
+		primaryWeapon->Discharge(position, target, this);
 
 	if (weaponManager[m_iCurrentWeapon])
 	{
@@ -881,12 +881,16 @@ bool CPlayerInfo::DischargeSecondaryWeapon(const float deltaTime)
 		/*Increase the position even further.*/
 		newPosition *= 3.f;
 		/*Create a new direction based on this new position.*/
-		//Vector3 targetVector((newPosition.x * 2.f) + position.x, ((newPosition.y * 2.f) + (position.y += 10*(float)deltaTime)), (newPosition.z * 2.f) + position.z);
+		Vector3 targetVector((newPosition.x * 2.f) + position.x, (newPosition.y * 2.f) + position.y, (newPosition.z * 2.f) + position.z);
 		/*Add the additional distance with original position.*/
-		newPosition += position;
-
-		//secondaryWeapon->StabEnemy(newPosition, targetVector, this);
-		secondaryWeapon->SlashEnemy(position, newPosition, this);
+		newPosition += position;		
+		
+		secondaryWeapon->StabEnemy(newPosition, targetVector, this);
+		if (secondaryWeapon->numOfStabs >= 5)
+		{
+			secondaryWeapon->SlashEnemy(position, newPosition, this);
+			secondaryWeapon->numOfStabs = 0;
+		}
 		return true;
 	}
 

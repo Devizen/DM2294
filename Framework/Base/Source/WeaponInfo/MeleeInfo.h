@@ -10,6 +10,7 @@ class CMeleeInfo : public Singleton<CMeleeInfo>
 public:
 	CMeleeInfo();
 	virtual ~CMeleeInfo();
+	int numOfStabs;
 protected:
 	// The time between shots in milliseconds
 	double timeBetweenShots;
@@ -42,4 +43,6 @@ public:
 	void StabEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
 
 	void SlashEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
+	//void CutEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
+
 };
