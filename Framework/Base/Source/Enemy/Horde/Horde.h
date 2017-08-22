@@ -1,3 +1,5 @@
+/*Horde was done by Lai Wei Jing, Eugene (160540A)*/
+/*Tested by Chan Zhi Hao, Lim Guan Sheng, Marcus and Kwong Yu Ming*/
 #pragma once
 #include "../Enemy3D.h"
 class CEnemy3D;

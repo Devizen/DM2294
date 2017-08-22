@@ -401,7 +401,7 @@ void Map_Editor::updateOption(double dt)
 			scaleAxis = SCALE_ALL;
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_LMENU) && KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_LMENU) && KeyboardController::GetInstance()->IsKeyDown(VK_LSHIFT))
 		_scale.Set(1.f, 1.f, 1.f);
 
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD3))

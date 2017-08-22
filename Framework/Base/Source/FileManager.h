@@ -1,3 +1,6 @@
+/*File Manager was done by Lim Guan Sheng, Marcus (161725E)*/
+/*Tested by Lai Wei Jing, Eugene, Chan Zhi Hao and Kwong Yu Ming*/
+
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 
@@ -57,6 +60,24 @@ class FileManager : public Singleton <FileManager>
 		float rotateAngle;
 	}theOBJinfo;
 
+	struct enemyInfo
+	{
+		string name1;
+		string name2;
+		string name3;
+		string name4;
+		string name5;
+		string name6;
+
+		float displacementX;
+		float displacementY;
+		float displacementZ;
+
+		float scaleX;
+		float scaleY;
+		float scaleZ;
+	}theEnemyInfo;
+
 	vector<EQ_Info>masterList;
 	vector<OBJinfo>objlist;
 	vector<Equipment*> eqlist;
@@ -70,13 +91,14 @@ public:
 	bool ReadPlayerFile(const string myFile);
 	bool ReadWeaponFile( string myFile);
 	bool ReadMapFile(const string myFile);
-	bool ReadLevelFile(const string myFile);
+	bool ReadEnemyFile(const string myFile);
 	
 	//bool ReadFile(const string myFile);
 
 	void EditFile(const string myFile);
 	void EditWeaponFile(const string myFile);
 	void EditMapFile(const string myFile);
+	void EditEnemyFile(const string myFile);
 
 	void PrintWeaponFile();
 

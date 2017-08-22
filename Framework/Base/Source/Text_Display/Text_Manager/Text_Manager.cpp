@@ -1,3 +1,6 @@
+/*Text Display was done by Lai Wei Jing, Eugene (160540A)*/
+/*Tested by Chan Zhi Hao, Lim Guan Sheng, Marcus and Kwong Yu Ming*/
+
 #include "Text_Manager.h"
 #include "../Text/Text.h"
 #include "MeshBuilder.h"

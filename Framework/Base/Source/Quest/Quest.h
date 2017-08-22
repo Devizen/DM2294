@@ -158,5 +158,8 @@ namespace Create
 	For example - Player's Gold count reaches 1,000,000
 	****************************************************/
 	CQuest* Quest(const string& _questName = "Name", const string& _questDescription = "Description of quest", CQuest::QUEST_TYPE _questType = CQuest::QUEST_NONE, CAttributes::ATTRIBUTE_TYPES _playersAttributeType = CAttributes::ATTRIBUTE_TYPES::TYPE_NONE, int _questGoalValue = 0);
+	/*********************************************************
+	TO DO: Overload function to create more (different) quests
+	**********************************************************/
 };
 #endif

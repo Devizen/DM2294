@@ -1,3 +1,6 @@
+/*Equipment was done by Lim Guan Sheng, Marcus (161725E)*/
+/*Tested by Lai Wei Jing, Eugene, Chan Zhi Hao and Kwong Yu Ming*/
+
 #include "Armour.h"
 #include "Inventory.h"
 #include "MeshBuilder.h"

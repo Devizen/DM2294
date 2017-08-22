@@ -1,3 +1,6 @@
+/*A.I logic done by Lai Wei Jing, Eugene (160540A)*/
+/*Binding of A.I Rendering Parts done by Kwong Yu Ming (160853T)*/
+/*Tested by Chan Zhi Hao and Lim Guan Sheng, Marcus*/
 #include "AnimatedEnemy.h"
 #include "MeshBuilder.h"
 #include "RenderHelper.h"

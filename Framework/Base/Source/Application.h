@@ -28,6 +28,7 @@ public:
 	static void GetCursorPos(double *xpos, double *ypos);
 	float GetWindowHeight();
 	float GetWindowWidth();
+	static bool IsKeyPressed(unsigned short key);
 
 	int m_window_width;
 	int m_window_height;
@@ -35,7 +36,6 @@ private:
 	Application();
 	~Application();
 
-	static bool IsKeyPressed(unsigned short key);
 
 	//Declare a window object
 	StopWatch m_timer;

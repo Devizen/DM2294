@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "MouseController.h"
 #include "KeyboardController.h"
-#include "SceneManager.h"
+#include "SceneManager//SceneManager.h"
 #include "GraphicsManager.h"
 
 //Include GLEW
@@ -138,28 +138,34 @@ void Application::Init()
 
 void Application::Run()
 {
-	SceneManager::GetInstance()->SetActiveScene("Start");
-	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
-	{
-		glfwPollEvents();
-		UpdateInput();
-		
-		float dt = m_timer.getElapsedTime();
-		if (dt > 0.015f)
-			dt = 0.015f;
 
-		SceneManager::GetInstance()->Update(dt);
-		SceneManager::GetInstance()->Render();
+	//Main Loop
+	SceneManager *scene = SceneManager::getInstance();
+	scene->changeScene(new SceneText());
+	scene->Update();
 
-		//Swap buffers
-		glfwSwapBuffers(m_window);
-		//Get and organize events, like keyboard and mouse input, window resizing, etc...
+	////SceneManager::GetInstance()->SetActiveScene("Start");
+	//m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
+	//while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
+	//{
+	//	glfwPollEvents();
+	//	UpdateInput();
+	//	
+	//	float dt = m_timer.getElapsedTime();
+	//	if (dt > 0.015f)
+	//		dt = 0.015f;
 
-		PostInputUpdate();
-        m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
-	}
-	SceneManager::GetInstance()->Exit();
+	//	SceneManager::getInstance()->Update(dt);
+	//	//SceneManager::getInstance()->Render();
+
+	//	//Swap buffers
+	//	glfwSwapBuffers(m_window);
+	//	//Get and organize events, like keyboard and mouse input, window resizing, etc...
+
+	//	PostInputUpdate();
+ //       m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
+	//}
+	////SceneManager::getInstance()->exit();
 }
 
 void Application::Exit()

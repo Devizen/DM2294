@@ -1,3 +1,6 @@
+/*Cinematic Camera was done by Chan Zhi Hao (163940Z)*/
+/*Tested by Lai Wei Jing, Eugene, Lim Guan Sheng, Marcus and Kwong Yu Ming*/
+
 #ifndef CINEMATIC_H
 #define CINEMATIC_H
 
