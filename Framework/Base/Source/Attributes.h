@@ -17,6 +17,7 @@ public:
 		TYPE_MAXHEALTH,
 		TYPE_SPEED,
 		TYPE_GOLD,
+		TYPE_NONE
 	};
 
 	//Getters

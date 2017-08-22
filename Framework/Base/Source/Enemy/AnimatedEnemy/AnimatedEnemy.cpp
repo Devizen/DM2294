@@ -11,8 +11,6 @@ CAnimatedEnemy::CAnimatedEnemy(Mesh* _core,
 	Mesh* _rightLeg,
 	Mesh* _head)
 	:CEnemy3D(NULL)
-	, minAlertBoundary(Vector3(-100.f, -50.f, -100.f))
-	, maxAlertBoundary(Vector3(100.f, 50.f, 100.f))
 	, m_fElapsedTimeBeforeUpdate(3.0f)
 	, state(IDLE)
 	, leftArmRotation(0.f)
@@ -244,6 +242,9 @@ void CAnimatedEnemy::Update(double dt)
 
 	/*Set positions without Y axis displacement for easier calculations.*/
 	Vector3 playerWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
+	Vector3 enemyWithoutY(0.f, 0.f, 0.f);
+	if (returnNearestEnemy() != nullptr)
+		enemyWithoutY = (returnNearestEnemy()->GetPos().x, -10.f, returnNearestEnemy()->GetPos().z);
 	Vector3 thisWithoutY(position.x, -10.f, position.z);
 
 	_enemy = this;
@@ -251,7 +252,8 @@ void CAnimatedEnemy::Update(double dt)
 	/*If enemy is IDLE, check if player or player object stepped into the boundary.*/
 	if (state == IDLE)
 	{
-		if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+		//cout << "IN IDLE" << endl;
+		if (checkInsideBoundary(getMinAlertBoundary(), getMaxAlertBoundary()))
 			state = ALERT;
 		else
 		{
@@ -312,46 +314,43 @@ void CAnimatedEnemy::Update(double dt)
 				}
 			}
 		}
-
-#ifdef _DEBUG
-		cout << "ALERTED" << endl;
-#endif
 	}
 
 	else if (state == ALERT)
 	{
+		//cout << "IN ALERT" << endl;
 		if (!pathFindingMode)
 		{
 			if (checkCollision())
 			{
 				position = previousPosition;
-#ifdef _DEBUG
-				cout << "COLLIDED" << endl;
-#endif
 				pathFindingMode = true;
 			}
 			else
 			{
-				if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+				if (checkInsideBoundary(getMinAlertBoundary(), getMaxAlertBoundary()))
 				{
-					Vector3 displacement(playerWithoutY - thisWithoutY);
+					Vector3 displacement(0.f, 0.f, 0.f);
 
-#ifdef _DEBUG
-					cout << displacement.LengthSquared() << endl;
-#endif
+					if (getWhoCloser() == ENEMY)
+					{
+						if (returnNearestEnemy() != nullptr)
+							enemyWithoutY = (returnNearestEnemy()->GetPos().x, -10.f, returnNearestEnemy()->GetPos().z);
+						//cout << "Enemy without Y: " << enemyWithoutY << endl;
+						displacement = enemyWithoutY - thisWithoutY;
+					}
+					else if (getWhoCloser() == PLAYER)
+						displacement = playerWithoutY - thisWithoutY;
+
 					/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
 					if (displacement.LengthSquared() > 100.f)
 					{
+						//cout << "MOVING TOWARDS ALERT" << endl;
 						position += displacement.Normalized() * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
 						previousPosition = position;
 					}
 					else
-					{
 						state = ATTACK;
-					}
-#ifdef _DEBUG
-					cout << "NO COLLISION" << endl;
-#endif
 				}
 				else
 					state = IDLE;
@@ -359,16 +358,21 @@ void CAnimatedEnemy::Update(double dt)
 
 		}
 		else if (pathFindingMode)
-			if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+			if (checkInsideBoundary(getMinAlertBoundary(), getMaxAlertBoundary()))
 			{
+				if ((enemyWithoutY - thisWithoutY).LengthSquared() <= 400.f && getWhoCloser() == ENEMY)
+					state = ATTACK;
 				/*Check distance to player first before moving.*/
-				if ((playerWithoutY - thisWithoutY).LengthSquared() <= 400.f)
+				else if ((playerWithoutY - thisWithoutY).LengthSquared() <= 400.f && getWhoCloser() == PLAYER)
 					state = ATTACK;
 
 				if (!scanned)
 				{
 					positionWithoutY.Set(position.x, -10.f, position.z);
-					targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
+					if (getWhoCloser() == ENEMY)
+						targetObjectPosition = returnNearestEnemy()->GetPos();
+					else if (getWhoCloser() == PLAYER)
+						targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
 					updatePathfinding(positionWithoutY, scale, dt);
 					nearestPosition = nearestPath();
 					scanned = true;
@@ -404,18 +408,35 @@ void CAnimatedEnemy::Update(double dt)
 	}
 	else if (state == ATTACK)
 	{
-		if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+		//cout << "IN ATTACK" << endl;
+		if (checkInsideBoundary(getMinAlertBoundary(), getMaxAlertBoundary()))
 		{
-			Vector3 displacement(playerWithoutY - thisWithoutY);
+			Vector3 displacement(0.f, 0.f, 0.f);
+			if (getWhoCloser() == ENEMY)
+			{
+				enemyWithoutY = (returnNearestEnemy()->GetPos().x, -10.f, returnNearestEnemy()->GetPos().z);
+				displacement = enemyWithoutY - thisWithoutY;
+			}
+			else if (getWhoCloser() == PLAYER)
+				displacement = playerWithoutY - thisWithoutY;
+
+			// << "returnNearestEnemy(): " << returnNearestEnemy()->GetPos()  << endl;
+			//cout << "Displacement Squared: " << displacement.LengthSquared() << endl;
 
 			/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
-			if (displacement.LengthSquared() > 100.f)
+			if (displacement.LengthSquared() > 50.f)
 			{
+				//cout << "MOVING TOWARDS ATTACK" << endl;
 				position += displacement.Normalized() * (float)dt * getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
 				previousPosition = position;
 			}
 			else
-				CPlayerInfo::GetInstance()->deductHealthBy(this->getAttribute(CAttributes::TYPE_ATTACK));
+			{
+				if (getWhoCloser() == ENEMY)
+					returnNearestEnemy()->deductHealthBy(this->getAttribute(CAttributes::TYPE_ATTACK));
+				else if (getWhoCloser() == PLAYER)
+					CPlayerInfo::GetInstance()->deductHealthBy(this->getAttribute(CAttributes::TYPE_ATTACK));
+			}
 		}
 		else
 			state = IDLE;
@@ -444,6 +465,29 @@ void CAnimatedEnemy::Update(double dt)
 
 		catch (exception e)
 		{ /*Not doing anything because this does not affect any gameplay. It will only make the robot turn 0 degree.*/
+		}
+	}
+	else if (state == ATTACK)
+	{
+		if (getWhoCloser() == ENEMY)
+		{
+			try {
+				angleToFace = Math::RadianToDegree(atan2(returnNearestEnemy()->GetPos().x - this->position.x, returnNearestEnemy()->GetPos().z - this->position.z));
+			}
+
+			catch (exception e)
+			{ /*Not doing anything because this does not affect any gameplay. It will only make the robot turn 0 degree.*/
+			}
+		}
+		else if (getWhoCloser() == PLAYER)
+		{
+			try {
+				angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
+			}
+
+			catch (exception e)
+			{ /*Not doing anything because this does not affect any gameplay. It will only make the robot turn 0 degree.*/
+			}
 		}
 	}
 }
@@ -865,7 +909,7 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->setSpeed(30);
 	result->setDefaultPosition(_position);
 	result->pathFindingMode = false;
-	result->setAlertBoundary(Vector3(-200.f, -10.f, -200.f), Vector3(200.f, 10.f, 200.f));
+	result->setAlertBoundary(Vector3(-100.f, -10.f, -100.f), Vector3(100.f, 10.f, 100.f));
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }

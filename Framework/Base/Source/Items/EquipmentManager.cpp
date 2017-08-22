@@ -21,6 +21,8 @@ void EquipmentManager::Init()
 
 	pressCountX = 0;
 	pressCountY = 0;
+	textTime = 0;
+	showText = false;
 }
 
 void EquipmentManager::AssignEquipment(Equipment * newEQ)
@@ -190,6 +192,19 @@ void EquipmentManager::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed('Q'))
 	{
 		UnEquip(pressCountX, pressCountY);
+		showText = true;
+		textTime = 0;
+	}
+
+	if (showText == true)
+	{
+		textTime += dt;
+	}
+
+	if (textTime > 1)
+	{
+		textTime = 0;
+		showText = false;
 	}
 }
 
@@ -279,6 +294,17 @@ void EquipmentManager::Render()
 		}
 	}
 	
+
+	if (showText)
+	{
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		string message = "Unequipped!";
+		modelStack.PushMatrix();
+		modelStack.Translate(100, 180.f, 0.f);
+		modelStack.Scale(35, 35, 35);
+		RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+		modelStack.PopMatrix();
+	}
 }
 
 void EquipmentManager::merge_sort(Equipment * data_set[], int start_index, int end_index)

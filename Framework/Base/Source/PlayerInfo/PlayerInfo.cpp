@@ -1084,7 +1084,7 @@ void CPlayerInfo::RenderAttribute()
 	modelStack.PushMatrix();
 	modelStack.Translate(-180, 180.f, 0.f);
 	modelStack.Scale(35, 35, 35);
-	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(0.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 
 	message = "Atk: ";
@@ -1092,7 +1092,7 @@ void CPlayerInfo::RenderAttribute()
 	modelStack.PushMatrix();
 	modelStack.Translate(-180, 150.f, 0.f);
 	modelStack.Scale(35, 35, 35);
-	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(0.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 
 	message = "Def: ";
@@ -1100,7 +1100,7 @@ void CPlayerInfo::RenderAttribute()
 	modelStack.PushMatrix();
 	modelStack.Translate(-180, 120.f, 0.f);
 	modelStack.Scale(35, 35, 35);
-	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(0.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 
 	message = "Spd: ";
@@ -1108,7 +1108,7 @@ void CPlayerInfo::RenderAttribute()
 	modelStack.PushMatrix();
 	modelStack.Translate(-180, 90.f, 0.f);
 	modelStack.Scale(35, 35, 35);
-	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(0.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 }
 
