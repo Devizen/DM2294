@@ -202,13 +202,13 @@ void SceneText::Init()
 	lights[0]->spotDirection.Set(0.f, 1.f, 0.f);
 	lights[0]->name = "lights[0]";
 
-	lights[1] = new Light();
-	GraphicsManager::GetInstance()->AddLight("lights[1]", lights[1]);
-	lights[1]->type = Light::LIGHT_POINT;
-	lights[1]->position.Set(1, 1, 0);
-	lights[1]->color.Set(1, 1, 0.5f);
-	lights[1]->power = 0.4f;
-	lights[1]->name = "lights[1]";
+	//lights[1] = new Light();
+	//GraphicsManager::GetInstance()->AddLight("lights[1]", lights[1]);
+	//lights[1]->type = Light::LIGHT_POINT;
+	//lights[1]->position.Set(1, 1, 0);
+	//lights[1]->color.Set(1, 1, 0.5f);
+	//lights[1]->power = 0.4f;
+	//lights[1]->name = "lights[1]";
 
 	currProg->UpdateInt("numLights", 1);
 	currProg->UpdateInt("textEnabled", 0);
@@ -829,6 +829,11 @@ void SceneText::Update(double dt)
 				}
 			}
 
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1))
+			{
+				EntityManager::GetInstance()->removeAllEntities();
+			}
+
 			if (playerInfo->getLockedOn())
 				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
 					playerInfo->SetTarget(playerInfo->getEnemyPositionToLockOn()->GetPos());
@@ -1384,7 +1389,7 @@ void SceneText::RenderPassMain(void)
 		currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
 	}
 
-	if (lights[1]->type == Light::LIGHT_DIRECTIONAL)
+	/*if (lights[1]->type == Light::LIGHT_DIRECTIONAL)
 	{
 		Vector3 lightDir(lights[1]->position.x, lights[1]->position.y, lights[1]->position.z);
 		Vector3 lightDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lightDir;
@@ -1401,7 +1406,7 @@ void SceneText::RenderPassMain(void)
 	{
 		Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->position;
 		currProg->UpdateVector3("lights[1].position_cameraspace", &lightPosition_cameraspace.x);
-	}
+	}*/
 
 
 	//RenderMesh(meshList[GEO_AXES], false);
@@ -1562,10 +1567,12 @@ void SceneText::Exit()
 	delete TEMPSPHERE;
 	delete TEMPDEPTHQUAD;
 
-
 	// Delete the lights
-	delete lights[0];
-	delete lights[1];
+	GraphicsManager::GetInstance()->RemoveLight("lights[0]");
+	GraphicsManager::GetInstance()->RemoveLight("lights[1]");
+
+	//delete lights[0];
+	//delete lights[1];
 
 	if (theCameraEffects)
 	{
@@ -1679,13 +1686,13 @@ void SceneText::Exit()
 		controls.pop_back();
 	}
 
-	for (int i = 0; i < 17; ++i)
-	{
-		delete controlText[i];
-	}
+	//for (int i = 0; i < 17; ++i)
+	//{
+	//	delete controlText[i];
+	//}
 
-	for (int i = 0; i < 30; ++i)
-	{
-		delete textObj[i];
-	}
+	//for (int i = 0; i < 30; ++i)
+	//{
+	//	delete textObj[i];
+	//}
 }

@@ -26,13 +26,6 @@ class CEnemy3D :
 		ENEMY_ATTACK,
 		ENEMY_DEFENSE,
 	};
-	
-	enum WHO_CLOSER
-	{
-		PLAYER = 0,
-		ENEMY,
-		NONE
-	};
 
 	//struct ATTRIBUTES
 	//{
@@ -41,7 +34,12 @@ class CEnemy3D :
 	//	int ATTACK;
 	//	int DEFENSE;
 	//};
-
+	enum WHO_CLOSER
+	{
+		PLAYER = 0,
+		ENEMY,
+		NONE
+	};
 protected:
 	Mesh* modelMesh;
 
@@ -55,6 +53,7 @@ protected:
 	//float m_fElapsedTimeBeforeUpdate;
 
 public:
+
 	CEnemy3D(Mesh* _modelMesh);
 	virtual ~CEnemy3D();
 
@@ -162,6 +161,9 @@ public:
 
 	/*Checking collision with enemy and object.*/
 	bool checkCollision(void);
+
+	/*Get who is closer, enemy (player) or player.*/
+	WHO_CLOSER getWhoCloser(void);
 
 	Vector3 previousPosition;
 private:
