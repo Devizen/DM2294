@@ -5,6 +5,9 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 
+#include <string>
+using std::string;
+
 CFurniture::CFurniture()
 {
 }
@@ -47,6 +50,16 @@ void CFurniture::SetStatus(const bool m_bStatus)
 	this->m_bStatus = m_bStatus;
 }
 
+void CFurniture::SetName(const string newName)
+{
+	name.assign(newName);
+}
+
+string CFurniture::GetName()
+{
+	return name;
+}
+
 CFurniture* Create::Furniture(const std::string& _meshName, const Vector3& _position, const Vector3& _scale)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
@@ -57,10 +70,11 @@ CFurniture* Create::Furniture(const std::string& _meshName, const Vector3& _posi
 	/*Align to ground*/
 	//Vector3 newPosition = _position;
 	//newPosition.y -= 10.f;
-
+	result->SetName(_meshName);
 	result->SetPosition(_position);
 	result->SetScale(_scale);
 	result->SetCollider(true);
+	result->SetLight(true);
 	EntityManager::GetInstance()->AddFixed(result);
 
 	return result;

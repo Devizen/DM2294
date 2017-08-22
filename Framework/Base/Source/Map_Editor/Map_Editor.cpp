@@ -390,6 +390,7 @@ void Map_Editor::updateOption(double dt)
 	if (_scale.z < 1.f)
 		_scale.z = 1.f;
 
+	cout << "Scale: " << _scale << endl;
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
 	{
 		if (objectType == ENVIRONMENT)
@@ -403,7 +404,7 @@ void Map_Editor::updateOption(double dt)
 				CFurniture* crate = Create::Furniture("crate", _displacement, _scale);
 				crate->SetCollider(true);
 				crate->SetLight(true);
-				crate->SetAABB(_maxAABB* 2.f, _minAABB);
+				crate->SetAABB(_maxAABB, _minAABB);
 				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
 				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
 				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));

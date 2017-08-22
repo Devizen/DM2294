@@ -696,7 +696,7 @@ void FileManager::EditMapFile(const string myFile)
 	for (list<CFurniture*>::iterator it = EntityManager::GetInstance()->returnFixed().begin(); it != EntityManager::GetInstance()->returnFixed().end(); ++it)
 	{
 		CFurniture* temp = (CFurniture*)*it;
-		File << temp->GetItem() << ","
+		File << temp->GetName() << ","
 			<< temp->GetPosition().x << ","
 			<< temp->GetPosition().y << ","
 			<< temp->GetPosition().z << ","
@@ -704,8 +704,8 @@ void FileManager::EditMapFile(const string myFile)
 			<< temp->GetMinAABB().y << ","
 			<< temp->GetMinAABB().z << ","
 			<< temp->GetMaxAABB().x << ","
-			<< temp->GetMaxAABB().x << ","
-			<< temp->GetMaxAABB().x << ","
+			<< temp->GetMaxAABB().y << ","
+			<< temp->GetMaxAABB().z << ","
 			<< temp->GetScale().x << ","
 			<< temp->GetScale().y << ","
 			<< temp->GetScale().z << ","

@@ -14,6 +14,12 @@ class Inventory : public Singleton <Inventory>
 
 	int pressCountX;
 	int pressCountY;
+
+	bool showDiscardText;
+	bool showEquipText;
+
+	double DiscardTextTime;
+	double EquipTextTime;
 public:
 
 	Inventory() {};
