@@ -53,6 +53,7 @@ CPlayerInfo::CPlayerInfo(void)
 	, KO_Count(0)
 	, lockedOn(false)
 	, enemyPositionToLockOn(nullptr)
+	,coolDownTimer(0)
 {
 }
 
@@ -585,6 +586,10 @@ void CPlayerInfo::Update(double dt)
 		attachedCamera->SetCameraTarget(target);
 		attachedCamera->SetCameraUp(up);
 	}
+
+	coolDownTimer += dt;
+	if (coolDownTimer > 0.5)
+		secondaryWeapon->numOfStabs = 0;
 }
 
 // Detect and process front / back movement on the controller
@@ -885,6 +890,7 @@ bool CPlayerInfo::DischargeSecondaryWeapon(const float deltaTime)
 		/*Add the additional distance with original position.*/
 		newPosition += position;		
 		
+		coolDownTimer = 0;
 		secondaryWeapon->StabEnemy(newPosition, targetVector, this);
 		if (secondaryWeapon->numOfStabs >= 5)
 		{

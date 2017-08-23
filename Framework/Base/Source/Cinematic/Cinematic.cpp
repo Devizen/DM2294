@@ -4,7 +4,7 @@
 #include "Cinematic.h"
 #include "MouseController.h"
 #include "KeyboardController.h"
-//#include "../EntityManager.h"
+#include "../PlayerInfo/PlayerInfo.h"
 
 #include <iostream>
 
@@ -19,6 +19,7 @@ CCinematic::CCinematic() :
 	, target(0.f, 0.f, 1.f)
 	, up(0.f, 1.f, 0.f)
 	, numberOfPositions(0)
+	, cinematicMode(false)
 {
 }
 
@@ -118,24 +119,25 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 	{
 	case C_Target:
 	{
-		Vector3 _target = _destination - _position;
-		cout << "Position: " << _position << endl;
-		cout << "Destination: " << _destination << endl;
-		target = Vector3(0,0,0);
+		Vector3 _target = cameraTarget - position;
+		cout << "Position: " << cameraPosition << endl;
+		cout << "Destination: " << cameraTarget << endl;
 		try
 		{
-			cout << "Displacement: " << (_destination - _position).Length() << endl;
-			if ((_destination - _position).Length() >= 50.f)
+			target = cameraTarget;
+			cout << "Displacement: " << _target.LengthSquared() << endl;
+			if (_target.LengthSquared() >= 50.f)
 				position += _target.Normalized() * _speed * (float)dt;
 			else
-				++numberOfPositions;
+
+				CCinematic::GetInstance()->cinematicMode = false;
 		}
 		catch (exception e)
 		{
 
 		}
 	}
-		break;
+	break;
 	case C_Destination:
 	{
 		Vector3 _target = _destination - _position;
@@ -160,7 +162,6 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 	default:
 		break;
 	}
-	
 }
 
 void CCinematic::Reset()

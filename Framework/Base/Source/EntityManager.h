@@ -16,6 +16,7 @@ class CFurniture;
 class CEnemy3D;
 class CPlayerInfo;
 class Patrol;
+class CCinematic;
 
 class EntityManager : public Singleton<EntityManager>
 {
@@ -80,6 +81,9 @@ private:
 	std::list<Patrol*>patrolList;
 
 	bool hit;
+
+	CCinematic *cinematic;
+	FPSCamera camera;
 };
 
 #endif // ENTITY_MANAGER_H

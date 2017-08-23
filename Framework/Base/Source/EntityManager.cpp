@@ -8,6 +8,7 @@
 #include "PlayerInfo\PlayerInfo.h"
 #include "CameraEffects\CameraEffects.h"
 #include "SoundEngine.h"
+#include "Cinematic\Cinematic.h"
 
 /*Min and Max*/
 #include <algorithm>
@@ -51,6 +52,7 @@ void EntityManager::Update(double _dt)
 				player->setTookDamage(true);
 				bullet->SetStatus(false);
 				player->setTookDamage(false);
+
 				CCameraEffects::GetInstance()->SetStatus_BloodScreen(true);
 			}
 			else
@@ -61,17 +63,23 @@ void EntityManager::Update(double _dt)
 		for (list<CEnemy3D*>::iterator enemyObj = enemyList.begin(); enemyObj != enemyList.end(); ++enemyObj)
 		{
 			CEnemy3D* enemy = (CEnemy3D*)*enemyObj;
-			//if (enemy->getPlayerProperty() && enemy->whoCloser == CEnemy3D::NONE)
-			//	continue;
 
+			/*Check if enemy belongs to player and did the bullet originated from the player.*/
 			if (enemy->getPlayerProperty() && bullet->bulletOriginated == CProjectile::FROM_PLAYER)
 				continue;
-			//Enemy cannot attack converted enemy
+
 			if (CheckProjectileToEnemyCollision(bullet, enemy))
 			{
 				enemy->deductHealthBy(1);
 				bullet->SetStatus(false);
 				hit = true;
+			
+				if (bullet->bulletOriginated == CProjectile::FROM_PLAYER)
+				{
+					CCinematic::GetInstance()->cinematicMode = true; // Only when critical hit, then active cinematic mode
+					CCinematic::GetInstance()->cameraPosition = CPlayerInfo::GetInstance()->GetPos();
+					CCinematic::GetInstance()->cameraTarget = Vector3(enemy->GetPos().x, CPlayerInfo::GetInstance()->GetPos().y, enemy->GetPos().z);
+				}
 			}
 			else
 				continue;
