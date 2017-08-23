@@ -73,6 +73,46 @@ void Map_Editor::renderObject(void)
 						modelStack.PopMatrix();
 						break;
 					}
+					case WATCHTOWER:
+					{
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("WatchTower"));
+						modelStack.PopMatrix();
+						break;
+					}
+					case BARRICADE:
+					{
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("Barricade"));
+						modelStack.PopMatrix();
+						break;
+					}
+					case STATUE:
+					{
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("Statue"));
+						modelStack.PopMatrix();
+						break;
+					}
+					case BARREL:
+					{
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("Barrel"));
+						modelStack.PopMatrix();
+						break;
+					}
 				}
 				break;
 			}
@@ -197,6 +237,18 @@ void Map_Editor::renderOption(void)
 	if (environmentObject == CRATE)
 		s_EnvironmentObject = "Crate";
 
+	if (environmentObject == WATCHTOWER)
+		s_EnvironmentObject = "WatchTower";
+
+	if (environmentObject == BARRICADE)
+		s_EnvironmentObject = "Statue";
+
+	if (environmentObject == STATUE)
+		s_EnvironmentObject = "Statue";
+
+	if (environmentObject == BARREL)
+		s_EnvironmentObject = "Barrel";
+
 	if (environmentObject == ENVIRONMENT_OBJECT_NONE)
 		s_EnvironmentObject = "None";
 
@@ -309,6 +361,18 @@ void Map_Editor::updateOption(double dt)
 			if (objectType == ENVIRONMENT)
 			{
 				if (environmentObject == ENVIRONMENT_OBJECT_NONE)
+					environmentObject = WATCHTOWER;
+
+				else if (environmentObject == WATCHTOWER)
+					environmentObject = BARRICADE;
+
+				else if (environmentObject == BARRICADE)
+					environmentObject = STATUE;
+
+				else if (environmentObject == STATUE)
+					environmentObject = BARREL;
+
+				else if (environmentObject == BARREL)
 					environmentObject = CRATE;
 
 				else if (environmentObject == CRATE)
@@ -349,11 +413,26 @@ void Map_Editor::updateOption(double dt)
 
 			if (objectType == ENVIRONMENT)
 			{
-				if (environmentObject == CRATE)
-					environmentObject = ENVIRONMENT_OBJECT_NONE;
-
-				else if (environmentObject == ENVIRONMENT_OBJECT_NONE)
+				if (environmentObject == ENVIRONMENT_OBJECT_NONE)
 					environmentObject = CRATE;
+
+				else if (environmentObject == CRATE)
+					environmentObject = BARREL;
+
+				else if (environmentObject == BARREL)
+					environmentObject = STATUE;
+
+				else if (environmentObject == STATUE)
+					environmentObject = BARRICADE;
+
+				else if(environmentObject == CRATE)
+					environmentObject = BARRICADE;
+
+				else if (environmentObject == BARRICADE)
+					environmentObject = WATCHTOWER;
+
+				else if (environmentObject == WATCHTOWER)
+					environmentObject = ENVIRONMENT_OBJECT_NONE;
 			}
 		}
 		else if (optionSelectionLevel == ENEMY_SELECT)
@@ -491,6 +570,70 @@ void Map_Editor::updateOption(double dt)
 				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
 				lastCreatedType = CREATED_ENVIRONMENT;
 			}
+
+			if (environmentObject == WATCHTOWER)
+			{
+				cout << "CREATED" << endl;
+				cout << "Displacement: " << _displacement << endl;
+				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
+				Vector3 _maxAABB(_scale);
+				CFurniture* crate = Create::Furniture("WatchTower", _displacement, _scale);
+				crate->SetCollider(true);
+				crate->SetLight(true);
+				crate->SetAABB(_maxAABB, _minAABB);
+				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
+				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
+				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
+				lastCreatedType = CREATED_ENVIRONMENT;
+			}
+
+			if (environmentObject == BARRICADE)
+			{
+				cout << "CREATED" << endl;
+				cout << "Displacement: " << _displacement << endl;
+				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
+				Vector3 _maxAABB(_scale);
+				CFurniture* crate = Create::Furniture("Barricade", _displacement, _scale);
+				crate->SetCollider(true);
+				crate->SetLight(true);
+				crate->SetAABB(_maxAABB, _minAABB);
+				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
+				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
+				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
+				lastCreatedType = CREATED_ENVIRONMENT;
+			}
+
+			if (environmentObject == STATUE)
+			{
+				cout << "CREATED" << endl;
+				cout << "Displacement: " << _displacement << endl;
+				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
+				Vector3 _maxAABB(_scale);
+				CFurniture* crate = Create::Furniture("Statue", _displacement, _scale);
+				crate->SetCollider(true);
+				crate->SetLight(true);
+				crate->SetAABB(_maxAABB, _minAABB);
+				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
+				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
+				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
+				lastCreatedType = CREATED_ENVIRONMENT;
+			}
+
+			if (environmentObject == BARREL)
+			{
+				cout << "CREATED" << endl;
+				cout << "Displacement: " << _displacement << endl;
+				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
+				Vector3 _maxAABB(_scale);
+				CFurniture* crate = Create::Furniture("Barrel", _displacement, _scale);
+				crate->SetCollider(true);
+				crate->SetLight(true);
+				crate->SetAABB(_maxAABB, _minAABB);
+				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
+				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
+				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
+				lastCreatedType = CREATED_ENVIRONMENT;
+			}
 		}
 		else if (objectType == ENEMY)
 		{
@@ -515,11 +658,6 @@ void Map_Editor::updateOption(double dt)
 			{
 				cout << "Create Displacement: " << _displacement << endl;
 				turret = Create::Enemy3D("turret", _displacement, _scale);
-				turret->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
-				turret->setMaxHealthTo(10.f);
-				turret->setHealthTo(10.f);
-				turret->setAttackTo(1.f);
-				turret->setDefenseTo(1.f);
 				lastCreatedType = CREATED_ENEMY;
 			}
 

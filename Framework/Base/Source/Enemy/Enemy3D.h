@@ -64,7 +64,8 @@ public:
 		ATTACK,
 		DEAD,
 		RECOVERY,
-		PATROL
+		PATROL,
+		NO_AI_STATE
 	};
 
 
@@ -184,5 +185,6 @@ namespace Create
 {
 	CEnemy3D* Enemy3D(const std::string& _meshName,
 						const Vector3& _position,
-						const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f));
+						const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f),
+						const bool& _playerProperty = false);
 };

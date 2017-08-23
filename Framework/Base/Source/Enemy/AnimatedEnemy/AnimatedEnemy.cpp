@@ -331,6 +331,9 @@ void CAnimatedEnemy::Update(double dt)
 		}
 	}
 
+	if (getAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) <= 0)
+		state = DEAD;
+
 	/*Update enemy facing direction.*/
 	if (pathFindingMode)
 	{

@@ -220,6 +220,8 @@ void Level03::Init()
 	// Create the playerinfo instance, which manages all information about the player
 	playerInfo = CPlayerInfo::GetInstance();
 	playerInfo->Init();
+	playerInfo->SetPos(Vector3(6.f, 0.f, 0.f));
+	playerInfo->SetTarget(Vector3(6.f, 0.f, 1.f));
 
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -245,6 +247,22 @@ void Level03::Init()
 	/*Crate*/
 	MeshBuilder::GetInstance()->GenerateOBJ("crate", "OBJ//crate.obj");
 	MeshBuilder::GetInstance()->GetMesh("crate")->textureID = LoadTGA("Image//crate.tga");
+
+	/*WatchTower*/
+	MeshBuilder::GetInstance()->GenerateOBJ("WatchTower", "OBJ//WatchTower.obj");
+	MeshBuilder::GetInstance()->GetMesh("WatchTower")->textureID = LoadTGA("Image//WatchTower.tga");
+
+	/*Barricade*/
+	MeshBuilder::GetInstance()->GenerateOBJ("Barricade", "OBJ//Barricade.obj");
+	MeshBuilder::GetInstance()->GetMesh("Barricade")->textureID = LoadTGA("Image//Barricade.tga");
+
+	/*Statue*/
+	MeshBuilder::GetInstance()->GenerateOBJ("Statue", "OBJ//Statue.obj");
+	MeshBuilder::GetInstance()->GetMesh("Statue")->textureID = LoadTGA("Image//Statue.tga");
+
+	/*Barrel*/
+	MeshBuilder::GetInstance()->GenerateOBJ("Barrel", "OBJ//Barrel.obj");
+	MeshBuilder::GetInstance()->GetMesh("Barrel")->textureID = LoadTGA("Image//crate.tga");
 
 	MeshBuilder::GetInstance()->GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	MeshBuilder::GetInstance()->GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
@@ -442,12 +460,12 @@ void Level03::Init()
 	weaponManager = playerInfo->getWeaponManager();
 
 	/*Initialise Sounds*/
-	CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
-	CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
-	CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
-	CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
-	CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
-	CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
+	//CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
+	//CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
+	//CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
+	//CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
+	//CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
+	//CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
 	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
@@ -469,12 +487,12 @@ void Level03::Init()
 
 	saveMapTime = 0;
 
-	//FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
+	FileManager::GetInstance()->ReadMapFile("Files//Level03.csv");
 }
 
 void Level03::Update(double dt)
 {
-	cout << "I AM IN LEVEL03 NOW" << endl;
+	//cout << "I AM IN LEVEL03 NOW" << endl;
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -486,7 +504,7 @@ void Level03::Update(double dt)
 
 	if (saveMapTime >= 10)
 	{
-		FileManager::GetInstance()->EditMapFile("Files//Level Loader.csv");
+		FileManager::GetInstance()->EditMapFile("Files//Level03.csv");
 	}
 
 
@@ -1600,4 +1618,6 @@ void Level03::Exit()
 		cinematic = nullptr;
 	}
 	Text_Manager::GetInstance()->resetAll();
+	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 }

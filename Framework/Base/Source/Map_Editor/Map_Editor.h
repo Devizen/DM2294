@@ -40,6 +40,10 @@ public:
 	enum ENVIRONMENT_OBJECT
 	{
 		CRATE = 0,
+		WATCHTOWER,
+		BARRICADE,
+		STATUE,
+		BARREL,
 		ENVIRONMENT_OBJECT_NONE
 	};
 	/*Options for Enemy Objects*/

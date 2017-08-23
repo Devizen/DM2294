@@ -3,11 +3,15 @@
 
 #include "Text_Manager.h"
 #include "../Text/Text.h"
+/*For rending of text.*/
 #include "MeshBuilder.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 #include "../../Application.h"
+/*For keypress to skip the text.*/
 #include "KeyboardController.h"
+/*To stop the camera from swaying.*/
+#include "../../Base/Source/PlayerInfo/PlayerInfo.h"
 #include <iostream>
 
 using std::cout;
@@ -105,6 +109,12 @@ void Text_Manager::updateText(double dt)
 						int nextVector = 0;
 						for (size_t i = 0; i < storeText.size(); ++i)
 						{
+							if (storeText[i] == '\n')
+							{
+								text->textConversation[nextVector] += storeText[i];
+								++nextVector;
+								continue;
+							}
 							text->textConversation[nextVector] += storeText[i];
 							if (count >= 50)
 							{
@@ -172,6 +182,7 @@ void Text_Manager::updateText(double dt)
 								text = nullptr;
 								textList.pop_back();
 								displayingText = false;
+								CPlayerInfo::GetInstance()->StopSway(dt);
 								break;
 							}
 							else
@@ -180,6 +191,7 @@ void Text_Manager::updateText(double dt)
 								text = nullptr;
 								textList.pop_back();
 								displayingText = false;
+								CPlayerInfo::GetInstance()->StopSway(dt);
 								break;
 							}
 						}
