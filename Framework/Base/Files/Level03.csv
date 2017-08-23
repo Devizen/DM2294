@@ -1,0 +1,10 @@
+Name,posX,posY,posZ,minAABBx,minAABBy,minAABBz,maxAABBx,maxAABBy,maxAABBz,scaleX,scaleY,scaleZ,rotateAngle
+WatchTower,50,-10,50,-7,0,-7,7,7,7,7,7,7,0
+WatchTower,-50,-10,50,-7,0,-7,7,7,7,7,7,7,0
+Barricade,39,-10,49,-1,0,-1,1,1,1,1,1,1,0
+Barricade,31,-10,50,-1,0,-1,1,1,1,1,1,1,0
+Barricade,-41,-10,52,-1,0,-1,1,1,1,1,1,1,0
+Barricade,-33,-10,52,-1,0,-1,1,1,1,1,1,1,0
+Statue,-27,-5,24,-1,0,-1,1,1,1,2,2,2,0
+Barrel,-58,-10,45,-1,0,-1,1,1,1,2,2,2,0
+Barrel,59,-10,44,-1,0,-1,1,1,1,2,2,2,0
