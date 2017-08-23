@@ -75,7 +75,7 @@ Tutorial::Tutorial()
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
-	, cinematicMode(false)
+	//, cinematicMode(false)
 	, windowHeight(0.f)
 	, windowWidth(0.f)
 	//, m_worldHeight(0.f)
@@ -87,7 +87,7 @@ Tutorial::Tutorial(SceneManager* _sceneMgr)
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
-	, cinematicMode(false)
+	//, cinematicMode(false)
 {
 	_sceneMgr->AddScene("Tutorial", this);
 }
@@ -233,8 +233,8 @@ void Tutorial::Init()
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
-	cinematic = new CCinematic();
-	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
+	cinematic = CCinematic::GetInstance();
+	//cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
@@ -510,6 +510,7 @@ void Tutorial::Update(double dt)
 	static int renderOnce = 0;
 
 	saveMapTime += dt;
+	static CEnemy3D* tower;
 
 	if (!Text_Manager::GetInstance()->displayingText)
 	{
@@ -537,7 +538,6 @@ void Tutorial::Update(double dt)
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 3)
 		{
-			playerInfo->StopSway(dt);
 			if (KeyboardController::GetInstance()->IsKeyDown('W') ||
 				KeyboardController::GetInstance()->IsKeyDown('A') ||
 				KeyboardController::GetInstance()->IsKeyDown('S') ||
@@ -554,7 +554,6 @@ void Tutorial::Update(double dt)
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 5)
 		{
-			playerInfo->StopSway(dt);
 			if (KeyboardController::GetInstance()->IsKeyDown('W') ||
 				KeyboardController::GetInstance()->IsKeyDown('A') ||
 				KeyboardController::GetInstance()->IsKeyDown('S') ||
@@ -566,33 +565,40 @@ void Tutorial::Update(double dt)
 			if (MouseController::GetInstance()->IsButtonDown(MouseController::BUTTON_TYPE::LMB))
 			{
 				Create::Text("text", "Defeat the Turret to make them your allies!", 0.f, 2.f, CText::TEXT_CONVERSATION);
-				playerInfo->StopSway(dt);
 				++Text_Manager::GetInstance()->messagePrompt;
 			}
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 7)
 		{
-			int countCheck = 0;
-			for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
-			{
-				if ((*it)->getPlayerProperty())
-				{
-					++countCheck;
-					continue;
-				}
-
-				if ((*it)->getState() == CEnemy3D::AI_STATE::DEAD)
-					++countCheck;
-			}
-
-			if (countCheck == 3)
+			if (playerInfo->getKO_Count() >= 2)
 				++Text_Manager::GetInstance()->messagePrompt;
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 8)
 		{
 			Create::Text("text", "A tower has spawned on the right, defeat it to win!", 0.f, 2.f, CText::TEXT_CONVERSATION);
-			playerInfo->StopSway(dt);
+			++Text_Manager::GetInstance()->messagePrompt;
 		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 9)
+		{
+			tower = Create::Enemy3D("TOWER", Vector3(-200.f, -10.f, 50.f), Vector3(3.f, 3.f, 3.f), false);
+			tower->setHealthTo(10.f);
+			tower->setMaxHealthTo(10.f);
+			tower->setAlertBoundary(Vector3(-1, -1, -1), Vector3(1, 1, 1));
+			tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
+			cinematic->cameraTarget = Vector3(tower->GetPos().x, 50.f, tower->GetPos().z);
+			cinematic->cinematicMode = true;
+			++Text_Manager::GetInstance()->messagePrompt;
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 10)
+		{
+			if (EntityManager::GetInstance()->returnEnemy().back()->getPlayerProperty())
+			{
+				Create::Text("text", "Great Job!\nTutorial Completed!", 0.f, 2.f, CText::TEXT_CONVERSATION);
+				++Text_Manager::GetInstance()->messagePrompt;
+			}
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 11)
+			SceneManager::GetInstance()->SetActiveScene("Level01");
 	}
 
 
@@ -803,7 +809,7 @@ void Tutorial::Update(double dt)
 			}
 
 			// Hardware Abstraction
-			if (!cinematicMode && !Text_Manager::GetInstance()->displayingText)
+			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 			{
 				theKeyboard->Read(dt);
 				theMouse->Read(dt);
@@ -850,7 +856,7 @@ void Tutorial::Update(double dt)
 				cout << "Attached Camera" << endl;
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(&camera);
-				cinematicMode = false;
+				cinematic->cinematicMode = false;
 				cinematic->numberOfPositions = 0;
 			}
 
@@ -863,40 +869,15 @@ void Tutorial::Update(double dt)
 				cout << "Attached Cinematic" << endl;
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
-				cinematicMode = true;
+				cinematic->cinematicMode = true;
 			}
 
-			if (cinematicMode)
+			if (cinematic->cinematicMode)
 			{
 				static bool completed = false;
-				if (cinematic->numberOfPositions == 0)
-				{
-					cinematic->targetType = CCinematic::C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 200.f, 200.f), 100.f, dt);
-				}
-				else if (cinematic->numberOfPositions == 1)
-				{
-					cinematic->targetType = CCinematic::C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 200.f, 100.f), 100.f, dt);
-				}
-				else if (cinematic->numberOfPositions == 2)
-				{
-					cinematic->targetType = CCinematic::C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 100.f, 0.f), 100.f, dt);
-					completed = true;
-					if (completed)
-					{
-						cinematic->SetCameraPos(camera.GetCameraPos());
-						cinematic->SetCameraTarget(camera.GetCameraTarget());
-						cinematic->SetCameraUp(camera.GetCameraUp());
-						cout << "Attached Camera" << endl;
-						playerInfo->DetachCamera();
-						playerInfo->AttachCamera(&camera);
-						cinematicMode = false;
-						cinematic->numberOfPositions = 0;
-					}
-
-				}
+				/*For player critical hit cinematic*/
+				cinematic->targetType = CCinematic::C_Target;
+				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt);
 
 				cinematic->Update(dt);
 				camera.SetCameraPos(cinematic->GetCameraPos());
@@ -904,6 +885,16 @@ void Tutorial::Update(double dt)
 				camera.SetCameraUp(cinematic->GetCameraUp());
 
 				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
+			}
+
+			if (!cinematic->cinematicMode)
+			{
+				cinematic->SetCameraPos(camera.GetCameraPos());
+				cinematic->SetCameraTarget(camera.GetCameraTarget());
+				cinematic->SetCameraUp(camera.GetCameraUp());
+				playerInfo->DetachCamera();
+				playerInfo->AttachCamera(&camera);
+				cinematic->numberOfPositions = 0;
 			}
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
@@ -1562,43 +1553,46 @@ void Tutorial::RenderPassMain(void)
 	}
 	EntityManager::GetInstance()->RenderUI();
 
-	/*Render Weapon*/
-	renderWeapon();
-
-	//*Render Camera Effects*/
-	theCameraEffects->RenderUI();
-
-	//*Render Weapon UI*/
-	renderWeaponUI();
-
-	//*Render Hit*/
-	if (EntityManager::GetInstance()->getHit())
-		renderHit();
-
-	if (openInventory)
+	if (!cinematic->cinematicMode)
 	{
-		Inventory::GetInstance()->RenderWeapon();
+		/*Render Weapon*/
+		renderWeapon();
+
+		//*Render Camera Effects*/
+		theCameraEffects->RenderUI();
+
+		//*Render Weapon UI*/
+		renderWeaponUI();
+
+		//*Render Hit*/
+		if (EntityManager::GetInstance()->getHit())
+			renderHit();
+
+		if (openInventory)
+		{
+			Inventory::GetInstance()->RenderWeapon();
+		}
+
+		if (openEQ)
+		{
+			EquipmentManager::GetInstance()->Render();
+			CPlayerInfo::GetInstance()->RenderAttribute();
+
+		}
+
+		//*Render KO Count*/
+		RenderHelper::GetInstance()->renderKOCount();
+		//*Render Player Health Bar*/
+		RenderHelper::GetInstance()->renderPlayerHealth();
+
+		/*Render Map Editor Options.*/
+		if (Map_Editor::GetInstance()->mapEditing)
+			Map_Editor::GetInstance()->renderOption();
+
+		/*Render text display.*/
+		if (Text_Manager::GetInstance()->returnTextList().size() > 0)
+			Text_Manager::GetInstance()->renderText();
 	}
-
-	if (openEQ)
-	{
-		EquipmentManager::GetInstance()->Render();
-		CPlayerInfo::GetInstance()->RenderAttribute();
-
-	}
-
-	//*Render KO Count*/
-	RenderHelper::GetInstance()->renderKOCount();
-	//*Render Player Health Bar*/
-	RenderHelper::GetInstance()->renderPlayerHealth();
-
-	/*Render Map Editor Options.*/
-	if (Map_Editor::GetInstance()->mapEditing)
-		Map_Editor::GetInstance()->renderOption();
-
-	/*Render text display.*/
-	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
-		Text_Manager::GetInstance()->renderText();
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -1706,14 +1700,14 @@ void Tutorial::Exit()
 	MeshBuilder::GetInstance()->removeMeshMap();
 	GraphicsManager::GetInstance()->removeLightMap();
 
-	if (cinematic)
-	{
-		delete cinematic;
-		cinematic = nullptr;
-	}
+	//if (cinematic)
+	//{
+	//	delete cinematic;
+	//	cinematic = nullptr;
+	//}
 	Text_Manager::GetInstance()->resetAll();
 
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
-
+	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	_CrtDumpMemoryLeaks();
 }

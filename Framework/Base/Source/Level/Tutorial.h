@@ -126,7 +126,7 @@ private:
 	bool openEQ;
 
 	/*Cinematic*/
-	bool cinematicMode;
+	//bool cinematicMode;
 
 	float windowHeight;
 	float windowWidth;

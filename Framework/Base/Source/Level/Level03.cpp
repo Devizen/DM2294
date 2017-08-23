@@ -1600,6 +1600,6 @@ void Level03::Exit()
 		cinematic = nullptr;
 	}
 	Text_Manager::GetInstance()->resetAll();
-
+	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 }

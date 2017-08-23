@@ -74,12 +74,12 @@ void EntityManager::Update(double _dt)
 				bullet->SetStatus(false);
 				hit = true;
 			
-				if (bullet->bulletOriginated == CProjectile::FROM_PLAYER)
-				{
-					CCinematic::GetInstance()->cinematicMode = true; // Only when critical hit, then active cinematic mode
-					CCinematic::GetInstance()->cameraPosition = CPlayerInfo::GetInstance()->GetPos();
-					CCinematic::GetInstance()->cameraTarget = Vector3(enemy->GetPos().x, CPlayerInfo::GetInstance()->GetPos().y, enemy->GetPos().z);
-				}
+				//if (bullet->bulletOriginated == CProjectile::FROM_PLAYER)
+				//{
+				//	CCinematic::GetInstance()->cinematicMode = true; // Only when critical hit, then active cinematic mode
+				//	CCinematic::GetInstance()->cameraPosition = CPlayerInfo::GetInstance()->GetPos();
+				//	CCinematic::GetInstance()->cameraTarget = Vector3(enemy->GetPos().x, CPlayerInfo::GetInstance()->GetPos().y, enemy->GetPos().z);
+				//}
 			}
 			else
 				continue;

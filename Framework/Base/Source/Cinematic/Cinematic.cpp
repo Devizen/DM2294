@@ -126,7 +126,7 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 		{
 			target = cameraTarget;
 			cout << "Displacement: " << _target.LengthSquared() << endl;
-			if (_target.LengthSquared() >= 50.f)
+			if (_target.LengthSquared() >= 200.f)
 				position += _target.Normalized() * _speed * (float)dt;
 			else
 

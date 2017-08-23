@@ -1610,13 +1610,13 @@ void SceneText::Exit()
 	MeshBuilder::GetInstance()->removeMeshMap();
 	GraphicsManager::GetInstance()->removeLightMap();
 
-	if (cinematic)
-	{
-		delete cinematic;
-		cinematic = nullptr;
-	}
+	//if (cinematic)
+	//{
+	//	delete cinematic;
+	//	cinematic = nullptr;
+	//}
 
 	Text_Manager::GetInstance()->resetAll();
-
+	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 }
