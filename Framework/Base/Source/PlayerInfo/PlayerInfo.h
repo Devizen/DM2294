@@ -4,7 +4,6 @@
 #include "../GroundEntity.h"
 #include "../WeaponInfo/WeaponInfo.h"
 #include "../WeaponInfo/MeleeInfo.h"
-//#include "../WeaponInfo/SlashInfo.h"
 #include "Collider\Collider.h"
 #include "../Attributes.h"
 #include "../Enemy/Patrol/Patrol.h"
@@ -238,6 +237,8 @@ private:
 	bool lockedOn;
 	CEnemy3D* enemyPositionToLockOn;
 	vector<CEnemy3D*>lockOnList;
+
+	float coolDownTimer;
 
 public:
 	// Camera Sway

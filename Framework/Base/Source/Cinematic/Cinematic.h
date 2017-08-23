@@ -5,6 +5,12 @@
 #define CINEMATIC_H
 
 #include "CameraBase.h"
+#include "SingletonTemplate.h"
+
+
+class CCinematic : public CameraBase, public std::exception, public Singleton<CCinematic>
+{
+public:
 
 enum cinematicTarget
 {
@@ -12,9 +18,6 @@ enum cinematicTarget
 	C_Destination
 };
 
-class CCinematic : public CameraBase, public std::exception
-{
-public:
 	CCinematic();
 	virtual ~CCinematic();
 
@@ -36,6 +39,10 @@ public:
 	int numberOfPositions;
 
 	cinematicTarget targetType;
+	bool cinematicMode;
+
+	Vector3 cameraPosition;
+	Vector3 cameraTarget;
 
 private:
 	Vector3 position;

@@ -871,17 +871,17 @@ void Tutorial::Update(double dt)
 				static bool completed = false;
 				if (cinematic->numberOfPositions == 0)
 				{
-					cinematic->targetType = C_Target;
+					cinematic->targetType = CCinematic::C_Target;
 					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 200.f, 200.f), 100.f, dt);
 				}
 				else if (cinematic->numberOfPositions == 1)
 				{
-					cinematic->targetType = C_Target;
+					cinematic->targetType = CCinematic::C_Target;
 					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 200.f, 100.f), 100.f, dt);
 				}
 				else if (cinematic->numberOfPositions == 2)
 				{
-					cinematic->targetType = C_Target;
+					cinematic->targetType = CCinematic::C_Target;
 					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 100.f, 0.f), 100.f, dt);
 					completed = true;
 					if (completed)

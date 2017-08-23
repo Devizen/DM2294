@@ -43,6 +43,5 @@ public:
 	void StabEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
 
 	void SlashEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
-	//void CutEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
 
 };

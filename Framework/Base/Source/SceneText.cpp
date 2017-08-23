@@ -73,7 +73,6 @@ SceneText::SceneText()
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
-	, cinematicMode(false)
 	, windowHeight(0.f)
 	, windowWidth(0.f)
 	//, m_worldHeight(0.f)
@@ -85,7 +84,6 @@ SceneText::SceneText(SceneManager* _sceneMgr)
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
-	, cinematicMode(false)
 {
 	_sceneMgr->AddScene("Start", this);
 }
@@ -229,7 +227,7 @@ void SceneText::Init()
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
-	cinematic = new CCinematic();
+	cinematic = CCinematic::GetInstance();
 	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
@@ -696,7 +694,7 @@ void SceneText::Update(double dt)
 			}
 
 			// Hardware Abstraction
-			if (!cinematicMode)
+			if (!CCinematic::GetInstance()->cinematicMode)
 			{
 				theKeyboard->Read(dt);
 				theMouse->Read(dt);
@@ -743,7 +741,7 @@ void SceneText::Update(double dt)
 				cout << "Attached Camera" << endl;
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(&camera);
-				cinematicMode = false;
+				CCinematic::GetInstance()->cinematicMode = false;
 				cinematic->numberOfPositions = 0;
 			}
 
@@ -756,26 +754,30 @@ void SceneText::Update(double dt)
 				cout << "Attached Cinematic" << endl;
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
-				cinematicMode = true;
+				CCinematic::GetInstance()->cinematicMode = true;
 			}
 
-			if (cinematicMode)
+			if (CCinematic::GetInstance()->cinematicMode)
 			{
 				static bool completed = false;
-				if (cinematic->numberOfPositions == 0)
+				/*For player critical hit cinematic*/
+				cinematic->targetType = CCinematic::C_Target;
+				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt);
+				/*For Scene Cinematics*/
+				/*if (cinematic->numberOfPositions == 0)
 				{
-					cinematic->targetType = C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 200.f, 200.f), 100.f, dt);
+					cinematic->targetType = CCinematic::C_Destination;
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 0.f, 200.f), 100.f, dt);
 				}
 				else if (cinematic->numberOfPositions == 1)
 				{
-					cinematic->targetType = C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 200.f, 100.f), 100.f, dt);
+					cinematic->targetType = CCinematic::C_Destination;
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 0.f, 200.f), 100.f, dt);
 				}
 				else if (cinematic->numberOfPositions == 2)
 				{
-					cinematic->targetType = C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 100.f, 0.f), 100.f, dt);
+					cinematic->targetType = CCinematic::C_Destination;
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 0.f, -200.f), 100.f, dt);
 					completed = true;
 					if (completed)
 					{
@@ -785,11 +787,10 @@ void SceneText::Update(double dt)
 						cout << "Attached Camera" << endl;
 						playerInfo->DetachCamera();
 						playerInfo->AttachCamera(&camera);
-						cinematicMode = false;
+						cinematic->cinematicMode = false;
 						cinematic->numberOfPositions = 0;
 					}
-
-				}
+				}*/
 
 				cinematic->Update(dt);
 				camera.SetCameraPos(cinematic->GetCameraPos());
@@ -797,6 +798,16 @@ void SceneText::Update(double dt)
 				camera.SetCameraUp(cinematic->GetCameraUp());
 
 				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
+			}
+
+			if (!cinematic->cinematicMode)
+			{
+				cinematic->SetCameraPos(camera.GetCameraPos());
+				cinematic->SetCameraTarget(camera.GetCameraTarget());
+				cinematic->SetCameraUp(camera.GetCameraUp());
+				playerInfo->DetachCamera();
+				playerInfo->AttachCamera(&camera);
+				cinematic->numberOfPositions = 0;
 			}
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
