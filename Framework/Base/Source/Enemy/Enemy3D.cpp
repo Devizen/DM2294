@@ -703,7 +703,8 @@ CEnemy3D::WHO_CLOSER CEnemy3D::getWhoCloser(void)
 
 CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 						const Vector3& _position,
-						const Vector3& _scale)
+						const Vector3& _scale,
+						const bool& _playerProperty)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
@@ -713,15 +714,20 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 
 	//cout << "Position in Create: " << _position << endl;
 	result->SetPosition(_position);
+	result->setDefaultPosition(_position);
 	result->SetPos(_position);
 	result->SetScale(_scale);
 	result->SetCollider(true);
-	result->setPlayerProperty(false);
+	result->setPlayerProperty(_playerProperty);
 	result->SetLight(true);
 	result->SetAABB(_scale * 2.f, -_scale * 2.f);
 	result->SetMinAABB(-_scale * 2.f);
 	result->SetMaxAABB(_scale * 2.f);
-	result->setDefaultPosition(_position);
+	result->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	result->setMaxHealthTo(10.f);
+	result->setHealthTo(10.f);
+	result->setAttackTo(1.f);
+	result->setDefenseTo(1.f);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }

@@ -1604,4 +1604,8 @@ void SceneText::Exit()
 		delete cinematic;
 		cinematic = nullptr;
 	}
+
+	Text_Manager::GetInstance()->resetAll();
+
+	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 }
