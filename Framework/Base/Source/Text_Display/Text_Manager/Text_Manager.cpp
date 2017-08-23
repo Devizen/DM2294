@@ -13,7 +13,10 @@
 using std::cout;
 using std::endl;
 
-Text_Manager::Text_Manager()
+Text_Manager::Text_Manager() :
+	displayingText(false)
+	, messagePrompt(0)
+	, cooldown(0.f)
 {
 }
 
@@ -167,29 +170,8 @@ void Text_Manager::updateText(double dt)
 								CText* _text = textList.back();
 								delete text;
 								text = nullptr;
-
-								
 								textList.pop_back();
-								//CText* tempText = textList.back();
-
-								///*Remove the strings in vector.*/
-								//while (tempText->textConversation.size() != 0)
-								//{
-								//	tempText->textConversation.pop_back();
-
-								//}
-
-								///*Move the first text to the last in vector.*/
-								//textList.back() = text;
-								///*First text change to last text.*/
-								//text = tempText;
-
-								///*Remove first text.*/
-								//delete text;
-								//text = nullptr;
-								//textList.pop_back();
-								///*Move last text back to the default position.*/
-								//textList.back() = tempText;
+								displayingText = false;
 								break;
 							}
 							else
@@ -197,6 +179,7 @@ void Text_Manager::updateText(double dt)
 								delete text;
 								text = nullptr;
 								textList.pop_back();
+								displayingText = false;
 								break;
 							}
 						}
@@ -301,4 +284,20 @@ void Text_Manager::renderText(void)
 void Text_Manager::addText(CText * _text)
 {
 	textList.push_back(_text);
+}
+
+void Text_Manager::resetAll(void)
+{
+	messagePrompt = 0;
+	cooldown = 0.f;
+	displayingText = false;
+
+	if (textList.size() > 0)
+	{
+		CText* text = textList.back();
+		delete text;
+		text = nullptr;
+
+		textList.pop_back();
+	}
 }

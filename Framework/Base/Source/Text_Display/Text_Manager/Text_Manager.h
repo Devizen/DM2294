@@ -21,6 +21,11 @@ public:
 	void updateText(double dt);
 	void renderText(void);
 	void addText(CText* _text);
+	bool displayingText;
+
+	size_t messagePrompt;
+	float cooldown;
+	void resetAll(void);
 
 private:
 	vector<CText*>textList;

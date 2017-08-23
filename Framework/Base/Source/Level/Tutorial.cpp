@@ -1,3 +1,10 @@
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#ifdef _DEBUG
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+#endif
+
 #include "Tutorial.h"
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
@@ -220,6 +227,8 @@ void Tutorial::Init()
 	// Create the playerinfo instance, which manages all information about the player
 	playerInfo = CPlayerInfo::GetInstance();
 	playerInfo->Init();
+	playerInfo->SetPos(Vector3(6.f, 0.f, 0.f));
+	playerInfo->SetTarget(Vector3(6.f, 0.f, 1.f));
 
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -469,12 +478,12 @@ void Tutorial::Init()
 
 	saveMapTime = 0;
 
-	//FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
+	FileManager::GetInstance()->ReadMapFile("Files//Tutorial.csv");
 }
 
 void Tutorial::Update(double dt)
 {
-	cout << "I AM IN TUTORIAL NOW" << endl;
+	//cout << "I AM IN TUTORIAL NOW" << endl;
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -484,9 +493,56 @@ void Tutorial::Update(double dt)
 
 	saveMapTime += dt;
 
-	if (saveMapTime >= 10)
+	cout << "Message Prompt: " << Text_Manager::GetInstance()->messagePrompt << endl;
+	cout << "Sway Angle: " << playerInfo->m_fCameraSwayAngle << endl;
+	cout << "Sway Delta Angle: " << playerInfo->m_fCameraSwayDeltaAngle << endl;
+	cout << "View: " << playerInfo->GetTarget() << endl;
+	if (!Text_Manager::GetInstance()->displayingText)
 	{
-		FileManager::GetInstance()->EditMapFile("Files//Level Loader.csv");
+		static Vector3 defaultUp;
+		if (Text_Manager::GetInstance()->messagePrompt == 0)
+		{
+			Create::Text("text", "Welcome to Game.\nPress W, A, S and D to move around.", 0.f, 2.f, CText::TEXT_CONVERSATION);
+			++Text_Manager::GetInstance()->messagePrompt;
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 1)
+		{
+			if (KeyboardController::GetInstance()->IsKeyDown('W') ||
+				KeyboardController::GetInstance()->IsKeyDown('A') ||
+				KeyboardController::GetInstance()->IsKeyDown('S') ||
+				KeyboardController::GetInstance()->IsKeyDown('D'))
+				Text_Manager::GetInstance()->cooldown += static_cast<float>(dt);
+
+			if (Text_Manager::GetInstance()->cooldown >= 1.f)
+			{
+				++Text_Manager::GetInstance()->messagePrompt;
+				defaultUp = playerInfo->GetUp();
+			}
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 2)
+		{
+			Create::Text("text", "Move to the point in front of you.", 0.f, 2.f, CText::TEXT_CONVERSATION);
+			++Text_Manager::GetInstance()->messagePrompt;
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 3)
+		{
+			playerInfo->SetUp(defaultUp);
+			if (KeyboardController::GetInstance()->IsKeyDown('W') ||
+				KeyboardController::GetInstance()->IsKeyDown('A') ||
+				KeyboardController::GetInstance()->IsKeyDown('S') ||
+				KeyboardController::GetInstance()->IsKeyDown('D'))
+				++Text_Manager::GetInstance()->messagePrompt;
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 4)
+		{
+
+		}
+	}
+
+
+	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
+	{
+		FileManager::GetInstance()->EditMapFile("Files//Tutorial.csv");
 	}
 
 
@@ -691,7 +747,7 @@ void Tutorial::Update(double dt)
 			}
 
 			// Hardware Abstraction
-			if (!cinematicMode)
+			if (!cinematicMode && !Text_Manager::GetInstance()->displayingText)
 			{
 				theKeyboard->Read(dt);
 				theMouse->Read(dt);
@@ -1599,4 +1655,6 @@ void Tutorial::Exit()
 		delete cinematic;
 		cinematic = nullptr;
 	}
+	Text_Manager::GetInstance()->resetAll();
+	_CrtDumpMemoryLeaks();
 }

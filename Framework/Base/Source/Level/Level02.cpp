@@ -1599,4 +1599,5 @@ void Level02::Exit()
 		delete cinematic;
 		cinematic = nullptr;
 	}
+	Text_Manager::GetInstance()->resetAll();
 }
