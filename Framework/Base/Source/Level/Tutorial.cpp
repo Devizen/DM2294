@@ -451,12 +451,12 @@ void Tutorial::Init()
 	weaponManager = playerInfo->getWeaponManager();
 
 	/*Initialise Sounds*/
-	CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
-	CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
-	CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
-	CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
-	CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
-	CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
+	//CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
+	//CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
+	//CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
+	//CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
+	//CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
+	//CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
 	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
@@ -479,6 +479,24 @@ void Tutorial::Init()
 	saveMapTime = 0;
 
 	FileManager::GetInstance()->ReadMapFile("Files//Tutorial.csv");
+
+	Vector3 _scale(3.f, 3.f, 3.f);
+	CEnemy3D* turret = Create::Enemy3D("turret", Vector3(-12.f, -10.f, 250.f), Vector3(3.f, 3.f, 3.f), false);
+	turret->setHealthTo(10.f);
+	turret->setMaxHealthTo(10.f);
+	turret->setAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
+	turret = Create::Enemy3D("turret", Vector3(24.f, -10.f, 250.f), Vector3(3.f, 3.f, 3.f), false);
+	turret->setHealthTo(10.f);
+	turret->setMaxHealthTo(10.f);
+	turret->setAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
+	CAnimatedEnemy* _staticEnemy = Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head", Vector3(6.f, -10.f, 300.f), Vector3(3.f, 3.f, 3.f));
+	_staticEnemy->setState(CEnemy3D::NO_AI_STATE);
+	_staticEnemy->setHealthTo(10.f);
+	_staticEnemy->setMaxHealthTo(10.f);
+	_staticEnemy->setAttackTo(0);
+	_staticEnemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
+	_staticEnemy->SetLight(true);
+
 }
 
 void Tutorial::Update(double dt)
@@ -493,13 +511,8 @@ void Tutorial::Update(double dt)
 
 	saveMapTime += dt;
 
-	cout << "Message Prompt: " << Text_Manager::GetInstance()->messagePrompt << endl;
-	cout << "Sway Angle: " << playerInfo->m_fCameraSwayAngle << endl;
-	cout << "Sway Delta Angle: " << playerInfo->m_fCameraSwayDeltaAngle << endl;
-	cout << "View: " << playerInfo->GetTarget() << endl;
 	if (!Text_Manager::GetInstance()->displayingText)
 	{
-		static Vector3 defaultUp;
 		if (Text_Manager::GetInstance()->messagePrompt == 0)
 		{
 			Create::Text("text", "Welcome to Game.\nPress W, A, S and D to move around.", 0.f, 2.f, CText::TEXT_CONVERSATION);
@@ -514,19 +527,17 @@ void Tutorial::Update(double dt)
 				Text_Manager::GetInstance()->cooldown += static_cast<float>(dt);
 
 			if (Text_Manager::GetInstance()->cooldown >= 1.f)
-			{
 				++Text_Manager::GetInstance()->messagePrompt;
-				defaultUp = playerInfo->GetUp();
-			}
+
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 2)
 		{
-			Create::Text("text", "Move to the point in front of you.", 0.f, 2.f, CText::TEXT_CONVERSATION);
+			Create::Text("text", "Hold Left Shift to Run.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 			++Text_Manager::GetInstance()->messagePrompt;
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 3)
 		{
-			playerInfo->SetUp(defaultUp);
+			playerInfo->StopSway(dt);
 			if (KeyboardController::GetInstance()->IsKeyDown('W') ||
 				KeyboardController::GetInstance()->IsKeyDown('A') ||
 				KeyboardController::GetInstance()->IsKeyDown('S') ||
@@ -535,7 +546,52 @@ void Tutorial::Update(double dt)
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 4)
 		{
+			if (playerInfo->GetPos().z >= 100.f)
+			{
+				Create::Text("text", "Fire at the enemy by left clicking.", 0.f, 2.f, CText::TEXT_CONVERSATION);
+				++Text_Manager::GetInstance()->messagePrompt;
+			}
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 5)
+		{
+			playerInfo->StopSway(dt);
+			if (KeyboardController::GetInstance()->IsKeyDown('W') ||
+				KeyboardController::GetInstance()->IsKeyDown('A') ||
+				KeyboardController::GetInstance()->IsKeyDown('S') ||
+				KeyboardController::GetInstance()->IsKeyDown('D'))
+				++Text_Manager::GetInstance()->messagePrompt;
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 6)
+		{
+			if (MouseController::GetInstance()->IsButtonDown(MouseController::BUTTON_TYPE::LMB))
+			{
+				Create::Text("text", "Defeat the Turret to make them your allies!", 0.f, 2.f, CText::TEXT_CONVERSATION);
+				playerInfo->StopSway(dt);
+				++Text_Manager::GetInstance()->messagePrompt;
+			}
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 7)
+		{
+			int countCheck = 0;
+			for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+			{
+				if ((*it)->getPlayerProperty())
+				{
+					++countCheck;
+					continue;
+				}
 
+				if ((*it)->getState() == CEnemy3D::AI_STATE::DEAD)
+					++countCheck;
+			}
+
+			if (countCheck == 3)
+				++Text_Manager::GetInstance()->messagePrompt;
+		}
+		else if (Text_Manager::GetInstance()->messagePrompt == 8)
+		{
+			Create::Text("text", "A tower has spawned on the right, defeat it to win!", 0.f, 2.f, CText::TEXT_CONVERSATION);
+			playerInfo->StopSway(dt);
 		}
 	}
 
@@ -1656,5 +1712,8 @@ void Tutorial::Exit()
 		cinematic = nullptr;
 	}
 	Text_Manager::GetInstance()->resetAll();
+
+	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
+
 	_CrtDumpMemoryLeaks();
 }

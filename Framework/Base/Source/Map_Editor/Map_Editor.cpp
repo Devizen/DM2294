@@ -658,11 +658,6 @@ void Map_Editor::updateOption(double dt)
 			{
 				cout << "Create Displacement: " << _displacement << endl;
 				turret = Create::Enemy3D("turret", _displacement, _scale);
-				turret->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
-				turret->setMaxHealthTo(10.f);
-				turret->setHealthTo(10.f);
-				turret->setAttackTo(1.f);
-				turret->setDefenseTo(1.f);
 				lastCreatedType = CREATED_ENEMY;
 			}
 
