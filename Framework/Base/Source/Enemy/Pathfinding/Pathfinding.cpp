@@ -1,3 +1,5 @@
+/*Pathfinding logic done by Lai Wei Jing, Eugene (160540A)*/
+/*Tested by Chan Zhi Hao, Lim Guan Sheng, Marcus and Kwong Yu Ming*/
 #include "Pathfinding.h"
 #include "../Patrol/Patrol.h"
 #include "../../Object/Furniture.h"

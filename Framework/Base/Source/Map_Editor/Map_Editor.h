@@ -60,6 +60,15 @@ public:
 		CREATED_NONE
 	};
 
+	/*Scaling Axis*/
+	enum SCALE_AXIS
+	{
+		SCALE_X = 0,
+		SCALE_Y,
+		SCALE_Z,
+		SCALE_ALL
+	};
+
 	Map_Editor();
 	~Map_Editor();
 
@@ -102,6 +111,9 @@ public:
 	/*To display Enemy Object*/
 	ostringstream ss_EnemyObject;
 
+	/*To display Scale Axis*/
+	ostringstream ss_ScaleAxis;
+
 	/*To check if adding enemy waypoint is needed.*/
 	bool addWaypoint;
 
@@ -111,6 +123,8 @@ public:
 	CEnemy3D* turret;
 	/*Enemy Horde to change variables.*/
 	CEnemy3D* _horde;
+	/*Switch between axis for scaling.*/
+	SCALE_AXIS scaleAxis;
 private:
 
 protected:

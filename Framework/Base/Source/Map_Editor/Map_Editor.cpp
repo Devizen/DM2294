@@ -40,10 +40,12 @@ Map_Editor::Map_Editor() :
 	, ss_ObjectType("")
 	, ss_EnvironmentObject("")
 	, ss_EnemyObject("")
+	, ss_ScaleAxis("")
 	, addWaypoint(false)
 	, _enemy(nullptr)
 	, turret(nullptr)
 	, lastCreatedType(CREATED_NONE)
+	, scaleAxis(SCALE_ALL)
 {
 }
 
@@ -169,6 +171,7 @@ void Map_Editor::renderOption(void)
 	static string s_ObjectType = "";
 	static string s_EnvironmentObject = "";
 	static string s_EnemyObject = "";
+	static string s_ScaleAxis = "";
 
 	if (optionSelectionLevel == OPTION_SELECT_NONE)
 		s_OptionSelectionLevel = "None";
@@ -209,10 +212,26 @@ void Map_Editor::renderOption(void)
 	if (enemyObject == ENEMY_OBJECT_NONE)
 		s_EnemyObject = "None";
 
+	if (scaleAxis == SCALE_ALL)
+		s_ScaleAxis = "All";
+
+	if (scaleAxis == SCALE_X)
+		s_ScaleAxis = "X";
+
+	if (scaleAxis == SCALE_Y)
+		s_ScaleAxis = "Y";
+
+	if (scaleAxis == SCALE_Z)
+		s_ScaleAxis = "Z";
+
 	ss_OptionSelectLevel.str(s_OptionSelectionLevel);
 	ss_ObjectType.str(s_ObjectType);
 	ss_EnvironmentObject.str(s_EnvironmentObject);
 	ss_EnemyObject.str(s_EnemyObject);
+	ss_ScaleAxis.str(s_ScaleAxis);
+
+	std::ostringstream playerPosition("");
+	playerPosition << CPlayerInfo::GetInstance()->GetPos();
 
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
@@ -237,6 +256,18 @@ void Map_Editor::renderOption(void)
 	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.25f, 0.f);
 	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Enemy Object:" + ss_EnemyObject.str(), Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.20f, 0.f);
+	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Scale Axis:" + ss_ScaleAxis.str(), Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.15f, 0.f);
+	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Player Position:" + playerPosition.str(), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 }
 
@@ -355,18 +386,60 @@ void Map_Editor::updateOption(double dt)
 		}
 	}
 
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_LMENU))
+	{
+		if (scaleAxis == SCALE_ALL)
+			scaleAxis = SCALE_X;
+
+		else if (scaleAxis == SCALE_X)
+			scaleAxis = SCALE_Y;
+
+		else if (scaleAxis == SCALE_Y)
+			scaleAxis = SCALE_Z;
+
+		else if (scaleAxis == SCALE_Z)
+			scaleAxis = SCALE_ALL;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_LMENU) && KeyboardController::GetInstance()->IsKeyDown(VK_LSHIFT))
+		_scale.Set(1.f, 1.f, 1.f);
+
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD3))
 	{
-		_scale.x += 1.f;
-		_scale.y += 1.f;
-		_scale.z += 1.f;
+		if (scaleAxis == SCALE_X)
+			_scale.x += 1.f;
+
+		else if (scaleAxis == SCALE_Y)
+			_scale.y += 1.f;
+
+		else if (scaleAxis == SCALE_Z)
+			_scale.z += 1.f;
+
+		else if (scaleAxis == SCALE_ALL)
+		{
+			_scale.x += 1.f;
+			_scale.y += 1.f;
+			_scale.z += 1.f;
+		}
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD1))
 	{
-		_scale.x -= 1.f;
-		_scale.y -= 1.f;
-		_scale.z -= 1.f;
+		if (scaleAxis == SCALE_X)
+			_scale.x -= 1.f;
+
+		else if (scaleAxis == SCALE_Y)
+			_scale.y -= 1.f;
+
+		else if (scaleAxis == SCALE_Z)
+			_scale.z -= 1.f;
+
+		else if (scaleAxis == SCALE_ALL)
+		{
+			_scale.x -= 1.f;
+			_scale.y -= 1.f;
+			_scale.z -= 1.f;
+		}
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD9))
@@ -390,7 +463,6 @@ void Map_Editor::updateOption(double dt)
 	if (_scale.z < 1.f)
 		_scale.z = 1.f;
 
-	cout << "Scale: " << _scale << endl;
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
 	{
 		if (objectType == ENVIRONMENT)

@@ -1,26 +1,19 @@
+/*Pathfinding logic done by Lai Wei Jing, Eugene (160540A)*/
+/*Tested by Chan Zhi Hao, Lim Guan Sheng, Marcus and Kwong Yu Ming*/
 #ifndef PATHFINDING_H
 #define PATHFINDING_H
 
 /*Pathfinding Theory*/
 /*
-Enemy will use normal AABB collision at first.
-When it hits the wall or any objects, it will return to it's previous position and set a boolean to true called startPathfinding.
-Upon startPathfinding being set to true, the Pathfinding Singleton will be called.
-It will then iterate through the list of nodes based on the enemy type.
-It will keep check based on two condition.
-The distance between the enemy and target, and, the distance between nodes to enemy.
-It will go with something like
-if ((nodePosition - enemyPos).LengthSquared() < f_nearestDistance)
-	{
-	nodeToCheck = nodePosition;
-	f_nearestDistance = (nodePosition - enemyPos).LengthSquared();
-	}
-
-	if ((nodeToCheck - nodeToMove).LengthSquared() < f_nearestNode)
-
+Object will use normal AABB collision at first.
+When it hits the wall or any objects, it will return to it's previous position and set a boolean to true called pathFindingMode.
+It will generate 36 points in a circle around the object.
+Each points will be checked if it collided with something, if collided, remove the points.
+The remaining points will be used to check and compare with the target position.
+The closest to the target will be selected.
+Object will then move towards this selected position.
 */
-///*Making Pathfinding a Singleton because you do not need to creates nodes individually for every enemy object.*/
-//#include "SingletonTemplate.h"
+
 /*Vector3 to store X, Y and Z position.*/
 #include "Vector3.h"
 /*Vector to store Vector3 positions.*/

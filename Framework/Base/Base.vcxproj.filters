@@ -94,6 +94,9 @@
     <Filter Include="Quest\Quest_Manager">
       <UniqueIdentifier>{566ae725-2c21-405c-875a-8a75ad9d389c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneManager">
+      <UniqueIdentifier>{6b343147-d420-4767-a47a-6e3b9b10ae40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -303,6 +306,9 @@
     <ClCompile Include="Source\Quest\Quest_Manager\Quest_Manager.cpp">
       <Filter>Quest\Quest_Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneManager\SceneManager.cpp">
+      <Filter>SceneManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -505,6 +511,9 @@
     </ClInclude>
     <ClInclude Include="Source\Quest\Quest_Manager\Quest_Manager.h">
       <Filter>Quest\Quest_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager\SceneManager.h">
+      <Filter>SceneManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

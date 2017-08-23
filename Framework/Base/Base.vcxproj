@@ -65,6 +65,7 @@
     <ClCompile Include="Source\Scene2D\Strategy.cpp" />
     <ClCompile Include="Source\Scene2D\Strategy_Kill.cpp" />
     <ClCompile Include="Source\Scene2D\TreasureChest.cpp" />
+    <ClCompile Include="Source\SceneManager\SceneManager.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
     <ClCompile Include="Source\SoundEngine.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Source\Scene2D\Strategy.h" />
     <ClInclude Include="Source\Scene2D\Strategy_Kill.h" />
     <ClInclude Include="Source\Scene2D\TreasureChest.h" />
+    <ClInclude Include="Source\SceneManager\SceneManager.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\SkyBox\SkyBoxEntity.h" />
     <ClInclude Include="Source\SoundEngine.h" />

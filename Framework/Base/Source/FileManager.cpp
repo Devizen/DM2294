@@ -1,3 +1,6 @@
+/*File Manager was done by Lim Guan Sheng, Marcus (161725E)*/
+/*Tested by Lai Wei Jing, Eugene, Chan Zhi Hao and Kwong Yu Ming*/
+
 #include "FileManager.h"
 #include <iostream>
 #include <fstream>

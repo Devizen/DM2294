@@ -1,3 +1,6 @@
+/*Text Display was done by Lai Wei Jing, Eugene (160540A)*/
+/*Tested by Chan Zhi Hao, Lim Guan Sheng, Marcus and Kwong Yu Ming*/
+
 #ifndef TEXT_MANAGER_H
 #define TEXT_MANAGER_H
 
