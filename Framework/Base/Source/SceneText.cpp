@@ -45,6 +45,7 @@
 #include "Items\Helmet.h"
 #include "FileManager.h"
 #include "Items\EquipmentManager.h"
+#include "ShopManager\ShopManager.h"
 
 /*Map Editor*/
 #include "Map_Editor\Map_Editor.h"
@@ -311,6 +312,9 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("EQWINDOW", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("EQWINDOW")->textureID = LoadTGA("Image//Equipment.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("SHOP", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SHOP")->textureID = LoadTGA("Image//Shop.tga");
+
 	MeshBuilder::GetInstance()->GenerateQuad("EMPHELM", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("EMPHELM")->textureID = LoadTGA("Image//EmperorHelmet.tga");
 
@@ -467,12 +471,15 @@ void SceneText::Init()
 
 	openInventory = false;
 	openEQ = false;
+	openShop = false;
 	FileManager::GetInstance()->init();
 	EquipmentManager::GetInstance()->Init();
+	ShopManager::GetInstance()->init();
 
 	saveMapTime = 0;
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
+	FileManager::GetInstance()->ReadShopFile("Files/Shop.csv");
 }
 
 void SceneText::Update(double dt)
@@ -509,16 +516,23 @@ void SceneText::Update(double dt)
 		controlText[i]->SetScale(Vector3(windowWidth * 0.03f, windowWidth * 0.03f, 1.f));
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed('I') && !openEQ)
+	if (KeyboardController::GetInstance()->IsKeyPressed('I') && !openEQ && !openShop)
 	{
 		OptionsManager::GetInstance()->setEditingState(true);
 		openInventory = true;
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed('E') && !openInventory)
+	if (KeyboardController::GetInstance()->IsKeyPressed('E') && !openInventory && !openShop)
 	{
 		OptionsManager::GetInstance()->setEditingState(true);
 		openEQ = true;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed('G') && !openEQ && !openInventory)
+	{
+		OptionsManager::GetInstance()->setEditingState(true);
+		openShop = true;
+		ShopManager::GetInstance()->setList();
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('U'))
@@ -527,6 +541,7 @@ void SceneText::Update(double dt)
 		FileManager::GetInstance()->EditWeaponFile("Files//Inventory.csv");
 		openInventory = false;
 		openEQ = false;
+		openShop = false;
 	}
 
 	CPlayerInfo::GetInstance()->printAttributes();
@@ -539,6 +554,11 @@ void SceneText::Update(double dt)
 	if (openEQ)
 	{
 		EquipmentManager::GetInstance()->Update(dt);
+	}
+
+	if (openShop)
+	{
+		ShopManager::GetInstance()->update(dt);
 	}
 
 	//if (KeyboardController::GetInstance()->IsKeyDown('O')) {
@@ -1488,7 +1508,11 @@ void SceneText::RenderPassMain(void)
 	{
 		EquipmentManager::GetInstance()->Render();
 		CPlayerInfo::GetInstance()->RenderAttribute();
+	}
 
+	if (openShop)
+	{
+		ShopManager::GetInstance()->render();
 	}
 
 	//*Render KO Count*/

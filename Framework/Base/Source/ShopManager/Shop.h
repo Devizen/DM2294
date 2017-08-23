@@ -1,18 +1,24 @@
-/*Equipment was done by Lim Guan Sheng, Marcus (161725E)*/
-/*Tested by Lai Wei Jing, Eugene, Chan Zhi Hao and Kwong Yu Ming*/
-
 #pragma once
-#include "Equipment.h"
+#include "SingletonTemplate.h"
+#include "Mesh.h"
+#include "MeshBuilder.h"
+#include <string>
+#include "..//Items/Equipment.h"
 
-class Gun : public Equipment
+using std::string;
+
+
+class Shop : public Singleton<Shop>, public Equipment
 {
-public: 
-	Mesh* modelMesh;
-public:
-	Gun() {};
-	Gun(Mesh* modelMesh) { this->modelMesh = modelMesh; };
-	~Gun() {};
+	Mesh* mesh;
+	int gold;
 
+public:
+	Shop() {};
+	Shop(Mesh* meshName) { this->mesh = meshName; }
+	~Shop() {};
+	void setGold(int gold);
+	virtual int getGold();
 	virtual int GetAttack() { return attack; };
 	virtual int GetDefense() { return defense; };
 	virtual int GetSpeed() { return speed; };
@@ -30,7 +36,6 @@ public:
 			return 0;
 		}
 	};
-	virtual int getGold() { return 0; }
 
 	void SetAttack(int newAtt) { attack = newAtt; }
 	void SetDef(int newDef) { defense = newDef; }
@@ -39,10 +44,9 @@ public:
 	void SetType(int newType) { type = newType; }
 	void SetName(string newName) { name = newName; }
 	void setStatus(bool newStat) { isEquipped = newStat; };
-
 };
 
 namespace Create
 {
-	Gun* theGun(const std::string& _meshName, string ID, string attack, bool isEquipped);
-};
+	Shop* ShopItems(const std::string& _meshName, string ID, string attack, string defense, string speed, int gold, int type);
+}

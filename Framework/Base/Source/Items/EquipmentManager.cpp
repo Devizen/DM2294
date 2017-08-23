@@ -37,7 +37,6 @@ void EquipmentManager::AssignEquipment(Equipment * newEQ)
 		{
 			EqList[i] = newEQ;
 			count++;
-			std::cout << "Count: " << count << std::endl;
 			break;
 		}
 	}

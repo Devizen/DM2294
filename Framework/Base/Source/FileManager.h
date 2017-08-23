@@ -72,10 +72,24 @@ class FileManager : public Singleton <FileManager>
 		float scaleY;
 		float scaleZ;
 	}theEnemyInfo;
+	
+	struct shopInfo
+	{
+		string name;
+		string eqAtk;
+		string eqDef;
+		string eqSpeed;
+		string eqId;
+		string eqType;
+		bool isEquipped;
+		int gold;
+	}theShopInfo;
 
 	vector<EQ_Info>masterList;
 	vector<OBJinfo>objlist;
 	vector<Equipment*> eqlist;
+	vector<Equipment>shopList;
+
 
 public:
 	FileManager() {};
@@ -87,10 +101,11 @@ public:
 	bool ReadWeaponFile( string myFile);
 	bool ReadMapFile(const string myFile);
 	bool ReadEnemyFile(const string myFile);
+	bool ReadShopFile(const string myFile);
 	
 	//bool ReadFile(const string myFile);
 
-	void EditFile(const string myFile);
+	void EditShopFile(const string myFile);
 	void EditWeaponFile(const string myFile);
 	void EditMapFile(const string myFile);
 	void EditEnemyFile(const string myFile);
