@@ -44,8 +44,8 @@ public:
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
 
-	ShaderProgram* currProg;
-	ShaderProgram* m_gPassShaderID;
+	//ShaderProgram* currProg;
+	//ShaderProgram* m_gPassShaderID;
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;
 	FPSCamera camera;

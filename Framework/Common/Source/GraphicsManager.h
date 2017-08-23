@@ -47,6 +47,8 @@ public:
 	void UpdateTexture(int _slot, int _textureValue);
 	void UnbindTexture(int _slot);
 
+	void removeLightMap(void);
+
 private:
 	GraphicsManager();
 	~GraphicsManager();

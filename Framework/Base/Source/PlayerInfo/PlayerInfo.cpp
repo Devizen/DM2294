@@ -21,7 +21,7 @@
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
-CPlayerInfo *CPlayerInfo::s_instance = 0;
+//CPlayerInfo *CPlayerInfo::s_instance = 0;
 
 CPlayerInfo::CPlayerInfo(void)
 	: m_dSpeed(40.0)
@@ -128,7 +128,7 @@ void CPlayerInfo::Init(void)
 
 	/*Set Bounding Box for player*/
 	SetAABB(Vector3(2.f, 10.f, 2.f), Vector3(-2.f, -10.f, -2.f));
-	EntityManager::GetInstance()->AddPlayer(this);
+	//EntityManager::GetInstance()->AddPlayer(this);
 }
 
 // Returns true if the player is on ground

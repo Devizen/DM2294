@@ -343,7 +343,7 @@ bool EntityManager::getHit(void)
 
 void EntityManager::removeAllEntities(void)
 {
-	if (entityList.size() > 0)
+	while (entityList.size() > 0)
 	{
 		EntityBase* entity = entityList.back();
 		delete entity;
@@ -351,7 +351,7 @@ void EntityManager::removeAllEntities(void)
 		entityList.pop_back();
 	}
 
-	if (projectileList.size() > 0)
+	while (projectileList.size() > 0)
 	{
 		CProjectile* projectile = projectileList.back();
 		delete projectile;
@@ -359,7 +359,7 @@ void EntityManager::removeAllEntities(void)
 		projectileList.pop_back();
 	}
 
-	if (fixedList.size() > 0)
+	while (fixedList.size() > 0)
 	{
 		EntityBase* fixed = fixedList.back();
 		delete fixed;
@@ -367,7 +367,7 @@ void EntityManager::removeAllEntities(void)
 		fixedList.pop_back();
 	}
 
-	if (enemyList.size() > 0)
+	while (enemyList.size() > 0)
 	{
 		CEnemy3D* enemy = enemyList.back();
 		delete enemy;
@@ -375,7 +375,7 @@ void EntityManager::removeAllEntities(void)
 		enemyList.pop_back();
 	}
 
-	if (itemList.size() > 0)
+	while (itemList.size() > 0)
 	{
 		EntityBase* item = itemList.back();
 		delete item;
@@ -383,7 +383,7 @@ void EntityManager::removeAllEntities(void)
 		itemList.pop_back();
 	}
 
-	if (patrolList.size() > 0)
+	while (patrolList.size() > 0)
 	{
 		Patrol* patrol = patrolList.back();
 		delete patrol;
@@ -721,6 +721,11 @@ list<CFurniture*>& EntityManager::returnFixed(void)
 list<CEnemy3D*>& EntityManager::returnEnemy(void)
 {
 	return enemyList;
+}
+
+list<EntityBase*>& EntityManager::returnEntity(void)
+{
+	return entityList;
 }
 
 int EntityManager::enemyCount(void)

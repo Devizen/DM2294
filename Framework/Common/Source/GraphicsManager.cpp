@@ -330,3 +330,17 @@ void GraphicsManager::UnbindTexture(int _slot)
 {
 	UpdateTexture(_slot, 0);
 }
+
+void GraphicsManager::removeLightMap(void)
+{
+	for (std::map<std::string, LightBase*>::iterator it = lightMap.begin(); it != lightMap.end();)
+	{
+		std::string s_Light = (std::string)it->first;
+		s_Light = "";
+		LightBase* light = it->second;
+		if (light != nullptr)
+			delete light;
+
+		it = lightMap.erase(it);
+	}
+}

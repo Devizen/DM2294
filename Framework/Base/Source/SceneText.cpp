@@ -56,6 +56,11 @@
 #include "Text_Display\Text\Text.h"
 #include "Text_Display\Text_Manager\Text_Manager.h"
 
+/*Scene Manager to switch scene.*/
+#include <map>
+using std::map;
+//#include "SceneManager//SceneManager.h"
+//#include "Level\Tutorial.h"
 #include <iostream>
 
 #include "Attributes.h"
@@ -63,10 +68,6 @@
 using namespace std;
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
-
-Mesh* TEMPDEPTHQUAD;
-Mesh* TEMPSPHERE;
-Mesh* TEMPQUAD;
 
 SceneText::SceneText()
 	: theMinimap(NULL)
@@ -105,65 +106,65 @@ void SceneText::Init()
 	//m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
 
 	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
-	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
-	m_gPassShaderID = GraphicsManager::GetInstance()->LoadShader("gpass",	"Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
-	
-	// Tell the shader program to store these uniform locations
-	currProg->AddUniform("MVP");
-	currProg->AddUniform("MV");
-	currProg->AddUniform("MV_inverse_transpose");
-	currProg->AddUniform("material.kAmbient");
-	currProg->AddUniform("material.kDiffuse");
-	currProg->AddUniform("material.kSpecular");
-	currProg->AddUniform("material.kShininess");
-	currProg->AddUniform("lightEnabled");
-	currProg->AddUniform("numLights");
-	currProg->AddUniform("lights[0].type");
-	currProg->AddUniform("lights[0].position_cameraspace");
-	currProg->AddUniform("lights[0].color");
-	currProg->AddUniform("lights[0].power");
-	currProg->AddUniform("lights[0].kC");
-	currProg->AddUniform("lights[0].kL");
-	currProg->AddUniform("lights[0].kQ");
-	currProg->AddUniform("lights[0].spotDirection");
-	currProg->AddUniform("lights[0].cosCutoff");
-	currProg->AddUniform("lights[0].cosInner");
-	currProg->AddUniform("lights[0].exponent");
-	currProg->AddUniform("lights[1].type");
-	currProg->AddUniform("lights[1].position_cameraspace");
-	currProg->AddUniform("lights[1].color");
-	currProg->AddUniform("lights[1].power");
-	currProg->AddUniform("lights[1].kC");
-	currProg->AddUniform("lights[1].kL");
-	currProg->AddUniform("lights[1].kQ");
-	currProg->AddUniform("lights[1].spotDirection");
-	currProg->AddUniform("lights[1].cosCutoff");
-	currProg->AddUniform("lights[1].cosInner");
-	currProg->AddUniform("lights[1].exponent");
-	currProg->AddUniform("colorTextureEnabled");
-	currProg->AddUniform("colorTexture");
-	currProg->AddUniform("textEnabled");
-	currProg->AddUniform("textColor");
+	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
+	//m_gPassShaderID = GraphicsManager::GetInstance()->LoadShader("gpass",	"Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
+	//
+	//// Tell the shader program to store these uniform locations
+	//currProg->AddUniform("MVP");
+	//currProg->AddUniform("MV");
+	//currProg->AddUniform("MV_inverse_transpose");
+	//currProg->AddUniform("material.kAmbient");
+	//currProg->AddUniform("material.kDiffuse");
+	//currProg->AddUniform("material.kSpecular");
+	//currProg->AddUniform("material.kShininess");
+	//currProg->AddUniform("lightEnabled");
+	//currProg->AddUniform("numLights");
+	//currProg->AddUniform("lights[0].type");
+	//currProg->AddUniform("lights[0].position_cameraspace");
+	//currProg->AddUniform("lights[0].color");
+	//currProg->AddUniform("lights[0].power");
+	//currProg->AddUniform("lights[0].kC");
+	//currProg->AddUniform("lights[0].kL");
+	//currProg->AddUniform("lights[0].kQ");
+	//currProg->AddUniform("lights[0].spotDirection");
+	//currProg->AddUniform("lights[0].cosCutoff");
+	//currProg->AddUniform("lights[0].cosInner");
+	//currProg->AddUniform("lights[0].exponent");
+	//currProg->AddUniform("lights[1].type");
+	//currProg->AddUniform("lights[1].position_cameraspace");
+	//currProg->AddUniform("lights[1].color");
+	//currProg->AddUniform("lights[1].power");
+	//currProg->AddUniform("lights[1].kC");
+	//currProg->AddUniform("lights[1].kL");
+	//currProg->AddUniform("lights[1].kQ");
+	//currProg->AddUniform("lights[1].spotDirection");
+	//currProg->AddUniform("lights[1].cosCutoff");
+	//currProg->AddUniform("lights[1].cosInner");
+	//currProg->AddUniform("lights[1].exponent");
+	//currProg->AddUniform("colorTextureEnabled");
+	//currProg->AddUniform("colorTexture");
+	//currProg->AddUniform("textEnabled");
+	//currProg->AddUniform("textColor");
 
-	/*Fog*/
-	currProg->AddUniform("fogParam.color");
-	currProg->AddUniform("fogParam.start");
-	currProg->AddUniform("fogParam.end");
-	currProg->AddUniform("fogParam.density");
-	currProg->AddUniform("fogParam.type");
-	currProg->AddUniform("fogParam.enabled");
+	///*Fog*/
+	//currProg->AddUniform("fogParam.color");
+	//currProg->AddUniform("fogParam.start");
+	//currProg->AddUniform("fogParam.end");
+	//currProg->AddUniform("fogParam.density");
+	//currProg->AddUniform("fogParam.type");
+	//currProg->AddUniform("fogParam.enabled");
 
-	/*Shadow*/
-	currProg->AddUniform("lightDepthMVP");
-	currProg->AddUniform("shadowMap");
+	///*Shadow*/
+	//currProg->AddUniform("lightDepthMVP");
+	//currProg->AddUniform("shadowMap");
 
-	m_gPassShaderID->AddUniform("lightDepthMVP");
-	m_gPassShaderID->AddUniform("colorTextureEnabled[0]");
-	m_gPassShaderID->AddUniform("colorTexture[0]");
-	m_gPassShaderID->AddUniform("colorTextureEnabled[1]");
-	m_gPassShaderID->AddUniform("colorTexture[1]");
-	m_gPassShaderID->AddUniform("colorTextureEnabled[2]");
-	m_gPassShaderID->AddUniform("colorTexture[2]");
+	//m_gPassShaderID->AddUniform("lightDepthMVP");
+	//m_gPassShaderID->AddUniform("colorTextureEnabled[0]");
+	//m_gPassShaderID->AddUniform("colorTexture[0]");
+	//m_gPassShaderID->AddUniform("colorTextureEnabled[1]");
+	//m_gPassShaderID->AddUniform("colorTexture[1]");
+	//m_gPassShaderID->AddUniform("colorTextureEnabled[2]");
+	//m_gPassShaderID->AddUniform("colorTexture[2]");
 	
 	//m_parameters[U_FOG_COLOR] = glGetUniformLocation(m_programID, "fogParam.color");
 	//m_parameters[U_FOG_START] = glGetUniformLocation(m_programID, "fogParam.start");
@@ -202,24 +203,24 @@ void SceneText::Init()
 	lights[0]->spotDirection.Set(0.f, 1.f, 0.f);
 	lights[0]->name = "lights[0]";
 
-	//lights[1] = new Light();
-	//GraphicsManager::GetInstance()->AddLight("lights[1]", lights[1]);
-	//lights[1]->type = Light::LIGHT_POINT;
-	//lights[1]->position.Set(1, 1, 0);
-	//lights[1]->color.Set(1, 1, 0.5f);
-	//lights[1]->power = 0.4f;
-	//lights[1]->name = "lights[1]";
+	lights[1] = new Light();
+	GraphicsManager::GetInstance()->AddLight("lights[1]", lights[1]);
+	lights[1]->type = Light::LIGHT_POINT;
+	lights[1]->position.Set(1, 1, 0);
+	lights[1]->color.Set(1, 1, 0.5f);
+	lights[1]->power = 0.4f;
+	lights[1]->name = "lights[1]";
 
-	currProg->UpdateInt("numLights", 1);
-	currProg->UpdateInt("textEnabled", 0);
+	SceneManager::GetInstance()->currProg->UpdateInt("numLights", 1);
+	SceneManager::GetInstance()->currProg->UpdateInt("textEnabled", 0);
 
 	Color fogColor(0.5f, 0.5f, 0.5f); //Vec3 Color
-	currProg->UpdateVector3("fogParam.color", &fogColor.r);
-	currProg->UpdateFloat("fogParam.start", 10);
-	currProg->UpdateFloat("fogParam.end", 2000);
-	currProg->UpdateFloat("fogParam.density", 0.005f);
-	currProg->UpdateInt("fogParam.type", 0);
-	currProg->UpdateInt("fogParam.enabled", 0);
+	SceneManager::GetInstance()->currProg->UpdateVector3("fogParam.color", &fogColor.r);
+	SceneManager::GetInstance()->currProg->UpdateFloat("fogParam.start", 10);
+	SceneManager::GetInstance()->currProg->UpdateFloat("fogParam.end", 2000);
+	SceneManager::GetInstance()->currProg->UpdateFloat("fogParam.density", 0.005f);
+	SceneManager::GetInstance()->currProg->UpdateInt("fogParam.type", 0);
+	SceneManager::GetInstance()->currProg->UpdateInt("fogParam.enabled", 0);
 	
 	// Create the playerinfo instance, which manages all information about the player
 	playerInfo = CPlayerInfo::GetInstance();
@@ -457,11 +458,6 @@ void SceneText::Init()
 	DepthFBO::GetInstance()->Init(1024, 1024);
 	//m_lightDepthFBO.Init(1024, 1024);
 
-	TEMPDEPTHQUAD = MeshBuilder::GetInstance()->GenerateQuad("TEMPDEPTH", Color(1, 0, 1), 1);
-	TEMPDEPTHQUAD->textureID = DepthFBO::GetInstance()->GetTexture();
-	TEMPSPHERE = MeshBuilder::GetInstance()->GenerateSphere("TEMPSPHERE", Color(1, 1, 1), 10, 10, 1);
-	TEMPQUAD = MeshBuilder::GetInstance()->GenerateQuad("TEMPQUADGROUND", Color(1, 1, 1), 1);
-
 	ParticleManager* particleManager = ParticleManager::GetInstance();
 	vector<ParticleManager*>particleList = particleManager->getParticleList();
 	for (int i = 0; i < particleManager->getMaximumParticles(); ++i)
@@ -483,6 +479,7 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+	cout << "I AM IN SCENETEXT NOW" << endl;
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -829,10 +826,16 @@ void SceneText::Update(double dt)
 				}
 			}
 
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F5))
+				SceneManager::GetInstance()->SetActiveScene("Tutorial");
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F1))
-			{
-				EntityManager::GetInstance()->removeAllEntities();
-			}
+				SceneManager::GetInstance()->SetActiveScene("Level01");
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F2))
+				SceneManager::GetInstance()->SetActiveScene("Level02");
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F3))
+				SceneManager::GetInstance()->SetActiveScene("Level03");
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4))
+				SceneManager::GetInstance()->SetActiveScene("Level04");
 
 			if (playerInfo->getLockedOn())
 				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
@@ -1357,7 +1360,7 @@ void SceneText::RenderPassMain(void)
 
 	//pass light depth texture 
 	DepthFBO::GetInstance()->BindForReading(GL_TEXTURE8);
-	currProg->UpdateInt("shadowMap", 8);
+	SceneManager::GetInstance()->currProg->UpdateInt("shadowMap", 8);
 	//GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 
 	// Camera matrix
@@ -1374,19 +1377,19 @@ void SceneText::RenderPassMain(void)
 	{
 		Vector3 lightDir(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 		Vector3 lightDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lightDir;
-		currProg->UpdateVector3("lights[0].position_cameraspace", &lightDirection_cameraspace.x);
+		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightDirection_cameraspace.x);
 	}
 	else if (lights[0]->type == Light::LIGHT_SPOT)
 	{
 		Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[0]->position;
-		currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
+		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
 		Vector3 spotDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[0]->spotDirection;
-		currProg->UpdateVector3("lights[0].spotDirection", &spotDirection_cameraspace.x);
+		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].spotDirection", &spotDirection_cameraspace.x);
 	}
 	else
 	{
 		Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[0]->position;
-		currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
+		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
 	}
 
 	/*if (lights[1]->type == Light::LIGHT_DIRECTIONAL)
@@ -1556,127 +1559,34 @@ void SceneText::Exit()
 	GraphicsManager::GetInstance()->DetachCamera();
 	playerInfo->DetachCamera();
 
-	if (playerInfo->DropInstance() == false)
-	{
-#if _DEBUGMODE==1
-		cout << "Unable to drop PlayerInfo class" << endl;
-#endif
-	}
-
-
-	delete TEMPSPHERE;
-	delete TEMPDEPTHQUAD;
+//	if (playerInfo->DropInstance() == false)
+//	{
+//#if _DEBUGMODE==1
+//		cout << "Unable to drop PlayerInfo class" << endl;
+//#endif
+//	}
 
 	// Delete the lights
 	GraphicsManager::GetInstance()->RemoveLight("lights[0]");
 	GraphicsManager::GetInstance()->RemoveLight("lights[1]");
 
-	//delete lights[0];
-	//delete lights[1];
 
-	if (theCameraEffects)
-	{
-		delete theCameraEffects;
-		theCameraEffects = NULL;
-	}
-	if (theMinimap)
-	{
-		delete theMinimap;
-		theMinimap = NULL;
-	}
-	if (theMouse)
-	{
-		delete theMouse;
-		theMouse = NULL;
-	}
-	if (theKeyboard)
-	{
-		delete theKeyboard;
-		theKeyboard = NULL;
-	}
-
-	if (currProg)
-	{
-		delete currProg;
-		currProg = nullptr;
-	}
-
-	if (m_gPassShaderID)
-	{
-		delete m_gPassShaderID;
-		m_gPassShaderID = nullptr;
-	}
-
-	//if (playerInfo)
+	//if (currProg)
 	//{
-	//	delete playerInfo;
-	//	playerInfo = nullptr;
+	//	delete currProg;
+	//	currProg = nullptr;
 	//}
 
-	//if (groundEntity)
+	//if (m_gPassShaderID)
 	//{
-	//	delete groundEntity;
-	//	groundEntity = nullptr;
-	//}
-
-	//if (theOption)
-	//{
-	//	delete theOption;
-	//	theOption = nullptr;
-	//}
-
-	//if (theCube)
-	//{
-	//	delete theCube;
-	//	theCube = nullptr;
-	//}
-
-	//if (anEnemy3D)
-	//{
-	//	delete anEnemy3D;
-	//	anEnemy3D = nullptr;
-	//}
-
-	//if (input)
-	//{
-	//	delete input;
-	//	input = nullptr;
-	//}
-
-	//if (optionUI)
-	//{
-	//	delete optionUI;
-	//	optionUI = nullptr;
-	//}
-
-	//if (weaponUI)
-	//{
-	//	delete weaponUI;
-	//	weaponUI = nullptr;
-	//}
-
-	//if (hitDisplay)
-	//{
-	//	delete hitDisplay;
-	//	hitDisplay = nullptr;
-	//}
-
-	//if (camera)
-	//{
-	//	delete camera;
-	//	camera = nullptr;
+	//	delete m_gPassShaderID;
+	//	m_gPassShaderID = nullptr;
 	//}
 
 	ParticleManager* particleManager = ParticleManager::GetInstance();
 	ParticleManager::GetInstance()->deleteParticle();
 
-	while (theObjects.size() > 0)
-	{
-		GenericEntity* object = theObjects.back();
-		delete object;
-		object = nullptr;
-		theObjects.pop_back();
-	}
+	EntityManager::GetInstance()->removeAllEntities();
 
 	while (controls.size() > 0)
 	{
@@ -1686,13 +1596,12 @@ void SceneText::Exit()
 		controls.pop_back();
 	}
 
-	//for (int i = 0; i < 17; ++i)
-	//{
-	//	delete controlText[i];
-	//}
+	MeshBuilder::GetInstance()->removeMeshMap();
+	GraphicsManager::GetInstance()->removeLightMap();
 
-	//for (int i = 0; i < 30; ++i)
-	//{
-	//	delete textObj[i];
-	//}
+	if (cinematic)
+	{
+		delete cinematic;
+		cinematic = nullptr;
+	}
 }
