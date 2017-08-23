@@ -24,6 +24,7 @@
 #include "Object\Furniture.h"
 #include "Enemy\AnimatedEnemy\AnimatedEnemy.h"
 #include "Enemy\Enemy3D.h"
+#include "Enemy\Horde\Horde.h"
 #include "Map_Editor\Map_Editor.h"
 
 using std::cout;
@@ -681,7 +682,7 @@ bool FileManager::ReadEnemyFile(const string myFile)
 							break;
 						}
 					}
-					theEnemyInfo.name1 = tempData;
+					theEnemyInfo.type = tempData;
 				}
 
 				if (nextData == 1)
@@ -698,8 +699,7 @@ bool FileManager::ReadEnemyFile(const string myFile)
 							break;
 						}
 					}
-
-					theEnemyInfo.name2 = tempData;
+					theEnemyInfo.displacementX = stof(tempData);
 				}
 
 				if (nextData == 2)
@@ -716,8 +716,7 @@ bool FileManager::ReadEnemyFile(const string myFile)
 							break;
 						}
 					}
-
-					theEnemyInfo.name3 = tempData;
+					theEnemyInfo.displacementY = stof(tempData);
 				}
 
 				if (nextData == 3)
@@ -734,8 +733,7 @@ bool FileManager::ReadEnemyFile(const string myFile)
 							break;
 						}
 					}
-
-					theEnemyInfo.name4 = tempData;
+					theEnemyInfo.displacementZ = stof(tempData);
 				}
 
 				if (nextData == 4)
@@ -752,8 +750,7 @@ bool FileManager::ReadEnemyFile(const string myFile)
 							break;
 						}
 					}
-
-					theEnemyInfo.name5 = tempData;
+					theEnemyInfo.scaleX= stof(tempData);
 				}
 
 				if (nextData == 5)
@@ -770,95 +767,10 @@ bool FileManager::ReadEnemyFile(const string myFile)
 							break;
 						}
 					}
-					theEnemyInfo.name6 = tempData;
-				}
-
-				if (nextData == 6)
-				{
-					for (int j = i; j < data.size(); ++j)
-					{
-						if (data[j] != ',')
-						{
-							tempData += data[j];
-						}
-						else
-						{
-							i = j;
-							break;
-						}
-					}
-					theEnemyInfo.displacementX = stof(tempData);
-				}
-
-				if (nextData == 7)
-				{
-					for (int j = i; j < data.size(); ++j)
-					{
-						if (data[j] != ',')
-						{
-							tempData += data[j];
-						}
-						else
-						{
-							i = j;
-							break;
-						}
-					}
-					theEnemyInfo.displacementY = stof(tempData);
-				}
-
-				if (nextData == 8)
-				{
-					for (int j = i; j < data.size(); ++j)
-					{
-						if (data[j] != ',')
-						{
-							tempData += data[j];
-						}
-						else
-						{
-							i = j;
-							break;
-						}
-					}
-					theEnemyInfo.displacementZ = stof(tempData);
-				}
-
-				if (nextData == 9)
-				{
-					for (int j = i; j < data.size(); ++j)
-					{
-						if (data[j] != ',')
-						{
-							tempData += data[j];
-						}
-						else
-						{
-							i = j;
-							break;
-						}
-					}
-					theEnemyInfo.scaleX= stof(tempData);
-				}
-
-				if (nextData == 10)
-				{
-					for (int j = i; j < data.size(); ++j)
-					{
-						if (data[j] != ',')
-						{
-							tempData += data[j];
-						}
-						else
-						{
-							i = j;
-							break;
-						}
-					}
 					theEnemyInfo.scaleY = stof(tempData);
 				}
 
-				if (nextData == 11)
+				if (nextData == 6)
 				{
 					for (int j = i; j < data.size(); ++j)
 					{
@@ -879,9 +791,19 @@ bool FileManager::ReadEnemyFile(const string myFile)
 				++nextData;
 			}
 
-			Create::AnimatedEnemy(theEnemyInfo.name1, theEnemyInfo.name2, theEnemyInfo.name3, theEnemyInfo.name4, theEnemyInfo.name5, theEnemyInfo.name6,
-				Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
-				Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+			if (theEnemyInfo.type == "ROBOT")
+			{
+				Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head",
+					Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
+					Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+			}
+
+			if (theEnemyInfo.type == "HORDE")
+			{
+				Create::Horde("ROBOT",
+					Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
+					Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+			}
 			nextData = 0;
 			tempData = "";
 		}
@@ -968,11 +890,8 @@ void FileManager::EditEnemyFile(const string myFile)
 
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
-		//CEnemy3D* temp = (CEnemy3D*)*it;
-		//if (Map_Editor::GetInstance()->lastCreatedType == Map_Editor::GetInstance()->CREATED_ENEMY)
-		//{
-		//	temp->get
-		//}
+		CEnemy3D* temp = (CEnemy3D*)*it;
+		File << Map_Editor::GetInstance()->enemyObject << "," << temp->nearestPath().x << "," << temp->nearestPath().y << "," << temp->nearestPath().z << "," << temp->GetScale().x << "," << temp->GetScale().y << "," << temp->GetScale().z;
 	}
 }
 
@@ -1032,6 +951,13 @@ void FileManager::CreateWeapon()
 vector<FileManager::EQ_Info> FileManager::returnMasterList()
 {
 	return masterList;
+}
+
+void FileManager::clearVector()
+{
+	masterList.clear();
+	eqlist.clear();
+	objlist.clear();
 }
 
 //Vector3 FileManager::Token2Vector(string token)
