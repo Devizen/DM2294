@@ -7,6 +7,7 @@
 #include "Collider\Collider.h"
 #include "../Attributes.h"
 #include "../Enemy/Patrol/Patrol.h"
+#include "../../Common/Source/SingletonTemplate.h"
 
 #include <fstream>
 #include <string>
@@ -14,11 +15,11 @@
 #include <vector>
 using namespace std;
 
-class CPlayerInfo : public CCollider, public CAttributes
+class CPlayerInfo : public CCollider, public CAttributes, public Singleton<CPlayerInfo>
 {
 protected:
-	static CPlayerInfo *s_instance;
-	CPlayerInfo(void);
+	//static CPlayerInfo *s_instance;
+	//CPlayerInfo(void);
 
 	// The postures of the FPS player/camera
 	enum CURRENT_POSTURE
@@ -40,22 +41,23 @@ protected:
 	CURRENT_POSTURE theCurrentPosture;
 
 public:
-	static CPlayerInfo *GetInstance()
-	{
-		if (!s_instance)
-			s_instance = new CPlayerInfo;
-		return s_instance;
-	}
-	static bool DropInstance()
-	{
-		if (s_instance)
-		{
-			delete s_instance;
-			s_instance = NULL;
-			return true;
-		}
-		return false;
-	}
+	//static CPlayerInfo *GetInstance()
+	//{
+	//	if (!s_instance)
+	//		s_instance = new CPlayerInfo;
+	//	return s_instance;
+	//}
+	//static bool DropInstance()
+	//{
+	//	if (s_instance)
+	//	{
+	//		delete s_instance;
+	//		s_instance = NULL;
+	//		return true;
+	//	}
+	//	return false;
+	//}
+	CPlayerInfo(void);
 	~CPlayerInfo(void);
 
 	// Initialise this class instance

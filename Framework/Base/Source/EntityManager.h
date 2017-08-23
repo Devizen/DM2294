@@ -41,6 +41,7 @@ public:
 
 	list<CFurniture*>&returnFixed(void);
 	list<CEnemy3D*>&returnEnemy(void);
+	list<EntityBase*>&returnEntity(void);
 	/*Count how many enemies left.*/
 	int enemyCount(void);
 

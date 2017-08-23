@@ -1,7 +1,1 @@
 Name,Attack,Defense,Speed,ID,Type,Equipped
-BHELM,1,1,0,1,0,0
-BARMOR,0,1,0,5,1,0
-BGLOVE,1,0,0,9,2,0
-BSHOE,0,2,2,13,3,0
-BSWORD,10,0,0,17,4,0
-BGUN,10,0,0,21,5,0

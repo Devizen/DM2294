@@ -233,6 +233,9 @@ void Map_Editor::renderOption(void)
 	std::ostringstream playerPosition("");
 	playerPosition << CPlayerInfo::GetInstance()->GetPos();
 
+	std::ostringstream playerTarget("");
+	playerTarget << CPlayerInfo::GetInstance()->GetTarget();
+
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.4f, 0.f);
@@ -269,6 +272,12 @@ void Map_Editor::renderOption(void)
 	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Player Position:" + playerPosition.str(), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.10f, 0.f);
+	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Player Target:" + playerTarget.str(), Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
 }
 
 void Map_Editor::updateOption(double dt)
@@ -276,7 +285,7 @@ void Map_Editor::updateOption(double dt)
 	static CPlayerInfo* _player = CPlayerInfo::GetInstance();
 
 	_displacement.Set(_player->GetTarget().x - _player->GetPos().x, -10.f, _player->GetTarget().z - _player->GetPos().z);
-	_displacement.Set((_displacement.x * 50.f) + _player->GetPos().x, -10.f, (_displacement.z * 50.f) + _player->GetPos().z);
+	_displacement.Set(static_cast<int>((_displacement.x * 50.f) + _player->GetPos().x), -10.f, static_cast<int>((_displacement.z * 50.f) + _player->GetPos().z));
 
 	//cout << "Displacement: " << _displacement << endl;
 

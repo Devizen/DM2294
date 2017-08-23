@@ -309,6 +309,18 @@
     <ClCompile Include="Source\SceneManager\SceneManager.cpp">
       <Filter>SceneManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level\Level01.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Level\Level02.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Level\Level03.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Level\Level04.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -514,6 +526,18 @@
     </ClInclude>
     <ClInclude Include="Source\SceneManager\SceneManager.h">
       <Filter>SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Level01.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Level02.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Level03.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Level04.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -62,12 +62,7 @@ class FileManager : public Singleton <FileManager>
 
 	struct enemyInfo
 	{
-		string name1;
-		string name2;
-		string name3;
-		string name4;
-		string name5;
-		string name6;
+		string type;
 
 		float displacementX;
 		float displacementY;
@@ -109,6 +104,8 @@ public:
 	bool Token2Bool(string token);
 
 	vector<EQ_Info> returnMasterList();
+
+	void clearVector();
 };
 
 #endif

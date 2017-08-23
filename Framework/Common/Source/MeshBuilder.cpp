@@ -602,3 +602,17 @@ void MeshBuilder::RemoveMesh(const std::string& _meshName)
 		meshMap.erase(_meshName);
 	}
 }
+
+void MeshBuilder::removeMeshMap(void)
+{
+	for (map<string, Mesh*>::iterator it = meshMap.begin(); it != meshMap.end();)
+	{
+		string meshName = (string)it->first;
+		meshName = "";
+		Mesh* mesh = it->second;
+		if (mesh != nullptr)
+			delete mesh;
+
+		it = meshMap.erase(it);
+	}
+}

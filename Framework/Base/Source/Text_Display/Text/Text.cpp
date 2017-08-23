@@ -44,6 +44,7 @@ CText * Create::Text(const std::string & _meshName, string _message, float _dura
 	text->textType = _textType;
 
 	Text_Manager::GetInstance()->addText(text);
+	Text_Manager::GetInstance()->displayingText = true;
 
 	return text;
 }
