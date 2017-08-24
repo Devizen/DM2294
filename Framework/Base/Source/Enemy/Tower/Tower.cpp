@@ -118,6 +118,7 @@ CTower* Create::Tower(const std::string& _meshName,
 	const Vector3& _scale,
 	const bool& _playerProperty)
 {
+
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
 		return nullptr;
@@ -140,6 +141,7 @@ CTower* Create::Tower(const std::string& _meshName,
 	result->setHealthTo(10.f);
 	result->setAttackTo(1.f);
 	result->setDefenseTo(1.f);
+	result->setType(3);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }

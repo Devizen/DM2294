@@ -129,6 +129,8 @@ public:
 	CEnemy3D* _horde;
 	/*Switch between axis for scaling.*/
 	SCALE_AXIS scaleAxis;
+
+	int enemyNo;
 private:
 
 protected:

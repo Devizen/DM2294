@@ -94,6 +94,7 @@ void Level04::Init()
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
+	{
 	//Application::GetInstance().setAspectRatioHeight(100.f);
 	//Application::GetInstance().setAspectRatioWidth(Application::GetInstance().getAspectRatioHeight() * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight());
 	//m_worldWidth = m_worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
@@ -179,7 +180,7 @@ void Level04::Init()
 	//m_parameters[U_SHADOW_COLOR_TEXTURE1] = glGetUniformLocation(m_gPassShaderID, "colorTexture[1]");
 	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED2] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[2]");
 	//m_parameters[U_SHADOW_COLOR_TEXTURE2] = glGetUniformLocation(m_gPassShaderID, "colorTexture[2]");
-
+	}
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
 
@@ -335,7 +336,9 @@ void Level04::Init()
 	//CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
 	//CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
 	//CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
-	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
+
+	//CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
+
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
 	//m_lightDepthFBO.Init(1024, 1024);
@@ -356,7 +359,8 @@ void Level04::Init()
 
 	saveMapTime = 0;
 
-	//FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
+	FileManager::GetInstance()->ReadMapFile("Files//Level04.csv");
+	FileManager::GetInstance()->ReadEnemyFile("Files//Level04Enemy.csv");
 }
 
 void Level04::Update(double dt)
@@ -373,7 +377,8 @@ void Level04::Update(double dt)
 
 	if (saveMapTime >= 10)
 	{
-		FileManager::GetInstance()->EditMapFile("Files//Level Loader.csv");
+		FileManager::GetInstance()->EditMapFile("Files//Level04.csv");
+		FileManager::GetInstance()->EditEnemyFile("Files//Level04Enemy.csv");
 	}
 
 

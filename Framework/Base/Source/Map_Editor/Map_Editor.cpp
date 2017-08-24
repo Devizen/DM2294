@@ -46,6 +46,7 @@ Map_Editor::Map_Editor() :
 	, turret(nullptr)
 	, lastCreatedType(CREATED_NONE)
 	, scaleAxis(SCALE_ALL)
+	, enemyNo(0)
 {
 }
 
@@ -641,6 +642,7 @@ void Map_Editor::updateOption(double dt)
 			{
 				if (!addWaypoint)
 				{
+					enemyNo = 1;
 					_enemy = Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head", _displacement, _scale);
 					_enemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 					_enemy->SetLight(true);
@@ -656,6 +658,8 @@ void Map_Editor::updateOption(double dt)
 			}
 			else if (enemyObject == TOWER)
 			{
+				enemyNo = 2;
+
 				cout << "Create Displacement: " << _displacement << endl;
 				turret = Create::Enemy3D("turret", _displacement, _scale);
 				lastCreatedType = CREATED_ENEMY;
@@ -663,6 +667,8 @@ void Map_Editor::updateOption(double dt)
 
 			else if (enemyObject == HORDE)
 			{
+				enemyNo = 3;
+
 				cout << "Create Displacement: " << _displacement << endl;
 				_horde = Create::Horde("ROBOT", _displacement, _scale);
 				lastCreatedType = CREATED_ENEMY_HORDE;

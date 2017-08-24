@@ -514,6 +514,7 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->setDefaultPosition(_position);
 	result->pathFindingMode = false;
 	result->setAlertBoundary(Vector3(-100.f, -10.f, -100.f), Vector3(100.f, 10.f, 100.f));
+	result->setType(1);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }

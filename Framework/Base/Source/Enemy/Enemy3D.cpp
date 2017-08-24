@@ -70,7 +70,7 @@ void CEnemy3D::Init(void)
 
 	// Add to EntityManager
 	EntityManager::GetInstance()->AddEntity(this);
-
+	type = 0;
 }
 
 // Reset this player instance to default
@@ -753,6 +753,7 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 	result->setHealthTo(10.f);
 	result->setAttackTo(1.f);
 	result->setDefenseTo(1.f);
+	result->setType(3);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }
