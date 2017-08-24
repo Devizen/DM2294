@@ -119,10 +119,10 @@ void EntityManager::Update(double _dt)
 			if (item->GetItem() == EntityBase::HEALTH)
 			{
 				CSoundEngine::GetInstance()->PlayASound("HEAL");
-				if (player->getAttribute(CAttributes::TYPE_HEALTH) + 20 > 100)
+				if (player->GetAttribute(CAttributes::TYPE_HEALTH) + 20 > 100)
 					player->setHealthTo(100);
 				else
-					player->setHealthTo(player->getAttribute(CAttributes::TYPE_HEALTH) + 20);
+					player->setHealthTo(player->GetAttribute(CAttributes::TYPE_HEALTH) + 20);
 
 				item->SetIsDone(true);
 			}

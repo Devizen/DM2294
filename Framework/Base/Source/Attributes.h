@@ -33,7 +33,7 @@ public:
 		TYPE_MAXHEALTH,
 		TYPE_GOLD,
 	*/
-	float getAttribute(ATTRIBUTE_TYPES type);
+	float GetAttribute(ATTRIBUTE_TYPES type);
 
 	//Setters
 	/*

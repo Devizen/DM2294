@@ -670,7 +670,7 @@ void Tutorial::Update(double dt)
 		cout << "IN" << endl;
 	}
 
-	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) > 0)
+	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) > 0)
 	{
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_BACK))
 			pause = true;
@@ -783,7 +783,7 @@ void Tutorial::Update(double dt)
 
 			///*Display player health.*/
 			//ss.str("");
-			//ss << "Health:" << playerInfo->getAttribute(CAttributes::TYPE_HEALTH);
+			//ss << "Health:" << playerInfo->GetAttribute(CAttributes::TYPE_HEALTH);
 			//textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
 			//textObj[23]->SetText(ss.str());
 
@@ -901,7 +901,7 @@ void Tutorial::Update(double dt)
 				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Conversation Message that Prints.It also goes to the second line.\nThere's also a third line.", 0.f, 2.f, CText::TEXT_CONVERSATION);
+				Create::Text("text", "Hello\nWorld\nTest.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
 				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
@@ -1612,7 +1612,7 @@ void Tutorial::RenderWorld(void)
 	/*Debug*/
 	//CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
 
-	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) <= 0)
+	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) <= 0)
 	{
 		Mesh* modelMesh;
 		modelMesh = MeshBuilder::GetInstance()->GetMesh("GAMEOVER");

@@ -10,6 +10,7 @@
 #include "../../Application.h"
 /*For keypress to skip the text.*/
 #include "KeyboardController.h"
+#include "MouseController.h"
 /*To stop the camera from swaying.*/
 #include "../../Base/Source/PlayerInfo/PlayerInfo.h"
 #include <iostream>
@@ -99,7 +100,7 @@ void Text_Manager::updateText(double dt)
 					}
 
 					/*Display entire message.*/
-					if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && text->message.size() != storeText.size())
+					if ((KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) || MouseController::GetInstance()->IsButtonPressed(MouseController::BUTTON_TYPE::LMB)) && text->message.size() != storeText.size())
 					{
 						text->textConversation[0] = "";
 						text->textConversation[1] = "";
@@ -111,18 +112,18 @@ void Text_Manager::updateText(double dt)
 						{
 							if (storeText[i] == '\n')
 							{
-								text->textConversation[nextVector] += storeText[i];
+								count = 0;
 								++nextVector;
 								continue;
 							}
 							text->textConversation[nextVector] += storeText[i];
-							if (count >= 50)
+							++count;
+							if (count > 49 && nextVector < 3)
 							{
 								count = 0;
 								++nextVector;
 								continue;
 							}
-							++count;
 						}
 						text->message = storeText;
 						preventCancel = true;
@@ -164,7 +165,7 @@ void Text_Manager::updateText(double dt)
 
 					if (text->message.size() >= storeText.size())
 					{
-						if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !preventCancel)
+						if ((KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) || MouseController::GetInstance()->IsButtonPressed(MouseController::BUTTON_TYPE::LMB)) && !preventCancel)
 						{
 							text->activateText = false;
 
