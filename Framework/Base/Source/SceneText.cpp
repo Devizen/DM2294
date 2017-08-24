@@ -479,6 +479,7 @@ void SceneText::Init()
 	saveMapTime = 0;
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
+	FileManager::GetInstance()->ReadEnemyFile("Files//Enemy Loader.csv");
 	FileManager::GetInstance()->ReadShopFile("Files/Shop.csv");
 }
 
@@ -497,6 +498,7 @@ void SceneText::Update(double dt)
 	if (saveMapTime >= 10)
 	{
 		FileManager::GetInstance()->EditMapFile("Files//Level Loader.csv");
+		FileManager::GetInstance()->EditEnemyFile("Files//Enemy Loader.csv");
 	}
 
 

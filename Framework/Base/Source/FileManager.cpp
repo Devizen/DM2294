@@ -811,6 +811,12 @@ bool FileManager::ReadEnemyFile(const string myFile)
 					Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
 					Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
 			}
+
+			if (stoi(theEnemyInfo.type) == 3)
+			{
+				Create::Enemy3D("turret", Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
+					Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+			}
 			nextData = 0;
 			tempData = "";
 		}
@@ -1174,7 +1180,7 @@ void FileManager::EditEnemyFile(const string myFile)
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
 		CEnemy3D* temp = (CEnemy3D*)*it;
-		File << Map_Editor::GetInstance()->enemyObject << "," << temp->nearestPath().x << "," << temp->nearestPath().y << "," << temp->nearestPath().z << "," << temp->GetScale().x << "," << temp->GetScale().y << "," << temp->GetScale().z;
+		File << Map_Editor::GetInstance()->enemyObject << "," << temp->GetPosition().x << "," << temp->GetPosition().y << "," << temp->GetPosition().z << "," << temp->GetScale().x << "," << temp->GetScale().y << "," << temp->GetScale().z << "\n";
 	}
 }
 

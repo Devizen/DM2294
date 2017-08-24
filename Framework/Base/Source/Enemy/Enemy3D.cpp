@@ -396,7 +396,7 @@ bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 
 
 				//cout << "Enemy Without Y: " << enemyWithoutY << endl;
-				cout << boundaryMin << " <= " << enemyMax << " && " << boundaryMax << " >= " << enemyMin << endl;
+				//cout << boundaryMin << " <= " << enemyMax << " && " << boundaryMax << " >= " << enemyMin << endl;
 				if (boundaryMin <= enemyMax && boundaryMax >= enemyMin)
 				{
 					//cout << "Set Who Closer to Enemy" << endl;
