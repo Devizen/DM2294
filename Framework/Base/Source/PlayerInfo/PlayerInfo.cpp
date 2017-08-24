@@ -1069,7 +1069,7 @@ void CPlayerInfo::renderPlayerHealth()
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
 	modelStack.Translate(20.f, 40.f, 0.f);
-	modelStack.Scale((this->getAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth()) * 0.0005f, Application::GetInstance().GetWindowHeight() * 0.01f, 1.f);
+	modelStack.Scale((this->GetAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth()) * 0.0005f, Application::GetInstance().GetWindowHeight() * 0.01f, 1.f);
 	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
 	modelStack.PopMatrix();
 }
@@ -1086,7 +1086,7 @@ void CPlayerInfo::RenderAttribute()
 {
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	string message = "HP: ";
-	message += to_string((int)getAttribute(TYPE_HEALTH));
+	message += to_string((int)GetAttribute(TYPE_HEALTH));
 	modelStack.PushMatrix();
 	modelStack.Translate(-180, 180.f, 0.f);
 	modelStack.Scale(35, 35, 35);
@@ -1094,7 +1094,7 @@ void CPlayerInfo::RenderAttribute()
 	modelStack.PopMatrix();
 
 	message = "Atk: ";
-	message += to_string((int)getAttribute(TYPE_ATTACK));
+	message += to_string((int)GetAttribute(TYPE_ATTACK));
 	modelStack.PushMatrix();
 	modelStack.Translate(-180, 150.f, 0.f);
 	modelStack.Scale(35, 35, 35);
@@ -1102,7 +1102,7 @@ void CPlayerInfo::RenderAttribute()
 	modelStack.PopMatrix();
 
 	message = "Def: ";
-	message += to_string((int)getAttribute(TYPE_DEFENSE));
+	message += to_string((int)GetAttribute(TYPE_DEFENSE));
 	modelStack.PushMatrix();
 	modelStack.Translate(-180, 120.f, 0.f);
 	modelStack.Scale(35, 35, 35);
@@ -1110,7 +1110,7 @@ void CPlayerInfo::RenderAttribute()
 	modelStack.PopMatrix();
 
 	message = "Spd: ";
-	message += to_string((int)getAttribute(TYPE_SPEED));
+	message += to_string((int)GetAttribute(TYPE_SPEED));
 	modelStack.PushMatrix();
 	modelStack.Translate(-180, 90.f, 0.f);
 	modelStack.Scale(35, 35, 35);
@@ -1122,7 +1122,45 @@ void CPlayerInfo::setLockedOn(void)
 {
 	if (!lockedOn)
 	{
-		list<CEnemy3D*>enemyList = EntityManager::GetInstance()->returnEnemy();
+		//CEnemy3D* enemy = nullptr;
+		float nearestDistance = 0.f;
+		Vector3 thisWithoutY(position.x, -10.f, position.z);
+
+
+		for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+		{
+			if ((*it)->getPlayerProperty())
+				continue;
+
+			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
+
+			/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
+			nearestDistance = (Vector3(enemyWithoutY.x - thisWithoutY.x, -10.f, enemyWithoutY.z - thisWithoutY.z)).LengthSquared();
+			enemyPositionToLockOn = (CEnemy3D*)*it;
+			break;
+		}
+
+		for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+		{
+			if ((*it)->getPlayerProperty())
+				continue;
+
+			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
+
+			if ((Vector3(enemyWithoutY.x - thisWithoutY.x, -10.f, enemyWithoutY.z - thisWithoutY.z)).LengthSquared() < nearestDistance)
+			{
+				enemyPositionToLockOn = (CEnemy3D*)*it;
+				nearestDistance = (enemyWithoutY - thisWithoutY).LengthSquared();
+			}
+			else
+				continue;
+		}
+	}
+	if (enemyPositionToLockOn != nullptr)
+		lockedOn = true;
+	else
+		lockedOn = false;
+		/*list<CEnemy3D*>enemyList = EntityManager::GetInstance()->returnEnemy();
 
 		for (list<CEnemy3D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 		{
@@ -1151,8 +1189,8 @@ void CPlayerInfo::setLockedOn(void)
 				enemyPositionToLockOn = enemyPosition;
 		}
 		if (enemyPositionToLockOn != nullptr)
-			lockedOn = true;
-	}
+			lockedOn = true;*/
+	//}
 }
 
 void CPlayerInfo::setLockedOn(bool _lockedOn)

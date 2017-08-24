@@ -155,7 +155,7 @@ void CEnemy3D::Update(double dt)
 	{
 		case IDLE:
 		{
-			/*Real-time loop control, check if player is within boundary every 3 seconds.*/
+			/*Real-time loop control, check if player is within boundary every 1 second.*/
 			m_fElapsedTimeBeforeUpdate += dt;
 			if (m_fElapsedTimeBeforeUpdate > 1.0f)
 				m_fElapsedTimeBeforeUpdate = 0.0f;
@@ -217,7 +217,7 @@ void CEnemy3D::Update(double dt)
 			//	cout << "Player Position: " << CPlayerInfo::GetInstance()->GetPos() << endl;
 			//}
 
-			if (this->getShootDelay() > 0.2f && getAttribute(CAttributes::TYPE_HEALTH)> 0)
+			if (this->getShootDelay() > 0.2f && GetAttribute(CAttributes::TYPE_HEALTH)> 0)
 			{
 				/*Randomise X value by 0.1f so that the trajectory will not be always fixed.*/
 				CProjectile* _bullet = Create::Projectile("sphere", newPosition, Vector3(Math::RandFloatMinMax(viewVector.x - 0.1f, viewVector.x + 0.1f), viewVector.y, viewVector.z), 2.f, 100.f, NULL);
@@ -263,7 +263,7 @@ void CEnemy3D::Update(double dt)
 			break;
 		}
 	}
-	if (getAttribute(CAttributes::TYPE_HEALTH) <= 0 && state != RECOVERY)
+	if (GetAttribute(CAttributes::TYPE_HEALTH) <= 0 && state != RECOVERY)
 		state = DEAD;
 	//if (enemyBehavior == ENEMY_BEHAVIOR::TOWER)
 	//	updateTower(dt);
@@ -326,7 +326,7 @@ void CEnemy3D::Render(void)
 		RenderHelper::RenderMeshWithLight(modelMesh);
 	modelStack.PopMatrix();
 
-	if (getAttribute(CAttributes::TYPE_HEALTH) > 0.f)
+	if (GetAttribute(CAttributes::TYPE_HEALTH) > 0.f)
 		renderHealthBar();
 }
 
@@ -620,18 +620,18 @@ void CEnemy3D::renderHealthBar(void)
 	/*Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());*/
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
-	modelStack.Scale((getAttribute(CAttributes::TYPE_HEALTH) / getAttribute(CAttributes::TYPE_MAXHEALTH)) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.000001f);
+	modelStack.Scale((GetAttribute(CAttributes::TYPE_HEALTH) / GetAttribute(CAttributes::TYPE_MAXHEALTH)) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.000001f);
 
 	/*Set health bar to green colour before damage.*/
-	if (getAttribute(CAttributes::TYPE_HEALTH) / getAttribute(CAttributes::TYPE_MAXHEALTH) == 1)
+	if (GetAttribute(CAttributes::TYPE_HEALTH) / GetAttribute(CAttributes::TYPE_MAXHEALTH) == 1)
 		MeshBuilder::GetInstance()->GenerateCube("cube", Color(0.f, 1.f, 0.0f), 1.f);
 
 	/*Set health bar to yellow color when taken damage and is above 20%.*/
-	if (getAttribute(CAttributes::TYPE_HEALTH) / getAttribute(CAttributes::TYPE_MAXHEALTH) > 0.2f && getAttribute(CAttributes::TYPE_HEALTH) / getAttribute(CAttributes::TYPE_MAXHEALTH) < 1.f)
+	if (GetAttribute(CAttributes::TYPE_HEALTH) / GetAttribute(CAttributes::TYPE_MAXHEALTH) > 0.2f && GetAttribute(CAttributes::TYPE_HEALTH) / GetAttribute(CAttributes::TYPE_MAXHEALTH) < 1.f)
 		MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.f, 1.f, 0.0f), 1.f);
 
 	/*Set health bar to red color when health is 20% and below.*/
-	if (getAttribute(CAttributes::TYPE_HEALTH) / getAttribute(CAttributes::TYPE_MAXHEALTH) <= 0.2f)
+	if (GetAttribute(CAttributes::TYPE_HEALTH) / GetAttribute(CAttributes::TYPE_MAXHEALTH) <= 0.2f)
 		MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.f, 0.f, 0.0f), 1.f);
 	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
 
@@ -696,9 +696,34 @@ bool CEnemy3D::checkCollision(void)
 	return false;
 }
 
-CEnemy3D::WHO_CLOSER CEnemy3D::getWhoCloser(void)
+void CEnemy3D::SetWhoCloser(WHO_CLOSER _whoCloser)
+{
+	whoCloser = _whoCloser;
+}
+
+CEnemy3D::WHO_CLOSER CEnemy3D::GetWhoCloser(void)
 {
 	return whoCloser;
+}
+
+void CEnemy3D::SetElapsedTime(float _m_fElapsedTimeBeforeUpdate)
+{
+	m_fElapsedTimeBeforeUpdate = _m_fElapsedTimeBeforeUpdate;
+}
+
+float CEnemy3D::GetElapsedTime(void)
+{
+	return m_fElapsedTimeBeforeUpdate;
+}
+
+void CEnemy3D::SetPreviousPosition(Vector3 _previousPosition)
+{
+	previousPosition = _previousPosition;
+}
+
+Vector3 CEnemy3D::GetPreviousPosition(void)
+{
+	return previousPosition;
 }
 
 CEnemy3D* Create::Enemy3D(const std::string& _meshName,

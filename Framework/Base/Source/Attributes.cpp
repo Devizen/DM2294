@@ -32,7 +32,7 @@ Types:
 -TYPE_MAXHEALTH
 -TYPE_GOLD
 */
-float CAttributes::getAttribute(ATTRIBUTE_TYPES type)
+float CAttributes::GetAttribute(ATTRIBUTE_TYPES type)
 {
 	switch (type)
 	{
@@ -131,14 +131,14 @@ Sets attributes base on CAttribute specified in parameter
 */
 void CAttributes::operator=(CAttributes newAttributes)
 {
-	this->ATTACK = newAttributes.getAttribute(TYPE_ATTACK);
-	this->DEFENSE = newAttributes.getAttribute(TYPE_DEFENSE);
-	this->HEALTH = newAttributes.getAttribute(TYPE_HEALTH);
-	this->MAX_EXP = newAttributes.getAttribute(TYPE_MAXEXP);
-	this->MAX_HEALTH = newAttributes.getAttribute(TYPE_MAXHEALTH);
-	this->GOLD = newAttributes.getAttribute(TYPE_GOLD);
-	this->EXP = newAttributes.getAttribute(TYPE_EXP);
-	this->LEVEL = newAttributes.getAttribute(TYPE_LEVEL);
+	this->ATTACK = newAttributes.GetAttribute(TYPE_ATTACK);
+	this->DEFENSE = newAttributes.GetAttribute(TYPE_DEFENSE);
+	this->HEALTH = newAttributes.GetAttribute(TYPE_HEALTH);
+	this->MAX_EXP = newAttributes.GetAttribute(TYPE_MAXEXP);
+	this->MAX_HEALTH = newAttributes.GetAttribute(TYPE_MAXHEALTH);
+	this->GOLD = newAttributes.GetAttribute(TYPE_GOLD);
+	this->EXP = newAttributes.GetAttribute(TYPE_EXP);
+	this->LEVEL = newAttributes.GetAttribute(TYPE_LEVEL);
 }
 
 void CAttributes::setLevel(int level)
