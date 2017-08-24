@@ -97,6 +97,9 @@
     <Filter Include="SceneManager">
       <UniqueIdentifier>{6b343147-d420-4767-a47a-6e3b9b10ae40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Enemy3D\Tower">
+      <UniqueIdentifier>{db51b8dd-4120-4d69-994d-ab60f0e8595b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -321,6 +324,9 @@
     <ClCompile Include="Source\Level\Level04.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Enemy\Tower\Tower.cpp">
+      <Filter>Enemy3D\Tower</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -538,6 +544,9 @@
     </ClInclude>
     <ClInclude Include="Source\Level\Level04.h">
       <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Tower\Tower.h">
+      <Filter>Enemy3D\Tower</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

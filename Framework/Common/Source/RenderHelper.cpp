@@ -189,7 +189,7 @@ void RenderHelper::renderPlayerHealth(void)
 {
 	CPlayerInfo* player = CPlayerInfo::GetInstance();
 	/*Calculating the alignment offset of health bar. Value is based on the scaling.*/
-	float healthBarOffset = CPlayerInfo::GetInstance()->getAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth() * 0.005f;
+	float healthBarOffset = CPlayerInfo::GetInstance()->GetAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth() * 0.005f;
 
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
@@ -200,12 +200,12 @@ void RenderHelper::renderPlayerHealth(void)
 		modelStack.Translate((-Application::GetInstance().GetWindowWidth() * 0.49f) + (healthBarOffset) * 0.5f, -Application::GetInstance().GetWindowHeight() * 0.4f, 0.f);
 	else
 		modelStack.Translate((-Application::GetInstance().GetWindowWidth() * 0.49f) + (healthBarOffset) * 0.5f, -Application::GetInstance().GetWindowHeight() * 0.35f, 0.f);
-	modelStack.Scale(CPlayerInfo::GetInstance()->getAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth() * 0.005f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
+	modelStack.Scale(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth() * 0.005f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
 	
 	/*Changing the health bar colour according to player health left %. 100% == Green, > 20% == Yellow and below 20% == Red.*/
-	if (player->getAttribute(CAttributes::TYPE_HEALTH) == player->getAttribute(CAttributes::TYPE_MAXHEALTH))
+	if (player->GetAttribute(CAttributes::TYPE_HEALTH) == player->GetAttribute(CAttributes::TYPE_MAXHEALTH))
 		MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
-	else if (player->getAttribute(CAttributes::TYPE_HEALTH) / player->getAttribute(CAttributes::TYPE_MAXHEALTH) > 0.2f)
+	else if (player->GetAttribute(CAttributes::TYPE_HEALTH) / player->GetAttribute(CAttributes::TYPE_MAXHEALTH) > 0.2f)
 		MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(1.f, 1.0f, 0.0f), 1.0f);
 	else
 		MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(1.f, 0.0f, 0.0f), 1.0f);

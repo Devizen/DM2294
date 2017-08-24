@@ -141,15 +141,15 @@ void CQuest::Update(double dt)
 			switch (valueComparisonType)
 			{
 			case COMPARE_EQUAL:
-				if (CPlayerInfo::GetInstance()->getAttribute(temp) == questGoalValue)
+				if (CPlayerInfo::GetInstance()->GetAttribute(temp) == questGoalValue)
 					isQuestDone = true;
 				break;
 			case COMPARE_LESS_THAN:
-				if (CPlayerInfo::GetInstance()->getAttribute(temp) < questGoalValue)
+				if (CPlayerInfo::GetInstance()->GetAttribute(temp) < questGoalValue)
 					isQuestDone = true;
 				break;
 			case COMPARE_MORE_THAN:
-				if (CPlayerInfo::GetInstance()->getAttribute(temp) > questGoalValue)
+				if (CPlayerInfo::GetInstance()->GetAttribute(temp) > questGoalValue)
 					isQuestDone = true;
 				break;
 			}

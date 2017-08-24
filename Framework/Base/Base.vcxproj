@@ -22,6 +22,7 @@
     <ClCompile Include="Source\Enemy\Horde\Horde.cpp" />
     <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp" />
     <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp" />
+    <ClCompile Include="Source\Enemy\Tower\Tower.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FileManager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="Source\Enemy\Horde\Horde.h" />
     <ClInclude Include="Source\Enemy\Pathfinding\Pathfinding.h" />
     <ClInclude Include="Source\Enemy\Patrol\Patrol.h" />
+    <ClInclude Include="Source\Enemy\Tower\Tower.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FileManager.h" />
     <ClInclude Include="Source\FPSCamera.h" />

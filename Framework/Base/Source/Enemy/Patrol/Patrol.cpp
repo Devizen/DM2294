@@ -161,7 +161,7 @@ void CPatrol::Render(void)
 		RenderHelper::RenderMeshWithLight(modelMesh);
 	modelStack.PopMatrix();
 
-	if (getAttribute(CAttributes::TYPE_HEALTH) > 0.f)
+	if (GetAttribute(CAttributes::TYPE_HEALTH) > 0.f)
 		renderHealthBar();
 
 	if (pathFindingMode)
