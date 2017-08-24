@@ -17,5 +17,6 @@ public:
 	virtual int GetType() = 0;
 	virtual string getName() = 0;
 	virtual int getEquippedStatus() = 0;
+	virtual int getGold() = 0;
 
 };

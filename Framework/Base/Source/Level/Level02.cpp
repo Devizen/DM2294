@@ -56,6 +56,10 @@
 #include "../Text_Display\Text\Text.h"
 #include "../Text_Display\Text_Manager\Text_Manager.h"
 
+/*Quest stuff*/
+#include "../Quest/Quest.h"
+#include "../Quest/Quest_Manager/Quest_Manager.h"
+
 #include <iostream>
 
 #include "../Attributes.h"
@@ -351,6 +355,10 @@ void Level02::Init()
 
 	MeshBuilder::GetInstance()->GenerateOBJ("TOWER", "OBJ//Tower.obj");
 	MeshBuilder::GetInstance()->GetMesh("TOWER")->textureID = LoadTGA("Image//Tower.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Wall", "OBJ//Wall.obj");
+	MeshBuilder::GetInstance()->GetMesh("Wall")->textureID = LoadTGA("Image//Wall_Texture.tga");
+
 	/*Player Health Bar Color*/
 	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
 
@@ -469,7 +477,13 @@ void Level02::Init()
 
 	saveMapTime = 0;
 
-	//FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
+	Create::Quest("Test", "For Testing Purpose", CQuest::QUEST_MAIN, true);
+	Create::Quest("Test2", "To Test or not to test", CQuest::QUEST_MAIN, true);
+	Create::Quest("Test3", "Blindness Blindness Blindness", CQuest::QUEST_MAIN, true);
+	Create::Quest("Test4", "I need to pee", CQuest::QUEST_MAIN, true);
+	Create::Quest("Test5", "Lmao lol meme", CQuest::QUEST_MAIN, false);
+
+	FileManager::GetInstance()->ReadMapFile("Files//Level02.csv");
 }
 
 void Level02::Update(double dt)
@@ -486,7 +500,7 @@ void Level02::Update(double dt)
 
 	if (saveMapTime >= 10)
 	{
-		FileManager::GetInstance()->EditMapFile("Files//Level Loader.csv");
+	//	FileManager::GetInstance()->EditMapFile("Files//Level02.csv");
 	}
 
 
@@ -802,6 +816,8 @@ void Level02::Update(double dt)
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
 				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
+
+			CQuest_Manager::GetInstance()->updateQuest(dt);
 
 			/*Update text display.*/
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)

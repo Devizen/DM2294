@@ -29,6 +29,7 @@ public:
 			return 0;
 		}
 	};
+	virtual int getGold() { return 0; }
 
 	void SetAttack(int newAtt) { attack = newAtt; }
 	void SetDef(int newDef) { defense = newDef; }

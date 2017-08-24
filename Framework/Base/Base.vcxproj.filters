@@ -100,6 +100,9 @@
     <Filter Include="Enemy3D\Tower">
       <UniqueIdentifier>{db51b8dd-4120-4d69-994d-ab60f0e8595b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ShopManager">
+      <UniqueIdentifier>{5f99713c-0f6b-40a8-beae-8354778b88fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -327,6 +330,12 @@
     <ClCompile Include="Source\Enemy\Tower\Tower.cpp">
       <Filter>Enemy3D\Tower</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ShopManager\Shop.cpp">
+      <Filter>ShopManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ShopManager\ShopManager.cpp">
+      <Filter>ShopManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -547,6 +556,12 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy\Tower\Tower.h">
       <Filter>Enemy3D\Tower</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ShopManager\Shop.h">
+      <Filter>ShopManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ShopManager\ShopManager.h">
+      <Filter>ShopManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

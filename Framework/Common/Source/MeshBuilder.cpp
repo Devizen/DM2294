@@ -569,6 +569,9 @@ Mesh* MeshBuilder::GenerateCircle(const std::string &meshName, Color color, floa
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
 	mesh->indexSize = index_buffer_data.size();
 	mesh->mode = Mesh::DRAW_TRIANGLES;
+
+	AddMesh(meshName, mesh);
+
 	return mesh;
 }
 

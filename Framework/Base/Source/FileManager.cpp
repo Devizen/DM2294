@@ -29,6 +29,8 @@
 #include "Enemy\Enemy3D.h"
 #include "Enemy\Horde\Horde.h"
 #include "Map_Editor\Map_Editor.h"
+#include "ShopManager\ShopManager.h"
+#include "ShopManager\Shop.h"
 
 using std::cout;
 using std::endl;
@@ -210,6 +212,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 			}
 			nextData = 0;
 		}
+		return true;
 	}
 
 	return false;
@@ -644,9 +647,10 @@ bool FileManager::ReadMapFile(const string myFile)
 			temp->SetRotate(theOBJinfo.rotateAngle);
 			nextData = 0;
 		}
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 bool FileManager::ReadEnemyFile(const string myFile)
@@ -819,6 +823,286 @@ bool FileManager::ReadEnemyFile(const string myFile)
 	return true;
 }
 
+bool FileManager::ReadShopFile(const string myFile)
+{
+	ifstream file;
+	static int count = 0;
+	string data = "";
+	string tempData = "";
+	int nextData = 0;
+	bool skipFirstLine = false;
+	file.open(myFile);
+
+	if (file.is_open())
+	{
+		while (getline(file, data))
+		{
+			if (!skipFirstLine)
+			{
+				skipFirstLine = true;
+				continue;
+			}
+
+			for (int i = 0; i < data.size(); ++i)
+			{
+				if (nextData == 0)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theShopInfo.name = tempData;
+				}
+
+				if (nextData == 1)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+
+					theShopInfo.eqAtk = tempData;
+				}
+
+				if (nextData == 2)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+
+					theShopInfo.eqDef = tempData;
+				}
+
+				if (nextData == 3)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+
+					theShopInfo.eqSpeed = tempData;
+				}
+
+				if (nextData == 4)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+
+					theShopInfo.eqId = tempData;
+				}
+
+				if (nextData == 5)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theShopInfo.eqType = tempData;
+				}
+
+				if (nextData == 6)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theShopInfo.isEquipped = stoi(tempData);
+				}
+
+				if (nextData == 7)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theShopInfo.gold = stoi(tempData);
+				}
+
+				tempData = "";
+				++nextData;
+			}
+			Create::ShopItems(theShopInfo.name, theShopInfo.eqId, theShopInfo.eqAtk, theShopInfo.eqDef, theShopInfo.eqSpeed, theShopInfo.gold, stoi(theShopInfo.eqType));
+			nextData = 0;
+			tempData = "";
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	return true;
+}
+
+void FileManager::EditShopFile(const string myFile)
+{
+	ofstream File;
+	File.open(myFile);
+	File << "Name,Attack,Defense,Speed,ID,Type,Equipped,Gold\n";
+	for (int i = 0; i < 3; i ++)
+	{
+		Equipment* temp = ShopManager::GetInstance()->getHelmVector()[i];
+		if (temp != NULL)
+		{
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << ","
+				<<temp->getGold() << "\n";
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		Equipment* temp = ShopManager::GetInstance()->getArmorVector()[i];
+		if (temp != NULL)
+		{
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << ","
+				<< temp->getGold() << "\n";
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		Equipment* temp = ShopManager::GetInstance()->getGloveVector()[i];
+		if (temp != NULL)
+		{
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << ","
+				<< temp->getGold() << "\n";
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		Equipment* temp = ShopManager::GetInstance()->getShoeVector()[i];
+		if (temp != NULL)
+		{
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << ","
+				<< temp->getGold() << "\n";
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		Equipment* temp = ShopManager::GetInstance()->getSwordVector()[i];
+		if (temp != NULL)
+		{
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << ","
+				<< temp->getGold() << "\n";
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		Equipment* temp = ShopManager::GetInstance()->getGunVector()[i];
+		if (temp != NULL)
+		{
+			File << temp->getName() << ","
+				<< temp->GetAttack() << ","
+				<< temp->GetDefense() << ","
+				<< temp->GetSpeed() << ","
+				<< temp->GetID() << ","
+				<< temp->GetType() << ","
+				<< temp->getEquippedStatus() << ","
+				<< temp->getGold() << "\n";
+		}
+	}
+}
+
 void FileManager::EditWeaponFile(const string myFile)
 {
 	ofstream File;
@@ -836,15 +1120,11 @@ void FileManager::EditWeaponFile(const string myFile)
 				<< temp->GetID() << ","
 				<< temp->GetType() << ","
 				<< temp->getEquippedStatus() << "\n";
-
-			cout << "Equipped Status: " << temp->getEquippedStatus() << endl;
 		}
 	}
 
 	for (int i = 0; i < 12; i++)
 	{
-		cout << "IN" << endl;
-
 		if (Inventory::GetInstance()->ReturnType()[i] != NULL)
 		{
 			Equipment* temp = Inventory::GetInstance()->ReturnType()[i];
@@ -961,6 +1241,7 @@ void FileManager::clearVector()
 	masterList.clear();
 	eqlist.clear();
 	objlist.clear();
+	shopList.clear();
 }
 
 //Vector3 FileManager::Token2Vector(string token)

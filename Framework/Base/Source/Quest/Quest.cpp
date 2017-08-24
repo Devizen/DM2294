@@ -90,8 +90,7 @@ void CQuest::setQuestDescription(const string & _newDescription)
 Set quest's type
 Quest Types:
 --QUEST_MAIN
---QUEST_sIDE
---QUEST_PLAYER
+--QUEST_SIDE
 ****************/
 void CQuest::setQuestType(const QUEST_TYPE & _newType)
 {
@@ -131,12 +130,13 @@ void CQuest::setComparisonType(COMPARISON_TYPE _comparisonType)
 
 void CQuest::Update(double dt)
 {
+	//For Quest_type is Quest_Player
 	if (questPlayerAttributeType != CAttributes::ATTRIBUTE_TYPES::TYPE_NONE)
 	{
 		for (int i = 0; i < CAttributes::ATTRIBUTE_TYPES::TYPE_NONE; ++i)
 		{
 			CAttributes::ATTRIBUTE_TYPES temp = (CAttributes::ATTRIBUTE_TYPES)i;
-			if (temp != questPlayerAttributeType || isQuestDone)
+			if (temp != questPlayerAttributeType || isQuestDone)						//Skip when Attribute type is not current quest's attribute type and when quest is done is true
 				continue;
 			switch (valueComparisonType)
 			{
@@ -160,12 +160,19 @@ void CQuest::Update(double dt)
 /****************************************************
 Creates quest for player's attribute
 For example - Player's Gold count reaches 1,000,000
+\param1 - Name of quest
+\param2 - Description of quest
+\param3 - Quest_Type
+\param4 - Player's attribute type
+\param5 - Target value to achieve
 ****************************************************/
-CQuest * Create::Quest(const string & _questName, const string & _questDescription, CQuest::QUEST_TYPE _questType, CAttributes::ATTRIBUTE_TYPES _playersAttributeType, int _questGoalValue)
+CQuest * Create::Quest(const string & _questName, const string & _questDescription, CQuest::QUEST_TYPE _questType, bool _questIsDone, CAttributes::ATTRIBUTE_TYPES _playersAttributeType, CQuest::COMPARISON_TYPE _compareType, int _questGoalValue)
 {
 	CQuest* temp = new CQuest(_questName, _questDescription, _questType);
 	temp->setQuestPlayerAttributeType(_playersAttributeType);
 	temp->setQuestGoalValue(_questGoalValue);
-	Quest_Manager::GetInstance()->addQuest(temp);
+	temp->setComparisonType(_compareType);
+	temp->setQuestIsDone(_questIsDone);
+	CQuest_Manager::GetInstance()->addQuest(temp);
 	return temp;
 }

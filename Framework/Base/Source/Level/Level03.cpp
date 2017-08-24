@@ -264,6 +264,11 @@ void Level03::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("Barrel", "OBJ//Barrel.obj");
 	MeshBuilder::GetInstance()->GetMesh("Barrel")->textureID = LoadTGA("Image//crate.tga");
 
+	/*Tower*/
+	MeshBuilder::GetInstance()->GenerateOBJ("TOWER", "OBJ//Tower.obj");
+	MeshBuilder::GetInstance()->GetMesh("TOWER")->textureID = LoadTGA("Image//Tower.tga");
+
+
 	MeshBuilder::GetInstance()->GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	MeshBuilder::GetInstance()->GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
 	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(0, 0, 0), 18, 36, 0.5f);
@@ -367,14 +372,23 @@ void Level03::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_Head", "OBJ//Robot_Head.obj");
 	MeshBuilder::GetInstance()->GetMesh("ROBOT_Head")->textureID = LoadTGA("Image//ROBOT.tga");
 
-	MeshBuilder::GetInstance()->GenerateOBJ("TOWER", "OBJ//Tower.obj");
-	MeshBuilder::GetInstance()->GetMesh("TOWER")->textureID = LoadTGA("Image//Tower.tga");
 	/*Player Health Bar Color*/
 	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
 
 	/*Minimap Enlarged*/
 	MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_ENLARGED", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MINIMAP_ENLARGED")->textureID = LoadTGA("Image//MINIMAP_ENLARGED.tga");
+	MeshBuilder::GetInstance()->GetMesh("MINIMAP_ENLARGED")->textureID = LoadTGA("Image//minimap//minimapStencil.tga");
+
+	MeshBuilder::GetInstance()->GenerateCircle("MINIMAP", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MINIMAP")->textureID = LoadTGA("Image//minimap/minimapBackground.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MINIMAPBORDER", Color(1, 1, 1), 1.05f);
+	MeshBuilder::GetInstance()->GetMesh("MINIMAPBORDER")->textureID = LoadTGA("Image//minimap//minimapBorder.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 0), 0.25f);
+	MeshBuilder::GetInstance()->GetMesh("MINIMAPAVATAR")->textureID = LoadTGA("Image//minimap//minimapAvatar.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_STENCIL", Color(1, 1, 1), 1.0f);
+	MeshBuilder::GetInstance()->GetMesh("MINIMAP_STENCIL")->textureID = LoadTGA("Image//minimap//minimapStencil.tga");
+
+
 
 	// Create entities into the scene
 	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
@@ -432,14 +446,31 @@ void Level03::Init()
 	// Activate the Blend Function
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	/*Minimap*/
+	Mesh* minimapBackground;
+	Mesh* minimapBorder;
+	Mesh* minimapAvatar;
+	Mesh* minimapStencil;
+
+	minimapBackground = MeshBuilder::GetInstance()->GenerateCircle("MINIMAP", Color(1, 1, 1), 1.f);
+	minimapBackground->textureID = MeshBuilder::GetInstance()->GetMesh("MINIMAP")->textureID = LoadTGA("Image//minimap/minimapBackground.tga");
+	minimapBorder = MeshBuilder::GetInstance()->GenerateQuad("MINIMAPBORDER", Color(1, 1, 1), 1.05f);
+	minimapBorder->textureID = MeshBuilder::GetInstance()->GetMesh("MINIMAPBORDER")->textureID = LoadTGA("Image//minimap//minimapBorder.tga");
+	minimapAvatar = MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 0), 0.25f);
+	minimapAvatar->textureID = MeshBuilder::GetInstance()->GetMesh("MINIMAPAVATAR")->textureID = LoadTGA("Image//minimap//minimapAvatar.tga");
+	minimapStencil = MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_STENCIL", Color(1, 1, 1), 1.0f);
+	minimapStencil->textureID = MeshBuilder::GetInstance()->GetMesh("MINIMAP_STENCIL")->textureID = LoadTGA("Image//minimap//minimapStencil.tga");
 	// Minimap
 	theMinimap = Create::Minimap(false);
-	theMinimap->SetBackground(MeshBuilder::GetInstance()->GenerateQuad("MINIMAP", Color(1, 1, 1), 1.f));
-	theMinimap->GetBackground()->textureID = LoadTGA("Image//snowGround.tga");
-	theMinimap->SetBorder(MeshBuilder::GetInstance()->GenerateCircle("MINIMAPBORDER", Color(1, 1, 1), 1.05f));
-	theMinimap->SetAvatar(MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 0), 0.25f));
-	theMinimap->GetAvatar()->textureID = LoadTGA("Image//Avatar.tga");
-	theMinimap->SetStencil(MeshBuilder::GetInstance()->GenerateCircle("MINIMAP_STENCIL", Color(1, 1, 1), 1.0f));
+	theMinimap->SetBackground(minimapBackground);
+	theMinimap->GetBackground()->textureID = minimapBackground->textureID;
+	theMinimap->SetBorder(minimapBorder);
+	theMinimap->GetBorder()->textureID = minimapBorder->textureID;
+	theMinimap->SetAvatar(minimapAvatar);
+	theMinimap->GetAvatar()->textureID = minimapAvatar->textureID;
+	theMinimap->SetStencil(minimapStencil);
+	theMinimap->GetStencil()->textureID = minimapStencil->textureID;
+
 
 	// CameraEffects
 	theCameraEffects = Create::CameraEffects(false);
@@ -501,6 +532,7 @@ void Level03::Update(double dt)
 	static int renderOnce = 0;
 
 	saveMapTime += dt;
+
 
 	if (saveMapTime >= 10)
 	{
@@ -618,7 +650,7 @@ void Level03::Update(double dt)
 			//	lights[0]->position.y += 100.f * dt;
 
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-			{
+			{ 
 				cout << "Left Mouse Button was released!" << endl;
 			}
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))

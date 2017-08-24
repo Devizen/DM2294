@@ -18,13 +18,12 @@ public:
 	Quest Type descriptions:
 	~Quest_Main - Main quest to be completed by player
 	~Quest_Side - Side quest that can be completed by player
-	~Quest_Player - Quest based on player's attribute
 	********************************************************/
 	enum QUEST_TYPE
 	{
 		QUEST_MAIN = 0,
-		QUEST_SIDE,
-		QUEST_PLAYER,
+		QUEST_SIDE,/*
+		QUEST_PLAYER,*/
 		QUEST_NONE
 	};
 	enum COMPARISON_TYPE
@@ -83,8 +82,7 @@ public:
 	Set quest's type
 	Quest Types:
 	--QUEST_MAIN
-	--QUEST_sIDE
-	--QUEST_PLAYER
+	--QUEST_SIDE
 	****************/
 	void setQuestType(const QUEST_TYPE& _newType);
 	/***************************************************
@@ -122,8 +120,7 @@ protected:
 	Type of Quest
 	Quest Types:
 	--QUEST_MAIN
-	--QUEST_sIDE
-	--QUEST_PLAYER
+	--QUEST_SIDE
 	*******************/
 	QUEST_TYPE questType;
 	/***************************************
@@ -156,8 +153,13 @@ namespace Create
 	/****************************************************
 	Creates quest for player's attribute
 	For example - Player's Gold count reaches 1,000,000
+	\param1 - Name of quest
+	\param2 - Description of quest
+	\param3 - Quest_Type
+	\param4 - Player's attribute type
+	\param5 - Target value to achieve
 	****************************************************/
-	CQuest* Quest(const string& _questName = "Name", const string& _questDescription = "Description of quest", CQuest::QUEST_TYPE _questType = CQuest::QUEST_NONE, CAttributes::ATTRIBUTE_TYPES _playersAttributeType = CAttributes::ATTRIBUTE_TYPES::TYPE_NONE, int _questGoalValue = 0);
+	CQuest* Quest(const string& _questName = "Name", const string& _questDescription = "Description of quest", CQuest::QUEST_TYPE _questType = CQuest::QUEST_NONE, bool _questIsDone = true, CAttributes::ATTRIBUTE_TYPES _playersAttributeType = CAttributes::ATTRIBUTE_TYPES::TYPE_NONE, CQuest::COMPARISON_TYPE _compareType = CQuest::COMPARISON_TYPE::COMPARISON_NUM, int _questGoalValue = 0);
 	/*********************************************************
 	TO DO: Overload function to create more (different) quests
 	**********************************************************/
