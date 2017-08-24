@@ -211,6 +211,10 @@ void SceneManager::initShader(void)
 	/*Tower*/
 	MeshBuilder::GetInstance()->GenerateOBJ("TOWER", "OBJ//Tower.obj");
 	MeshBuilder::GetInstance()->GetMesh("TOWER")->textureID = LoadTGA("Image//Tower.tga");
+	
+	/*Wall*/
+	MeshBuilder::GetInstance()->GenerateOBJ("Wall", "OBJ//Wall.obj");
+	MeshBuilder::GetInstance()->GetMesh("Wall")->textureID = LoadTGA("Image//Wall_Texture.tga");
 
 
 	MeshBuilder::GetInstance()->GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
