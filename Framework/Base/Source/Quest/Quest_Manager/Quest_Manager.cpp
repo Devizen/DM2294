@@ -31,22 +31,31 @@ void CQuest_Manager::updateQuest(double dt)
 	{
 		(*it)->Update(dt);
 	}
+	if (KeyboardController::GetInstance()->IsKeyPressed('B'))
+	{
+		renderQuest();
+	}
 }
 
 void CQuest_Manager::renderQuest(void)
 {
-	while(QuestList.at(printPos)->getIsQuestDone())
+	for (; printPos >= 0; ++printPos)
 	{
-		++printPos;
 		if (printPos == QuestList.size())
+		{
+			printPos = 0;
 			break;
+		}
+		if (!QuestList.at(printPos)->getIsQuestDone())
+		{
+			string temp("");
+			temp += QuestList.at(printPos)->getQuestName() + "\n" + QuestList.at(printPos)->getQuestDescription();
+			Create::Text("text", temp, 0.f, 0.2f, CText::TEXT_CONVERSATION);
+			++printPos;
+			break;
+		}
+
 	}
-	string temp("");
-	temp += QuestList.at(printPos)->getQuestName() + "\n" + QuestList.at(printPos)->getQuestDescription();
-	Create::Text("text", temp, 0.f, 0.2f, CText::TEXT_CONVERSATION);
-	++printPos;
-	if (printPos == QuestList.size())
-		printPos = 0;
 }
 
 void CQuest_Manager::addQuest(CQuest * _Quest)

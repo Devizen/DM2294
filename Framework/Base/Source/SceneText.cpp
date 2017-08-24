@@ -575,7 +575,7 @@ void SceneText::Update(double dt)
 		cout << "IN" << endl;
 	}
 
-	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) > 0)
+	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) > 0)
 	{
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_BACK))
 			pause = true;
@@ -688,7 +688,7 @@ void SceneText::Update(double dt)
 
 			///*Display player health.*/
 			//ss.str("");
-			//ss << "Health:" << playerInfo->getAttribute(CAttributes::TYPE_HEALTH);
+			//ss << "Health:" << playerInfo->GetAttribute(CAttributes::TYPE_HEALTH);
 			//textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
 			//textObj[23]->SetText(ss.str());
 
@@ -1546,7 +1546,7 @@ void SceneText::RenderWorld(void)
 	/*Debug*/
 	//CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
 
-	if (playerInfo->getAttribute(CAttributes::TYPE_HEALTH) <= 0)
+	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) <= 0)
 	{
 		Mesh* modelMesh;
 		modelMesh = MeshBuilder::GetInstance()->GetMesh("GAMEOVER");
