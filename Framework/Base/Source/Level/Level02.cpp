@@ -477,7 +477,7 @@ void Level02::Init()
 
 	saveMapTime = 0;
 
-	Create::Quest("Test", "For Testing Purpose", CQuest::QUEST_MAIN, false);
+	Create::Quest("Test", "For Testing Purpose", CQuest::QUEST_MAIN, true);
 	Create::Quest("Test2", "To Test or not to test", CQuest::QUEST_MAIN, true);
 	Create::Quest("Test3", "Blindness Blindness Blindness", CQuest::QUEST_MAIN, true);
 	Create::Quest("Test4", "I need to pee", CQuest::QUEST_MAIN, true);
@@ -500,7 +500,7 @@ void Level02::Update(double dt)
 
 	if (saveMapTime >= 10)
 	{
-		FileManager::GetInstance()->EditMapFile("Files//Level02.csv");
+	//	FileManager::GetInstance()->EditMapFile("Files//Level02.csv");
 	}
 
 
@@ -818,12 +818,6 @@ void Level02::Update(double dt)
 				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 
 			CQuest_Manager::GetInstance()->updateQuest(dt);
-
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('B'))
-			{
-				CQuest_Manager::GetInstance()->renderQuest();
-			}
 
 			/*Update text display.*/
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)
