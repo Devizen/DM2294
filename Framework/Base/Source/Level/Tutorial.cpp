@@ -59,9 +59,11 @@
 /*Cinematic Camera*/
 #include "../Cinematic\Cinematic.h"
 
-/*DIsplaying Text*/
+/*Displaying Text*/
 #include "../Text_Display\Text\Text.h"
 #include "../Text_Display\Text_Manager\Text_Manager.h"
+
+#include "../Enemy/Tower/Tower.h"
 
 #include <iostream>
 
@@ -497,6 +499,9 @@ void Tutorial::Init()
 	_staticEnemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 	_staticEnemy->SetLight(true);
 
+	CTower* tower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
+	cout << tower->GetMinAABB() << endl;
+	cout << tower->GetMaxAABB() << endl;
 }
 
 void Tutorial::Update(double dt)

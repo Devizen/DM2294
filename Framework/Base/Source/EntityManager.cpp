@@ -790,8 +790,8 @@ bool EntityManager::CheckProjectileToEnemyCollision(CProjectile * thisEntity, CE
 	Vector3 projectileMin = thisEntity->GetMinAABB() + thisEntity->GetPosition();
 	Vector3 projectileMax = thisEntity->GetMaxAABB() + thisEntity->GetPosition();
 
-	Vector3 enemyMin = thatEntity->GetMinAABB() + Vector3(thatEntity->GetPos().x, -5.f, thatEntity->GetPos().z);
-	Vector3 enemyMax = thatEntity->GetMaxAABB() + Vector3(thatEntity->GetPos().x, -5.f, thatEntity->GetPos().z);
+	Vector3 enemyMin = thatEntity->GetMinAABB() + Vector3(thatEntity->GetPos().x, thatEntity->GetPos().y, thatEntity->GetPos().z);
+	Vector3 enemyMax = thatEntity->GetMaxAABB() + Vector3(thatEntity->GetPos().x, thatEntity->GetPos().y, thatEntity->GetPos().z);
 
 	if ((projectileMin.x < enemyMax.x && projectileMax.x > enemyMin.x) &&
 		(projectileMin.y < enemyMax.y && projectileMax.y > enemyMin.y) &&

@@ -78,7 +78,7 @@ void CTower::Update(double dt)
 	{
 	case IDLE:
 	{
-		
+		cout << "TOWER" << endl;
 	}
 	case ALERT:
 	{
@@ -115,6 +115,7 @@ void CTower::Render(void)
 
 CTower* Create::Tower(const std::string& _meshName,
 	const Vector3& _position,
+	const float& _rotate,
 	const Vector3& _scale,
 	const bool& _playerProperty)
 {
@@ -128,13 +129,13 @@ CTower* Create::Tower(const std::string& _meshName,
 	result->SetPosition(_position);
 	result->setDefaultPosition(_position);
 	result->SetPos(_position);
+	result->SetRotate(_rotate);
 	result->SetScale(_scale);
 	result->SetCollider(true);
 	result->setPlayerProperty(_playerProperty);
 	result->SetLight(true);
-	result->SetAABB(_scale * 2.f, -_scale * 2.f);
-	result->SetMinAABB(-_scale * 2.f);
-	result->SetMaxAABB(_scale * 2.f);
+	result->SetMinAABB(Vector3(_scale.x * 4.f, -10.f, _scale.z * 4.f));
+	result->SetMaxAABB(Vector3(_scale.x * 4.f, _scale.x * _scale.y * _scale.z, _scale.z * 4.f));
 	result->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	result->setMaxHealthTo(10.f);
 	result->setHealthTo(10.f);

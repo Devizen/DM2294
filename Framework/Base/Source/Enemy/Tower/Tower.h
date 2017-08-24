@@ -42,6 +42,7 @@ namespace Create
 {
 	CTower* Tower(const std::string& _meshName,
 		const Vector3& _position,
+		const float& _rotate,
 		const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f),
 		const bool& _playerProperty = false);
 };
