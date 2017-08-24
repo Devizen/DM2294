@@ -236,10 +236,17 @@ void CMinimap::RenderUI()
 	if (enlargedMap)
 	{
 		Mesh* modelMesh;
+
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("MINIMAPAVATAR");
+		modelStack.PushMatrix();
+		modelStack.Scale(50.f, 50.f, 0.f);
+		RenderHelper::RenderMesh(modelMesh);
+		modelStack.PopMatrix();
+
 		modelMesh = MeshBuilder::GetInstance()->GetMesh("MINIMAP_ENLARGED");
 		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 		modelStack.PushMatrix();
-		modelStack.Translate(0.f, 0.f, 0.f);
+		modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.05f, 0.f, 0.f);
 		//modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
 		modelStack.Scale(500.f, 500.f, 0.f);
 		RenderHelper::RenderMesh(modelMesh);
