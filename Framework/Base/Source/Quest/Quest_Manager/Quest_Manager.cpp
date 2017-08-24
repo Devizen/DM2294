@@ -44,6 +44,7 @@ void CQuest_Manager::renderQuest(void)
 		if (printPos == QuestList.size())
 		{
 			printPos = 0;
+			break;
 		}
 		if (!QuestList.at(printPos)->getIsQuestDone())
 		{
