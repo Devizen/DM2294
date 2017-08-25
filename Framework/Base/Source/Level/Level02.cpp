@@ -367,6 +367,7 @@ void Level02::Init()
 	Create::Quest("Test5", "Lmao lol meme", CQuest::QUEST_MAIN, false);
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level02.csv");
+	FileManager::GetInstance()->ReadEnemyFile("Files//Level02Enemy.csv");
 }
 
 void Level02::Update(double dt)
@@ -383,7 +384,8 @@ void Level02::Update(double dt)
 
 	if (saveMapTime >= 10)
 	{
-	//	FileManager::GetInstance()->EditMapFile("Files//Level02.csv");
+		FileManager::GetInstance()->EditMapFile("Files//Level02.csv");
+		FileManager::GetInstance()->EditEnemyFile("Files//Level02Enemy.csv");
 	}
 
 
