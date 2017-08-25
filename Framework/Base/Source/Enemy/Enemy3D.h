@@ -179,6 +179,11 @@ public:
 	void SetPreviousPosition(Vector3 _previousPosition);
 	/*Get Previous Position.*/
 	Vector3 GetPreviousPosition(void);
+
+	//set type 
+	void setType(int newType) { this->type = newType; }
+	int getType() { return type; }
+
 private:
 	//ATTRIBUTES attributes;
 	int health;
@@ -191,6 +196,10 @@ private:
 	float shootDelay;
 	float m_fElapsedTimeBeforeUpdate;
 	WHO_CLOSER whoCloser;
+	//type of enemy
+
+	int type;
+
 };
 
 namespace Create

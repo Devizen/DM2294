@@ -31,6 +31,7 @@ void Inventory::Init()
 
 	EquipTextTime = 0;
 	DiscardTextTime = 0;
+	currentEquipped = false;
 }
 
 void Inventory::Update(double dt)
@@ -84,9 +85,24 @@ void Inventory::Update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('E'))
 	{
-		EquipWeapon();
-		showEquipText = true;
-		EquipTextTime = 0;
+		for (int i = 0; i < 6; i++)
+		{
+			if (EquipmentManager::GetInstance()->ReturnList()[i] != NULL)
+			{
+				if (storage[pressCountX + (pressCountY * 4)]->GetType() == EquipmentManager::GetInstance()->ReturnList()[i]->GetType())
+				{
+					currentEquipped = true;
+				}
+			}
+		}
+		if (currentEquipped == false)
+		{
+			if (EquipmentManager::GetInstance()->ReturnList())
+				EquipWeapon();
+			showEquipText = true;
+			EquipTextTime = 0;
+			currentEquipped = false;
+		}
 	}
 
 	if (showDiscardText == true)

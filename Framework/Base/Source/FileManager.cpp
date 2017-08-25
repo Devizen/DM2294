@@ -689,7 +689,7 @@ bool FileManager::ReadEnemyFile(const string myFile)
 							break;
 						}
 					}
-					theEnemyInfo.type = tempData;
+					theEnemyInfo.type = stoi(tempData);
 				}
 
 				if (nextData == 1)
@@ -798,18 +798,27 @@ bool FileManager::ReadEnemyFile(const string myFile)
 				++nextData;
 			}
 
-			if (theEnemyInfo.type == "ROBOT")
+			if (theEnemyInfo.type != 0)
 			{
-				Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head",
-					Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
-					Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
-			}
+				if (theEnemyInfo.type == 1)
+				{
+					Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head",
+						Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
+						Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+				}
 
-			if (theEnemyInfo.type == "HORDE")
-			{
-				Create::Horde("ROBOT",
-					Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
-					Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+				if (theEnemyInfo.type == 2)
+				{
+					Create::Horde("ROBOT",
+						Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
+						Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+				}
+
+				if (theEnemyInfo.type == 3)
+				{
+					Create::Enemy3D("turret", Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
+						Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+				}
 			}
 			nextData = 0;
 			tempData = "";
@@ -1174,7 +1183,13 @@ void FileManager::EditEnemyFile(const string myFile)
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
 		CEnemy3D* temp = (CEnemy3D*)*it;
-		File << Map_Editor::GetInstance()->enemyObject << "," << temp->nearestPath().x << "," << temp->nearestPath().y << "," << temp->nearestPath().z << "," << temp->GetScale().x << "," << temp->GetScale().y << "," << temp->GetScale().z;
+		File << temp->getType() << ","
+			<< temp->GetPosition().x << "," 
+			<< temp->GetPosition().y << "," 
+			<< temp->GetPosition().z << "," 
+			<< temp->GetScale().x << "," 
+			<< temp->GetScale().y << "," 
+			<< temp->GetScale().z << "\n";
 	}
 }
 

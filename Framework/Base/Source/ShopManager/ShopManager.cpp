@@ -77,7 +77,7 @@ void ShopManager::update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('B'))
 	{
-		ArrangeVector(pressCountY);
+		Inventory::GetInstance()->assign_storage(temp[pressCountY]);
 	}
 }
 
@@ -108,6 +108,12 @@ void ShopManager::render()
 			modelStack.PopMatrix();
 		}
 	}
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-90, 180.f, 0.f);
+	modelStack.Scale(100, 100, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), name, Color(0.f, 0.f, 0.f));
+	modelStack.PopMatrix();
 }
 
 void ShopManager::setList()
@@ -238,7 +244,6 @@ void ShopManager::PushBackIntoList(Equipment * result, int type)
 
 void ShopManager::ArrangeVector(int type)
 {
-	int size;
 	Inventory::GetInstance()->assign_storage(temp[pressCountY]);
 
 	for (int i = pressCountY; i < 2; i++)

@@ -62,7 +62,7 @@ class FileManager : public Singleton <FileManager>
 
 	struct enemyInfo
 	{
-		string type;
+		int type;
 
 		float displacementX;
 		float displacementY;
