@@ -193,9 +193,12 @@ void EquipmentManager::Update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('Q'))
 	{
-		UnEquip(pressCountX, pressCountY);
-		showText = true;
-		textTime = 0;
+		if (Inventory::GetInstance()->ReturnType()[11] == NULL)
+		{
+			UnEquip(pressCountX, pressCountY);
+			showText = true;
+			textTime = 0;
+		}
 	}
 
 	if (showText == true)
