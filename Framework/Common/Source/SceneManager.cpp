@@ -13,6 +13,9 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 
+#include "../../Base/Source/Debugger/Debugger.h"
+#include "KeyboardController.h"
+
 
 SceneManager::SceneManager() : activeScene(nullptr), nextScene(nullptr)
 {
@@ -39,7 +42,18 @@ void SceneManager::Update(double _dt)
 	}
 
 	if (activeScene)
+	{
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RCONTROL) && !Debugger::GetInstance()->GetDebuggerMode())
+			Debugger::GetInstance()->SwitchDebuggerMode(true);
+		else if (KeyboardController::GetInstance()->IsKeyPressed(VK_RCONTROL) && Debugger::GetInstance()->GetDebuggerMode())
+			Debugger::GetInstance()->SwitchDebuggerMode(false);
+
+		/*Displaying Debug Messages.*/
+		if (Debugger::GetInstance()->GetDebuggerMode())
+			Debugger::GetInstance()->Update();
+
 		activeScene->Update(_dt);
+	}
 }
 
 void SceneManager::Render()

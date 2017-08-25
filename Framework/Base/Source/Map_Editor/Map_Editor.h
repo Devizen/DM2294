@@ -50,8 +50,9 @@ public:
 	enum ENEMY_OBJECT
 	{
 		ROBOT = 0,
-		TOWER,
 		HORDE,
+		TURRET,
+		TOWER,
 		ENEMY_OBJECT_NONE
 	};
 
@@ -102,6 +103,8 @@ public:
 	Vector3 _displacementModifier;
 	/*For scaling the object.*/
 	Vector3 _scale;
+	/*For rotating the object.*/
+	float _rotate;
 
 	/*To display Option Selection Level*/
 	ostringstream ss_OptionSelectLevel;

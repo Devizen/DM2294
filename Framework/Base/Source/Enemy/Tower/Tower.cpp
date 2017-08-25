@@ -3,6 +3,7 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 #include "MeshBuilder.h"
+#include "../../Base/Source/Debugger/Debugger.h"
 
 CTower::CTower(Mesh* _modelMesh)
 	: CEnemy3D(NULL)
@@ -73,12 +74,29 @@ void CTower::Reset(void)
 // Update
 void CTower::Update(double dt)
 {
+	static Debug_Message* _debug = new Debug_Message();
 	setPortableDT(dt);
 	switch (getState())
 	{
 	case IDLE:
 	{
-		cout << "TOWER" << endl;
+		/*Position*/
+		_debug->SetMessageType(Debug_Message::POSITION);
+		_debug->SetVector3(position);
+		Debugger::GetInstance()->AddMessage(_debug);
+		_debug->SetMessageType(Debug_Message::POSITION);
+		_debug->SetVector3(minAABB);
+		_debug->SetMessage("Min AABB: ");
+		Debugger::GetInstance()->AddMessage(_debug);
+		_debug->SetMessageType(Debug_Message::POSITION);
+		_debug->SetVector3(maxAABB);
+		_debug->SetMessage("Max AABB: ");
+		Debugger::GetInstance()->AddMessage(_debug);
+
+		/*Defined Message*/
+		_debug->SetMessageType(Debug_Message::DEFINED);
+		_debug->SetMessage("I am in Tower.");
+		Debugger::GetInstance()->AddMessage(_debug);
 	}
 	case ALERT:
 	{
@@ -134,8 +152,8 @@ CTower* Create::Tower(const std::string& _meshName,
 	result->SetCollider(true);
 	result->setPlayerProperty(_playerProperty);
 	result->SetLight(true);
-	result->SetMinAABB(Vector3(_scale.x * 4.f, -10.f, _scale.z * 4.f));
-	result->SetMaxAABB(Vector3(_scale.x * 4.f, _scale.x * _scale.y * _scale.z, _scale.z * 4.f));
+	result->SetMinAABB(Vector3(-_scale.x * 4.f, -10.f, -_scale.z * 4.f));
+	result->SetMaxAABB(Vector3(_scale.x * 4.f, _scale.x * _scale.y * _scale.z * 2.5, _scale.z * 4.f));
 	result->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	result->setMaxHealthTo(10.f);
 	result->setHealthTo(10.f);

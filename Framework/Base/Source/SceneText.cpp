@@ -40,6 +40,7 @@
 #include "Enemy\Enemy3D.h"
 #include "Enemy/AnimatedEnemy/AnimatedEnemy.h"
 #include "Enemy\Patrol\Patrol.h"
+#include "Enemy\Tower\Tower.h"
 
 #include "Items\Inventory.h"
 #include "Items\Helmet.h"
@@ -480,6 +481,8 @@ void SceneText::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
 	FileManager::GetInstance()->ReadShopFile("Files/Shop.csv");
+
+	CTower* sTower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
 }
 
 void SceneText::Update(double dt)

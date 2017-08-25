@@ -1,1 +1,2 @@
 Name,posX,posY,posZ,minAABBx,minAABBy,minAABBz,maxAABBx,maxAABBy,maxAABBz,scaleX,scaleY,scaleZ,rotateAngle
+WatchTower,50,-10,9,-5,0,-5,5,5,5,5,5,5,0

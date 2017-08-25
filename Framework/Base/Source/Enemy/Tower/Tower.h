@@ -1,6 +1,7 @@
 #pragma once
 #include "../Enemy3D.h"
 #include <vector>
+#include "../../Debugger/Debugger.h"
 
 #define MAX_HEALTH_SCALE 10.f
 
@@ -34,6 +35,8 @@ public:
 	virtual void Update(double dt = 0.0333f);
 	// Render
 	virtual void Render(void);
+
+	Debugger* debugger;
 private:
 
 };

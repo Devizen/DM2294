@@ -4,7 +4,7 @@
 #include <vector>
 using std::vector;
 
-class Vector3;
+struct Vector3;
 
 struct Enemy_Type
 {

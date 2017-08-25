@@ -15,6 +15,8 @@
     <ClCompile Include="Source\Attributes.cpp" />
     <ClCompile Include="Source\CameraEffects\CameraEffects.cpp" />
     <ClCompile Include="Source\Cinematic\Cinematic.cpp" />
+    <ClCompile Include="Source\Debugger\Debugger.cpp" />
+    <ClCompile Include="Source\Debugger\Debug_Message.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.cpp" />
     <ClCompile Include="Source\Enemy\Enemy3D.cpp" />
@@ -70,7 +72,6 @@
     <ClCompile Include="Source\Scene2D\Strategy.cpp" />
     <ClCompile Include="Source\Scene2D\Strategy_Kill.cpp" />
     <ClCompile Include="Source\Scene2D\TreasureChest.cpp" />
-    <ClCompile Include="Source\SceneManager\SceneManager.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\ShopManager\Shop.cpp" />
     <ClCompile Include="Source\ShopManager\ShopManager.cpp" />
@@ -91,6 +92,8 @@
     <ClInclude Include="Source\Attributes.h" />
     <ClInclude Include="Source\CameraEffects\CameraEffects.h" />
     <ClInclude Include="Source\Cinematic\Cinematic.h" />
+    <ClInclude Include="Source\Debugger\Debugger.h" />
+    <ClInclude Include="Source\Debugger\Debug_Message.h" />
     <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.h" />
     <ClInclude Include="Source\Enemy\Enemy3D.h" />
@@ -147,7 +150,6 @@
     <ClInclude Include="Source\Scene2D\Strategy.h" />
     <ClInclude Include="Source\Scene2D\Strategy_Kill.h" />
     <ClInclude Include="Source\Scene2D\TreasureChest.h" />
-    <ClInclude Include="Source\SceneManager\SceneManager.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\ShopManager\Shop.h" />
     <ClInclude Include="Source\ShopManager\ShopManager.h" />

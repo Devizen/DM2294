@@ -36,6 +36,7 @@ Map_Editor::Map_Editor() :
 	, _displacement(0.f, -10.f, 0.f)
 	, _displacementModifier(0.f, -10.f, 0.f)
 	, _scale(1.f, 1.f, 1.f)
+	, _rotate(0.f)
 	, ss_OptionSelectLevel("")
 	, ss_ObjectType("")
 	, ss_EnvironmentObject("")
@@ -68,6 +69,7 @@ void Map_Editor::renderObject(void)
 						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 						modelStack.PushMatrix();
 						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("crate"));
 						modelStack.PopMatrix();
@@ -78,6 +80,7 @@ void Map_Editor::renderObject(void)
 						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 						modelStack.PushMatrix();
 						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("WatchTower"));
 						modelStack.PopMatrix();
@@ -88,6 +91,7 @@ void Map_Editor::renderObject(void)
 						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 						modelStack.PushMatrix();
 						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("Barricade"));
 						modelStack.PopMatrix();
@@ -98,6 +102,7 @@ void Map_Editor::renderObject(void)
 						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 						modelStack.PushMatrix();
 						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("Statue"));
 						modelStack.PopMatrix();
@@ -108,6 +113,7 @@ void Map_Editor::renderObject(void)
 						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 						modelStack.PushMatrix();
 						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("Barrel"));
 						modelStack.PopMatrix();
@@ -127,6 +133,7 @@ void Map_Editor::renderObject(void)
 							MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 							modelStack.PushMatrix();
 							modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+							modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 							modelStack.Scale(_scale.x, _scale.y, _scale.z);
 							RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
 							modelStack.PopMatrix();
@@ -136,20 +143,11 @@ void Map_Editor::renderObject(void)
 							MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 							modelStack.PushMatrix();
 							modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+							modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 							modelStack.Scale(_scale.x, _scale.y, _scale.z);
 							RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("cube"));
 							modelStack.PopMatrix();
 						}
-						break;
-					}
-					case TOWER:
-					{
-						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-						modelStack.PushMatrix();
-						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
-						modelStack.Scale(_scale.x, _scale.y, _scale.z);
-						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("turret"));
-						modelStack.PopMatrix();
 						break;
 					}
 
@@ -163,35 +161,64 @@ void Map_Editor::renderObject(void)
 						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 						modelStack.PushMatrix();
 						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
 						modelStack.PopMatrix();
 
 						modelStack.PushMatrix();
 						modelStack.Translate(_leftPosition.x, _leftPosition.y, _leftPosition.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
 						modelStack.PopMatrix();
 
 						modelStack.PushMatrix();
 						modelStack.Translate(_rightPosition.x, _rightPosition.y, _rightPosition.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
 						modelStack.PopMatrix();
 
 						modelStack.PushMatrix();
 						modelStack.Translate(_upPosition.x, _upPosition.y, _upPosition.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
 						modelStack.PopMatrix();
 
 						modelStack.PushMatrix();
 						modelStack.Translate(_downPosition.x, _downPosition.y, _downPosition.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("ROBOT"));
 						modelStack.PopMatrix();
 
 
+						break;
+					}
+
+					case TURRET:
+					{
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("turret"));
+						modelStack.PopMatrix();
+						break;
+					}
+
+					case TOWER:
+					{
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("TOWER"));
+						modelStack.PopMatrix();
 						break;
 					}
 				}
@@ -255,11 +282,14 @@ void Map_Editor::renderOption(void)
 	if (enemyObject == ROBOT)
 		s_EnemyObject = "Robot";
 
-	if (enemyObject == TOWER)
-		s_EnemyObject = "Tower";
-
 	if (enemyObject == HORDE)
 		s_EnemyObject = "Horde";
+
+	if (enemyObject == TURRET)
+		s_EnemyObject = "Turret";
+
+	if (enemyObject == TOWER)
+		s_EnemyObject = "Tower";
 
 	if (enemyObject == ENEMY_OBJECT_NONE)
 		s_EnemyObject = "None";
@@ -287,6 +317,9 @@ void Map_Editor::renderOption(void)
 
 	std::ostringstream playerTarget("");
 	playerTarget << CPlayerInfo::GetInstance()->GetTarget();
+
+	std::ostringstream ss_ObjectRotate("");
+	ss_ObjectRotate << _rotate;
 
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
@@ -322,11 +355,17 @@ void Map_Editor::renderOption(void)
 	modelStack.PushMatrix();
 	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.15f, 0.f);
 	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
-	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Player Position:" + playerPosition.str(), Color(1.f, 0.f, 0.f));
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Rotate:" + ss_ObjectRotate.str(), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.10f, 0.f);
+	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Player Position:" + playerPosition.str(), Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-windowWidth * 0.48f, windowHeight * 0.05f, 0.f);
 	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Player Target:" + playerTarget.str(), Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
@@ -386,12 +425,15 @@ void Map_Editor::updateOption(double dt)
 			{
 				cout << "Enemy Object: " << enemyObject << endl;
 				if (enemyObject == ENEMY_OBJECT_NONE)
-					enemyObject = HORDE;
-
-				else if (enemyObject == HORDE)
 					enemyObject = TOWER;
 
 				else if (enemyObject == TOWER)
+					enemyObject = TURRET;
+
+				else if (enemyObject == TURRET)
+					enemyObject = HORDE;
+
+				else if (enemyObject == HORDE)
 					enemyObject = ROBOT;
 
 				else if (enemyObject == ROBOT)
@@ -446,12 +488,15 @@ void Map_Editor::updateOption(double dt)
 					enemyObject = ROBOT;
 
 				else if (enemyObject == ROBOT)
-					enemyObject = TOWER;
-
-				else if (enemyObject == TOWER)
 					enemyObject = HORDE;
 
 				else if (enemyObject == HORDE)
+					enemyObject = TURRET;
+
+				else if (enemyObject == TURRET)
+					enemyObject = TOWER;
+
+				else if (enemyObject == TOWER)
 					enemyObject = ENEMY_OBJECT_NONE;
 			}
 		}
@@ -462,6 +507,7 @@ void Map_Editor::updateOption(double dt)
 		mapEditing = false;
 	}
 
+	/*Back to first option.*/
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD7))
 	{
 		cout << "PRESSED NUMPAD 7 " << optionSelectionLevel << endl;
@@ -472,6 +518,15 @@ void Map_Editor::updateOption(double dt)
 			environmentObject = ENVIRONMENT_OBJECT_NONE;
 			enemyObject = ENEMY_OBJECT_NONE;
 		}
+	}
+
+	/*Rotate objects.*/
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD8))
+	{
+		if (_rotate >= 270.f)
+			_rotate = 0.f;
+		else if (_rotate < 270.f)
+			_rotate += 90.f;
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_LMENU))
