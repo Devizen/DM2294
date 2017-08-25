@@ -94,14 +94,14 @@
     <Filter Include="Quest\Quest_Manager">
       <UniqueIdentifier>{566ae725-2c21-405c-875a-8a75ad9d389c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SceneManager">
-      <UniqueIdentifier>{6b343147-d420-4767-a47a-6e3b9b10ae40}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Enemy3D\Tower">
       <UniqueIdentifier>{db51b8dd-4120-4d69-994d-ab60f0e8595b}</UniqueIdentifier>
     </Filter>
     <Filter Include="ShopManager">
       <UniqueIdentifier>{5f99713c-0f6b-40a8-beae-8354778b88fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debugger">
+      <UniqueIdentifier>{24f69075-1fe2-4c32-8bad-dd69b51a8e13}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -312,9 +312,6 @@
     <ClCompile Include="Source\Quest\Quest_Manager\Quest_Manager.cpp">
       <Filter>Quest\Quest_Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneManager\SceneManager.cpp">
-      <Filter>SceneManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Level\Level01.cpp">
       <Filter>Level</Filter>
     </ClCompile>
@@ -335,6 +332,12 @@
     </ClCompile>
     <ClCompile Include="Source\ShopManager\ShopManager.cpp">
       <Filter>ShopManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Debugger\Debugger.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Debugger\Debug_Message.cpp">
+      <Filter>Debugger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Level\Mainmenu.cpp">
       <Filter>Level</Filter>
@@ -542,9 +545,6 @@
     <ClInclude Include="Source\Quest\Quest_Manager\Quest_Manager.h">
       <Filter>Quest\Quest_Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneManager\SceneManager.h">
-      <Filter>SceneManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Level\Level01.h">
       <Filter>Level</Filter>
     </ClInclude>
@@ -565,6 +565,12 @@
     </ClInclude>
     <ClInclude Include="Source\ShopManager\ShopManager.h">
       <Filter>ShopManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Debugger\Debugger.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Debugger\Debug_Message.h">
+      <Filter>Debugger</Filter>
     </ClInclude>
     <ClInclude Include="Source\Level\Mainmenu.h">
       <Filter>Level</Filter>

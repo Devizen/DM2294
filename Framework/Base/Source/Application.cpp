@@ -60,22 +60,22 @@ void Application::MakeFullScreen(void)
 
 	m_window_width = mode->width;
 	m_window_height = mode->height;
-	glfwSetWindowSize(m_window, m_window_width, m_window_height);
+	//glfwSetWindowSize(m_window, m_window_width, m_window_height);
 	
-	//glfwSetWindowMonitor(m_window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
+	glfwSetWindowMonitor(m_window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
 	screenMode = true;
 }
 
 void Application::MakeWindowedMode(void)
 {
 	/*Get Monitor*/
-	//const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	m_window_width = 800;
 	m_window_height = 600;
-	//glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
-	glfwSetWindowSize(m_window, m_window_width, m_window_height);
-	//glfwSetWindowMonitor(m_window, NULL, 0, 0, m_window_width, m_window_height, mode->refreshRate);
+	//glfwSetWindowSize(m_window, m_window_width, m_window_height);
+	glfwSetWindowMonitor(m_window, NULL, 0, 0, m_window_width, m_window_height, mode->refreshRate);
 	screenMode = false;
 }
 
@@ -176,19 +176,20 @@ void Application::Run()
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
+
 		glfwPollEvents();
 		UpdateInput();
 
-		float dt = static_cast<float>(m_timer.getElapsedTime());
-		if (dt > 0.015f)
-			dt = 0.015f;
-
-		SceneManager::GetInstance()->Update(dt);
 		/*Switching between Fullscreen and Windowed mode.*/
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_LMENU) && KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !screenMode)
 			MakeFullScreen();
 		else if (KeyboardController::GetInstance()->IsKeyDown(VK_LMENU) && KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && screenMode)
 			MakeWindowedMode();
+		float dt = static_cast<float>(m_timer.getElapsedTime());
+		if (dt > 0.015f)
+			dt = 0.015f;
+
+		SceneManager::GetInstance()->Update(dt);
 
 		SceneManager::GetInstance()->Render();
 
