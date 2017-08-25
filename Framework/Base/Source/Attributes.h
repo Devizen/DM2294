@@ -33,7 +33,7 @@ public:
 		TYPE_MAXHEALTH,
 		TYPE_GOLD,
 	*/
-	float GetAttribute(ATTRIBUTE_TYPES type);
+	int GetAttribute(ATTRIBUTE_TYPES type);
 
 	//Setters
 	/*
@@ -43,15 +43,15 @@ public:
 	/*
 	Deduct health by amount specified in parameter
 	*/
-	void deductHealthBy(float _amount);
+	void deductHealthBy(int _amount);
 	/*
 	Increase health by amount specified in parameter
 	*/
-	void increaseHealthBy(float _amount);
+	void increaseHealthBy(int _amount);
 	/*
 	Set health to amount specified in parameter
 	*/
-	void setHealthTo(float _amount);
+	void setHealthTo(int _amount);
 	/*
 	Increase level by one
 	*/
@@ -71,11 +71,11 @@ public:
 	/*
 	Increase max health to amount specified in parameter
 	*/
-	void increaseMaxHealth(float _amount);
+	void increaseMaxHealth(int _amount);
 	/*
 	Set Max Health to amount specified in parameter
 	*/
-	void setMaxHealthTo(float _amount);
+	void setMaxHealthTo(int _amount);
 	/*
 	Sets attributes base on CAttribute specified in parameter
 	*/
@@ -91,10 +91,10 @@ public:
 	void setGold(int gold);
 
 	//set the MP
-	void setMP(float mana);
+	void setMP(int mana);
 
 	//set max MP
-	void setMaxMP(float maxMana);
+	void setMaxMP(int maxMana);
 
 	//set current exp
 	void setEXP(int exp);
@@ -106,12 +106,12 @@ public:
 	void addSpeed(int newSpeed);
 
 private:
-	float MAX_HEALTH;			//To cap player's health / when reseting player's health to this
-	float HEALTH;				//Current health
-	float MAX_MANA;				//cap player's mana
-	float MANA;					//current mana
-	/*const float MAX_ARMOUR;
-	float ARMOUR;*/
+	int MAX_HEALTH;			//To cap player's health / when reseting player's health to this
+	int HEALTH;				//Current health
+	int MAX_MANA;				//cap player's mana
+	int MANA;					//current mana
+	/*const int MAX_ARMOUR;
+	int ARMOUR;*/
 	int MAX_EXP;				//For player to level up once EXP >= MAX_EXP
 	int EXP;					//Experience points
 	int GOLD;					//currency

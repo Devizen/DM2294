@@ -488,7 +488,7 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
-	cout << "I AM IN SCENETEXT NOW" << endl;
+	//cout << "I AM IN SCENETEXT NOW" << endl;
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();

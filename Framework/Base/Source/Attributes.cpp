@@ -5,15 +5,15 @@ using std::cout;
 using std::endl;
 
 CAttributes::CAttributes()
-	: MAX_HEALTH(100.f)
-	, HEALTH(100.f)
+	: MAX_HEALTH(100)
+	, HEALTH(100)
 	, ATTACK(1)
 	, DEFENSE(0)
 	, GOLD(0)
 	, EXP(0)
 	, MAX_EXP(1)
 	, LEVEL(1)
-	,SPEED(10.f)
+	,SPEED(10)
 {
 }
 
@@ -32,7 +32,7 @@ Types:
 -TYPE_MAXHEALTH
 -TYPE_GOLD
 */
-float CAttributes::GetAttribute(ATTRIBUTE_TYPES type)
+int CAttributes::GetAttribute(ATTRIBUTE_TYPES type)
 {
 	switch (type)
 	{
@@ -66,21 +66,21 @@ void CAttributes::resetHealthToMax()
 /*
 Deduct health by amount specified in parameter
 */
-void CAttributes::deductHealthBy(float amount)
+void CAttributes::deductHealthBy(int amount)
 {
 	this->HEALTH -= amount;
 }
 /*
 Increase health by amount specified in parameter
 */
-void CAttributes::increaseHealthBy(float _amount)
+void CAttributes::increaseHealthBy(int _amount)
 {
 	this->HEALTH += _amount;
 }
 /*
 Set health to amount specified in parameter
 */
-void CAttributes::setHealthTo(float _amount)
+void CAttributes::setHealthTo(int _amount)
 {
 	HEALTH = _amount;
 }
@@ -115,14 +115,14 @@ void CAttributes::setDefenseTo(int _amount)
 /*
 Increase max health to amount specified in parameter
 */
-void CAttributes::increaseMaxHealth(float _amount)
+void CAttributes::increaseMaxHealth(int _amount)
 {
 	this->MAX_HEALTH = _amount;
 }
 /*
 Set Max Health to amount specified in parameter
 */
-void CAttributes::setMaxHealthTo(float _amount)
+void CAttributes::setMaxHealthTo(int _amount)
 {
 	MAX_HEALTH = _amount;
 }
@@ -156,12 +156,12 @@ void CAttributes::setGold(int gold)
 	GOLD = gold;
 }
 
-void CAttributes::setMP(float mana)
+void CAttributes::setMP(int mana)
 {
 	MANA = mana;
 }
 
-void CAttributes::setMaxMP(float maxMana)
+void CAttributes::setMaxMP(int maxMana)
 {
 	MAX_MANA = maxMana;
 }

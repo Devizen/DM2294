@@ -61,16 +61,21 @@ void Application::MakeFullScreen(void)
 	m_window_width = mode->width;
 	m_window_height = mode->height;
 	glfwSetWindowSize(m_window, m_window_width, m_window_height);
+	
+	//glfwSetWindowMonitor(m_window, glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, mode->refreshRate);
 	screenMode = true;
 }
 
 void Application::MakeWindowedMode(void)
-
 {
+	/*Get Monitor*/
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	m_window_width = 800;
 	m_window_height = 600;
+	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
 	glfwSetWindowSize(m_window, m_window_width, m_window_height);
+	//glfwSetWindowMonitor(m_window, NULL, 0, 0, m_window_width, m_window_height, mode->refreshRate);
 	screenMode = false;
 }
 
@@ -179,7 +184,6 @@ void Application::Run()
 			dt = 0.015f;
 
 		SceneManager::GetInstance()->Update(dt);
-
 		/*Switching between Fullscreen and Windowed mode.*/
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_LMENU) && KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !screenMode)
 			MakeFullScreen();
