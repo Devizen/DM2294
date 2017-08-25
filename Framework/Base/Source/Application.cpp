@@ -69,10 +69,10 @@ void Application::MakeFullScreen(void)
 void Application::MakeWindowedMode(void)
 {
 	/*Get Monitor*/
-	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	//const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	m_window_width = 800;
 	m_window_height = 600;
-	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+	//glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
 	glfwSetWindowSize(m_window, m_window_width, m_window_height);
 	//glfwSetWindowMonitor(m_window, NULL, 0, 0, m_window_width, m_window_height, mode->refreshRate);

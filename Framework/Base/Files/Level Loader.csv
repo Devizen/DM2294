@@ -1,2 +1,5 @@
 Name,posX,posY,posZ,minAABBx,minAABBy,minAABBz,maxAABBx,maxAABBy,maxAABBz,scaleX,scaleY,scaleZ,rotateAngle
 WatchTower,50,-10,9,-5,0,-5,5,5,5,5,5,5,0
+Barrel,55,-10,191,-4,0,-4,4,4,4,4,4,4,0
+Statue,280,-10,-16,-4,0,-4,4,4,4,4,4,4,0
+Statue,294,-10,-106,-4,0,-4,4,4,4,4,4,4,0

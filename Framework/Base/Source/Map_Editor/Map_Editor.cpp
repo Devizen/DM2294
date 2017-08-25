@@ -18,6 +18,8 @@
 #include "../Enemy/Patrol/Patrol.h"
 /*To create Horde.*/
 #include "../Enemy/Horde/Horde.h"
+/*To create Tower.*/
+#include "../Enemy/Tower/Tower.h"
 /*To create animated robot*/
 #include "../Enemy/AnimatedEnemy/AnimatedEnemy.h"
 /*To access objects in list for removal.*/
@@ -617,7 +619,7 @@ void Map_Editor::updateOption(double dt)
 				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
-				CFurniture* crate = Create::Furniture("crate", _displacement, _scale);
+				CFurniture* crate = Create::Furniture("crate", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
@@ -633,7 +635,7 @@ void Map_Editor::updateOption(double dt)
 				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
-				CFurniture* crate = Create::Furniture("WatchTower", _displacement, _scale);
+				CFurniture* crate = Create::Furniture("WatchTower", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
@@ -649,7 +651,7 @@ void Map_Editor::updateOption(double dt)
 				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
-				CFurniture* crate = Create::Furniture("Barricade", _displacement, _scale);
+				CFurniture* crate = Create::Furniture("Barricade", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
@@ -665,7 +667,7 @@ void Map_Editor::updateOption(double dt)
 				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
-				CFurniture* crate = Create::Furniture("Statue", _displacement, _scale);
+				CFurniture* crate = Create::Furniture("Statue", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
@@ -681,7 +683,7 @@ void Map_Editor::updateOption(double dt)
 				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
-				CFurniture* crate = Create::Furniture("Barrel", _displacement, _scale);
+				CFurniture* crate = Create::Furniture("Barrel", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
@@ -711,23 +713,31 @@ void Map_Editor::updateOption(double dt)
 					addWaypoint = false;
 
 			}
-			else if (enemyObject == TOWER)
-			{
-				enemyNo = 2;
-
-				cout << "Create Displacement: " << _displacement << endl;
-				turret = Create::Enemy3D("turret", _displacement, _scale);
-				lastCreatedType = CREATED_ENEMY;
-			}
-
 			else if (enemyObject == HORDE)
 			{
-				enemyNo = 3;
+				enemyNo = 2;
 
 				cout << "Create Displacement: " << _displacement << endl;
 				_horde = Create::Horde("ROBOT", _displacement, _scale);
 				lastCreatedType = CREATED_ENEMY_HORDE;
 			}
+			else if (enemyObject == TURRET)
+			{
+				enemyNo = 3;
+
+				cout << "Create Displacement: " << _displacement << endl;
+				turret = Create::Enemy3D("turret", _displacement, _scale);
+				lastCreatedType = CREATED_ENEMY;
+			}
+			else if (enemyObject == TOWER)
+			{
+				enemyNo = 4;
+
+				cout << "Create Displacement: " << _displacement << endl;
+				_tower = Create::Tower("TOWER", _displacement, _rotate, _scale);
+				lastCreatedType = CREATED_ENEMY;
+			}
+
 		}
 		if (!addWaypoint)
 			resetOption();

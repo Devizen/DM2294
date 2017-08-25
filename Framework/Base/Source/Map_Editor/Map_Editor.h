@@ -15,6 +15,7 @@ class CPatrol;
 class CEnemy3D;
 class CHorde;
 class CAnimatedEnemy;
+class CTower;
 
 class Map_Editor : public Singleton<Map_Editor>
 {
@@ -130,6 +131,8 @@ public:
 	CEnemy3D* turret;
 	/*Enemy Horde to change variables.*/
 	CEnemy3D* _horde;
+	/*Enemy Tower to change variables.*/
+	CTower* _tower;
 	/*Switch between axis for scaling.*/
 	SCALE_AXIS scaleAxis;
 

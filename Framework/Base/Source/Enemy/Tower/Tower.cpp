@@ -119,7 +119,7 @@ void CTower::Render(void)
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
-	modelStack.Rotate(rotate, 1.f, 0.f, 0.f);
+	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	if (!light)
 		RenderHelper::RenderMesh(modelMesh);
