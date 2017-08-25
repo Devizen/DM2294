@@ -38,4 +38,5 @@ public:
 	void DeleteWeapon();
 	void EquipWeapon();
 	bool empty;
+	bool currentEquipped;
 };
