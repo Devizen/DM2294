@@ -44,6 +44,7 @@ public:
 		BARRICADE,
 		STATUE,
 		BARREL,
+		WALL,
 		ENVIRONMENT_OBJECT_NONE
 	};
 	/*Options for Enemy Objects*/

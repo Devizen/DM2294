@@ -336,6 +336,9 @@
     <ClCompile Include="Source\ShopManager\ShopManager.cpp">
       <Filter>ShopManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level\Mainmenu.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -562,6 +565,9 @@
     </ClInclude>
     <ClInclude Include="Source\ShopManager\ShopManager.h">
       <Filter>ShopManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Mainmenu.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

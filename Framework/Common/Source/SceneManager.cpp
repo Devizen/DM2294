@@ -336,4 +336,15 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GetMesh("MINIMAPAVATAR")->textureID = LoadTGA("Image//minimap//minimapAvatar.tga");
 	MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_STENCIL", Color(1, 1, 1), 1.0f);
 	MeshBuilder::GetInstance()->GetMesh("MINIMAP_STENCIL")->textureID = LoadTGA("Image//minimap//minimapStencil.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("MainMenu", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MainMenu")->textureID = LoadTGA("Image//Mainmenu/Menubackground.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MainMenuTitle", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MainMenuTitle")->textureID = LoadTGA("Image//Mainmenu/Menutitle.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MainMenuStart", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MainMenuStart")->textureID = LoadTGA("Image//Mainmenu/Menustart.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MainMenuLevels", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MainMenuLevels")->textureID = LoadTGA("Image//Mainmenu/Menulevels.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MainMenuQuit", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MainMenuQuit")->textureID = LoadTGA("Image//Mainmenu/Menuquit.tga");
 }

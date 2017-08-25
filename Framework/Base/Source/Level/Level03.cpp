@@ -360,11 +360,12 @@ void Level03::Init()
 	saveMapTime = 0;
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level03.csv");
+	FileManager::GetInstance()->ReadEnemyFile("Files//Level03Enemy.csv");
 }
 
 void Level03::Update(double dt)
 {
-	//cout << "I AM IN LEVEL03 NOW" << endl;
+	//cout << "I AM IN LEVEL03 NOW" << endl;	
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -378,6 +379,7 @@ void Level03::Update(double dt)
 	if (saveMapTime >= 10)
 	{
 		FileManager::GetInstance()->EditMapFile("Files//Level03.csv");
+		FileManager::GetInstance()->EditEnemyFile("Files//Level03Enemy.csv");
 	}
 
 

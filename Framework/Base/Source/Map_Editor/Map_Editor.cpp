@@ -114,6 +114,17 @@ void Map_Editor::renderObject(void)
 						modelStack.PopMatrix();
 						break;
 					}
+					case WALL:
+					{
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Scale(_scale.x, _scale.y, _scale.z);
+						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("Wall"));
+						modelStack.PopMatrix();
+						break;
+					}
+
 				}
 				break;
 			}
@@ -250,6 +261,9 @@ void Map_Editor::renderOption(void)
 	if (environmentObject == BARREL)
 		s_EnvironmentObject = "Barrel";
 
+	if (environmentObject == WALL)
+		s_EnvironmentObject = "Wall";
+
 	if (environmentObject == ENVIRONMENT_OBJECT_NONE)
 		s_EnvironmentObject = "None";
 
@@ -374,6 +388,9 @@ void Map_Editor::updateOption(double dt)
 					environmentObject = BARREL;
 
 				else if (environmentObject == BARREL)
+					environmentObject = WALL;
+
+				else if (environmentObject == WALL)
 					environmentObject = CRATE;
 
 				else if (environmentObject == CRATE)
@@ -430,6 +447,9 @@ void Map_Editor::updateOption(double dt)
 					environmentObject = BARRICADE;
 
 				else if (environmentObject == BARRICADE)
+					environmentObject = WALL;
+
+				else if (environmentObject == WALL)
 					environmentObject = WATCHTOWER;
 
 				else if (environmentObject == WATCHTOWER)
@@ -627,6 +647,22 @@ void Map_Editor::updateOption(double dt)
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
 				CFurniture* crate = Create::Furniture("Barrel", _displacement, _scale);
+				crate->SetCollider(true);
+				crate->SetLight(true);
+				crate->SetAABB(_maxAABB, _minAABB);
+				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
+				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
+				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
+				lastCreatedType = CREATED_ENVIRONMENT;
+			}
+
+			if (environmentObject == WALL)
+			{
+				cout << "CREATED" << endl;
+				cout << "Displacement: " << _displacement << endl;
+				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
+				Vector3 _maxAABB(_scale);
+				CFurniture* crate = Create::Furniture("Wall", _displacement, _scale);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
