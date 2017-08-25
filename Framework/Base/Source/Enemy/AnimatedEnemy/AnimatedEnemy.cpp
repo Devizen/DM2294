@@ -482,7 +482,8 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 						const std::string& _rightLeg,
 						const std::string& _Head,
 						const Vector3& _position,
-						const Vector3& _scale)
+						const Vector3& _scale,
+						const float& _rotate)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_core);
 	if (modelMesh == nullptr)
@@ -507,6 +508,7 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 
 	//cout << "Position in Create: " << _position << endl;
 	result->SetPosition(_position);
+	result->SetRotate(_rotate);
 	result->SetScale(_scale);
 	result->SetCollider(true);
 	result->setPlayerProperty(false);

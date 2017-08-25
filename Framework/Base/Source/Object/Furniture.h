@@ -46,7 +46,8 @@ namespace Create
 {
 	CFurniture* Furniture(const std::string& _meshName,
 		const Vector3& _position,
-		const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f));
+		const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f),
+		const float& _rotate = 0.f);
 };
 
 #endif

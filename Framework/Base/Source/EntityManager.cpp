@@ -9,6 +9,7 @@
 #include "CameraEffects\CameraEffects.h"
 #include "SoundEngine.h"
 #include "Cinematic\Cinematic.h"
+#include "Debugger\Debugger.h"
 
 /*Min and Max*/
 #include <algorithm>
@@ -790,12 +791,10 @@ bool EntityManager::CheckProjectileToEnemyCollision(CProjectile * thisEntity, CE
 	Vector3 projectileMin = thisEntity->GetMinAABB() + thisEntity->GetPosition();
 	Vector3 projectileMax = thisEntity->GetMaxAABB() + thisEntity->GetPosition();
 
-	Vector3 enemyMin = thatEntity->GetMinAABB() + Vector3(thatEntity->GetPos().x, -5.f, thatEntity->GetPos().z);
-	Vector3 enemyMax = thatEntity->GetMaxAABB() + Vector3(thatEntity->GetPos().x, -5.f, thatEntity->GetPos().z);
+	Vector3 enemyMin = thatEntity->GetMinAABB() + thatEntity->GetPos();
+	Vector3 enemyMax = thatEntity->GetMaxAABB() + thatEntity->GetPos();
 
-	if ((projectileMin.x < enemyMax.x && projectileMax.x > enemyMin.x) &&
-		(projectileMin.y < enemyMax.y && projectileMax.y > enemyMin.y) &&
-		(projectileMin.z < enemyMax.z && projectileMax.z > enemyMin.z))
+	if ((projectileMin < enemyMax && projectileMax > enemyMin))
 		return true;
 	else
 		return false;

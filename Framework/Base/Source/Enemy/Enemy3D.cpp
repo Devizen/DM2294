@@ -319,6 +319,7 @@ void CEnemy3D::Render(void)
 			angleToFace = 90.f;
 		modelStack.Rotate(-angleToFace, 1.f, 0.f, 0.f);
 	}
+	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	if (!light)
 		RenderHelper::RenderMesh(modelMesh);
@@ -620,7 +621,7 @@ void CEnemy3D::renderHealthBar(void)
 	/*Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());*/
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
-	modelStack.Scale((GetAttribute(CAttributes::TYPE_HEALTH) / GetAttribute(CAttributes::TYPE_MAXHEALTH)) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.000001f);
+	modelStack.Scale((static_cast<float>(GetAttribute(CAttributes::TYPE_HEALTH)) / static_cast<float>(GetAttribute(CAttributes::TYPE_MAXHEALTH))) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.000001f);
 
 	/*Set health bar to green colour before damage.*/
 	if (GetAttribute(CAttributes::TYPE_HEALTH) / GetAttribute(CAttributes::TYPE_MAXHEALTH) == 1)
