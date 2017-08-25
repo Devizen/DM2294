@@ -1,6 +1,7 @@
 #pragma once
 #include "../Enemy3D.h"
 #include <vector>
+#include "../../Debugger/Debugger.h"
 
 #define MAX_HEALTH_SCALE 10.f
 
@@ -34,6 +35,8 @@ public:
 	virtual void Update(double dt = 0.0333f);
 	// Render
 	virtual void Render(void);
+
+	Debugger* debugger;
 private:
 
 };
@@ -42,6 +45,7 @@ namespace Create
 {
 	CTower* Tower(const std::string& _meshName,
 		const Vector3& _position,
+		const float& _rotate,
 		const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f),
 		const bool& _playerProperty = false);
 };

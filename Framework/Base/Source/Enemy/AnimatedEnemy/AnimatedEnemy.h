@@ -171,6 +171,7 @@ namespace Create
 		const std::string& _rightLeg,
 		const std::string& _Head,
 		const Vector3& _position,
-		const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f));
+		const Vector3& _scale = Vector3(1.0f, 1.0f, 1.0f),
+		const float& _rotate = (0.f));
 };
 

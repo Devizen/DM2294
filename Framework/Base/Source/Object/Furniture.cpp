@@ -27,7 +27,7 @@ void CFurniture::Render()
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
-	//modelStack.Rotate(37.f, 0.f, 1.f, 0.f);
+	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	if (!light)
 		RenderHelper::RenderMesh(modelMesh);
@@ -60,7 +60,7 @@ string CFurniture::GetName()
 	return name;
 }
 
-CFurniture* Create::Furniture(const std::string& _meshName, const Vector3& _position, const Vector3& _scale)
+CFurniture* Create::Furniture(const std::string& _meshName, const Vector3& _position, const Vector3& _scale, const float& _rotate)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
@@ -72,7 +72,7 @@ CFurniture* Create::Furniture(const std::string& _meshName, const Vector3& _posi
 	//newPosition.y -= 10.f;
 	result->SetName(_meshName);
 	result->SetPosition(_position);
-	result->SetRotate(0.f);
+	result->SetRotate(_rotate);
 	result->SetScale(_scale);
 	result->SetCollider(true);
 	result->SetLight(true);

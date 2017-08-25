@@ -13,6 +13,9 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 
+#include "../../Base/Source/Debugger/Debugger.h"
+#include "KeyboardController.h"
+
 
 SceneManager::SceneManager() : activeScene(nullptr), nextScene(nullptr)
 {
@@ -39,7 +42,18 @@ void SceneManager::Update(double _dt)
 	}
 
 	if (activeScene)
+	{
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RCONTROL) && !Debugger::GetInstance()->GetDebuggerMode())
+			Debugger::GetInstance()->SwitchDebuggerMode(true);
+		else if (KeyboardController::GetInstance()->IsKeyPressed(VK_RCONTROL) && Debugger::GetInstance()->GetDebuggerMode())
+			Debugger::GetInstance()->SwitchDebuggerMode(false);
+
+		/*Displaying Debug Messages.*/
+		if (Debugger::GetInstance()->GetDebuggerMode())
+			Debugger::GetInstance()->Update();
+
 		activeScene->Update(_dt);
+	}
 }
 
 void SceneManager::Render()
@@ -229,7 +243,7 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
 
 	MeshBuilder::GetInstance()->GenerateQuad("snowGround", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("snowGround")->textureID = LoadTGA("Image//snowGround.tga");
+	MeshBuilder::GetInstance()->GetMesh("snowGround")->textureID = LoadTGA("Image//SkyBox//nottingham_dn.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
@@ -237,12 +251,12 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_RIGHT", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_TOP", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BOTTOM", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_FRONT")->textureID = LoadTGA("Image//SkyBox//skybox_front.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BACK")->textureID = LoadTGA("Image//SkyBox//skybox_back.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_LEFT")->textureID = LoadTGA("Image//SkyBox//skybox_left.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureID = LoadTGA("Image//SkyBox//skybox_right.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//skybox_top.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//skybox_bottom.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_FRONT")->textureID = LoadTGA("Image//SkyBox//nottingham_ft.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BACK")->textureID = LoadTGA("Image//SkyBox//nottingham_bk.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_LEFT")->textureID = LoadTGA("Image//SkyBox//nottingham_lf.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureID = LoadTGA("Image//SkyBox//nottingham_rt.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//nottingham_up.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//nottingham_dn.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("PISTOL", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("PISTOL")->textureID = LoadTGA("Image//PISTOL.tga");

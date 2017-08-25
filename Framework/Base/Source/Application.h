@@ -32,6 +32,11 @@ public:
 
 	int m_window_width;
 	int m_window_height;
+
+	void MakeFullScreen(void);
+	void MakeWindowedMode(void);
+
+	bool screenMode;
 private:
 	Application();
 	~Application();
