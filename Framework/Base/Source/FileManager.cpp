@@ -794,6 +794,23 @@ bool FileManager::ReadEnemyFile(const string myFile)
 					theEnemyInfo.scaleZ = stof(tempData);
 				}
 
+				if (nextData == 7)
+				{
+					for (int j = i; j < data.size(); ++j)
+					{
+						if (data[j] != ',')
+						{
+							tempData += data[j];
+						}
+						else
+						{
+							i = j;
+							break;
+						}
+					}
+					theEnemyInfo.scaleZ = stof(tempData);
+				}
+
 				tempData = "";
 				++nextData;
 			}
@@ -1178,7 +1195,7 @@ void FileManager::EditEnemyFile(const string myFile)
 {
 	ofstream File;
 	File.open(myFile);
-	File << "type,displacementx,displacementy,displacementz,scalex,scaley,scalez\n";
+	File << "type,displacementx,displacementy,displacementz,scalex,scaley,scalez,rotation\n";
 
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
@@ -1189,7 +1206,8 @@ void FileManager::EditEnemyFile(const string myFile)
 			<< temp->GetPosition().z << "," 
 			<< temp->GetScale().x << "," 
 			<< temp->GetScale().y << "," 
-			<< temp->GetScale().z << "\n";
+			<< temp->GetScale().z << ","
+			<< temp->GetRotate() << "\n";
 	}
 }
 

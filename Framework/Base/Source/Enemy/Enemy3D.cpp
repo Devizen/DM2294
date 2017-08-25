@@ -754,6 +754,7 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 	result->setAttackTo(1.f);
 	result->setDefenseTo(1.f);
 	result->setType(3);
+	result->SetLight(true);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }
