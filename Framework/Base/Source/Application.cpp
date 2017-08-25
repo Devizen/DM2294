@@ -48,7 +48,34 @@ bool Application::IsKeyPressed(unsigned short key)
 	return ((GetAsyncKeyState(key) & 0x8001) != 0);
 }
 
-Application::Application()
+void Application::MakeFullScreen(void)
+{
+	/*Get Monitor*/
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+	m_window_width = mode->width;
+	m_window_height = mode->height;
+	glfwSetWindowSize(m_window, m_window_width, m_window_height);
+	screenMode = true;
+}
+
+void Application::MakeWindowedMode(void)
+
+{
+	m_window_width = 800;
+	m_window_height = 600;
+
+	glfwSetWindowSize(m_window, m_window_width, m_window_height);
+	screenMode = false;
+}
+
+Application::Application() :
+	screenMode(false)
 {
 }
 
@@ -74,7 +101,7 @@ void Application::Init()
 												   //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
-																   /*Get Monitor*/
+	/*Get Monitor*/
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
@@ -147,11 +174,18 @@ void Application::Run()
 		glfwPollEvents();
 		UpdateInput();
 
-		float dt = m_timer.getElapsedTime();
+		float dt = static_cast<float>(m_timer.getElapsedTime());
 		if (dt > 0.015f)
 			dt = 0.015f;
 
 		SceneManager::GetInstance()->Update(dt);
+
+		/*Switching between Fullscreen and Windowed mode.*/
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_LMENU) && KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !screenMode)
+			MakeFullScreen();
+		else if (KeyboardController::GetInstance()->IsKeyDown(VK_LMENU) && KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && screenMode)
+			MakeWindowedMode();
+
 		SceneManager::GetInstance()->Render();
 
 		//Swap buffers
