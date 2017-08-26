@@ -4,6 +4,7 @@
 #include "Enemy_Type.h"
 #include "../Attributes.h"
 #include "Pathfinding\Pathfinding.h"
+#include "../Physics/Physics.h"
 #include <vector>
 
 #define MAX_HEALTH_SCALE 10.f
@@ -15,7 +16,8 @@ class Mesh;
 class CEnemy3D :
 	public GenericEntity,
 	public CAttributes,
-	public Pathfinding
+	public Pathfinding,
+	public Physics
 {
 	friend class EntityManager;
 	friend class SceneText;
@@ -113,28 +115,28 @@ public:
 	int getHealth(void);
 
 	/*Set A.I State*/
-	void setState(AI_STATE _state);
+	void SetState(AI_STATE _state);
 	/*Get A.I State*/
-	int getState(void);
+	int GetState(void);
 
 	/*Check if player is inside defined boundary around enemy.*/
-	virtual bool checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary);
+	virtual bool CheckInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary);
 
 	/*Return nearest enemy*/
-	CEnemy3D* returnNearestEnemy(void);
+	CEnemy3D* ReturnNearestEnemy(void);
 
 	/*Set Alert Boundary*/
-	void setAlertBoundary(Vector3 _minAlertBoundary, Vector3 _maxAlertBoundary);
+	void SetAlertBoundary(Vector3 _minAlertBoundary, Vector3 _maxAlertBoundary);
 	/*Get Min Alert Boundary*/
-	Vector3 getMinAlertBoundary(void);
+	Vector3 GetMinAlertBoundary(void);
 	/*Get Max Alert Boundary*/
-	Vector3 getMaxAlertBoundary(void);
+	Vector3 GetMaxAlertBoundary(void);
 
 	/*Set Portable DT*/
-	void setPortableDT(double _portableDT);
+	void SetPortableDT(double _portableDT);
 
 	/*Get Portable DT*/
-	double getPortableDT(void);
+	double GetPortableDT(void);
 
 	///*Set Attributes*/
 	//void setAttributes(ATTRIBUTES _attributes);
@@ -143,26 +145,26 @@ public:
 	//float getAttributes(ATTRIBUTE_TYPES type);
 
 	/*Set Player Property*/
-	void setPlayerProperty(bool _playerProperty);
+	void SetPlayerProperty(bool _playerProperty);
 
 	/*Get Player Property*/
-	bool getPlayerProperty(void);
+	bool GetPlayerProperty(void);
 
 	/*Set Shoot Delay*/
-	virtual void setShootDelay(float _shootDelay);
+	virtual void SetShootDelay(float _shootDelay);
 
 	/*Get Player Property*/
-	virtual float getShootDelay(void);
+	virtual float GetShootDelay(void);
 
 	/*Render Health Bar*/
-	virtual void renderHealthBar(void);
+	virtual void RenderHealthBar(void);
 	///*Update for Patrol Behavior*/
 	//void updatePatrol(double dt);
 	///*Update for Tower Behavior*/
 	//void updateTower(double dt);
 
 	/*Checking collision with enemy and object.*/
-	bool checkCollision(void);
+	bool CheckCollision(void);
 
 	/*Set who is closer, enemy (player) or player.*/
 	void SetWhoCloser(WHO_CLOSER _whoCloser);
@@ -181,8 +183,8 @@ public:
 	Vector3 GetPreviousPosition(void);
 
 	//set type 
-	void setType(int newType) { this->type = newType; }
-	int getType() { return type; }
+	void SetType(int newType) { this->type = newType; }
+	int GetType() { return type; }
 
 private:
 	//ATTRIBUTES attributes;

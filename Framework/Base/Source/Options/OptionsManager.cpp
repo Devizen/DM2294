@@ -85,7 +85,7 @@ bool OptionsManager::loadConfig(string filePath)
 
 			}
 			Controls* newInput = new Controls(_type, stoi(_key));
-			//newInput->setType(_type);
+			//newInput->SetType(_type);
 			//newInput->set_mKey(stoi(_key));
 			_type = "";
 			_key = "";

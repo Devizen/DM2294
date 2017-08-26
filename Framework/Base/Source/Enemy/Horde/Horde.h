@@ -27,16 +27,16 @@ public:
 	virtual void Render(void);
 
 	/*Check if player is inside defined boundary around enemy.*/
-	virtual bool checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary);
+	virtual bool CheckInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary);
 
 	/*Set Shoot Delay*/
-	virtual void setShootDelay(float _shootDelay);
+	virtual void SetShootDelay(float _shootDelay);
 
 	/*Get Player Property*/
-	virtual float getShootDelay(void);
+	virtual float GetShootDelay(void);
 
 	/*Render Health Bar*/
-	//virtual void renderHealthBar(void);
+	//virtual void RenderHealthBar(void);
 
 	/*Set Default Position*/
 	void setDefaultPosition(Vector3 _defaultPosition);

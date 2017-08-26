@@ -37,7 +37,7 @@ void CPatrol::Update(double dt)
 
 	if (!pathFindingMode)
 	{
-		if (checkCollision())
+		if (CheckCollision())
 		{
 			position = previousPosition;
 			cout << "COLLIDED" << endl;
@@ -50,7 +50,7 @@ void CPatrol::Update(double dt)
 		}
 
 		//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
-		if ((CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() < 100.f * 100.f && checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+		if ((CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() < 100.f * 100.f && CheckInsideBoundary(minAlertBoundary, maxAlertBoundary))
 			state = ALERT;
 		else
 			state = PATROL;
@@ -162,7 +162,7 @@ void CPatrol::Render(void)
 	modelStack.PopMatrix();
 
 	if (GetAttribute(CAttributes::TYPE_HEALTH) > 0.f)
-		renderHealthBar();
+		RenderHealthBar();
 
 	if (pathFindingMode)
 	{
@@ -184,7 +184,7 @@ void CPatrol::Render(void)
 }
 
 
-bool CPatrol::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
+bool CPatrol::CheckInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 {
 	Vector3 boundaryMin = minBoundary + waypoint[0];
 	Vector3 boundaryMax = maxBoundary + waypoint[0];
@@ -201,17 +201,17 @@ bool CPatrol::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 }
 
 
-void CPatrol::setShootDelay(float _shootDelay)
+void CPatrol::SetShootDelay(float _shootDelay)
 {
 	shootDelay = _shootDelay;
 }
 
-float CPatrol::getShootDelay(void)
+float CPatrol::GetShootDelay(void)
 {
 	return shootDelay;
 }
 
-//void CPatrol::renderHealthBar(void)
+//void CPatrol::RenderHealthBar(void)
 //{
 //
 //}
@@ -243,7 +243,7 @@ CPatrol* Create::Patrol(const std::string& _meshName,
 	result->SetPosition(_position);
 	result->SetScale(_scale);
 	result->SetCollider(true);
-	result->setPlayerProperty(false);
+	result->SetPlayerProperty(false);
 	result->waypointToGo = 0;
 	result->waypoint.push_back(_position);
 	EntityManager::GetInstance()->AddEnemy(result);

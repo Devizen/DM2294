@@ -74,29 +74,32 @@ void CTower::Reset(void)
 // Update
 void CTower::Update(double dt)
 {
-	static Debug_Message* _debug = new Debug_Message();
-	setPortableDT(dt);
+	//static Debug_Message* _debug = new Debug_Message();
+	//setPortableDT(dt);
+	if (GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) <= 0)
+		setState(AI_STATE::DEAD);
+
 	switch (getState())
 	{
 	case IDLE:
 	{
-		/*Position*/
-		_debug->SetMessageType(Debug_Message::POSITION);
-		_debug->SetVector3(position);
-		Debugger::GetInstance()->AddMessage(_debug);
-		_debug->SetMessageType(Debug_Message::POSITION);
-		_debug->SetVector3(minAABB);
-		_debug->SetMessage("Min AABB: ");
-		Debugger::GetInstance()->AddMessage(_debug);
-		_debug->SetMessageType(Debug_Message::POSITION);
-		_debug->SetVector3(maxAABB);
-		_debug->SetMessage("Max AABB: ");
-		Debugger::GetInstance()->AddMessage(_debug);
+		///*Position*/
+		//_debug->SetMessageType(Debug_Message::POSITION);
+		//_debug->SetVector3(position);
+		//Debugger::GetInstance()->AddMessage(_debug);
+		//_debug->SetMessageType(Debug_Message::POSITION);
+		//_debug->SetVector3(minAABB);
+		//_debug->SetMessage("Min AABB: ");
+		//Debugger::GetInstance()->AddMessage(_debug);
+		//_debug->SetMessageType(Debug_Message::POSITION);
+		//_debug->SetVector3(maxAABB);
+		//_debug->SetMessage("Max AABB: ");
+		//Debugger::GetInstance()->AddMessage(_debug);
 
-		/*Defined Message*/
-		_debug->SetMessageType(Debug_Message::DEFINED);
-		_debug->SetMessage("I am in Tower.");
-		Debugger::GetInstance()->AddMessage(_debug);
+		///*Defined Message*/
+		//_debug->SetMessageType(Debug_Message::DEFINED);
+		//_debug->SetMessage("I am in Tower.");
+		//Debugger::GetInstance()->AddMessage(_debug);
 	}
 	case ALERT:
 	{

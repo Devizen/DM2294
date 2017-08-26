@@ -927,7 +927,7 @@ void Level02::createEnemies(double dt)
 	//		//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
 	//		anEnemy3D = Create::Enemy3D("turret", newPosition, _scale);
 	//		//anEnemy3D->Init();
-	//		anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	//		anEnemy3D->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	//		anEnemy3D->SetCollider(true);
 	//		anEnemy3D->SetLight(true);
 	//		anEnemy3D->SetAABB(Vector3(_scale.x, 0.f, _scale.z), Vector3(-_scale.x, -5.f, -_scale.z));

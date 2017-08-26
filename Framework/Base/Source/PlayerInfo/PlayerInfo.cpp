@@ -1129,7 +1129,7 @@ void CPlayerInfo::setLockedOn(void)
 
 		for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 		{
-			if ((*it)->getPlayerProperty())
+			if ((*it)->GetPlayerProperty())
 				continue;
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
@@ -1142,7 +1142,7 @@ void CPlayerInfo::setLockedOn(void)
 
 		for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 		{
-			if ((*it)->getPlayerProperty())
+			if ((*it)->GetPlayerProperty())
 				continue;
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);

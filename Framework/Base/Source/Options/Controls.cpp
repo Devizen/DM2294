@@ -12,7 +12,7 @@ void Controls::setKey(int _key)
 	key = _key;
 }
 
-void Controls::setType(string _type)
+void Controls::SetType(string _type)
 {
 	if (_type == "LEFT")
 		type = LEFT;
@@ -78,7 +78,7 @@ string Controls::getStrType(void)
 	return str_type;
 }
 
-int Controls::getType(void)
+int Controls::GetType(void)
 {
 	return type;
 }

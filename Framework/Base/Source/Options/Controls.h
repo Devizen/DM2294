@@ -32,11 +32,11 @@ public:
 	void setKey(int _key);
 	void set_iKey(int _key);
 	void set_strType(string _type);
-	void setType(string _type);
+	void SetType(string _type);
 
 	int getKey(void);
 	string getStrType(void);
-	int getType(void);
+	int GetType(void);
 	bool checkType(int _type);
 
 	Controls();
