@@ -14,6 +14,7 @@ CWeaponInfo::CWeaponInfo()
 	, elapsedTime(0.0)
 	, bFire(true)
 	, defaultMaxTotalRounds(0)
+	, fired(false)
 {
 }
 
@@ -130,27 +131,69 @@ void CWeaponInfo::Init(void)
 // Update the elapsed time
 void CWeaponInfo::Update(const double dt)
 {
-	elapsedTime += dt;
+	portableDT = dt;
+	if (elapsedTime != timeBetweenShots)
+		elapsedTime += dt;
+
+	cout << "Elapsed: " << elapsedTime << endl;
+	cout << "Time Between: " << timeBetweenShots << endl;
 	if (elapsedTime > timeBetweenShots)
 	{
 		bFire = true;
-		elapsedTime = 0.0;
+		fired = false;
+		elapsedTime = timeBetweenShots;
+	}
+
+	if (!bFire)
+	{
+		if (elapsedTime > 0.1f)
+			fired = false;
+		else
+			fired = true;
 	}
 }
 
 // Discharge this weapon
 void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
 {
-	if (bFire)
+	if (elapsedTime == timeBetweenShots)
 	{
+		Vector3 distanceBetween(0.f, 0.f, 0.f);
 		// If there is still ammo in the magazine, then fire
 		if (magRounds > 0)
 		{
-			Vector3 distanceBetween(target - position);
-			distanceBetween *= 3.f;
-			distanceBetween += position;
+			if (!_source->getLockedOn())
+			{
+				distanceBetween = target - _source->GetPos();
+				distanceBetween *= 3.f;
+				distanceBetween += _source->GetPos();
+				cout << "CAME IN " << endl;
+			}
+			else
+			{
+				Vector3 shiftForward((_source->getEnemyPositionToLockOn()->GetPos() - _source->GetPos()).Normalized());
+				shiftForward *= 3.f;
+
+				distanceBetween += _source->GetPos() + shiftForward;
+				/*Vector3 rightVector = target.Normalized().Cross(_source->GetUp());
+				_source->GetUp();*/
+				//Vector3 tempTarget(target);
+				//Vector3 tempPosition(position);
+
+				//while ((tempTarget - tempPosition).LengthSquared() > 200.f)
+				//{
+				//	cout << "Temp Target: " << tempTarget << endl;
+				//	cout << "Temp Distance: " << (tempTarget - tempPosition).LengthSquared() << endl;
+				//	tempTarget -= static_cast<float>(portableDT) * tempPosition;
+				//}
+
+				//distanceBetween = tempTarget - position;
+				//distanceBetween *= 3.f;
+				//distanceBetween += position;
+				//tempTarget.Set(0.f, 0.f, 0.f);
+			}
 			CProjectile* aProjectile = Create::Projectile("sphere", 
-				distanceBetween,
+															distanceBetween,
 															(target - position).Normalized(), /*Direction*/
 															2.0f, /*Lifespan of Bullet*/
 															800.0f, /*Speed*/
@@ -160,6 +203,7 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 			aProjectile->bulletOriginated = CProjectile::FROM_PLAYER;
 			bFire = false;
 			magRounds--;
+			elapsedTime = 0.f;
 		}
 	}
 }
@@ -214,4 +258,9 @@ void CWeaponInfo::PrintSelf(void)
 int CWeaponInfo::getDefaultMaxTotalRounds(void)
 {
 	return defaultMaxTotalRounds;
+}
+
+double CWeaponInfo::GetElapsedTime(void)
+{
+	return elapsedTime;
 }

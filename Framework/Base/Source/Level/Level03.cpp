@@ -819,7 +819,7 @@ void Level03::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired)
 		{
 			CSoundEngine::GetInstance()->PlayASound("PISTOL");
 			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
@@ -833,7 +833,7 @@ void Level03::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired)
 		{
 			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);

@@ -658,6 +658,7 @@ void Tutorial::Update(double dt)
 				else
 				{
 					playerInfo->setLockedOn(false);
+					Vector3 newTarget(playerInfo->GetTarget().Normalized() + playerInfo->GetPos());
 					playerInfo->SetTarget(camera.GetCameraTarget());
 				}
 			}
@@ -673,10 +674,15 @@ void Tutorial::Update(double dt)
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4))
 				SceneManager::GetInstance()->SetActiveScene("Level04");
 
-			if (playerInfo->getLockedOn())
-				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
-					playerInfo->SetTarget(playerInfo->getEnemyPositionToLockOn()->GetPos());
 
+			if (playerInfo->getLockedOn())
+			{
+				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
+				{
+					Vector3 aimAtEnemyTarget(playerInfo->getEnemyPositionToLockOn()->GetPosition() - playerInfo->GetPos().Normalized());
+					playerInfo->SetTarget(aimAtEnemyTarget);
+				}
+			}
 		}
 	}
 	else
@@ -768,7 +774,7 @@ void Tutorial::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired)
 		{
 			CSoundEngine::GetInstance()->PlayASound("PISTOL");
 			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
@@ -782,7 +788,7 @@ void Tutorial::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired)
 		{
 			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);

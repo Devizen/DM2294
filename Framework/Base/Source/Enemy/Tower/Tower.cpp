@@ -4,6 +4,7 @@
 #include "RenderHelper.h"
 #include "MeshBuilder.h"
 #include "../../Base/Source/Debugger/Debugger.h"
+#include "../../ParticleManager.h"
 
 CTower::CTower(Mesh* _modelMesh)
 	: CEnemy3D(NULL)
@@ -27,8 +28,6 @@ CTower::CTower(Mesh* _modelMesh)
 	SetPreviousPosition(Vector3(0.f, 0.f, 0.f));
 	gravity.Set(0.f, -9.8f, 0.f);
 	initialVelocity.Set(0.f, 0.f, 0.f);
-	/*This Previous Position will be used to check if tower was demolished.*/
-	SetPreviousPosition(minAABB);
 	/*Speed to slow down the demolishing.*/
 	speed = 0.1f;
 	mass = 100.f;
@@ -122,10 +121,9 @@ void CTower::Update(double dt)
 				finalVelocity += gravity * static_cast<float>(dt) * speed;
 				Vector3 shake(Math::RandFloatMinMax(-1.f, 1.f), 0.f, Math::RandFloatMinMax(-1.f, 1.f));
 				position += finalVelocity + shake;
+				maxAABB += finalVelocity + shake;
 
-				cout << "Position: " << position << endl; 
-				cout << "Gravity: " << gravity << endl;
-				if (maxAABB.y < previousPosition.y)
+				if (maxAABB.y < -10.f)
 					demolished = true;
 			}
 			break;
