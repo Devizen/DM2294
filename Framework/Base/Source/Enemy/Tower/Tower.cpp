@@ -160,7 +160,9 @@ CTower* Create::Tower(const std::string& _meshName,
 	result->setHealthTo(10.f);
 	result->setAttackTo(1.f);
 	result->setDefenseTo(1.f);
-	result->setType(3);
+	result->setType(2);
+	result->SetLight(true);
+
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }
