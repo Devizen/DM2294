@@ -342,6 +342,9 @@
     <ClCompile Include="Source\Level\Mainmenu.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level\Selection.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -573,6 +576,9 @@
       <Filter>Debugger</Filter>
     </ClInclude>
     <ClInclude Include="Source\Level\Mainmenu.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Selection.h">
       <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>

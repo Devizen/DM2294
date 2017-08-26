@@ -398,7 +398,7 @@ void Mainmenu::Update(double dt)
 	case 2:
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
 		{
-			SceneManager::GetInstance()->SetActiveScene("Level03");
+			SceneManager::GetInstance()->SetActiveScene("Selection");
 		}
 		break;
 	case 3:
@@ -410,7 +410,6 @@ void Mainmenu::Update(double dt)
 	default:
 		break;
 	}
-	cout << "SelectedChoice" << selectedChoice << endl;
 }
 
 void Mainmenu::Render()
@@ -570,98 +569,187 @@ void Mainmenu::renderMainMenu(void)
 {
 	Mesh* modelMesh;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenu");
-	modelStack.PushMatrix();
-	modelStack.Scale(500, 500, 0);
-	RenderHelper::RenderMesh(modelMesh);
-	modelStack.PopMatrix();
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+	{
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenu");
+		modelStack.PushMatrix();
+		//modelStack.Scale(500, 500, 0);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.99f, Application::GetInstance().GetWindowHeight() * 0.99f, 0);
+		RenderHelper::RenderMesh(modelMesh);
+		modelStack.PopMatrix();
+	}
+	else
+	{
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenu");
+		modelStack.PushMatrix();
+		//modelStack.Scale(500, 500, 0);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.99f, Application::GetInstance().GetWindowHeight() * 0.99f, 0);
+		RenderHelper::RenderMesh(modelMesh);
+		modelStack.PopMatrix();
+	}
 }
 
 void Mainmenu::renderMainMenuTitle(void)
 {
 	Mesh* modelMesh;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuTitle");
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 150, 0);
-	modelStack.Scale(200, 40, 1.f);
-	RenderHelper::RenderMesh(modelMesh);
-	modelStack.PopMatrix();
-}
-
-void Mainmenu::renderMainMenuStart(void)
-{
-	if (selectedChoice == 1)
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
 	{
-		Mesh* modelMesh;
-		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuTitle");
 		modelStack.PushMatrix();
-		modelStack.Scale(150, 50, 1.f);
+		modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.35 , 0);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6, Application::GetInstance().GetWindowHeight() * .09, 1.f);
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
 	else
 	{
-		Mesh* modelMesh;
-		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuTitle");
 		modelStack.PushMatrix();
-		modelStack.Scale(100, 50, 1.f);
+		modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.35, 0);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6, Application::GetInstance().GetWindowHeight() * .09, 1.f);
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
+	}
+}
+
+void Mainmenu::renderMainMenuStart(void)
+{
+	Mesh* modelMesh;
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+	{
+		if (selectedChoice == 1)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
+			modelStack.PushMatrix();
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
+			modelStack.PushMatrix();
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+	}
+	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
+	{
+		if (selectedChoice == 1)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
+			modelStack.PushMatrix();
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
+			modelStack.PushMatrix();
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
 	}
 }
 
 void Mainmenu::renderMainMenuLevels(void)
 {
-	if (selectedChoice == 2)
+	Mesh* modelMesh;
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
 	{
-		Mesh* modelMesh;
-		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
-		modelStack.PushMatrix();
-		modelStack.Translate(0, -100, 0);
-		modelStack.Scale(150, 50, 1.f);
-		RenderHelper::RenderMesh(modelMesh);
-		modelStack.PopMatrix();
+		if (selectedChoice == 2)
+		{		
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
+			modelStack.PushMatrix();
+			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.15, 0);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
+			modelStack.PushMatrix();
+			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.15, 0);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
 	}
-	else
+	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
 	{
-		Mesh* modelMesh;
-		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
-		modelStack.PushMatrix();
-		modelStack.Translate(0, -100, 0);
-		modelStack.Scale(100, 50, 1.f);
-		RenderHelper::RenderMesh(modelMesh);
-		modelStack.PopMatrix();
+		if (selectedChoice == 2)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
+			modelStack.PushMatrix();
+			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.15, 0);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
+			modelStack.PushMatrix();
+			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.15, 0);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
 	}
 }
 
 void Mainmenu::renderMainMenuQuit(void)
 {
-	if (selectedChoice == 3)
+	Mesh* modelMesh;
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
 	{
-		Mesh* modelMesh;
-		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
-		modelStack.PushMatrix();
-		modelStack.Translate(0, -200, 0);
-		modelStack.Scale(150, 50, 1.f);
-		RenderHelper::RenderMesh(modelMesh);
-		modelStack.PopMatrix();
+		if (selectedChoice == 3)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
+			modelStack.PushMatrix();
+			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.3, 0);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
+			modelStack.PushMatrix();
+			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.3, 0);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
 	}
-	else
+	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
 	{
-		Mesh* modelMesh;
-		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
-		modelStack.PushMatrix();
-		modelStack.Translate(0, -200, 0);
-		modelStack.Scale(100, 50, 1.f);
-		RenderHelper::RenderMesh(modelMesh);
-		modelStack.PopMatrix();
+		if (selectedChoice == 3)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
+			modelStack.PushMatrix();
+			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.3, 0);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
+			modelStack.PushMatrix();
+			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.3, 0);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
 	}
 }
 
