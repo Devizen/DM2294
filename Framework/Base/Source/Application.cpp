@@ -168,6 +168,11 @@ void Application::Init()
 
 	// Init systems
 	GraphicsManager::GetInstance()->Init();
+
+	/*Init Sounds*/
+	CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
+	CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
+	CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
 }
 
 void Application::Run()
