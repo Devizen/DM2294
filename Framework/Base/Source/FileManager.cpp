@@ -1200,7 +1200,7 @@ void FileManager::EditEnemyFile(const string myFile)
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
 		CEnemy3D* temp = (CEnemy3D*)*it;
-		File << temp->getType() << ","
+		File << temp->GetType() << ","
 			<< temp->GetPosition().x << "," 
 			<< temp->GetPosition().y << "," 
 			<< temp->GetPosition().z << "," 

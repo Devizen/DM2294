@@ -140,6 +140,7 @@
     <ClInclude Include="Source\Options\Controls.h" />
     <ClInclude Include="Source\Options\OptionsManager.h" />
     <ClInclude Include="Source\ParticleManager.h" />
+    <ClInclude Include="Source\Physics\Physics.h" />
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
     <ClInclude Include="Source\Projectile\Projectile.h" />
     <ClInclude Include="Source\Quest\Quest.h" />

@@ -39,7 +39,7 @@ void CHorde::Reset(void)
 void CHorde::Update(double dt)
 {
 	//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
-	if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+	if (CheckInsideBoundary(minAlertBoundary, maxAlertBoundary))
 		state = ALERT;
 	else
 		state = IDLE;
@@ -117,11 +117,11 @@ void CHorde::Render(void)
 	modelStack.PopMatrix();
 
 	if (GetAttribute(CAttributes::TYPE_HEALTH) > 0.f)
-		renderHealthBar();
+		RenderHealthBar();
 }
 
 
-bool CHorde::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
+bool CHorde::CheckInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 {
 	Vector3 boundaryMin = minBoundary + defaultPosition;
 	Vector3 boundaryMax = maxBoundary + defaultPosition;
@@ -138,12 +138,12 @@ bool CHorde::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 }
 
 
-void CHorde::setShootDelay(float _shootDelay)
+void CHorde::SetShootDelay(float _shootDelay)
 {
 	shootDelay = _shootDelay;
 }
 
-float CHorde::getShootDelay(void)
+float CHorde::GetShootDelay(void)
 {
 	return shootDelay;
 }
@@ -158,7 +158,7 @@ const Vector3 CHorde::getDefaultPosition(void)
 	return defaultPosition;
 }
 
-//void CHorde::renderHealthBar(void)
+//void CHorde::RenderHealthBar(void)
 //{
 //
 //}
@@ -238,54 +238,54 @@ CHorde* Create::Horde(const std::string& _meshName,
 	//down->SetCollider(true);
 	//EntityManager::GetInstance()->AddEnemy(down);
 
-	//center->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	//center->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	//center->SetCollider(true);
 	//center->SetLight(true);;
 	//center->setMaxHealthTo(10.f);
 	//center->setHealthTo(10.f);
 	//center->setAttackTo(1.f);
 	//center->setDefenseTo(1.f);
-	//center->setPlayerProperty(false);
+	//center->SetPlayerProperty(false);
 	//center->SetLight(true);
 
-	//left->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	//left->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	//left->SetCollider(true);
 	//left->SetLight(true);
 	//left->setMaxHealthTo(10.f);
 	//left->setHealthTo(10.f);
 	//left->setAttackTo(1.f);
 	//left->setDefenseTo(1.f);
-	//left->setPlayerProperty(false);
+	//left->SetPlayerProperty(false);
 	//left->SetLight(true);
 
-	//right->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	//right->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	//right->SetCollider(true);
 	//right->SetLight(true);
 	//right->setMaxHealthTo(10.f);
 	//right->setHealthTo(10.f);
 	//right->setAttackTo(1.f);
 	//right->setDefenseTo(1.f);
-	//right->setPlayerProperty(false);
+	//right->SetPlayerProperty(false);
 	//right->SetLight(true);
 
-	//up->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	//up->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	//up->SetCollider(true);
 	//up->SetLight(true);
 	//up->setMaxHealthTo(10.f);
 	//up->setHealthTo(10.f);
 	//up->setAttackTo(1.f);
 	//up->setDefenseTo(1.f);
-	//up->setPlayerProperty(false);
+	//up->SetPlayerProperty(false);
 	//up->SetLight(true);
 
-	//down->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	//down->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	//down->SetCollider(true);
 	//down->SetLight(true);
 	//down->setMaxHealthTo(10.f);
 	//down->setHealthTo(10.f);
 	//down->setAttackTo(1.f);
 	//down->setDefenseTo(1.f);
-	//down->setPlayerProperty(false);
+	//down->SetPlayerProperty(false);
 	//down->SetLight(true);
 
 	//return center;

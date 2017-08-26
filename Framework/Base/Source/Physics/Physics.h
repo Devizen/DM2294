@@ -6,9 +6,16 @@
 
 struct Physics
 {
-	float gravity;
+	Vector3 gravity;
+	Vector3 acceleration;
 	Vector3 direction;
-	Vector3 velocity;
+	Vector3 initialVelocity;
+	Vector3 finalVelocity;
+	Vector3 force;
+	float mass;
+	float speed;
+	float time;
+	float displacement;
 };
 
 #endif
