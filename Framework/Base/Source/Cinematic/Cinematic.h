@@ -5,9 +5,10 @@
 #define CINEMATIC_H
 
 #include "CameraBase.h"
+#include <string>
 #include "SingletonTemplate.h"
 
-
+using std::string;
 class CCinematic : public CameraBase, public std::exception, public Singleton<CCinematic>
 {
 public:
@@ -15,6 +16,7 @@ public:
 enum cinematicTarget
 {
 	C_Target = 0,
+	C_Target_Text,
 	C_Destination
 };
 
@@ -34,7 +36,7 @@ enum cinematicTarget
 	virtual Vector3 GetCameraUp() const;
 	virtual void SetCameraUp(Vector3 pos);
 
-	void moveCamera(Vector3 _position, Vector3 _destination, float _speed, double dt);
+	void moveCamera(Vector3 _position, Vector3 _destination, float _speed, double dt, string _message = "");
 
 	int numberOfPositions;
 

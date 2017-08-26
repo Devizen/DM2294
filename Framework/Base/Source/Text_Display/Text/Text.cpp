@@ -38,12 +38,12 @@ CText * Create::Text(const std::string & _meshName, string _message, float _dura
 		{
 			text->textConversation.push_back("");
 		}
-
 	text->durationElapsed = _durationElapsed;
 	text->maxDuration = _maxDuration;
 	text->textType = _textType;
 
-	Text_Manager::GetInstance()->addText(text);
+	if (_textType != CText::TEXT_NONE)
+		Text_Manager::GetInstance()->addText(text);
 	Text_Manager::GetInstance()->displayingText = true;
 
 	return text;

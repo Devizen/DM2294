@@ -22,6 +22,7 @@ public:
 	{
 		TEXT_CONVERSATION = 0,
 		TEXT_BATTLE,
+		TEXT_IMPACT,
 		TEXT_NONE
 	};
 
@@ -37,6 +38,7 @@ public:
 	float scaleText;
 	float scaleBackground;
 	vector<string>textConversation;
+	vector<CText*>textImpact;
 };
 
 namespace Create

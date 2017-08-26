@@ -762,8 +762,8 @@ void Tutorial::Update(double dt)
 			{
 				static bool completed = false;
 				/*For player critical hit cinematic*/
-				cinematic->targetType = CCinematic::C_Target;
-				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt);
+				cinematic->targetType = CCinematic::C_Target_Text;
+				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt, "LIM GUAN SHENG");
 
 				cinematic->Update(dt);
 				camera.SetCameraPos(cinematic->GetCameraPos());
@@ -787,7 +787,7 @@ void Tutorial::Update(double dt)
 				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello\nWorld\nTest.", 0.f, 2.f, CText::TEXT_CONVERSATION);
+				Create::Text("text", "OFFICER", 0.f, 2.f, CText::TEXT_IMPACT);
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
 				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);

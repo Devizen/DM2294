@@ -14,6 +14,8 @@
 /*To stop the camera from swaying.*/
 #include "../../Base/Source/PlayerInfo/PlayerInfo.h"
 #include <iostream>
+/*Sound Engine to play sound for text.*/
+#include "../../SoundEngine.h"
 
 using std::cout;
 using std::endl;
@@ -58,7 +60,7 @@ void Text_Manager::updateText(double dt)
 					{
 						text->activateText = false;
 
-						if (textList.size() > 1)
+						if (textList.size() > 0)
 						{
 							CText* tempText = textList.back();
 
@@ -198,6 +200,181 @@ void Text_Manager::updateText(double dt)
 						}
 					}
 				}
+
+				if (text->textType == CText::TEXT_IMPACT)
+				{
+					const float textSize = 0.1f;
+					const float printSpeed = 3.f;
+					bool preventCancel = false;
+					static int characterCount = 0;
+					static bool initialise = false;
+					static int textState = 0;
+
+					/*Push back a character to use.*/
+					if (!initialise)
+					{
+						if (text->message.size() != text->textImpact.size())
+						{
+							text->textImpact.push_back(Create::Text("text", string(1, text->message[characterCount]), 0.f, 0.5f, CText::TEXT_NONE));
+							text->textImpact.back()->scaleText = Application::GetInstance().GetWindowWidth();
+						}
+						initialise = true;
+					}
+
+					/*When the desired scale of character is met, add another character.*/
+					if (text->textImpact.back()->scaleText <= (Application::GetInstance().GetWindowWidth() * textSize) && (text->message.size() != text->textImpact.size()))
+					{
+						if (text->textImpact.back()->message != " ")
+							CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\TEXT_IMPACT.ogg");
+						++characterCount;
+						text->textImpact.push_back(Create::Text("text", string(1, text->message[characterCount]), 0.f, 0.5f, CText::TEXT_NONE));
+						text->textImpact.back()->scaleText = Application::GetInstance().GetWindowWidth();
+					}
+
+					static bool playOnce = false;
+					if (text->textImpact.size() == text->message.size() && !text->textImpact.back()->activateText)
+					{
+						if (!playOnce)
+							CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\TEXT_IMPACT.ogg");
+
+						playOnce = true;
+					}
+
+
+					if (textState == 0 /*!= text->message.size()*/)
+					{
+						for (vector<CText*>::iterator it = text->textImpact.begin(); it != text->textImpact.end(); ++it)
+						{
+							CText* _text = (CText*)*it;
+
+							_text->durationElapsed += static_cast<float>(dt);
+
+							if (_text->scaleText >= (Application::GetInstance().GetWindowWidth() * textSize) && _text->activateText)
+								_text->scaleText -= static_cast<float>(dt) * Application::GetInstance().GetWindowWidth() * printSpeed;
+							else
+								_text->activateText = false;
+						}
+
+						int tempCount = 0;
+						for (vector<CText*>::iterator it = text->textImpact.begin(); it != text->textImpact.end(); ++it)
+						{
+							CText* _text = (CText*)*it;
+
+							_text->durationElapsed += static_cast<float>(dt);
+
+							if (_text->scaleText <= (Application::GetInstance().GetWindowWidth() * textSize) && !_text->activateText)
+								++tempCount;
+
+							if (tempCount == text->message.size())
+								textState = 1;
+						}
+					}
+
+					if (textState == 1)
+					{
+						int tempCount = 0;
+
+						for (vector<CText*>::iterator it = text->textImpact.begin(); it != text->textImpact.end(); ++it)
+						{
+							CText* _text = (CText*)*it;
+
+							_text->durationElapsed += static_cast<float>(dt);
+
+							if (_text->scaleText <= (Application::GetInstance().GetWindowWidth() * textSize * 10.f) && !_text->activateText)
+								_text->scaleText += static_cast<float>(dt) * Application::GetInstance().GetWindowWidth() * printSpeed;
+							else
+								_text->activateText = true;
+						}
+
+						for (vector<CText*>::iterator it = text->textImpact.begin(); it != text->textImpact.end(); ++it)
+						{
+							CText* _text = (CText*)*it;
+
+							_text->durationElapsed += static_cast<float>(dt);
+
+							if (_text->scaleText >= (Application::GetInstance().GetWindowWidth() * textSize * 2.f) && _text->activateText)
+								++tempCount;
+								
+							if (tempCount == text->message.size())
+								textState = 2;
+						}
+
+					}
+
+					if (textState == 2)
+					{
+						int tempCount = 0;
+	
+						for (vector<CText*>::iterator it = text->textImpact.begin(); it != text->textImpact.end(); ++it)
+						{
+							CText* _text = (CText*)*it;
+
+							_text->durationElapsed += static_cast<float>(dt);
+
+							if (_text->scaleText >= (Application::GetInstance().GetWindowWidth() * textSize) && _text->activateText)
+								_text->scaleText -= static_cast<float>(dt) * Application::GetInstance().GetWindowWidth() * printSpeed;
+							else
+								_text->activateText = false;
+						}
+
+						for (vector<CText*>::iterator it = text->textImpact.begin(); it != text->textImpact.end(); ++it)
+						{
+							CText* _text = (CText*)*it;
+
+							_text->durationElapsed += static_cast<float>(dt);
+
+							if (_text->scaleText <= (Application::GetInstance().GetWindowWidth() * textSize) && !_text->activateText)
+								++tempCount;
+	
+							if (tempCount == text->message.size())
+							{
+								CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\TEXT_IMPACT_END.ogg");
+								textState = 3;
+							}
+						}
+					}
+
+					if (textState == 3)
+					{
+						text->durationElapsed += static_cast<float>(dt);
+
+						if (text->durationElapsed >= 1.5f)
+						{
+							text->activateText = false;
+
+							while (text->textImpact.size() > 0)
+							{
+								CText* _text = text->textImpact.back();
+								delete _text;
+								_text = nullptr;
+								text->textImpact.pop_back();
+							}
+
+							if (textList.size() > 0)
+							{
+								CText* tempText = textList.back();
+
+								/*Move the first text to the last in vector.*/
+								textList.back() = text;
+								/*First text change to last text.*/
+								text = tempText;
+								/*Remove first text.*/
+								delete text;
+								text = nullptr;
+								textList.pop_back();
+								/*Move last text back to the default position.*/
+								textList.back() = tempText;
+								characterCount = 0;
+								Text_Manager::GetInstance()->displayingText = false;
+								initialise = false;
+								playOnce = false;
+								textState = 0;
+								break;
+							}
+						}
+					}
+
+				}
 			break;
 		}
 	}
@@ -288,6 +465,51 @@ void Text_Manager::renderText(void)
 					RenderHelper::RenderText(text->modelMesh, text->textConversation[2], Color(1.f, 0.f, 0.f));
 					modelStack.PopMatrix();
 				}
+
+				else if (text->textType == CText::TEXT_IMPACT)
+				{
+					if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+					{
+						float characterOffset = 0.f;
+						for (vector<CText*>::iterator it = text->textImpact.begin(); it != text->textImpact.end(); ++it)
+						{
+							CText* character = (CText*)*it;
+
+							/*Quad for the text to display onto.*/
+							MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+
+							/*Display text.*/
+							modelStack.PushMatrix();
+							modelStack.Translate(-Application::GetInstance().GetWindowWidth() * (0.3f - characterOffset), 0.f, 0.f);
+							modelStack.Scale(character->scaleText, character->scaleText, 1.f);
+							RenderHelper::RenderText(character->modelMesh, character->message, Color(1.f, 0.f, 0.f));
+							modelStack.PopMatrix();
+
+							characterOffset += 0.05f;
+						}
+					}
+					else
+					{
+						float characterOffset = 0.f;
+						for (vector<CText*>::iterator it = text->textImpact.begin(); it != text->textImpact.end(); ++it)
+						{
+							CText* character = (CText*)*it;
+
+							/*Quad for the text to display onto.*/
+							MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+
+							/*Display text.*/
+							modelStack.PushMatrix();
+							modelStack.Translate(-Application::GetInstance().GetWindowWidth() * (0.3f - characterOffset), 0.f, 0.f);
+							modelStack.Scale(character->scaleText, character->scaleText, 1.f);
+							RenderHelper::RenderText(character->modelMesh, character->message, Color(1.f, 0.f, 0.f));
+							modelStack.PopMatrix();
+
+							characterOffset += 0.05f;
+						}
+					}
+				}
+
 			}
 			break;
 		}

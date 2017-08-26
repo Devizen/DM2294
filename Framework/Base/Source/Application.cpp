@@ -3,6 +3,7 @@
 #include "KeyboardController.h"
 #include "SceneManager.h"
 #include "GraphicsManager.h"
+#include "SoundEngine.h"
 
 //Include GLEW
 #include <GL/glew.h>

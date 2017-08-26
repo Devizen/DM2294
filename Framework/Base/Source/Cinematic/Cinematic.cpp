@@ -5,6 +5,7 @@
 #include "MouseController.h"
 #include "KeyboardController.h"
 #include "../PlayerInfo/PlayerInfo.h"
+#include "../Text_Display/Text/Text.h"
 
 #include <iostream>
 
@@ -113,7 +114,7 @@ void CCinematic::SetCameraUp(Vector3 up)
 	this->up = up;
 }
 
-void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _speed, double dt)
+void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _speed, double dt, string _message)
 {
 	switch (targetType)
 	{
@@ -129,15 +130,38 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 			if (_target.LengthSquared() >= 200.f)
 				position += _target.Normalized() * _speed * (float)dt;
 			else
-
 				CCinematic::GetInstance()->cinematicMode = false;
 		}
 		catch (exception e)
 		{
 
 		}
-	}
 	break;
+	}
+
+	case C_Target_Text:
+	{
+		Vector3 _target = cameraTarget - position;
+		cout << "Position: " << cameraPosition << endl;
+		cout << "Destination: " << cameraTarget << endl;
+		try
+		{
+			target = cameraTarget;
+			cout << "Displacement: " << _target.LengthSquared() << endl;
+			if (_target.LengthSquared() >= 200.f)
+				position += _target.Normalized() * _speed * (float)dt;
+			else
+			{
+				Create::Text("text", _message, 0.f, 2.f, CText::TEXT_IMPACT);
+				CCinematic::GetInstance()->cinematicMode = false;
+			}
+		}
+		catch (exception e)
+		{
+
+		}
+		break;
+	}
 	case C_Destination:
 	{
 		Vector3 _target = _destination - _position;
@@ -157,8 +181,8 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 		{
 
 		}
-	}
 		break;
+	}
 	default:
 		break;
 	}
