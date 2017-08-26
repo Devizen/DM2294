@@ -191,7 +191,7 @@ void SceneManager::initShader(void)
 
 	// Load all the meshes
 	MeshBuilder::GetInstance()->GenerateAxes("reference");
-	MeshBuilder::GetInstance()->GenerateCrossHair("crosshair");
+	MeshBuilder::GetInstance()->GenerateCrossHair("crosshair", 1.f, 1.f, 0.f, 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
 	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);

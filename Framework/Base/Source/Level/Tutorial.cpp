@@ -471,7 +471,7 @@ void Tutorial::Update(double dt)
 			tower->setMaxHealthTo(10.f);
 			tower->setAlertBoundary(Vector3(-1, -1, -1), Vector3(1, 1, 1));
 			tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
-			cinematic->cameraTarget = Vector3(tower->GetPos().x, 50.f, tower->GetPos().z);
+			cinematic->cameraTarget = Vector3(tower->GetPos().x, tower->GetMaxAABB().y * 0.5f, tower->GetPos().z);
 			cinematic->cinematicMode = true;
 			++Text_Manager::GetInstance()->messagePrompt;
 		}

@@ -118,73 +118,75 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 {
 	switch (targetType)
 	{
-	case C_Target:
-	{
-		Vector3 _target = cameraTarget - position;
-		cout << "Position: " << cameraPosition << endl;
-		cout << "Destination: " << cameraTarget << endl;
-		try
+		case C_Target:
 		{
-			target = cameraTarget;
-			cout << "Displacement: " << _target.LengthSquared() << endl;
-			if (_target.LengthSquared() >= 200.f)
-				position += _target.Normalized() * _speed * (float)dt;
-			else
-				CCinematic::GetInstance()->cinematicMode = false;
-		}
-		catch (exception e)
-		{
-
-		}
-	break;
-	}
-
-	case C_Target_Text:
-	{
-		Vector3 _target = cameraTarget - position;
-		cout << "Position: " << cameraPosition << endl;
-		cout << "Destination: " << cameraTarget << endl;
-		try
-		{
-			target = cameraTarget;
-			cout << "Displacement: " << _target.LengthSquared() << endl;
-			if (_target.LengthSquared() >= 200.f)
-				position += _target.Normalized() * _speed * (float)dt;
-			else
+			Vector3 _target = cameraTarget - position;
+			cout << "Position: " << cameraPosition << endl;
+			cout << "Destination: " << cameraTarget << endl;
+			try
 			{
-				Create::Text("text", _message, 0.f, 2.f, CText::TEXT_IMPACT);
-				CCinematic::GetInstance()->cinematicMode = false;
+				target = cameraTarget;
+				cout << "Displacement Target: " << _target.LengthSquared() << endl;
+				if (_target.LengthSquared() >= 1000.f)
+					position += _target.Normalized() * _speed * (float)dt;
+				else
+					CCinematic::GetInstance()->cinematicMode = false;
 			}
-		}
-		catch (exception e)
-		{
+			catch (exception e)
+			{
 
+			}
+			break;
 		}
-		break;
-	}
-	case C_Destination:
-	{
-		Vector3 _target = _destination - _position;
-		cout << "Position: " << _position << endl;
-		cout << "Destination: " << _destination << endl;
-		cout << "Target: " << target << endl;
-		target = _destination;
-		try
-		{
-			cout << "Displacement: " << (_destination - _position).Length() << endl;
-			if ((_destination - _position).Length() >= 50.f)
-				position += _target.Normalized() * _speed * (float)dt;
-			else
-				++numberOfPositions;
-		}
-		catch (exception e)
-		{
 
+		case C_Target_Text:
+		{
+			Vector3 _target = cameraTarget - position;
+			cout << "Position: " << cameraPosition << endl;
+			cout << "Destination: " << cameraTarget << endl;
+			try
+			{
+				target = cameraTarget;
+				cout << "Displacement Target Text: " << _target.LengthSquared() << endl;
+				if (_target.LengthSquared() >= 2000.f)
+					position += _target.Normalized() * _speed * (float)dt;
+				else
+				{
+					Create::Text("text", _message, 0.f, 2.f, CText::TEXT_IMPACT);
+					CCinematic::GetInstance()->cinematicMode = false;
+				}
+			}
+			catch (exception e)
+			{
+
+			}
+			break;
 		}
-		break;
-	}
-	default:
-		break;
+		case C_Destination:
+		{
+			Vector3 _target = _destination - _position;
+			cout << "Position: " << _position << endl;
+			cout << "Destination: " << _destination << endl;
+			cout << "Target: " << target << endl;
+			target = _destination;
+			try
+			{
+				cout << "Displacement Destination: " << (_destination - _position).Length() << endl;
+				if ((_destination - _position).LengthSquared() >= 1000.f)
+					position += _target.Normalized() * _speed * (float)dt;
+				else
+					++numberOfPositions;
+			}
+			catch (exception e)
+			{
+
+			}
+			break;
+		}
+		default:
+		{
+			break; 
+		}
 	}
 }
 
