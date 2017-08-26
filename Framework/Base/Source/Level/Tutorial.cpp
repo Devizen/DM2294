@@ -440,20 +440,11 @@ void Tutorial::Update(double dt)
 	CPlayerInfo::GetInstance()->printAttributes();
 
 	if (openInventory)
-	{
 		Inventory::GetInstance()->Update(dt);
-	}
 
 	if (openEQ)
-	{
 		EquipmentManager::GetInstance()->Update(dt);
-	}
 
-	//if (KeyboardController::GetInstance()->IsKeyDown('O')) {
-	//	Mtx44 rotate;
-	//	rotate.SetToRotation(90 * dt, 1, 0, 0);
-	//	lights[0]->position = rotate * lights[0]->position;
-	//}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('K'))
 	{
@@ -488,44 +479,14 @@ void Tutorial::Update(double dt)
 			/*Create random health power-up for player.*/
 			//createHealth(dt);
 
-			//cout << "Light Position X: " << lights[0]->position.x << endl;
-			//cout << "Light Position Y: " << lights[0]->position.y << endl;
-			//cout << "Light Position Z: " << lights[0]->position.z << endl;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('I'))
-			//	lights[0]->position.z += 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('K'))
-			//	lights[0]->position.z -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('L'))
-			//	lights[0]->position.x += 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('J'))
-			//	lights[0]->position.x -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('U'))
-			//	lights[0]->position.y -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('O'))
-			//	lights[0]->position.y += 100.f * dt;
-
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-			{
 				cout << "Left Mouse Button was released!" << endl;
-			}
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-			{
 				cout << "Right Mouse Button was released!" << endl;
-			}
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-			{
 				cout << "Middle Mouse Button was released!" << endl;
-			}
 			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-			{
 				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-			}
 
 			static float printInterval = 0;
 			printInterval += static_cast<float>(dt);
@@ -543,16 +504,13 @@ void Tutorial::Update(double dt)
 					{
 						weaponName = "Assault Rifle";
 						EntityManager::GetInstance()->RemoveEntity(weaponUI);
-						//weaponUI = Create::Sprite2DObject("ASSAULT", Vector3(-350.0f, -250.0f, 0.f), Vector3(100.0f, 40.0f, 100.0f), true);
 					}
 				}
 				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 0)
 				{
 					weaponName = "Pistol";
 					EntityManager::GetInstance()->RemoveEntity(weaponUI);
-					//weaponUI = Create::Sprite2DObject("PISTOL", Vector3(-350.0f, -250.0f, 0.f), Vector3(50.0f, 50.0f, 50.0f), true);
 				}
-
 
 				weaponType << weaponName;
 				if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
@@ -574,12 +532,6 @@ void Tutorial::Update(double dt)
 			textObj[5]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[5]->SetText(ss.str());
 
-			///*Display player health.*/
-			//ss.str("");
-			//ss << "Health:" << playerInfo->GetAttribute(CAttributes::TYPE_HEALTH);
-			//textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
-			//textObj[23]->SetText(ss.str());
-
 			/*Display score*/
 			ss.str("");
 			ss << "Score:" << playerInfo->getScore();
@@ -587,13 +539,6 @@ void Tutorial::Update(double dt)
 			textObj[24]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[24]->SetColor(Color(1.f, 0.f, 0.f));
 			textObj[24]->SetText(ss.str());
-
-			//ss.str("");
-			//ss << "Highscore:" << OptionsManager::GetInstance()->getHighscore();
-			//textObj[25]->SetPosition(Vector3(textObj[24]->GetPosition().x- 200.f, textObj[24]->GetPosition().y -570.f, textObj[24]->GetPosition().z));
-			//textObj[25]->SetColor(Color(1.f, 0.f, 0.f));
-			//textObj[25]->SetText(ss.str());
-
 
 			if (playerInfo->getScore() > OptionsManager::GetInstance()->getHighscore())
 			{
@@ -736,6 +681,7 @@ void Tutorial::Update(double dt)
 	}
 	else
 	{
+		/*For resetting player status.*/
 		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
 		{
 			CPlayerInfo::GetInstance()->setHealthTo(100.f);
