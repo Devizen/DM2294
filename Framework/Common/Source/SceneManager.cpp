@@ -296,6 +296,39 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("EMPHELM", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("EMPHELM")->textureID = LoadTGA("Image//EmperorHelmet.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("EMPARMOR", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("EMPARMOR")->textureID = LoadTGA("Image//EmperorArmor.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("EMPGLOVE", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("EMPGLOVE")->textureID = LoadTGA("Image//EmperorGlove.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("EMPSHOE", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("EMPSHOE")->textureID = LoadTGA("Image//EmperorShoe.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("CAPHELM", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("CAPHELM")->textureID = LoadTGA("Image//CaptainHelmet.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("CAPARMOR", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("CAPARMOR")->textureID = LoadTGA("Image//CaptainArmor.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("CAPSHOE", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("CAPSHOE")->textureID = LoadTGA("Image//CaptainShoe.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("CAPGLOVE", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("CAPGLOVE")->textureID = LoadTGA("Image//CaptainGlove.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERHELM", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERHELM")->textureID = LoadTGA("Image//SoldierHelmet.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERARMOR", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERARMOR")->textureID = LoadTGA("Image//SoldierArmor.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERSHOE", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERSHOE")->textureID = LoadTGA("Image//SoldierShoe.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERGLOVE", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERGLOVE")->textureID = LoadTGA("Image//SoldierGlove.tga");
+
 	MeshBuilder::GetInstance()->GenerateQuad("BHELM", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("BHELM")->textureID = LoadTGA("Image//BasicHelmet.tga");
 
