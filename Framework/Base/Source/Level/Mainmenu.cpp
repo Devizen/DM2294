@@ -597,8 +597,8 @@ void Mainmenu::renderMainMenuTitle(void)
 	{
 		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuTitle");
 		modelStack.PushMatrix();
-		modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.35 , 0);
-		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6, Application::GetInstance().GetWindowHeight() * .09, 1.f);
+		modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.35f , 0.f);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6f, Application::GetInstance().GetWindowHeight() * .09f, 1.f);
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
@@ -606,8 +606,8 @@ void Mainmenu::renderMainMenuTitle(void)
 	{
 		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuTitle");
 		modelStack.PushMatrix();
-		modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.35, 0);
-		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6, Application::GetInstance().GetWindowHeight() * .09, 1.f);
+		modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.35f, 0.f);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6f, Application::GetInstance().GetWindowHeight() * .09f, 1.f);
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
@@ -623,7 +623,7 @@ void Mainmenu::renderMainMenuStart(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
 			modelStack.PushMatrix();
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -631,7 +631,7 @@ void Mainmenu::renderMainMenuStart(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
 			modelStack.PushMatrix();
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -642,7 +642,7 @@ void Mainmenu::renderMainMenuStart(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
 			modelStack.PushMatrix();
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -650,7 +650,7 @@ void Mainmenu::renderMainMenuStart(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
 			modelStack.PushMatrix();
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -667,8 +667,8 @@ void Mainmenu::renderMainMenuLevels(void)
 		{		
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.15, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.15f, 0);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -676,8 +676,8 @@ void Mainmenu::renderMainMenuLevels(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.15, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.15f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -688,8 +688,8 @@ void Mainmenu::renderMainMenuLevels(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.15, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.15f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -697,8 +697,8 @@ void Mainmenu::renderMainMenuLevels(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.15, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.15f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -715,8 +715,8 @@ void Mainmenu::renderMainMenuQuit(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.3, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.3f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -724,8 +724,8 @@ void Mainmenu::renderMainMenuQuit(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.3, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.3f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -736,8 +736,8 @@ void Mainmenu::renderMainMenuQuit(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.3, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .15, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.3f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -745,8 +745,8 @@ void Mainmenu::renderMainMenuQuit(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.3, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.3f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -964,7 +964,7 @@ void Mainmenu::RenderPassMain(void)
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 800, 600);
-	glViewport(0, 0, Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight());
+	glViewport(static_cast<GLint>(0), static_cast<GLint>(0), static_cast<GLint>(Application::GetInstance().GetWindowWidth()), static_cast<GLint>(Application::GetInstance().GetWindowHeight()));
 	//glViewport(0, 0, m_worldWidth, m_worldHeight);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -1050,9 +1050,10 @@ void Mainmenu::RenderPassMain(void)
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
-	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
+	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.f;
+	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.f;
+	GraphicsManager::GetInstance()->SetOrthographicProjection(static_cast<double>(-halfWindowWidth), static_cast<double>(halfWindowWidth), 
+		static_cast<double>(-halfWindowHeight), static_cast<double>(halfWindowHeight), static_cast<double>(-10), static_cast<double>(10));
 	GraphicsManager::GetInstance()->DetachCamera();
 	if (OptionsManager::GetInstance()->getEditingState())
 	{
