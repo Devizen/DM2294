@@ -135,8 +135,8 @@ void Level01::Init()
 	// Create the playerinfo instance, which manages all information about the player
 	playerInfo = CPlayerInfo::GetInstance();
 	playerInfo->Init();
-	playerInfo->SetPos(Vector3(450.f, 0.f, -450.f));
-	playerInfo->SetTarget(playerInfo->GetPos());
+	playerInfo->SetPos(Vector3(0.f, 0.f, -450.f));
+	playerInfo->SetTarget(Vector3(0.f, 0.f, -1.f));
 
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -1402,11 +1402,6 @@ void Level01::Exit()
 	MeshBuilder::GetInstance()->removeMeshMap();
 	GraphicsManager::GetInstance()->removeLightMap();
 
-	if (cinematic)
-	{
-		delete cinematic;
-		cinematic = nullptr;
-	}
 	Text_Manager::GetInstance()->resetAll();
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();

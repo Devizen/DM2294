@@ -101,18 +101,24 @@ void CPlayerInfo::Init(void)
 	freeLookViewVector.Set(1, 0, 0);
 
 	// Set the pistol as the primary weapon
-	primaryWeapon = new CPistol();
+	if (primaryWeapon == nullptr)
+		primaryWeapon = new CPistol();
 	primaryWeapon->Init();
 	cout << "Primary Weapon From Player: " << primaryWeapon << endl;
-
-	secondaryWeapon = new CKnife();
+	if (secondaryWeapon == nullptr)
+		secondaryWeapon = new CKnife();
 	secondaryWeapon->Init();
 
-	weaponManager = new CWeaponInfo*[m_iNumOfWeapon];
-	weaponManager[0] = new CPistol();
-	weaponManager[0]->Init();
+	if (weaponManager == nullptr)
+	{
+		weaponManager = new CWeaponInfo*[m_iNumOfWeapon];
+		weaponManager[0] = primaryWeapon;
+		weaponManager[1] = new CAssaultRifle();
+	}
+	//weaponManager[0] = new CPistol();
+	//weaponManager[0]->Init();
 
-	weaponManager[1] = new CAssaultRifle();
+	//weaponManager[1] = new CAssaultRifle();
 	weaponManager[1]->Init();
 
 	/*for (int i = 0; i < m_iNumOfWeapon; i++)

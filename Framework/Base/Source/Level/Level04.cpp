@@ -225,7 +225,7 @@ void Level04::Init()
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
-	cinematic = new CCinematic();
+	cinematic = CCinematic::GetInstance();
 	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
@@ -1491,11 +1491,6 @@ void Level04::Exit()
 	MeshBuilder::GetInstance()->removeMeshMap();
 	GraphicsManager::GetInstance()->removeLightMap();
 
-	if (cinematic)
-	{
-		delete cinematic;
-		cinematic = nullptr;
-	}
 	Text_Manager::GetInstance()->resetAll();
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();

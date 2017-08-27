@@ -151,7 +151,7 @@ void Tutorial::Init()
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	cinematic = CCinematic::GetInstance();
-	//cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
+	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
@@ -1303,7 +1303,7 @@ void Tutorial::RenderPassMain(void)
 	}
 	EntityManager::GetInstance()->RenderUI();
 
-	if (!cinematic->cinematicMode)
+	if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 	{
 		/*Render Weapon*/
 		renderWeapon();
@@ -1339,10 +1339,11 @@ void Tutorial::RenderPassMain(void)
 		if (Map_Editor::GetInstance()->mapEditing)
 			Map_Editor::GetInstance()->renderOption();
 
-		/*Render text display.*/
-		if (Text_Manager::GetInstance()->returnTextList().size() > 0)
-			Text_Manager::GetInstance()->renderText();
 	}
+
+	/*Render text display.*/
+	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
+		Text_Manager::GetInstance()->renderText();
 
 	glEnable(GL_DEPTH_TEST);
 
