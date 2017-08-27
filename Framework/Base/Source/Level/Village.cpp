@@ -1,11 +1,4 @@
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#ifdef _DEBUG
-#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#define new DEBUG_NEW
-#endif
-
-#include "Tutorial.h"
+#include "Village.h"
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
 
@@ -59,11 +52,9 @@
 /*Cinematic Camera*/
 #include "../Cinematic\Cinematic.h"
 
-/*Displaying Text*/
+/*DIsplaying Text*/
 #include "../Text_Display\Text\Text.h"
 #include "../Text_Display\Text_Manager\Text_Manager.h"
-
-#include "../Enemy/Tower/Tower.h"
 
 #include <iostream>
 
@@ -71,13 +62,13 @@
 
 using namespace std;
 
-Tutorial* Tutorial::sInstance = new Tutorial(SceneManager::GetInstance());
+Village* Village::sInstance = new Village(SceneManager::GetInstance());
 
-Tutorial::Tutorial()
+Village::Village()
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
-	//, cinematicMode(false)
+	, cinematicMode(false)
 	, windowHeight(0.f)
 	, windowWidth(0.f)
 	//, m_worldHeight(0.f)
@@ -85,20 +76,20 @@ Tutorial::Tutorial()
 {
 }
 
-Tutorial::Tutorial(SceneManager* _sceneMgr)
+Village::Village(SceneManager* _sceneMgr)
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
-	//, cinematicMode(false)
+	, cinematicMode(false)
 {
-	_sceneMgr->AddScene("Tutorial", this);
+	_sceneMgr->AddScene("Village", this);
 }
 
-Tutorial::~Tutorial()
+Village::~Village()
 {
 }
 
-void Tutorial::Init()
+void Village::Init()
 {
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
@@ -144,8 +135,8 @@ void Tutorial::Init()
 	// Create the playerinfo instance, which manages all information about the player
 	playerInfo = CPlayerInfo::GetInstance();
 	playerInfo->Init();
-	playerInfo->SetPos(Vector3(6.f, 0.f, 0.f));
-	playerInfo->SetTarget(Vector3(6.f, 0.f, 1.f));
+	playerInfo->SetPos(Vector3(0.f, 0.f, -450.f));
+	playerInfo->SetTarget(Vector3(0.f, 0.f, -1.f));
 
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -155,11 +146,25 @@ void Tutorial::Init()
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
+	// Create entities into the scene
+	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
+	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
+	////GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
+	//Create::Entity("ring", Vector3(0.0f, 0.0f, 0.0f)); // Reference
+
 	groundEntity = Create::Ground("snowGround", "snowGround");
 	groundEntity->SetLight(true);
 
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f), true);
+
+	///*Chair Test*/
+	//CFurniture* chair = Create::Furniture("Chair", Vector3(20.f, 0.f, 0.f), Vector3(1.f, 1.f, 1.f));
+	//chair->SetCollider(true);
+	//chair->SetLight(false);
+	//chair->SetAABB(Vector3(5.f, 5.f, 5.f), Vector3(-5.f, -5.f, -5.f));
+	//
+
 
 	SkyBoxEntity* theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
 		"SKYBOX_LEFT", "SKYBOX_RIGHT",
@@ -241,13 +246,14 @@ void Tutorial::Init()
 	weaponManager = playerInfo->getWeaponManager();
 
 	/*Initialise Sounds*/
-	CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
-	CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
-	CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
+	//CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
+	//CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
+
+	//CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
 	//CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
 	//CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
 	//CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
-	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
+	//CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
 	//m_lightDepthFBO.Init(1024, 1024);
@@ -268,34 +274,11 @@ void Tutorial::Init()
 
 	saveMapTime = 0;
 
-	FileManager::GetInstance()->ReadMapFile("Files//Tutorial.csv");
-
-	
-	Vector3 _scale(3.f, 3.f, 3.f);
-	CEnemy3D* turret = Create::Enemy3D("turret", Vector3(-12.f, -10.f, 250.f), Vector3(3.f, 3.f, 3.f), false);
-	turret->setHealthTo(10);
-	turret->setMaxHealthTo(10);
-	turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
-	turret = Create::Enemy3D("turret", Vector3(24.f, -10.f, 250.f), Vector3(3.f, 3.f, 3.f), false);
-	turret->setHealthTo(10.f);
-	turret->setMaxHealthTo(10.f);
-	turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
-	CAnimatedEnemy* _staticEnemy = Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head", Vector3(6.f, -10.f, 300.f), Vector3(3.f, 3.f, 3.f));
-	_staticEnemy->SetState(CEnemy3D::NO_AI_STATE);
-	_staticEnemy->setHealthTo(10.f);
-	_staticEnemy->setMaxHealthTo(10.f);
-	_staticEnemy->setAttackTo(0);
-	_staticEnemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
-	_staticEnemy->SetLight(true);
-
-	//CTower* sTower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
-	//cout << sTower->GetMinAABB() << endl;
-	//cout << sTower->GetMaxAABB() << endl;
+	//FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
 }
 
-void Tutorial::Update(double dt)
+void Village::Update(double dt)
 {
-	//cout << "I AM IN TUTORIAL NOW" << endl;
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -303,101 +286,11 @@ void Tutorial::Update(double dt)
 	static bool pause = false;
 	static int renderOnce = 0;
 
-	saveMapTime += dt;
-	static CTower* tower;
-
-	if (!Text_Manager::GetInstance()->displayingText)
-	{
-		if (Text_Manager::GetInstance()->messagePrompt == 0)
-		{
-			Create::Text("text", "Welcome to Game.\nPress W, A, S and D to move around.", 0.f, 2.f, CText::TEXT_CONVERSATION);
-			++Text_Manager::GetInstance()->messagePrompt;
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 1)
-		{
-			if (KeyboardController::GetInstance()->IsKeyDown('W') ||
-				KeyboardController::GetInstance()->IsKeyDown('A') ||
-				KeyboardController::GetInstance()->IsKeyDown('S') ||
-				KeyboardController::GetInstance()->IsKeyDown('D'))
-				Text_Manager::GetInstance()->cooldown += static_cast<float>(dt);
-
-			if (Text_Manager::GetInstance()->cooldown >= 1.f)
-				++Text_Manager::GetInstance()->messagePrompt;
-
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 2)
-		{
-			Create::Text("text", "Hold Left Shift to Run.", 0.f, 2.f, CText::TEXT_CONVERSATION);
-			++Text_Manager::GetInstance()->messagePrompt;
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 3)
-		{
-			if (KeyboardController::GetInstance()->IsKeyDown('W') ||
-				KeyboardController::GetInstance()->IsKeyDown('A') ||
-				KeyboardController::GetInstance()->IsKeyDown('S') ||
-				KeyboardController::GetInstance()->IsKeyDown('D'))
-				++Text_Manager::GetInstance()->messagePrompt;
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 4)
-		{
-			if (playerInfo->GetPos().z >= 100.f)
-			{
-				Create::Text("text", "Fire at the enemy by left clicking.", 0.f, 2.f, CText::TEXT_CONVERSATION);
-				++Text_Manager::GetInstance()->messagePrompt;
-			}
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 5)
-		{
-			if (KeyboardController::GetInstance()->IsKeyDown('W') ||
-				KeyboardController::GetInstance()->IsKeyDown('A') ||
-				KeyboardController::GetInstance()->IsKeyDown('S') ||
-				KeyboardController::GetInstance()->IsKeyDown('D'))
-				++Text_Manager::GetInstance()->messagePrompt;
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 6)
-		{
-			if (MouseController::GetInstance()->IsButtonDown(MouseController::BUTTON_TYPE::LMB))
-			{
-				Create::Text("text", "Defeat the Turret to make them your allies!", 0.f, 2.f, CText::TEXT_CONVERSATION);
-				++Text_Manager::GetInstance()->messagePrompt;
-			}
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 7)
-		{
-			if (playerInfo->getKO_Count() >= 2)
-				++Text_Manager::GetInstance()->messagePrompt;
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 8)
-		{
-			Create::Text("text", "A tower spawned on the right, defeat it to win!", 0.f, 2.f, CText::TEXT_CONVERSATION);
-			++Text_Manager::GetInstance()->messagePrompt;
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 9)
-		{
-			tower = Create::Tower("TOWER", Vector3(-150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
-			tower->setHealthTo(10);
-			tower->setMaxHealthTo(10);
-			tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
-			cinematic->cameraTarget = Vector3(tower->GetPos().x, tower->GetMaxAABB().y * 0.5f, tower->GetPos().z);
-			cinematic->cinematicMode = true;
-			++Text_Manager::GetInstance()->messagePrompt;
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 10)
-		{
-			if (EntityManager::GetInstance()->returnEnemy().back()->GetState() == CEnemy3D::AI_STATE::DEAD)
-			{
-				Create::Text("text", "Great Job!\nTutorial Completed!", 0.f, 2.f, CText::TEXT_CONVERSATION);
-				++Text_Manager::GetInstance()->messagePrompt;
-			}
-		}
-		else if (Text_Manager::GetInstance()->messagePrompt == 11)
-			SceneManager::GetInstance()->SetActiveScene("Level01");
-	}
-
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
 	{
-		FileManager::GetInstance()->EditMapFile("Files//Tutorial.csv");
+		FileManager::GetInstance()->EditMapFile("Files//Village.csv");
+		FileManager::GetInstance()->EditEnemyFile("Files//VillageEnemy.csv");
 	}
 
 
@@ -440,11 +333,20 @@ void Tutorial::Update(double dt)
 	CPlayerInfo::GetInstance()->printAttributes();
 
 	if (openInventory)
+	{
 		Inventory::GetInstance()->Update(dt);
+	}
 
 	if (openEQ)
+	{
 		EquipmentManager::GetInstance()->Update(dt);
+	}
 
+	//if (KeyboardController::GetInstance()->IsKeyDown('O')) {
+	//	Mtx44 rotate;
+	//	rotate.SetToRotation(90 * dt, 1, 0, 0);
+	//	lights[0]->position = rotate * lights[0]->position;
+	//}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('K'))
 	{
@@ -467,6 +369,8 @@ void Tutorial::Update(double dt)
 
 		if (!OptionsManager::GetInstance()->getEditingState())
 		{
+			// Update our entities
+			EntityManager::GetInstance()->Update(dt);
 			clearKeyDisplay();
 			/*Create random enemies around the map.*/
 			//createEnemies(dt);
@@ -477,14 +381,44 @@ void Tutorial::Update(double dt)
 			/*Create random health power-up for player.*/
 			//createHealth(dt);
 
+			//cout << "Light Position X: " << lights[0]->position.x << endl;
+			//cout << "Light Position Y: " << lights[0]->position.y << endl;
+			//cout << "Light Position Z: " << lights[0]->position.z << endl;
+
+			//if (KeyboardController::GetInstance()->IsKeyDown('I'))
+			//	lights[0]->position.z += 100.f * dt;
+
+			//if (KeyboardController::GetInstance()->IsKeyDown('K'))
+			//	lights[0]->position.z -= 100.f * dt;
+
+			//if (KeyboardController::GetInstance()->IsKeyDown('L'))
+			//	lights[0]->position.x += 100.f * dt;
+
+			//if (KeyboardController::GetInstance()->IsKeyDown('J'))
+			//	lights[0]->position.x -= 100.f * dt;
+
+			//if (KeyboardController::GetInstance()->IsKeyDown('U'))
+			//	lights[0]->position.y -= 100.f * dt;
+
+			//if (KeyboardController::GetInstance()->IsKeyDown('O'))
+			//	lights[0]->position.y += 100.f * dt;
+
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
+			{
 				cout << "Left Mouse Button was released!" << endl;
+			}
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
+			{
 				cout << "Right Mouse Button was released!" << endl;
+			}
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
+			{
 				cout << "Middle Mouse Button was released!" << endl;
+			}
 			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
+			{
 				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
+			}
 
 			static float printInterval = 0;
 			printInterval += static_cast<float>(dt);
@@ -502,13 +436,16 @@ void Tutorial::Update(double dt)
 					{
 						weaponName = "Assault Rifle";
 						EntityManager::GetInstance()->RemoveEntity(weaponUI);
+						//weaponUI = Create::Sprite2DObject("ASSAULT", Vector3(-350.0f, -250.0f, 0.f), Vector3(100.0f, 40.0f, 100.0f), true);
 					}
 				}
 				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 0)
 				{
 					weaponName = "Pistol";
 					EntityManager::GetInstance()->RemoveEntity(weaponUI);
+					//weaponUI = Create::Sprite2DObject("PISTOL", Vector3(-350.0f, -250.0f, 0.f), Vector3(50.0f, 50.0f, 50.0f), true);
 				}
+
 
 				weaponType << weaponName;
 				if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
@@ -530,6 +467,12 @@ void Tutorial::Update(double dt)
 			textObj[5]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[5]->SetText(ss.str());
 
+			///*Display player health.*/
+			//ss.str("");
+			//ss << "Health:" << playerInfo->GetAttribute(CAttributes::TYPE_HEALTH);
+			//textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
+			//textObj[23]->SetText(ss.str());
+
 			/*Display score*/
 			ss.str("");
 			ss << "Score:" << playerInfo->getScore();
@@ -538,27 +481,27 @@ void Tutorial::Update(double dt)
 			textObj[24]->SetColor(Color(1.f, 0.f, 0.f));
 			textObj[24]->SetText(ss.str());
 
+			//ss.str("");
+			//ss << "Highscore:" << OptionsManager::GetInstance()->getHighscore();
+			//textObj[25]->SetPosition(Vector3(textObj[24]->GetPosition().x- 200.f, textObj[24]->GetPosition().y -570.f, textObj[24]->GetPosition().z));
+			//textObj[25]->SetColor(Color(1.f, 0.f, 0.f));
+			//textObj[25]->SetText(ss.str());
+
+
 			if (playerInfo->getScore() > OptionsManager::GetInstance()->getHighscore())
 			{
 				OptionsManager::GetInstance()->setHighscore(playerInfo->getScore());
 				OptionsManager::GetInstance()->saveHighscore();
 			}
 
-
-			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
-
-			// Update our entities
-			EntityManager::GetInstance()->Update(dt);
-
 			// Hardware Abstraction
-			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
+			if (!cinematicMode)
 			{
 				theKeyboard->Read(dt);
 				theMouse->Read(dt);
 
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
-
 			}
 
 			//// Update the player position and other details based on keyboard and mouse inputs
@@ -599,7 +542,7 @@ void Tutorial::Update(double dt)
 				cout << "Attached Camera" << endl;
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(&camera);
-				cinematic->cinematicMode = false;
+				cinematicMode = false;
 				cinematic->numberOfPositions = 0;
 			}
 
@@ -612,15 +555,40 @@ void Tutorial::Update(double dt)
 				cout << "Attached Cinematic" << endl;
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
-				cinematic->cinematicMode = true;
+				cinematicMode = true;
 			}
 
-			if (cinematic->cinematicMode)
+			if (cinematicMode)
 			{
 				static bool completed = false;
-				/*For player critical hit cinematic*/
-				cinematic->targetType = CCinematic::C_Target_Text;
-				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt, "TOWER");
+				if (cinematic->numberOfPositions == 0)
+				{
+					cinematic->targetType = CCinematic::C_Target;
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 200.f, 200.f), 100.f, dt);
+				}
+				else if (cinematic->numberOfPositions == 1)
+				{
+					cinematic->targetType = CCinematic::C_Target;
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 200.f, 100.f), 100.f, dt);
+				}
+				else if (cinematic->numberOfPositions == 2)
+				{
+					cinematic->targetType = CCinematic::C_Target;
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 100.f, 0.f), 100.f, dt);
+					completed = true;
+					if (completed)
+					{
+						cinematic->SetCameraPos(camera.GetCameraPos());
+						cinematic->SetCameraTarget(camera.GetCameraTarget());
+						cinematic->SetCameraUp(camera.GetCameraUp());
+						cout << "Attached Camera" << endl;
+						playerInfo->DetachCamera();
+						playerInfo->AttachCamera(&camera);
+						cinematicMode = false;
+						cinematic->numberOfPositions = 0;
+					}
+
+				}
 
 				cinematic->Update(dt);
 				camera.SetCameraPos(cinematic->GetCameraPos());
@@ -630,21 +598,11 @@ void Tutorial::Update(double dt)
 				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
 
-			if (!cinematic->cinematicMode)
-			{
-				cinematic->SetCameraPos(camera.GetCameraPos());
-				cinematic->SetCameraTarget(camera.GetCameraTarget());
-				cinematic->SetCameraUp(camera.GetCameraUp());
-				playerInfo->DetachCamera();
-				playerInfo->AttachCamera(&camera);
-				cinematic->numberOfPositions = 0;
-			}
-
 			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
 				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "OFFICER", 0.f, 2.f, CText::TEXT_IMPACT);
+				Create::Text("text", "Hello World Test Conversation Message that Prints.It also goes to the second line.\nThere's also a third line.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
 				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
@@ -653,7 +611,7 @@ void Tutorial::Update(double dt)
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)
 				Text_Manager::GetInstance()->updateText(dt);
 
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_TAB) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_TAB))
 			{
 				if (!playerInfo->getLockedOn())
 				{
@@ -663,7 +621,6 @@ void Tutorial::Update(double dt)
 				else
 				{
 					playerInfo->setLockedOn(false);
-					Vector3 newTarget(playerInfo->GetTarget().Normalized() + playerInfo->GetPos());
 					playerInfo->SetTarget(camera.GetCameraTarget());
 				}
 			}
@@ -689,11 +646,11 @@ void Tutorial::Update(double dt)
 					playerInfo->SetTarget(aimAtEnemyTarget);
 				}
 			}
+
 		}
 	}
 	else
 	{
-		/*For resetting player status.*/
 		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
 		{
 			CPlayerInfo::GetInstance()->setHealthTo(100.f);
@@ -702,13 +659,13 @@ void Tutorial::Update(double dt)
 	}
 }
 
-void Tutorial::Render()
+void Village::Render()
 {
 	RenderPassGPass();
 	RenderPassMain();
 }
 
-void Tutorial::displayControls(void)
+void Village::displayControls(void)
 {
 	std::ostringstream ss;
 	ss << "[Enter] to save changes.";
@@ -763,7 +720,7 @@ void Tutorial::displayControls(void)
 	controlText[0]->SetText(ss.str());
 }
 
-void Tutorial::renderWeapon(void)
+void Village::renderWeapon(void)
 {
 	Mesh* modelMesh;
 	if (playerInfo->GetWeapon() == 0)
@@ -805,7 +762,7 @@ void Tutorial::renderWeapon(void)
 	modelStack.PopMatrix();
 }
 
-void Tutorial::renderWeaponUI(void)
+void Village::renderWeaponUI(void)
 {
 	Mesh* modelMesh;
 	if (playerInfo->GetWeapon() == 0)
@@ -841,7 +798,7 @@ void Tutorial::renderWeaponUI(void)
 	modelStack.PopMatrix();
 }
 
-void Tutorial::createEnemies(double dt)
+void Village::createEnemies(double dt)
 {
 	//static bool once = false;
 
@@ -897,7 +854,7 @@ void Tutorial::createEnemies(double dt)
 
 }
 
-void Tutorial::createCrates(double dt)
+void Village::createCrates(double dt)
 {
 	static float increaseCrates = 0.f;
 	increaseCrates += (float)dt;
@@ -923,7 +880,7 @@ void Tutorial::createCrates(double dt)
 	}
 }
 
-void Tutorial::createBullets(double dt)
+void Village::createBullets(double dt)
 {
 	static float increaseBullets = 0.f;
 	increaseBullets += (float)dt;
@@ -948,7 +905,7 @@ void Tutorial::createBullets(double dt)
 	}
 }
 
-void Tutorial::createHealth(double dt)
+void Village::createHealth(double dt)
 {
 	static float increaseHealth = 0.f;
 	increaseHealth += (float)dt;
@@ -973,7 +930,7 @@ void Tutorial::createHealth(double dt)
 	}
 }
 
-void Tutorial::renderHit(void)
+void Village::renderHit(void)
 {
 
 	Mesh* modelMesh;
@@ -987,7 +944,7 @@ void Tutorial::renderHit(void)
 	modelStack.PopMatrix();
 }
 
-void Tutorial::pauseOptions(double dt, bool &pause)
+void Village::pauseOptions(double dt, bool &pause)
 {
 	OptionsManager::GetInstance()->setEditingState(true);
 	static bool choseType = false;
@@ -1145,7 +1102,7 @@ void Tutorial::pauseOptions(double dt, bool &pause)
 
 }
 
-void Tutorial::clearKeyDisplay(void)
+void Village::clearKeyDisplay(void)
 {
 	for (int i = 0; i < 17; ++i)
 	{
@@ -1153,7 +1110,7 @@ void Tutorial::clearKeyDisplay(void)
 	}
 }
 
-void Tutorial::RenderPassGPass(void)
+void Village::RenderPassGPass(void)
 {
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_PRE;
 
@@ -1193,7 +1150,7 @@ void Tutorial::RenderPassGPass(void)
 	RenderWorld();
 }
 
-void Tutorial::RenderPassMain(void)
+void Village::RenderPassMain(void)
 {
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -1304,43 +1261,39 @@ void Tutorial::RenderPassMain(void)
 	}
 	EntityManager::GetInstance()->RenderUI();
 
-	if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
+	/*Render Weapon*/
+	renderWeapon();
+
+	//*Render Camera Effects*/
+	theCameraEffects->RenderUI();
+
+	//*Render Weapon UI*/
+	renderWeaponUI();
+
+	//*Render Hit*/
+	if (EntityManager::GetInstance()->getHit())
+		renderHit();
+
+	if (openInventory)
 	{
-		/*Render Weapon*/
-		renderWeapon();
+		Inventory::GetInstance()->RenderWeapon();
+	}
 
-		//*Render Camera Effects*/
-		theCameraEffects->RenderUI();
-
-		//*Render Weapon UI*/
-		renderWeaponUI();
-
-		//*Render Hit*/
-		if (EntityManager::GetInstance()->getHit())
-			renderHit();
-
-		if (openInventory)
-		{
-			Inventory::GetInstance()->RenderWeapon();
-		}
-
-		if (openEQ)
-		{
-			EquipmentManager::GetInstance()->Render();
-			CPlayerInfo::GetInstance()->RenderAttribute();
-
-		}
-
-		//*Render KO Count*/
-		RenderHelper::GetInstance()->renderKOCount();
-		//*Render Player Health Bar*/
-		RenderHelper::GetInstance()->renderPlayerHealth();
-
-		/*Render Map Editor Options.*/
-		if (Map_Editor::GetInstance()->mapEditing)
-			Map_Editor::GetInstance()->renderOption();
+	if (openEQ)
+	{
+		EquipmentManager::GetInstance()->Render();
+		CPlayerInfo::GetInstance()->RenderAttribute();
 
 	}
+
+	//*Render KO Count*/
+	RenderHelper::GetInstance()->renderKOCount();
+	//*Render Player Health Bar*/
+	RenderHelper::GetInstance()->renderPlayerHealth();
+
+	/*Render Map Editor Options.*/
+	if (Map_Editor::GetInstance()->mapEditing)
+		Map_Editor::GetInstance()->renderOption();
 
 	/*Render text display.*/
 	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
@@ -1359,7 +1312,7 @@ void Tutorial::RenderPassMain(void)
 	glDisable(GL_BLEND);
 }
 
-void Tutorial::RenderWorld(void)
+void Village::RenderWorld(void)
 {
 	/*Debug*/
 	//CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
@@ -1406,7 +1359,7 @@ void Tutorial::RenderWorld(void)
 	/*--------------------------------------------------------*/
 }
 
-void Tutorial::Exit()
+void Village::Exit()
 {
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
@@ -1452,14 +1405,7 @@ void Tutorial::Exit()
 	MeshBuilder::GetInstance()->removeMeshMap();
 	GraphicsManager::GetInstance()->removeLightMap();
 
-	//if (cinematic)
-	//{
-	//	delete cinematic;
-	//	cinematic = nullptr;
-	//}
 	Text_Manager::GetInstance()->resetAll();
-
-	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
-	_CrtDumpMemoryLeaks();
+	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 }
