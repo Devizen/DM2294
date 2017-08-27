@@ -627,7 +627,7 @@ void Tutorial::Update(double dt)
 				camera.SetCameraTarget(cinematic->GetCameraTarget());
 				camera.SetCameraUp(cinematic->GetCameraUp());
 
-				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
+				//cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
 
 			if (!cinematic->cinematicMode)

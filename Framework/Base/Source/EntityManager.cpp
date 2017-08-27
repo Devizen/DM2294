@@ -114,15 +114,13 @@ void EntityManager::Update(double _dt)
 	{
 		EntityBase* item = (EntityBase*)*it;
 
-		Vector3 itemMin = item->GetMinAABB() + Vector3(item->GetPosition().x, -5.f, item->GetPosition().z);
-		Vector3 itemMax = item->GetMaxAABB() + Vector3(item->GetPosition().x, -5.f, item->GetPosition().z);
+		Vector3 itemMin = item->GetMinAABB() + Vector3(item->GetPosition().x, -10.f, item->GetPosition().z);
+		Vector3 itemMax = item->GetMaxAABB() + Vector3(item->GetPosition().x, -10.f, item->GetPosition().z);
 
-		Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
-		Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -5.f, CPlayerInfo::GetInstance()->GetPos().z);
+		Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
+		Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + Vector3(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
 
-		if ((playerMin.x < itemMax.x && playerMax.x > itemMin.x) &&
-			(playerMin.y < itemMax.y && playerMax.y > itemMin.y) &&
-			(playerMin.z < itemMax.z && playerMax.z > itemMin.z))
+		if (playerMin < itemMax && playerMax > itemMin)
 		{
 			CWeaponInfo** weaponManager = CPlayerInfo::GetInstance()->getWeaponManager();
 			CPlayerInfo* player = CPlayerInfo::GetInstance();

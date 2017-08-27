@@ -62,18 +62,21 @@ void Text_Manager::updateText(double dt)
 
 						if (textList.size() > 0)
 						{
-							CText* tempText = textList.back();
-
-							/*Move the first text to the last in vector.*/
-							textList.back() = text;
-							/*First text change to last text.*/
-							text = tempText;
-							/*Remove first text.*/
 							delete text;
 							text = nullptr;
 							textList.pop_back();
-							/*Move last text back to the default position.*/
-							textList.back() = tempText;
+							//CText* tempText = textList.back();
+
+							///*Move the first text to the last in vector.*/
+							//textList.back() = text;
+							///*First text change to last text.*/
+							//text = tempText;
+							///*Remove first text.*/
+							//delete text;
+							//text = nullptr;
+							//textList.pop_back();
+							///*Move last text back to the default position.*/
+							//textList.back() = tempText;
 							break;
 						}
 						else
@@ -480,7 +483,7 @@ void Text_Manager::renderText(void)
 
 							/*Display text.*/
 							modelStack.PushMatrix();
-							modelStack.Translate(-Application::GetInstance().GetWindowWidth() * (0.3f - characterOffset), 0.f, 0.f);
+							modelStack.Translate(-Application::GetInstance().GetWindowWidth() * (0.3f - characterOffset), -Application::GetInstance().GetWindowHeight() * 0.2f, 0.f);
 							modelStack.Scale(character->scaleText, character->scaleText, 1.f);
 							RenderHelper::RenderText(character->modelMesh, character->message, Color(1.f, 0.f, 0.f));
 							modelStack.PopMatrix();
@@ -500,7 +503,7 @@ void Text_Manager::renderText(void)
 
 							/*Display text.*/
 							modelStack.PushMatrix();
-							modelStack.Translate(-Application::GetInstance().GetWindowWidth() * (0.3f - characterOffset), 0.f, 0.f);
+							modelStack.Translate(-Application::GetInstance().GetWindowWidth() * (0.3f - characterOffset), -Application::GetInstance().GetWindowHeight() * 0.2f, 0.f);
 							modelStack.Scale(character->scaleText, character->scaleText, 1.f);
 							RenderHelper::RenderText(character->modelMesh, character->message, Color(1.f, 0.f, 0.f));
 							modelStack.PopMatrix();

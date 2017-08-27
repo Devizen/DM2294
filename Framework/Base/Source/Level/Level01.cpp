@@ -71,6 +71,7 @@ Level01::Level01()
 	, cinematicMode(false)
 	, windowHeight(0.f)
 	, windowWidth(0.f)
+	, currentTowerCount(0)
 	//, m_worldHeight(0.f)
 	//, m_worldWidth(0.f)
 {
@@ -81,6 +82,9 @@ Level01::Level01(SceneManager* _sceneMgr)
 	, theCameraEffects(NULL)
 	, currentHighscore(0)
 	, cinematicMode(false)
+	, windowHeight(0.f)
+	, windowWidth(0.f)
+	, currentTowerCount(0)
 {
 	_sceneMgr->AddScene("Level01", this);
 }
@@ -275,10 +279,61 @@ void Level01::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level01.csv");
 	FileManager::GetInstance()->ReadEnemyFile("Files//Level01Enemy.csv");
+
+	/*Display Objective to Player.*/
+	Create::Text("text", "Demolish the towers in the map!", 0.f, 3.f, CText::TEXT_BATTLE);
+
+	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+	{
+		if ((*it)->isTower)
+			++currentTowerCount;
+	}
+
+	Create::Health("POWERUP_HEALTH", Vector3(30.f, 0.f, -240.f), Vector3(3.f, 3.f, 3.f));
+	Create::Bullet("POWERUP_BULLET", Vector3(-30.f, 0.f, -240.f), Vector3(3.f, 3.f, 3.f));
+	Create::Health("POWERUP_HEALTH", Vector3(-110.f, 0.f, -35.f), Vector3(3.f, 3.f, 3.f));
+	Create::Bullet("POWERUP_BULLET", Vector3(110.f, 0.f, -35.f), Vector3(3.f, 3.f, 3.f));
+	Create::Bullet("POWERUP_BULLET", Vector3(-110.f, 0.f, 90.f), Vector3(3.f, 3.f, 3.f));
+	Create::Health("POWERUP_HEALTH", Vector3(110.f, 0.f, -90.f), Vector3(3.f, 3.f, 3.f));
+	CAnimatedEnemy* boss = Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head", Vector3(0.f, -10.f, 300.f), Vector3(4.f, 4.f, 4.f));
+	boss->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	boss->setSpeed(60);
+
+	Text_Manager::GetInstance()->displayingText = false;
 }
 
 void Level01::Update(double dt)
 {
+	int towerCount = 0;
+
+	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+	{
+		if ((*it)->isTower)
+			++towerCount;
+	}
+
+	if (currentTowerCount != towerCount)
+	{
+
+		Create::Text("text", "Tower(s) left: " + to_string(towerCount), 0.f, 1.5f, CText::TEXT_BATTLE);
+		currentTowerCount = towerCount;
+	}
+
+	static bool zoomToBoss = false;
+	if (playerInfo->GetPos().z >= 130.f && !zoomToBoss)
+	{
+		Text_Manager::GetInstance()->displayingText = true;
+		cinematic->cameraTarget = Vector3(EntityManager::GetInstance()->returnEnemy().back()->GetPos().x, EntityManager::GetInstance()->returnEnemy().back()->GetMaxAABB().y * 0.5f, EntityManager::GetInstance()->returnEnemy().back()->GetPos().z);
+		cinematic->cinematicMode = true;
+		zoomToBoss = true;
+	}
+
+	if (towerCount == 0)
+	{
+		//Create::Text("text", "Great Job!\nTutorial Completed!", 0.f, 2.f, CText::TEXT_CONVERSATION);
+		SceneManager::GetInstance()->SetActiveScene("Level02");
+	}
+
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -369,39 +424,7 @@ void Level01::Update(double dt)
 
 		if (!OptionsManager::GetInstance()->getEditingState())
 		{
-			// Update our entities
-			EntityManager::GetInstance()->Update(dt);
 			clearKeyDisplay();
-			/*Create random enemies around the map.*/
-			//createEnemies(dt);
-			/*Create random crates for player to hide behind.*/
-			//createCrates(dt);
-			/*Create random bullet power-up for player.*/
-			//createBullets(dt);
-			/*Create random health power-up for player.*/
-			//createHealth(dt);
-
-			//cout << "Light Position X: " << lights[0]->position.x << endl;
-			//cout << "Light Position Y: " << lights[0]->position.y << endl;
-			//cout << "Light Position Z: " << lights[0]->position.z << endl;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('I'))
-			//	lights[0]->position.z += 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('K'))
-			//	lights[0]->position.z -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('L'))
-			//	lights[0]->position.x += 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('J'))
-			//	lights[0]->position.x -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('U'))
-			//	lights[0]->position.y -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('O'))
-			//	lights[0]->position.y += 100.f * dt;
 
 			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
 			{
@@ -495,8 +518,10 @@ void Level01::Update(double dt)
 			}
 
 			// Hardware Abstraction
-			if (!cinematicMode)
+			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 			{
+				EntityManager::GetInstance()->Update(dt); // Update our entities
+
 				theKeyboard->Read(dt);
 				theMouse->Read(dt);
 
@@ -558,44 +583,30 @@ void Level01::Update(double dt)
 				cinematicMode = true;
 			}
 
-			if (cinematicMode)
+			if (cinematic->cinematicMode)
 			{
+				playerInfo->StopSway(dt);
 				static bool completed = false;
-				if (cinematic->numberOfPositions == 0)
-				{
-					cinematic->targetType = CCinematic::C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 200.f, 200.f), 100.f, dt);
-				}
-				else if (cinematic->numberOfPositions == 1)
-				{
-					cinematic->targetType = CCinematic::C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 200.f, 100.f), 100.f, dt);
-				}
-				else if (cinematic->numberOfPositions == 2)
-				{
-					cinematic->targetType = CCinematic::C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 100.f, 0.f), 100.f, dt);
-					completed = true;
-					if (completed)
-					{
-						cinematic->SetCameraPos(camera.GetCameraPos());
-						cinematic->SetCameraTarget(camera.GetCameraTarget());
-						cinematic->SetCameraUp(camera.GetCameraUp());
-						cout << "Attached Camera" << endl;
-						playerInfo->DetachCamera();
-						playerInfo->AttachCamera(&camera);
-						cinematicMode = false;
-						cinematic->numberOfPositions = 0;
-					}
-
-				}
+				/*For player critical hit cinematic*/
+				cinematic->targetType = CCinematic::C_Target_Text;
+				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt, "OFFICER");
 
 				cinematic->Update(dt);
 				camera.SetCameraPos(cinematic->GetCameraPos());
 				camera.SetCameraTarget(cinematic->GetCameraTarget());
 				camera.SetCameraUp(cinematic->GetCameraUp());
 
-				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
+				//cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
+			}
+
+			if (!cinematic->cinematicMode)
+			{
+				cinematic->SetCameraPos(camera.GetCameraPos());
+				cinematic->SetCameraTarget(camera.GetCameraTarget());
+				cinematic->SetCameraUp(camera.GetCameraUp());
+				playerInfo->DetachCamera();
+				playerInfo->AttachCamera(&camera);
+				cinematic->numberOfPositions = 0;
 			}
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)

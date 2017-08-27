@@ -208,24 +208,9 @@ void CEnemy3D::Update(double dt)
 			/*Aim the player.*/
 			if (this->GetPlayerProperty() || !this->GetPlayerProperty() && whoCloser == ENEMY)
 				newPosition.Set((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y + 2.5f, (distanceBetween.z / 2.f) + this->position.z);
-			//else if (!this->GetPlayerProperty() && whoCloser == ENEMY)
-			//	newPosition.Set((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y + 2.5f, (distanceBetween.z / 2.f) + this->position.z);
-			//if (KeyboardController::GetInstance()->IsKeyPressed('M'))
-			//{
-			//	cout << "Target: " << target << endl;
-			//	cout << "Enemy Position: " << position << endl;
-			//	cout << "Distance Between: " << distanceBetween << endl;
-			//	cout << "New Position: " << newPosition << endl;
-			//	cout << "Player Position: " << CPlayerInfo::GetInstance()->GetPos() << endl;
-			//}
 
-			cout << "In ALERT" << endl;
-			cout << "Player Property: " << playerProperty << endl;
-			cout << "Position: " << position << endl;
-			cout << "Shoot Delay: " << shootDelay << endl;
 			if (this->GetShootDelay() > 0.2f && GetAttribute(CAttributes::TYPE_HEALTH)> 0)
 			{
-				cout << "SHOOT" << endl;
 				/*Randomise X value by 0.1f so that the trajectory will not be always fixed.*/
 				CProjectile* _bullet = Create::Projectile("sphere", newPosition, Vector3(Math::RandFloatMinMax(viewVector.x - 0.1f, viewVector.x + 0.1f), viewVector.y, viewVector.z), 2.f, 100.f, NULL);
 				_bullet->bulletOriginated = CProjectile::FROM_ENEMY;

@@ -131,6 +131,7 @@ void CTower::Update(double dt)
 		}
 		case DEAD:
 		{
+			isTower = false;
 			//if (!demolished)
 			//{
 			//	finalVelocity += gravity * static_cast<float>(dt) * speed;

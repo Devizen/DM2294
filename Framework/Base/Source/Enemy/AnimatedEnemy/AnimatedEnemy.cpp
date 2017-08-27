@@ -396,6 +396,13 @@ void CAnimatedEnemy::Update(double dt)
 			}
 		}
 	}
+	else if (state = DEAD)
+	{
+		angleToFace += static_cast<float>(dt) * 1000.f;
+
+		if (angleToFace >= 1000.f)
+			SetIsDone(true);
+	}
 }
 
 // Render
@@ -516,6 +523,7 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->setDefaultPosition(_position);
 	result->pathFindingMode = false;
 	result->SetAlertBoundary(Vector3(-100.f, -10.f, -100.f), Vector3(100.f, 10.f, 100.f));
+	result->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -10.f, -_scale.z));
 	result->SetType(1);
 	result->SetLight(true);
 	EntityManager::GetInstance()->AddEnemy(result);

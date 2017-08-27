@@ -722,13 +722,13 @@ void Map_Editor::updateOption(double dt)
 				Vector3 _maxAABB(0.f, 0.f, 0.f);
 				if (_rotate == 0 || _rotate == 180)
 				{
-					_minAABB.Set(-_scale.x * 8.f, 0.f, -_scale.z);
-					_maxAABB.Set(_scale.x * 8.f, 0.f, _scale.z);
+					_minAABB.Set(-_scale.x * 8.f, -10.f, -_scale.z);
+					_maxAABB.Set(_scale.x * 8.f, 100.f, _scale.z);
 				}
 				else
 				{
-					_minAABB.Set(-_scale.x, 0.f, -_scale.z * 8.f);
-					_maxAABB.Set(_scale.x, 0.f, _scale.z * 8.f);
+					_minAABB.Set(-_scale.x, 10.f, -_scale.z * 8.f);
+					_maxAABB.Set(_scale.x, 100.f, _scale.z * 8.f);
 				}
 				CFurniture* crate = Create::Furniture("Wall", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
@@ -748,7 +748,6 @@ void Map_Editor::updateOption(double dt)
 				{
 					enemyNo = 1;
 					_enemy = Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head", _displacement, _scale);
-					_enemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 					_enemy->SetLight(true);
 					addWaypoint = true;
 					lastCreatedType = CREATED_ENEMY;

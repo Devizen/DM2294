@@ -63,6 +63,11 @@ CHealth* Create::Health(const std::string& _meshName, const Vector3& _position, 
 	result->SetPosition(newPosition);
 	result->SetScale(_scale);
 	result->SetCollider(true);
+	Vector3 _minAABB(-5.f, -5.f, -5.f);
+	Vector3 _maxAABB(5.f, 5.f, 5.f);
+	result->SetLight(true);
+	result->SetAABB(_maxAABB, _minAABB);
+	result->SetItem(EntityBase::HEALTH);
 	EntityManager::GetInstance()->AddItem(result);
 
 	return result;
