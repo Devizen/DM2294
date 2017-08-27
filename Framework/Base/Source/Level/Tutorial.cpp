@@ -288,9 +288,9 @@ void Tutorial::Init()
 	_staticEnemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 	_staticEnemy->SetLight(true);
 
-	CTower* sTower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
-	cout << sTower->GetMinAABB() << endl;
-	cout << sTower->GetMaxAABB() << endl;
+	//CTower* sTower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
+	//cout << sTower->GetMinAABB() << endl;
+	//cout << sTower->GetMaxAABB() << endl;
 }
 
 void Tutorial::Update(double dt)
@@ -374,7 +374,7 @@ void Tutorial::Update(double dt)
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 9)
 		{
-			tower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
+			tower = Create::Tower("TOWER", Vector3(-150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
 			tower->setHealthTo(10);
 			tower->setMaxHealthTo(10);
 			tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
@@ -384,7 +384,7 @@ void Tutorial::Update(double dt)
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 10)
 		{
-			if (EntityManager::GetInstance()->returnEnemy().back()->GetPlayerProperty())
+			if (EntityManager::GetInstance()->returnEnemy().back()->GetState() == CEnemy3D::AI_STATE::DEAD)
 			{
 				Create::Text("text", "Great Job!\nTutorial Completed!", 0.f, 2.f, CText::TEXT_CONVERSATION);
 				++Text_Manager::GetInstance()->messagePrompt;
@@ -467,8 +467,6 @@ void Tutorial::Update(double dt)
 
 		if (!OptionsManager::GetInstance()->getEditingState())
 		{
-			// Update our entities
-			EntityManager::GetInstance()->Update(dt);
 			clearKeyDisplay();
 			/*Create random enemies around the map.*/
 			//createEnemies(dt);
@@ -549,11 +547,14 @@ void Tutorial::Update(double dt)
 			// Hardware Abstraction
 			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 			{
+				// Update our entities
+				EntityManager::GetInstance()->Update(dt);
 				theKeyboard->Read(dt);
 				theMouse->Read(dt);
 
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
+
 			}
 
 			//// Update the player position and other details based on keyboard and mouse inputs

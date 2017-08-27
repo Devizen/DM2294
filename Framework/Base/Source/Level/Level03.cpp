@@ -726,8 +726,13 @@ void Level03::Update(double dt)
 				SceneManager::GetInstance()->SetActiveScene("Level04");
 
 			if (playerInfo->getLockedOn())
+			{
 				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
-					playerInfo->SetTarget(playerInfo->getEnemyPositionToLockOn()->GetPos());
+				{
+					Vector3 aimAtEnemyTarget(playerInfo->getEnemyPositionToLockOn()->GetPosition() - playerInfo->GetPos().Normalized());
+					playerInfo->SetTarget(aimAtEnemyTarget);
+				}
+			}
 
 		}
 	}
