@@ -717,8 +717,8 @@ void Map_Editor::updateOption(double dt)
 			{
 				cout << "CREATED" << endl;
 				cout << "Displacement: " << _displacement << endl;
-				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
-				Vector3 _maxAABB(_scale);
+				Vector3 _minAABB(-_scale.x * 5.f, 0.f, -_scale.z);
+				Vector3 _maxAABB(_scale.x * 5.f, 0.f, _scale.z);
 				CFurniture* crate = Create::Furniture("Wall", _displacement, _scale);
 				crate->SetCollider(true);
 				crate->SetLight(true);

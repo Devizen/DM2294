@@ -238,6 +238,8 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("cubeBox", Color(1.0f, 0.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("ENEMY", Color(1.0f, 0.0f, 0.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("ALLY", Color(0.f, 0.0f, 1.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("BLACK", Color(0.f, 0.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("PATH", Color(0.f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);

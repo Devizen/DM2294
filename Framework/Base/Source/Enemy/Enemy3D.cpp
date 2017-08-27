@@ -319,7 +319,7 @@ void CEnemy3D::Render(void)
 			angleToFace = 90.f;
 		modelStack.Rotate(-angleToFace, 1.f, 0.f, 0.f);
 	}
-	modelStack.Rotate(rotate, 0.f, 1.f, 0.f);
+	modelStack.Rotate(angleToFace, 0.f, 1.f, 0.f);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	if (!light)
 		RenderHelper::RenderMesh(modelMesh);
@@ -609,9 +609,21 @@ void CEnemy3D::RenderHealthBar(void)
 	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), furtherDisplacement.z);
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
-	modelStack.Scale(MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.000001f);
-	MeshBuilder::GetInstance()->GenerateCube("cube", Color(0.f, 0.f, 0.0f), 1.f);
-	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("cube"));
+	modelStack.Scale(MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.001f);
+	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("BLACK"));
+	modelStack.PopMatrix();
+
+	/*Colour health bar that depicts the enemy or ally.*/
+	modelStack.PushMatrix();
+	/*Keep the health bar fixed to the left of the enemy.*/
+	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), furtherDisplacement.z);
+	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
+	/*Scale it according to the health left.*/
+	modelStack.Scale(MAX_HEALTH_SCALE * 1.1f, Application::GetInstance().GetWindowHeight() * 0.006f, 0.00001f);
+	if (playerProperty)
+		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("ALLY"));
+	else
+		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("ENEMY"));
 	modelStack.PopMatrix();
 
 	/*Health Bar above enemy head*/
@@ -621,7 +633,7 @@ void CEnemy3D::RenderHealthBar(void)
 	/*Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());*/
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
-	modelStack.Scale((static_cast<float>(GetAttribute(CAttributes::TYPE_HEALTH)) / static_cast<float>(GetAttribute(CAttributes::TYPE_MAXHEALTH))) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.000001f);
+	modelStack.Scale((static_cast<float>(GetAttribute(CAttributes::TYPE_HEALTH)) / static_cast<float>(GetAttribute(CAttributes::TYPE_MAXHEALTH))) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.01f);
 
 	/*Set health bar to green colour before damage.*/
 	if (GetAttribute(CAttributes::TYPE_HEALTH) / GetAttribute(CAttributes::TYPE_MAXHEALTH) == 1)
