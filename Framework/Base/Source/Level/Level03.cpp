@@ -60,6 +60,8 @@
 
 #include "../Attributes.h"
 
+#include "../Enemy/Tower/Tower.h"
+
 using namespace std;
 
 Level03* Level03::sInstance = new Level03(SceneManager::GetInstance());
@@ -220,8 +222,8 @@ void Level03::Init()
 	// Create the playerinfo instance, which manages all information about the player
 	playerInfo = CPlayerInfo::GetInstance();
 	playerInfo->Init();
-	playerInfo->SetPos(Vector3(6.f, 0.f, 0.f));
-	playerInfo->SetTarget(Vector3(6.f, 0.f, 1.f));
+	playerInfo->SetPos(Vector3(0.f, 0.f, 360.f));
+	playerInfo->SetTarget(Vector3(0.f, 0.f, 350.f));
 
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -361,6 +363,22 @@ void Level03::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level03.csv");
 	FileManager::GetInstance()->ReadEnemyFile("Files//Level03Enemy.csv");
+
+	static CTower* tower;
+	tower = Create::Tower("TOWER", Vector3(200.f, -10.f, -200.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
+	tower->setHealthTo(10);
+	tower->setMaxHealthTo(10);
+	tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
+
+	tower = Create::Tower("TOWER", Vector3(0.f, -10.f, -200.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
+	tower->setHealthTo(10);
+	tower->setMaxHealthTo(10);
+	tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
+
+	tower = Create::Tower("TOWER", Vector3(-200.f, -10.f, -200.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
+	tower->setHealthTo(10);
+	tower->setMaxHealthTo(10);
+	tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
 }
 
 void Level03::Update(double dt)
@@ -426,8 +444,10 @@ void Level03::Update(double dt)
 		Inventory::GetInstance()->Update(dt);
 	}
 
+
 	if (openEQ)
 	{
+	
 		EquipmentManager::GetInstance()->Update(dt);
 	}
 
