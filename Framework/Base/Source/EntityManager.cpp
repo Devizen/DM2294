@@ -66,7 +66,7 @@ void EntityManager::Update(double _dt)
 			CEnemy3D* enemy = (CEnemy3D*)*enemyObj;
 
 			/*Check if enemy belongs to player and did the bullet originated from the player.*/
-			if (enemy->getPlayerProperty() && bullet->bulletOriginated == CProjectile::FROM_PLAYER)
+			if (enemy->GetPlayerProperty() && bullet->bulletOriginated == CProjectile::FROM_PLAYER)
 				continue;
 
 			if (CheckProjectileToEnemyCollision(bullet, enemy))
@@ -744,7 +744,7 @@ int EntityManager::enemyCount(void)
 	{
 		CEnemy3D* enemy = (CEnemy3D*)*it;
 
-		if (enemy->getState() == CEnemy3D::IDLE || enemy->getState() == CEnemy3D::ALERT)
+		if (enemy->GetState() == CEnemy3D::IDLE || enemy->GetState() == CEnemy3D::ALERT)
 			++tempCount;
 	}
 	return tempCount;

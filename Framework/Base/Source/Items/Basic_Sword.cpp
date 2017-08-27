@@ -29,4 +29,6 @@ Basic_Sword * Create::theSword(const std::string & _meshName, string ID, string 
 	{
 		Inventory::GetInstance()->assign_storage(result);
 	}
+	return result;
+
 }

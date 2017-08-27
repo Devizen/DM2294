@@ -28,4 +28,6 @@ Gun * Create::theGun(const std::string & _meshName, string ID, string attack, bo
 	{
 		Inventory::GetInstance()->assign_storage(result);
 	}
+	return result;
+
 }
