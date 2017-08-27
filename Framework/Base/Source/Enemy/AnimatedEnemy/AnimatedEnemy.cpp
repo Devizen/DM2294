@@ -161,8 +161,8 @@ void CAnimatedEnemy::Update(double dt)
 	/*Set positions without Y axis displacement for easier calculations.*/
 	Vector3 playerWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
 	Vector3 enemyWithoutY(0.f, 0.f, 0.f);
-	if (returnNearestEnemy() != nullptr)
-		enemyWithoutY = returnNearestEnemy()->GetPos();
+	if (ReturnNearestEnemy() != nullptr)
+		enemyWithoutY = ReturnNearestEnemy()->GetPos();
 	Vector3 thisWithoutY(position.x, -10.f, position.z);
 
 	_enemy = this;
@@ -171,14 +171,14 @@ void CAnimatedEnemy::Update(double dt)
 	if (state == IDLE && !pathFindingMode)
 	{
 		//cout << "IN IDLE" << endl;
-		if (checkInsideBoundary(getMinAlertBoundary(), getMaxAlertBoundary()))
+		if (CheckInsideBoundary(GetMinAlertBoundary(), GetMaxAlertBoundary()))
 			state = ALERT;
 		else
 		{
 			/*If player is not in boundary and enemy is not at the default location, move it back to default location.*/
 			if (position != defaultPosition)
 			{
-				if (checkCollision())
+				if (CheckCollision())
 				{
 					position = previousPosition;
 					targetObjectPosition = defaultPosition;
@@ -196,20 +196,20 @@ void CAnimatedEnemy::Update(double dt)
 	else if (state == ALERT && !pathFindingMode)
 	{
 		//cout << "IN ALERT" << endl;
-		if (checkCollision())
+		if (CheckCollision())
 		{
 			position = previousPosition;
 			pathFindingMode = true;
 		}
 		else
 		{
-			if (checkInsideBoundary(getMinAlertBoundary(), getMaxAlertBoundary()))
+			if (CheckInsideBoundary(GetMinAlertBoundary(), GetMaxAlertBoundary()))
 			{
 				Vector3 displacement(0.f, 0.f, 0.f);
 
-				if (GetWhoCloser() == ENEMY && returnNearestEnemy() != nullptr)
+				if (GetWhoCloser() == ENEMY && ReturnNearestEnemy() != nullptr)
 				{
-					enemyWithoutY = Vector3(returnNearestEnemy()->GetPos().x, -10.f, returnNearestEnemy()->GetPos().z);
+					enemyWithoutY = Vector3(ReturnNearestEnemy()->GetPos().x, -10.f, ReturnNearestEnemy()->GetPos().z);
 					//cout << "Enemy without Y: " << enemyWithoutY << endl;
 					displacement = Vector3(enemyWithoutY.x - thisWithoutY.x, position.y, enemyWithoutY.z - thisWithoutY.z);
 				}
@@ -234,26 +234,26 @@ void CAnimatedEnemy::Update(double dt)
 	else if (state == ATTACK && !pathFindingMode)
 	{
 		//cout << "IN ATTACK" << endl;
-		if (checkCollision())
+		if (CheckCollision())
 		{
 			position = previousPosition;
 			pathFindingMode = true;
 		}
 		else
 		{
-			if (checkInsideBoundary(getMinAlertBoundary(), getMaxAlertBoundary()))
+			if (CheckInsideBoundary(GetMinAlertBoundary(), GetMaxAlertBoundary()))
 			{
 				Vector3 displacement(0.f, 0.f, 0.f);
-				if (GetWhoCloser() == ENEMY && returnNearestEnemy() != nullptr)
+				if (GetWhoCloser() == ENEMY && ReturnNearestEnemy() != nullptr)
 				{
-					enemyWithoutY = Vector3(returnNearestEnemy()->GetPos().x, -10.f, returnNearestEnemy()->GetPos().z);
+					enemyWithoutY = Vector3(ReturnNearestEnemy()->GetPos().x, -10.f, ReturnNearestEnemy()->GetPos().z);
 					//cout << "Enemy without Y: " << enemyWithoutY << endl;
 					displacement = Vector3(enemyWithoutY.x - thisWithoutY.x, position.y, enemyWithoutY.z - thisWithoutY.z);
 				}
 				else if (GetWhoCloser() == PLAYER)
 					displacement = playerWithoutY - thisWithoutY;
 
-				// << "returnNearestEnemy(): " << returnNearestEnemy()->GetPos()  << endl;
+				// << "ReturnNearestEnemy(): " << ReturnNearestEnemy()->GetPos()  << endl;
 				//cout << "Displacement Squared: " << displacement.LengthSquared() << endl;
 
 				/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
@@ -266,7 +266,7 @@ void CAnimatedEnemy::Update(double dt)
 				else
 				{
 					if (GetWhoCloser() == ENEMY)
-						returnNearestEnemy()->deductHealthBy(this->GetAttribute(CAttributes::TYPE_ATTACK));
+						ReturnNearestEnemy()->deductHealthBy(this->GetAttribute(CAttributes::TYPE_ATTACK));
 					else if (GetWhoCloser() == PLAYER)
 						CPlayerInfo::GetInstance()->deductHealthBy(this->GetAttribute(CAttributes::TYPE_ATTACK));
 				}
@@ -284,15 +284,15 @@ void CAnimatedEnemy::Update(double dt)
 		}
 		else if (state == ALERT)
 		{
-			if (GetWhoCloser() == ENEMY && returnNearestEnemy() != nullptr)
-				targetObjectPosition = returnNearestEnemy()->GetPos();
+			if (GetWhoCloser() == ENEMY && ReturnNearestEnemy() != nullptr)
+				targetObjectPosition = ReturnNearestEnemy()->GetPos();
 			else if (GetWhoCloser() == PLAYER)
 				targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
 		}
 		else if (state == ATTACK)
 		{
-			if (GetWhoCloser() == ENEMY && returnNearestEnemy() != nullptr)
-				targetObjectPosition = returnNearestEnemy()->GetPos();
+			if (GetWhoCloser() == ENEMY && ReturnNearestEnemy() != nullptr)
+				targetObjectPosition = ReturnNearestEnemy()->GetPos();
 			else if (GetWhoCloser() == PLAYER)
 				targetObjectPosition = CPlayerInfo::GetInstance()->GetPos();
 		}
@@ -352,10 +352,10 @@ void CAnimatedEnemy::Update(double dt)
 	}
 	else if (state == ALERT)
 	{
-		if (GetWhoCloser() == ENEMY  && returnNearestEnemy() != nullptr)
+		if (GetWhoCloser() == ENEMY  && ReturnNearestEnemy() != nullptr)
 		{
 			try {
-				angleToFace = Math::RadianToDegree(atan2(returnNearestEnemy()->GetPos().x - this->position.x, returnNearestEnemy()->GetPos().z - this->position.z));
+				angleToFace = Math::RadianToDegree(atan2(ReturnNearestEnemy()->GetPos().x - this->position.x, ReturnNearestEnemy()->GetPos().z - this->position.z));
 			}
 
 			catch (exception e)
@@ -375,10 +375,10 @@ void CAnimatedEnemy::Update(double dt)
 	}
 	else if (state == ATTACK)
 	{
-		if (GetWhoCloser() == ENEMY && returnNearestEnemy() != nullptr)
+		if (GetWhoCloser() == ENEMY && ReturnNearestEnemy() != nullptr)
 		{
 			try {
-				angleToFace = Math::RadianToDegree(atan2(returnNearestEnemy()->GetPos().x - this->position.x, returnNearestEnemy()->GetPos().z - this->position.z));
+				angleToFace = Math::RadianToDegree(atan2(ReturnNearestEnemy()->GetPos().x - this->position.x, ReturnNearestEnemy()->GetPos().z - this->position.z));
 			}
 
 			catch (exception e)
@@ -450,7 +450,7 @@ void CAnimatedEnemy::Render(void)
 	modelStack.PopMatrix();
 
 	if (GetAttribute(CAttributes::TYPE_HEALTH) > 0.f)
-		renderHealthBar();
+		RenderHealthBar();
 
 	if (pathFindingMode)
 	{
@@ -511,12 +511,12 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->SetRotate(_rotate);
 	result->SetScale(_scale);
 	result->SetCollider(true);
-	result->setPlayerProperty(false);
+	result->SetPlayerProperty(false);
 	result->setSpeed(30);
 	result->setDefaultPosition(_position);
 	result->pathFindingMode = false;
-	result->setAlertBoundary(Vector3(-100.f, -10.f, -100.f), Vector3(100.f, 10.f, 100.f));
-	result->setType(1);
+	result->SetAlertBoundary(Vector3(-100.f, -10.f, -100.f), Vector3(100.f, 10.f, 100.f));
+	result->SetType(1);
 	result->SetLight(true);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;

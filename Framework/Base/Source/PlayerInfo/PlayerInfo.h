@@ -192,6 +192,11 @@ public:
 	/*Render Attribute*/
 	void RenderAttribute();
 
+	/*Get the default target*/
+	Vector3 GetDefaultTarget(void);
+	/*Set Default Target*/
+	void SetDefaultTarget(Vector3 _defaultTarget);
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;

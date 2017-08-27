@@ -151,7 +151,7 @@ void Tutorial::Init()
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	cinematic = CCinematic::GetInstance();
-	//cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
+	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
@@ -270,26 +270,27 @@ void Tutorial::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Tutorial.csv");
 
+	
 	Vector3 _scale(3.f, 3.f, 3.f);
 	CEnemy3D* turret = Create::Enemy3D("turret", Vector3(-12.f, -10.f, 250.f), Vector3(3.f, 3.f, 3.f), false);
-	turret->setHealthTo(10.f);
-	turret->setMaxHealthTo(10.f);
-	turret->setAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
+	turret->setHealthTo(10);
+	turret->setMaxHealthTo(10);
+	turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
 	turret = Create::Enemy3D("turret", Vector3(24.f, -10.f, 250.f), Vector3(3.f, 3.f, 3.f), false);
 	turret->setHealthTo(10.f);
 	turret->setMaxHealthTo(10.f);
-	turret->setAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
+	turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
 	CAnimatedEnemy* _staticEnemy = Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head", Vector3(6.f, -10.f, 300.f), Vector3(3.f, 3.f, 3.f));
-	_staticEnemy->setState(CEnemy3D::NO_AI_STATE);
+	_staticEnemy->SetState(CEnemy3D::NO_AI_STATE);
 	_staticEnemy->setHealthTo(10.f);
 	_staticEnemy->setMaxHealthTo(10.f);
 	_staticEnemy->setAttackTo(0);
 	_staticEnemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 	_staticEnemy->SetLight(true);
 
-	CTower* sTower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
-	cout << sTower->GetMinAABB() << endl;
-	cout << sTower->GetMaxAABB() << endl;
+	//CTower* sTower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
+	//cout << sTower->GetMinAABB() << endl;
+	//cout << sTower->GetMaxAABB() << endl;
 }
 
 void Tutorial::Update(double dt)
@@ -303,7 +304,7 @@ void Tutorial::Update(double dt)
 	static int renderOnce = 0;
 
 	saveMapTime += dt;
-	static CEnemy3D* tower;
+	static CTower* tower;
 
 	if (!Text_Manager::GetInstance()->displayingText)
 	{
@@ -368,15 +369,14 @@ void Tutorial::Update(double dt)
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 8)
 		{
-			Create::Text("text", "A tower has spawned on the right, defeat it to win!", 0.f, 2.f, CText::TEXT_CONVERSATION);
+			Create::Text("text", "A tower spawned on the right, defeat it to win!", 0.f, 2.f, CText::TEXT_CONVERSATION);
 			++Text_Manager::GetInstance()->messagePrompt;
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 9)
 		{
-			tower = Create::Enemy3D("TOWER", Vector3(-200.f, -10.f, 50.f), Vector3(3.f, 3.f, 3.f), false);
-			tower->setHealthTo(10.f);
-			tower->setMaxHealthTo(10.f);
-			tower->setAlertBoundary(Vector3(-1, -1, -1), Vector3(1, 1, 1));
+			tower = Create::Tower("TOWER", Vector3(-150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
+			tower->setHealthTo(10);
+			tower->setMaxHealthTo(10);
 			tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
 			cinematic->cameraTarget = Vector3(tower->GetPos().x, tower->GetMaxAABB().y * 0.5f, tower->GetPos().z);
 			cinematic->cinematicMode = true;
@@ -384,7 +384,7 @@ void Tutorial::Update(double dt)
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 10)
 		{
-			if (EntityManager::GetInstance()->returnEnemy().back()->getPlayerProperty())
+			if (EntityManager::GetInstance()->returnEnemy().back()->GetState() == CEnemy3D::AI_STATE::DEAD)
 			{
 				Create::Text("text", "Great Job!\nTutorial Completed!", 0.f, 2.f, CText::TEXT_CONVERSATION);
 				++Text_Manager::GetInstance()->messagePrompt;
@@ -467,8 +467,6 @@ void Tutorial::Update(double dt)
 
 		if (!OptionsManager::GetInstance()->getEditingState())
 		{
-			// Update our entities
-			EntityManager::GetInstance()->Update(dt);
 			clearKeyDisplay();
 			/*Create random enemies around the map.*/
 			//createEnemies(dt);
@@ -546,6 +544,12 @@ void Tutorial::Update(double dt)
 				OptionsManager::GetInstance()->saveHighscore();
 			}
 
+
+			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
+
+			// Update our entities
+			EntityManager::GetInstance()->Update(dt);
+
 			// Hardware Abstraction
 			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 			{
@@ -554,6 +558,7 @@ void Tutorial::Update(double dt)
 
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
+
 			}
 
 			//// Update the player position and other details based on keyboard and mouse inputs
@@ -615,7 +620,7 @@ void Tutorial::Update(double dt)
 				static bool completed = false;
 				/*For player critical hit cinematic*/
 				cinematic->targetType = CCinematic::C_Target_Text;
-				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt, "LIM GUAN SHENG");
+				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt, "TOWER");
 
 				cinematic->Update(dt);
 				camera.SetCameraPos(cinematic->GetCameraPos());
@@ -648,7 +653,7 @@ void Tutorial::Update(double dt)
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)
 				Text_Manager::GetInstance()->updateText(dt);
 
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_TAB))
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_TAB) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
 			{
 				if (!playerInfo->getLockedOn())
 				{
@@ -658,6 +663,7 @@ void Tutorial::Update(double dt)
 				else
 				{
 					playerInfo->setLockedOn(false);
+					Vector3 newTarget(playerInfo->GetTarget().Normalized() + playerInfo->GetPos());
 					playerInfo->SetTarget(camera.GetCameraTarget());
 				}
 			}
@@ -673,10 +679,15 @@ void Tutorial::Update(double dt)
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4))
 				SceneManager::GetInstance()->SetActiveScene("Level04");
 
-			if (playerInfo->getLockedOn())
-				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
-					playerInfo->SetTarget(playerInfo->getEnemyPositionToLockOn()->GetPos());
 
+			if (playerInfo->getLockedOn())
+			{
+				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
+				{
+					Vector3 aimAtEnemyTarget(playerInfo->getEnemyPositionToLockOn()->GetPosition() - playerInfo->GetPos().Normalized());
+					playerInfo->SetTarget(aimAtEnemyTarget);
+				}
+			}
 		}
 	}
 	else
@@ -768,7 +779,7 @@ void Tutorial::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("PISTOL");
 			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
@@ -782,7 +793,7 @@ void Tutorial::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
@@ -868,7 +879,7 @@ void Tutorial::createEnemies(double dt)
 	//		//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
 	//		anEnemy3D = Create::Enemy3D("turret", newPosition, _scale);
 	//		//anEnemy3D->Init();
-	//		anEnemy3D->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	//		anEnemy3D->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	//		anEnemy3D->SetCollider(true);
 	//		anEnemy3D->SetLight(true);
 	//		anEnemy3D->SetAABB(Vector3(_scale.x, 0.f, _scale.z), Vector3(-_scale.x, -5.f, -_scale.z));
@@ -1292,7 +1303,7 @@ void Tutorial::RenderPassMain(void)
 	}
 	EntityManager::GetInstance()->RenderUI();
 
-	if (!cinematic->cinematicMode)
+	if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 	{
 		/*Render Weapon*/
 		renderWeapon();
@@ -1328,10 +1339,11 @@ void Tutorial::RenderPassMain(void)
 		if (Map_Editor::GetInstance()->mapEditing)
 			Map_Editor::GetInstance()->renderOption();
 
-		/*Render text display.*/
-		if (Text_Manager::GetInstance()->returnTextList().size() > 0)
-			Text_Manager::GetInstance()->renderText();
 	}
+
+	/*Render text display.*/
+	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
+		Text_Manager::GetInstance()->renderText();
 
 	glEnable(GL_DEPTH_TEST);
 

@@ -150,7 +150,7 @@ Vector3 CEnemy3D::getDefaultPosition(void)
 // Update
 void CEnemy3D::Update(double dt)
 {
-	setPortableDT(dt);
+	SetPortableDT(dt);
 	switch (state)
 	{
 		case IDLE:
@@ -163,17 +163,17 @@ void CEnemy3D::Update(double dt)
 			if (m_fElapsedTimeBeforeUpdate == 0.f)
 			{
 				/*Scan for player, if player is inside the defined boundary, activate the enemy.*/
-				if (checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+				if (CheckInsideBoundary(minAlertBoundary, maxAlertBoundary))
 					state = ALERT;
 			}
 			break;
 		}
 		case ALERT:
 		{
-			if (!checkInsideBoundary(minAlertBoundary, maxAlertBoundary))
+			if (!CheckInsideBoundary(minAlertBoundary, maxAlertBoundary))
 				state = IDLE;
 
-			if (this->getPlayerProperty() && returnNearestEnemy() == nullptr)
+			if (this->GetPlayerProperty() && ReturnNearestEnemy() == nullptr)
 				state = IDLE;
 
 			/*Offset the y to make it seem as if bullet is hitting face on.*/
@@ -181,21 +181,21 @@ void CEnemy3D::Update(double dt)
 			Vector3 viewVector = (targetLower - position).Normalized();
 			Vector3 distanceBetween = CPlayerInfo::GetInstance()->GetPos() - GetPos();
 
-			if (this->getPlayerProperty() && returnNearestEnemy() != nullptr)
+			if (this->GetPlayerProperty() && ReturnNearestEnemy() != nullptr)
 			{
 				/*Offset the y to make it seem as if bullet is hitting face on.*/
 				/*Firing at enemies.*/
-				targetLower.Set(returnNearestEnemy()->GetPos().x, returnNearestEnemy()->GetPos().y + 5.f, returnNearestEnemy()->GetPos().z);
+				targetLower.Set(ReturnNearestEnemy()->GetPos().x, ReturnNearestEnemy()->GetPos().y + 5.f, ReturnNearestEnemy()->GetPos().z);
 				viewVector = (targetLower - position).Normalized();
-				distanceBetween = returnNearestEnemy()->GetPos() - GetPos();
+				distanceBetween = ReturnNearestEnemy()->GetPos() - GetPos();
 			}
-			else if (!this->getPlayerProperty() && returnNearestEnemy() != nullptr && whoCloser == ENEMY)
+			else if (!this->GetPlayerProperty() && ReturnNearestEnemy() != nullptr && whoCloser == ENEMY)
 			{
 				/*Offset the y to make it seem as if bullet is hitting face on.*/
 				/*Firing at enemies that converted to player.*/
-				targetLower.Set(returnNearestEnemy()->GetPos().x, returnNearestEnemy()->GetPos().y + 5.f, returnNearestEnemy()->GetPos().z);
+				targetLower.Set(ReturnNearestEnemy()->GetPos().x, ReturnNearestEnemy()->GetPos().y + 5.f, ReturnNearestEnemy()->GetPos().z);
 				viewVector = (targetLower - position).Normalized();
-				distanceBetween = returnNearestEnemy()->GetPos() - GetPos();
+				distanceBetween = ReturnNearestEnemy()->GetPos() - GetPos();
 			}
 
 			shootDelay += static_cast<float>(dt);
@@ -204,9 +204,9 @@ void CEnemy3D::Update(double dt)
 			/*Change Y value to spawn bullet at correct position.*/
 			Vector3 newPosition((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y, (distanceBetween.z / 2.f) + this->position.z);
 			/*Aim the player.*/
-			if (this->getPlayerProperty() || !this->getPlayerProperty() && whoCloser == ENEMY)
+			if (this->GetPlayerProperty() || !this->GetPlayerProperty() && whoCloser == ENEMY)
 				newPosition.Set((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y + 2.5f, (distanceBetween.z / 2.f) + this->position.z);
-			//else if (!this->getPlayerProperty() && whoCloser == ENEMY)
+			//else if (!this->GetPlayerProperty() && whoCloser == ENEMY)
 			//	newPosition.Set((distanceBetween.x / 2.f) + this->position.x, (distanceBetween.y / 2.f) + this->position.y + 2.5f, (distanceBetween.z / 2.f) + this->position.z);
 			//if (KeyboardController::GetInstance()->IsKeyPressed('M'))
 			//{
@@ -217,7 +217,7 @@ void CEnemy3D::Update(double dt)
 			//	cout << "Player Position: " << CPlayerInfo::GetInstance()->GetPos() << endl;
 			//}
 
-			if (this->getShootDelay() > 0.2f && GetAttribute(CAttributes::TYPE_HEALTH)> 0)
+			if (this->GetShootDelay() > 0.2f && GetAttribute(CAttributes::TYPE_HEALTH)> 0)
 			{
 				/*Randomise X value by 0.1f so that the trajectory will not be always fixed.*/
 				CProjectile* _bullet = Create::Projectile("sphere", newPosition, Vector3(Math::RandFloatMinMax(viewVector.x - 0.1f, viewVector.x + 0.1f), viewVector.y, viewVector.z), 2.f, 100.f, NULL);
@@ -240,10 +240,10 @@ void CEnemy3D::Update(double dt)
 			CSoundEngine::GetInstance()->PlayASound("EXPLODE");
 
 			/*Converting Enemy to Player vice versa.*/
-			if (!getPlayerProperty())
-				setPlayerProperty(true);
+			if (!GetPlayerProperty())
+				SetPlayerProperty(true);
 			else
-				setPlayerProperty(false);
+				SetPlayerProperty(false);
 
 			state = RECOVERY;
 			m_fElapsedTimeBeforeUpdate = 0.f;
@@ -301,20 +301,20 @@ void CEnemy3D::Render(void)
 
 	if (state == ALERT)
 	{
-		if (!getPlayerProperty())
+		if (!GetPlayerProperty())
 		{
 			if (whoCloser == PLAYER)
 				angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
-			else if (whoCloser == ENEMY && returnNearestEnemy() != nullptr)
-				angleToFace = Math::RadianToDegree(atan2(returnNearestEnemy()->GetPos().x - this->position.x, returnNearestEnemy()->GetPos().z - this->position.z));
+			else if (whoCloser == ENEMY && ReturnNearestEnemy() != nullptr)
+				angleToFace = Math::RadianToDegree(atan2(ReturnNearestEnemy()->GetPos().x - this->position.x, ReturnNearestEnemy()->GetPos().z - this->position.z));
 		}
-		else if (returnNearestEnemy() != nullptr)
-			angleToFace = Math::RadianToDegree(atan2(returnNearestEnemy()->GetPos().x - this->position.x, returnNearestEnemy()->GetPos().z - this->position.z));
+		else if (ReturnNearestEnemy() != nullptr)
+			angleToFace = Math::RadianToDegree(atan2(ReturnNearestEnemy()->GetPos().x - this->position.x, ReturnNearestEnemy()->GetPos().z - this->position.z));
 		modelStack.Rotate(angleToFace, 0.f, 1.f, 0.f);
 	}
 	if (state == RECOVERY)
 	{
-		angleToFace += static_cast<float>(getPortableDT() * 20.f);
+		angleToFace += static_cast<float>(GetPortableDT() * 20.f);
 		if (angleToFace >= 90.f)
 			angleToFace = 90.f;
 		modelStack.Rotate(-angleToFace, 1.f, 0.f, 0.f);
@@ -328,7 +328,7 @@ void CEnemy3D::Render(void)
 	modelStack.PopMatrix();
 
 	if (GetAttribute(CAttributes::TYPE_HEALTH) > 0.f)
-		renderHealthBar();
+		RenderHealthBar();
 }
 
 void CEnemy3D::setHealth(int _health)
@@ -341,29 +341,29 @@ int CEnemy3D::getHealth(void)
 	return health;
 }
 
-void CEnemy3D::setState(AI_STATE _state)
+void CEnemy3D::SetState(AI_STATE _state)
 {
 	state = _state;
 }
 
-int CEnemy3D::getState(void)
+int CEnemy3D::GetState(void)
 {
 	return state;
 }
 
-bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
+bool CEnemy3D::CheckInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 {
 	Vector3 thisWithoutY(defaultPosition.x, -10.f, defaultPosition.z);
 	Vector3 playerWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
 	Vector3 enemyWithoutY(0.f, 0.f, 0.f);
-	if (returnNearestEnemy() != nullptr)
-		enemyWithoutY = returnNearestEnemy()->GetPos();
+	if (ReturnNearestEnemy() != nullptr)
+		enemyWithoutY = ReturnNearestEnemy()->GetPos();
 
 
 	Vector3 boundaryMin = Vector3(minBoundary.x + thisWithoutY.x, -10.f, minBoundary.z + thisWithoutY.z);
 	Vector3 boundaryMax = Vector3(maxBoundary.x + thisWithoutY.x, -10.f, maxBoundary.z + thisWithoutY.z);
 
-	if (!this->getPlayerProperty())
+	if (!this->GetPlayerProperty())
 	{
 		// << "Enemy to Enemy Player Distance: " << Vector3(enemyWithoutY.x - thisWithoutY.x, -10.f, enemyWithoutY.z - thisWithoutY.z).LengthSquared() << endl;
 		// << "Enemy to Player Distance: " << Vector3(playerWithoutY.x - thisWithoutY.x, -10.f, playerWithoutY.z - thisWithoutY.z).LengthSquared() << endl;
@@ -383,17 +383,17 @@ bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 			else
 				return false;
 		}
-		else if (returnNearestEnemy() != nullptr)
+		else if (ReturnNearestEnemy() != nullptr)
 		{
-			Vector3 displacementEnemy(returnNearestEnemy()->GetPos().x - position.x, -10.f, returnNearestEnemy()->GetPos().z - position.z);
+			Vector3 displacementEnemy(ReturnNearestEnemy()->GetPos().x - position.x, -10.f, ReturnNearestEnemy()->GetPos().z - position.z);
 			Vector3 displacementPlayer(CPlayerInfo::GetInstance()->GetPos().x - position.x, -10.f, CPlayerInfo::GetInstance()->GetPos().z - position.z);
 
-			if (displacementEnemy.LengthSquared() < displacementPlayer.LengthSquared() && returnNearestEnemy()->getPlayerProperty())
+			if (displacementEnemy.LengthSquared() < displacementPlayer.LengthSquared() && ReturnNearestEnemy()->GetPlayerProperty())
 			{
 				//cout << "Enemy Closer Than Player: " << this << endl;
-				//cout << "Nearest Enemy: " << (returnNearestEnemy()->GetPos() - this->GetPos()).LengthSquared() << " Player: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << " " << returnNearestEnemy()->getPlayerProperty()  <<endl;
-				Vector3 enemyMin = Vector3(returnNearestEnemy()->GetMinAABB().x + returnNearestEnemy()->GetPos().x, -10.f, returnNearestEnemy()->GetMinAABB().z + returnNearestEnemy()->GetPos().z);
-				Vector3 enemyMax = Vector3(returnNearestEnemy()->GetMaxAABB().x + returnNearestEnemy()->GetPos().x, -10.f, returnNearestEnemy()->GetMaxAABB().z + returnNearestEnemy()->GetPos().z);
+				//cout << "Nearest Enemy: " << (ReturnNearestEnemy()->GetPos() - this->GetPos()).LengthSquared() << " Player: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << " " << ReturnNearestEnemy()->GetPlayerProperty()  <<endl;
+				Vector3 enemyMin = Vector3(ReturnNearestEnemy()->GetMinAABB().x + ReturnNearestEnemy()->GetPos().x, -10.f, ReturnNearestEnemy()->GetMinAABB().z + ReturnNearestEnemy()->GetPos().z);
+				Vector3 enemyMax = Vector3(ReturnNearestEnemy()->GetMaxAABB().x + ReturnNearestEnemy()->GetPos().x, -10.f, ReturnNearestEnemy()->GetMaxAABB().z + ReturnNearestEnemy()->GetPos().z);
 
 
 				//cout << "Enemy Without Y: " << enemyWithoutY << endl;
@@ -411,7 +411,7 @@ bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 		else
 		{
 			//cout << "Player Closer than Enemy" << this << endl;
-			//cout << "Nearest Enemy: " << (returnNearestEnemy()->GetPos() - this->GetPos()).LengthSquared() << " Player: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << " " << returnNearestEnemy()->getPlayerProperty()<<  endl;
+			//cout << "Nearest Enemy: " << (ReturnNearestEnemy()->GetPos() - this->GetPos()).LengthSquared() << " Player: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << " " << ReturnNearestEnemy()->GetPlayerProperty()<<  endl;
 			Vector3 playerMin = Vector3(CPlayerInfo::GetInstance()->GetMinAABB().x + playerWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMinAABB().z + playerWithoutY.z);
 			Vector3 playerMax = Vector3(CPlayerInfo::GetInstance()->GetMaxAABB().x + playerWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMaxAABB().z + playerWithoutY.z);
 
@@ -427,12 +427,12 @@ bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 	}
 	else
 	{
-		if (returnNearestEnemy() == nullptr)
+		if (ReturnNearestEnemy() == nullptr)
 			return false;
 
 		whoCloser = ENEMY;
-		Vector3 enemyMin = Vector3(returnNearestEnemy()->GetMinAABB().x + enemyWithoutY.x, -10.f, returnNearestEnemy()->GetMinAABB().z + enemyWithoutY.z);
-		Vector3 enemyMax = Vector3(returnNearestEnemy()->GetMaxAABB().x + enemyWithoutY.x, -10.f, returnNearestEnemy()->GetMaxAABB().z + enemyWithoutY.z);
+		Vector3 enemyMin = Vector3(ReturnNearestEnemy()->GetMinAABB().x + enemyWithoutY.x, -10.f, ReturnNearestEnemy()->GetMinAABB().z + enemyWithoutY.z);
+		Vector3 enemyMax = Vector3(ReturnNearestEnemy()->GetMaxAABB().x + enemyWithoutY.x, -10.f, ReturnNearestEnemy()->GetMaxAABB().z + enemyWithoutY.z);
 
 		if (boundaryMin <= enemyMax && boundaryMax >= enemyMin)
 			return true;
@@ -442,20 +442,20 @@ bool CEnemy3D::checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 	}
 }
 
-CEnemy3D * CEnemy3D::returnNearestEnemy(void)
+CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)
 {
 	CEnemy3D* enemy = nullptr;
 	float nearestDistance = 0.f;
 	Vector3 thisWithoutY(position.x, -10.f, position.z);
 
-	if (this->getPlayerProperty())
+	if (this->GetPlayerProperty())
 	{
 		for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 		{
 			if (this == (*it))
 				continue;
 
-			if ((*it)->getPlayerProperty())
+			if ((*it)->GetPlayerProperty())
 				continue;
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
@@ -471,7 +471,7 @@ CEnemy3D * CEnemy3D::returnNearestEnemy(void)
 			if (this == (*it))
 				continue;
 
-			if ((*it)->getPlayerProperty())
+			if ((*it)->GetPlayerProperty())
 				continue;
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
@@ -492,7 +492,7 @@ CEnemy3D * CEnemy3D::returnNearestEnemy(void)
 			if (this == (*it))
 				continue;
 
-			if (!(*it)->getPlayerProperty())
+			if (!(*it)->GetPlayerProperty())
 				continue;
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
@@ -508,7 +508,7 @@ CEnemy3D * CEnemy3D::returnNearestEnemy(void)
 			if (this == (*it))
 				continue;
 
-			if (!(*it)->getPlayerProperty())
+			if (!(*it)->GetPlayerProperty())
 				continue;
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
@@ -525,28 +525,28 @@ CEnemy3D * CEnemy3D::returnNearestEnemy(void)
 	return enemy;
 }
 
-void CEnemy3D::setAlertBoundary(Vector3 _minAlertBoundary, Vector3 _maxAlertBoundary)
+void CEnemy3D::SetAlertBoundary(Vector3 _minAlertBoundary, Vector3 _maxAlertBoundary)
 {
 	minAlertBoundary = _minAlertBoundary;
 	maxAlertBoundary = _maxAlertBoundary;
 }
 
-Vector3 CEnemy3D::getMinAlertBoundary(void)
+Vector3 CEnemy3D::GetMinAlertBoundary(void)
 {
 	return minAlertBoundary;
 }
 
-Vector3 CEnemy3D::getMaxAlertBoundary(void)
+Vector3 CEnemy3D::GetMaxAlertBoundary(void)
 {
 	return maxAlertBoundary;
 }
 
-void CEnemy3D::setPortableDT(double _portableDT)
+void CEnemy3D::SetPortableDT(double _portableDT)
 {
 	portableDT = _portableDT;
 }
 
-double CEnemy3D::getPortableDT(void)
+double CEnemy3D::GetPortableDT(void)
 {
 	return portableDT;
 }
@@ -568,27 +568,27 @@ double CEnemy3D::getPortableDT(void)
 //		return attributes.DEFENSE;
 //}
 
-void CEnemy3D::setPlayerProperty(bool _playerProperty)
+void CEnemy3D::SetPlayerProperty(bool _playerProperty)
 {
 	playerProperty = _playerProperty;
 }
 
-bool CEnemy3D::getPlayerProperty(void)
+bool CEnemy3D::GetPlayerProperty(void)
 {
 	return playerProperty;
 }
 
-void CEnemy3D::setShootDelay(float _shootDelay)
+void CEnemy3D::SetShootDelay(float _shootDelay)
 {
 	shootDelay = _shootDelay;
 }
 
-float CEnemy3D::getShootDelay(void)
+float CEnemy3D::GetShootDelay(void)
 {
 	return shootDelay;
 }
 
-void CEnemy3D::renderHealthBar(void)
+void CEnemy3D::RenderHealthBar(void)
 {
 	/*Calculate the displacement from enemy to player.*/
 	Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());
@@ -639,7 +639,7 @@ void CEnemy3D::renderHealthBar(void)
 	modelStack.PopMatrix();
 }
 
-bool CEnemy3D::checkCollision(void)
+bool CEnemy3D::CheckCollision(void)
 {
 	/*Boundary was multiplied by 2.f in order to factor in the boundary that the point does not have.*/
 	list<CEnemy3D*>enemyList = EntityManager::GetInstance()->returnEnemy();
@@ -744,17 +744,17 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 	result->SetPos(_position);
 	result->SetScale(_scale);
 	result->SetCollider(true);
-	result->setPlayerProperty(_playerProperty);
+	result->SetPlayerProperty(_playerProperty);
 	result->SetLight(true);
 	result->SetAABB(_scale * 2.f, -_scale * 2.f);
 	result->SetMinAABB(-_scale * 2.f);
 	result->SetMaxAABB(_scale * 2.f);
-	result->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	result->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
 	result->setMaxHealthTo(10.f);
 	result->setHealthTo(10.f);
 	result->setAttackTo(1.f);
 	result->setDefenseTo(1.f);
-	result->setType(3);
+	result->SetType(3);
 	result->SetLight(true);
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;

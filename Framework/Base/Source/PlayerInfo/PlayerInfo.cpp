@@ -101,18 +101,24 @@ void CPlayerInfo::Init(void)
 	freeLookViewVector.Set(1, 0, 0);
 
 	// Set the pistol as the primary weapon
-	primaryWeapon = new CPistol();
+	if (primaryWeapon == nullptr)
+		primaryWeapon = new CPistol();
 	primaryWeapon->Init();
 	cout << "Primary Weapon From Player: " << primaryWeapon << endl;
-
-	secondaryWeapon = new CKnife();
+	if (secondaryWeapon == nullptr)
+		secondaryWeapon = new CKnife();
 	secondaryWeapon->Init();
 
-	weaponManager = new CWeaponInfo*[m_iNumOfWeapon];
-	weaponManager[0] = new CPistol();
-	weaponManager[0]->Init();
+	if (weaponManager == nullptr)
+	{
+		weaponManager = new CWeaponInfo*[m_iNumOfWeapon];
+		weaponManager[0] = primaryWeapon;
+		weaponManager[1] = new CAssaultRifle();
+	}
+	//weaponManager[0] = new CPistol();
+	//weaponManager[0]->Init();
 
-	weaponManager[1] = new CAssaultRifle();
+	//weaponManager[1] = new CAssaultRifle();
 	weaponManager[1]->Init();
 
 	/*for (int i = 0; i < m_iNumOfWeapon; i++)
@@ -649,6 +655,7 @@ bool CPlayerInfo::Move_FrontBack(const float deltaTime, const bool direction, co
 			Constrain();
 			// Update the target
 			target = position + viewVector;
+			defaultTarget = position + viewVector;
 			return true;
 		}
 	}
@@ -667,6 +674,7 @@ bool CPlayerInfo::Move_FrontBack(const float deltaTime, const bool direction, co
 			Constrain();
 			// Update the target
 			target = position + viewVector;
+			defaultTarget = position + viewVector;
 			return true;
 		}
 	}
@@ -698,6 +706,7 @@ bool CPlayerInfo::Move_LeftRight(const float deltaTime, const bool direction, co
 			Constrain();
 			// Update the target
 			target = position + viewVector;
+			defaultTarget = position + viewVector;
 			return true;
 		}
 	}
@@ -715,6 +724,7 @@ bool CPlayerInfo::Move_LeftRight(const float deltaTime, const bool direction, co
 			Constrain();
 			// Update the target
 			target = position + viewVector;
+			defaultTarget = position + viewVector;
 			return true;
 		}
 	}
@@ -747,6 +757,7 @@ bool CPlayerInfo::Look_UpDown(const float deltaTime, const bool direction, const
 			return false;
 		viewUV = rotation * viewUV;
 		target = position + viewUV;
+		defaultTarget = position + viewUV;
 	}
 	else
 	{
@@ -765,6 +776,7 @@ bool CPlayerInfo::Look_UpDown(const float deltaTime, const bool direction, const
 			return false;
 		viewUV = rotation * viewUV;
 		target = position + viewUV;
+		defaultTarget = position + viewUV;
 	}
 
 	return true;
@@ -785,6 +797,7 @@ bool CPlayerInfo::Look_LeftRight(const float deltaTime, const bool direction, co
 		rotation.SetToRotation(yaw, 0, 1, 0);
 		viewUV = rotation * viewUV;
 		target = position + viewUV;
+		defaultTarget = position + viewUV;
 		rightUV = viewUV.Cross(up);
 		rightUV.y = 0;
 		rightUV.Normalize();
@@ -797,6 +810,7 @@ bool CPlayerInfo::Look_LeftRight(const float deltaTime, const bool direction, co
 		rotation.SetToRotation(yaw, 0, 1, 0);
 		viewUV = rotation * viewUV;
 		target = position + viewUV;
+		defaultTarget = position + viewUV;
 		rightUV = viewUV.Cross(up);
 		rightUV.y = 0;
 		rightUV.Normalize();
@@ -1160,37 +1174,6 @@ void CPlayerInfo::setLockedOn(void)
 		lockedOn = true;
 	else
 		lockedOn = false;
-		/*list<CEnemy3D*>enemyList = EntityManager::GetInstance()->returnEnemy();
-
-		for (list<CEnemy3D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-		{
-			CEnemy3D* enemy = (CEnemy3D*)*it;
-			Vector3 enemyWithoutYAxis(enemy->GetPos().x, -10.f, enemy->GetPos().x);
-			Vector3 playerWithoutYAxis(this->position.x, -10.f, this->position.z);
-			cout << (enemyWithoutYAxis - playerWithoutYAxis).LengthSquared() << endl;
-			if ((enemyWithoutYAxis - playerWithoutYAxis).LengthSquared() > 15000.f)
-				continue;
-
-			lockOnList.push_back(enemy);
-			enemyPositionToLockOn = lockOnList.back();
-		}
-
-		for (vector<CEnemy3D*>::iterator it = lockOnList.begin(); it != lockOnList.end(); ++it)
-		{
-			if (enemyPositionToLockOn == nullptr)
-				break;
-
-			CEnemy3D* enemyPosition = (CEnemy3D*)*it;
-
-			Vector3 enemyWithoutYAxis(enemyPosition->GetPos().x, -10.f, enemyPosition->GetPos().x);
-			Vector3 playerWithoutYAxis(this->position.x, -10.f, this->position.z);
-
-			if ((enemyWithoutYAxis - playerWithoutYAxis).LengthSquared() < (Vector3(enemyPositionToLockOn->GetPos().x, -10.f, enemyPositionToLockOn->GetPos().z) - playerWithoutYAxis).LengthSquared())
-				enemyPositionToLockOn = enemyPosition;
-		}
-		if (enemyPositionToLockOn != nullptr)
-			lockedOn = true;*/
-	//}
 }
 
 void CPlayerInfo::setLockedOn(bool _lockedOn)
@@ -1207,9 +1190,7 @@ bool CPlayerInfo::getLockedOn(void)
 CEnemy3D* CPlayerInfo::getLockedOnPosition(void)
 {
 	if (lockedOn)
-	{
 		return enemyPositionToLockOn;
-	}
 }
 
 vector<CEnemy3D*>& CPlayerInfo::returnLockOnList(void)
@@ -1220,4 +1201,14 @@ vector<CEnemy3D*>& CPlayerInfo::returnLockOnList(void)
 CEnemy3D* CPlayerInfo::getEnemyPositionToLockOn(void)
 {
 	return enemyPositionToLockOn;
+}
+
+Vector3 CPlayerInfo::GetDefaultTarget(void)
+{
+	return defaultTarget;
+}
+
+void CPlayerInfo::SetDefaultTarget(Vector3 _defaultTarget)
+{
+	defaultTarget = _defaultTarget;
 }

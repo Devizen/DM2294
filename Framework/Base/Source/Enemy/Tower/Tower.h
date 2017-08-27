@@ -38,7 +38,7 @@ public:
 
 	Debugger* debugger;
 private:
-
+	bool demolished;
 };
 
 namespace Create

@@ -226,7 +226,7 @@ void Level03::Init()
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
-	cinematic = new CCinematic();
+	cinematic = CCinematic::GetInstance();
 	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
@@ -726,8 +726,13 @@ void Level03::Update(double dt)
 				SceneManager::GetInstance()->SetActiveScene("Level04");
 
 			if (playerInfo->getLockedOn())
+			{
 				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
-					playerInfo->SetTarget(playerInfo->getEnemyPositionToLockOn()->GetPos());
+				{
+					Vector3 aimAtEnemyTarget(playerInfo->getEnemyPositionToLockOn()->GetPosition() - playerInfo->GetPos().Normalized());
+					playerInfo->SetTarget(aimAtEnemyTarget);
+				}
+			}
 
 		}
 	}
@@ -819,7 +824,7 @@ void Level03::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("PISTOL");
 			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
@@ -833,7 +838,7 @@ void Level03::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
@@ -1487,11 +1492,6 @@ void Level03::Exit()
 	MeshBuilder::GetInstance()->removeMeshMap();
 	GraphicsManager::GetInstance()->removeLightMap();
 
-	if (cinematic)
-	{
-		delete cinematic;
-		cinematic = nullptr;
-	}
 	Text_Manager::GetInstance()->resetAll();
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();

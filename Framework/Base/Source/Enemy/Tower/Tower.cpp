@@ -4,6 +4,7 @@
 #include "RenderHelper.h"
 #include "MeshBuilder.h"
 #include "../../Base/Source/Debugger/Debugger.h"
+#include "../../ParticleManager.h"
 
 CTower::CTower(Mesh* _modelMesh)
 	: CEnemy3D(NULL)
@@ -15,15 +16,22 @@ CTower::CTower(Mesh* _modelMesh)
 	, maxBoundary(Vector3(0.0f, 0.0f, 0.0f))
 	, minBoundary(Vector3(0.0f, 0.0f, 0.0f))
 	, m_pTerrain(NULL)
+	, demolished(false)
 {
 	this->modelMesh = _modelMesh;
-	setAlertBoundary(Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 0.f));
+	SetAlertBoundary(Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 0.f));
 	SetElapsedTime(0.f);
-	setHealthTo(10.f);
-	setState(AI_STATE::IDLE);
-	setPlayerProperty(false);
+	setHealthTo(10);
+	SetState(AI_STATE::IDLE);
+	SetPlayerProperty(false);
 	SetWhoCloser(CEnemy3D::NONE);
 	SetPreviousPosition(Vector3(0.f, 0.f, 0.f));
+	gravity.Set(0.f, -9.8f, 0.f);
+	initialVelocity.Set(0.f, 0.f, 0.f);
+	/*Speed to slow down the demolishing.*/
+	speed = 0.1f;
+	mass = 100.f;
+	force.Set(200.f, 0.f, 0.f);
 }
 
 
@@ -55,7 +63,7 @@ void CTower::Init(void)
 	m_dSpeed = 10.0;
 
 	/*Set State*/
-	setState(IDLE);
+	SetState(IDLE);
 
 	// Add to EntityManager
 	EntityManager::GetInstance()->AddEntity(this);
@@ -75,44 +83,55 @@ void CTower::Reset(void)
 void CTower::Update(double dt)
 {
 	//static Debug_Message* _debug = new Debug_Message();
-	//setPortableDT(dt);
+	//SetPortableDT(dt);
 	if (GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) <= 0)
-		setState(AI_STATE::DEAD);
+		SetState(AI_STATE::DEAD);
 
-	switch (getState())
+	switch (GetState())
 	{
-	case IDLE:
-	{
-		///*Position*/
-		//_debug->SetMessageType(Debug_Message::POSITION);
-		//_debug->SetVector3(position);
-		//Debugger::GetInstance()->AddMessage(_debug);
-		//_debug->SetMessageType(Debug_Message::POSITION);
-		//_debug->SetVector3(minAABB);
-		//_debug->SetMessage("Min AABB: ");
-		//Debugger::GetInstance()->AddMessage(_debug);
-		//_debug->SetMessageType(Debug_Message::POSITION);
-		//_debug->SetVector3(maxAABB);
-		//_debug->SetMessage("Max AABB: ");
-		//Debugger::GetInstance()->AddMessage(_debug);
+		case IDLE:
+		{
+			///*Position*/
+			//_debug->SetMessageType(Debug_Message::POSITION);
+			//_debug->SetVector3(position);
+			//Debugger::GetInstance()->AddMessage(_debug);
+			//_debug->SetMessageType(Debug_Message::POSITION);
+			//_debug->SetVector3(minAABB);
+			//_debug->SetMessage("Min AABB: ");
+			//Debugger::GetInstance()->AddMessage(_debug);
+			//_debug->SetMessageType(Debug_Message::POSITION);
+			//_debug->SetVector3(maxAABB);
+			//_debug->SetMessage("Max AABB: ");
+			//Debugger::GetInstance()->AddMessage(_debug);
 
-		///*Defined Message*/
-		//_debug->SetMessageType(Debug_Message::DEFINED);
-		//_debug->SetMessage("I am in Tower.");
-		//Debugger::GetInstance()->AddMessage(_debug);
-	}
-	case ALERT:
-	{
-		
-	}
-	case DEAD:
-	{
-		
-	}
-	case RECOVERY:
-	{
-		
-	}
+			///*Defined Message*/
+			//_debug->SetMessageType(Debug_Message::DEFINED);
+			//_debug->SetMessage("I am in Tower.");
+			//Debugger::GetInstance()->AddMessage(_debug);
+			break;
+		}
+		case ALERT:
+		{
+			break;
+		}
+		case DEAD:
+		{
+			if (!demolished)
+			{
+				finalVelocity += gravity * static_cast<float>(dt) * speed;
+				Vector3 shake(Math::RandFloatMinMax(-1.f, 1.f), 0.f, Math::RandFloatMinMax(-1.f, 1.f));
+				position += finalVelocity + shake;
+				maxAABB += finalVelocity + shake;
+
+				if (maxAABB.y < -10.f)
+					demolished = true;
+			}
+			break;
+		}
+		case RECOVERY:
+		{
+			break;
+		}
 	}
 }
 
@@ -131,7 +150,7 @@ void CTower::Render(void)
 	modelStack.PopMatrix();
 
 	if (GetAttribute(CAttributes::TYPE_HEALTH) > 0.f)
-		renderHealthBar();
+		RenderHealthBar();
 }
 
 CTower* Create::Tower(const std::string& _meshName,
@@ -154,16 +173,16 @@ CTower* Create::Tower(const std::string& _meshName,
 	result->SetRotate(_rotate);
 	result->SetScale(_scale);
 	result->SetCollider(true);
-	result->setPlayerProperty(_playerProperty);
+	result->SetPlayerProperty(_playerProperty);
 	result->SetLight(true);
 	result->SetMinAABB(Vector3(-_scale.x * 4.f, -10.f, -_scale.z * 4.f));
-	result->SetMaxAABB(Vector3(_scale.x * 4.f, _scale.x * _scale.y * _scale.z * 2.5, _scale.z * 4.f));
-	result->setAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
-	result->setMaxHealthTo(10.f);
-	result->setHealthTo(10.f);
-	result->setAttackTo(1.f);
-	result->setDefenseTo(1.f);
-	result->setType(2);
+	result->SetMaxAABB(Vector3(_scale.x * 4.f, _scale.x * _scale.y * _scale.z * 2.5f, _scale.z * 4.f));
+	result->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	result->setMaxHealthTo(10);
+	result->setHealthTo(10);
+	result->setAttackTo(1);
+	result->setDefenseTo(1);
+	result->SetType(4);
 	result->SetLight(true);
 
 	EntityManager::GetInstance()->AddEnemy(result);

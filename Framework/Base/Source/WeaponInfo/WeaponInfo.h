@@ -79,4 +79,13 @@ public:
 
 	/*Get default max total rounds*/
 	int getDefaultMaxTotalRounds(void);
+
+	/*Portable DT*/
+	double portableDT;
+
+	/*To play sound when bullet fired.*/
+	bool fired;
+
+	/*Get Elapsed Time*/
+	double GetElapsedTime(void);
 };

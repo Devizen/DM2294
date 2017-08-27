@@ -108,37 +108,37 @@ public:
 	/////*Get Health*/
 	////int getHealth(void);
 	/////*Set A.I State*/
-	////void setState(AI_STATE _state);
+	////void SetState(AI_STATE _state);
 	/////*Get A.I State*/
-	////int getState(void);
+	////int GetState(void);
 	/////*Check if player is inside defined boundary around enemy.*/
-	////virtual bool checkInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary);
+	////virtual bool CheckInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary);
 	/////*Return nearest enemy*/
-	////CAnimatedEnemy* returnNearestEnemy(void);
+	////CAnimatedEnemy* ReturnNearestEnemy(void);
 	/////*Set Alert Boundary*/
-	////void setAlertBoundary(Vector3 _minAlertBoundary, Vector3 _maxAlertBoundary);
+	////void SetAlertBoundary(Vector3 _minAlertBoundary, Vector3 _maxAlertBoundary);
 	/////*Get Min Alert Boundary*/
-	////Vector3 getMinAlertBoundary(void);
+	////Vector3 GetMinAlertBoundary(void);
 	/////*Get Max Alert Boundary*/
-	////Vector3 getMaxAlertBoundary(void);
+	////Vector3 GetMaxAlertBoundary(void);
 	/////*Set Portable DT*/
-	////void setPortableDT(double _portableDT);
+	////void SetPortableDT(double _portableDT);
 	/////*Get Portable DT*/
-	//double getPortableDT(void);
+	//double GetPortableDT(void);
 	/////*Set Attributes*/
 	////void setAttributes(ATTRIBUTES _attributes);
 	/////*Get Attributes*/
 	////float getAttributes(ATTRIBUTE_TYPES type);
 	/////*Set Player Property*/
-	////void setPlayerProperty(bool _playerProperty);
+	////void SetPlayerProperty(bool _playerProperty);
 	/////*Get Player Property*/
-	////bool getPlayerProperty(void);
+	////bool GetPlayerProperty(void);
 	/////*Set Shoot Delay*/
-	////virtual void setShootDelay(float _shootDelay);
+	////virtual void SetShootDelay(float _shootDelay);
 	/////*Get Player Property*/
-	////virtual float getShootDelay(void);
+	////virtual float GetShootDelay(void);
 	/////*Render Health Bar*/
-	//virtual void renderHealthBar(void);
+	//virtual void RenderHealthBar(void);
 	/////*Update for Patrol Behavior*/
 	////void updatePatrol(double dt);
 	/////*Update for Tower Behavior*/

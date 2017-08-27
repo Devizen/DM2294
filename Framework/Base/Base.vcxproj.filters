@@ -103,6 +103,9 @@
     <Filter Include="Debugger">
       <UniqueIdentifier>{24f69075-1fe2-4c32-8bad-dd69b51a8e13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{3ab3c84a-1325-4564-807f-f1c411a74bb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -580,6 +583,9 @@
     </ClInclude>
     <ClInclude Include="Source\Level\Selection.h">
       <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\Physics.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

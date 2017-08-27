@@ -98,91 +98,6 @@ void Level02::Init()
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
-	//Application::GetInstance().setAspectRatioHeight(100.f);
-	//Application::GetInstance().setAspectRatioWidth(Application::GetInstance().getAspectRatioHeight() * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight());
-	//m_worldWidth = m_worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
-	//m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
-	//m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
-
-	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
-	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
-	//m_gPassShaderID = GraphicsManager::GetInstance()->LoadShader("gpass", "Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
-
-	//// Tell the shader program to store these uniform locations
-	//currProg->AddUniform("MVP");
-	//currProg->AddUniform("MV");
-	//currProg->AddUniform("MV_inverse_transpose");
-	//currProg->AddUniform("material.kAmbient");
-	//currProg->AddUniform("material.kDiffuse");
-	//currProg->AddUniform("material.kSpecular");
-	//currProg->AddUniform("material.kShininess");
-	//currProg->AddUniform("lightEnabled");
-	//currProg->AddUniform("numLights");
-	//currProg->AddUniform("lights[0].type");
-	//currProg->AddUniform("lights[0].position_cameraspace");
-	//currProg->AddUniform("lights[0].color");
-	//currProg->AddUniform("lights[0].power");
-	//currProg->AddUniform("lights[0].kC");
-	//currProg->AddUniform("lights[0].kL");
-	//currProg->AddUniform("lights[0].kQ");
-	//currProg->AddUniform("lights[0].spotDirection");
-	//currProg->AddUniform("lights[0].cosCutoff");
-	//currProg->AddUniform("lights[0].cosInner");
-	//currProg->AddUniform("lights[0].exponent");
-	//currProg->AddUniform("lights[1].type");
-	//currProg->AddUniform("lights[1].position_cameraspace");
-	//currProg->AddUniform("lights[1].color");
-	//currProg->AddUniform("lights[1].power");
-	//currProg->AddUniform("lights[1].kC");
-	//currProg->AddUniform("lights[1].kL");
-	//currProg->AddUniform("lights[1].kQ");
-	//currProg->AddUniform("lights[1].spotDirection");
-	//currProg->AddUniform("lights[1].cosCutoff");
-	//currProg->AddUniform("lights[1].cosInner");
-	//currProg->AddUniform("lights[1].exponent");
-	//currProg->AddUniform("colorTextureEnabled");
-	//currProg->AddUniform("colorTexture");
-	//currProg->AddUniform("textEnabled");
-	//currProg->AddUniform("textColor");
-
-	///*Fog*/
-	//currProg->AddUniform("fogParam.color");
-	//currProg->AddUniform("fogParam.start");
-	//currProg->AddUniform("fogParam.end");
-	//currProg->AddUniform("fogParam.density");
-	//currProg->AddUniform("fogParam.type");
-	//currProg->AddUniform("fogParam.enabled");
-
-	///*Shadow*/
-	//currProg->AddUniform("lightDepthMVP");
-	//currProg->AddUniform("shadowMap");
-
-	//m_gPassShaderID->AddUniform("lightDepthMVP");
-	//m_gPassShaderID->AddUniform("colorTextureEnabled[0]");
-	//m_gPassShaderID->AddUniform("colorTexture[0]");
-	//m_gPassShaderID->AddUniform("colorTextureEnabled[1]");
-	//m_gPassShaderID->AddUniform("colorTexture[1]");
-	//m_gPassShaderID->AddUniform("colorTextureEnabled[2]");
-	//m_gPassShaderID->AddUniform("colorTexture[2]");
-
-	//m_parameters[U_FOG_COLOR] = glGetUniformLocation(m_programID, "fogParam.color");
-	//m_parameters[U_FOG_START] = glGetUniformLocation(m_programID, "fogParam.start");
-	//m_parameters[U_FOG_END] = glGetUniformLocation(m_programID, "fogParam.end");
-	//m_parameters[U_FOG_DENSITY] = glGetUniformLocation(m_programID, "fogParam.density");
-	//m_parameters[U_FOG_TYPE] = glGetUniformLocation(m_programID, "fogParam.type");
-	//m_parameters[U_FOG_ENABLED] = glGetUniformLocation(m_programID, "fogParam.enabled");
-
-	///*Shadow*/
-	//m_parameters[U_LIGHT_DEPTH_MVP_GPASS] = glGetUniformLocation(m_gPassShaderID, "lightDepthMVP");
-	//m_parameters[U_LIGHT_DEPTH_MVP] = glGetUniformLocation(m_programID, "lightDepthMVP");
-	//m_parameters[U_SHADOW_MAP] = glGetUniformLocation(m_programID, "shadowMap");
-
-	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[0]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE] = glGetUniformLocation(m_gPassShaderID, "colorTexture[0]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED1] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[1]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE1] = glGetUniformLocation(m_gPassShaderID, "colorTexture[1]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED2] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[2]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE2] = glGetUniformLocation(m_gPassShaderID, "colorTexture[2]");
 
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
@@ -228,7 +143,7 @@ void Level02::Init()
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
-	cinematic = new CCinematic();
+	cinematic = CCinematic::GetInstance();
 	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
@@ -734,8 +649,13 @@ void Level02::Update(double dt)
 				SceneManager::GetInstance()->SetActiveScene("Level04");
 
 			if (playerInfo->getLockedOn())
+			{
 				if (playerInfo->getEnemyPositionToLockOn() != nullptr)
-					playerInfo->SetTarget(playerInfo->getEnemyPositionToLockOn()->GetPos());
+				{
+					Vector3 aimAtEnemyTarget(playerInfo->getEnemyPositionToLockOn()->GetPosition() - playerInfo->GetPos().Normalized());
+					playerInfo->SetTarget(aimAtEnemyTarget);
+				}
+			}
 
 		}
 	}
@@ -827,7 +747,7 @@ void Level02::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("PISTOL");
 			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
@@ -841,7 +761,7 @@ void Level02::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
 
-		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
@@ -1495,11 +1415,6 @@ void Level02::Exit()
 	MeshBuilder::GetInstance()->removeMeshMap();
 	GraphicsManager::GetInstance()->removeLightMap();
 
-	if (cinematic)
-	{
-		delete cinematic;
-		cinematic = nullptr;
-	}
 	Text_Manager::GetInstance()->resetAll();
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
