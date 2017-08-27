@@ -135,11 +135,13 @@ void Level01::Init()
 	// Create the playerinfo instance, which manages all information about the player
 	playerInfo = CPlayerInfo::GetInstance();
 	playerInfo->Init();
+	playerInfo->SetPos(Vector3(450.f, 0.f, -450.f));
+	playerInfo->SetTarget(playerInfo->GetPos());
 
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
-	cinematic = new CCinematic();
+	cinematic = CCinematic::GetInstance();
 	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
@@ -283,11 +285,11 @@ void Level01::Update(double dt)
 	static bool pause = false;
 	static int renderOnce = 0;
 
-	saveMapTime += dt;
 
-	if (saveMapTime >= 10)
+	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
 	{
-		FileManager::GetInstance()->EditMapFile("Files//Level Loader.csv");
+		FileManager::GetInstance()->EditMapFile("Files//Level01.csv");
+		FileManager::GetInstance()->EditEnemyFile("Files//Level01Enemy.csv");
 	}
 
 
@@ -732,7 +734,7 @@ void Level01::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
 
-		if (weaponManager[playerInfo->GetWeapon()]->fired)
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("PISTOL");
 			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
@@ -746,7 +748,7 @@ void Level01::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
 
-		if (weaponManager[playerInfo->GetWeapon()]->fired)
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);

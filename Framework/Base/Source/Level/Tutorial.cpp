@@ -369,7 +369,7 @@ void Tutorial::Update(double dt)
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 8)
 		{
-			Create::Text("text", "A tower has spawned on the right, defeat it to win!", 0.f, 2.f, CText::TEXT_CONVERSATION);
+			Create::Text("text", "A tower spawned on the right, defeat it to win!", 0.f, 2.f, CText::TEXT_CONVERSATION);
 			++Text_Manager::GetInstance()->messagePrompt;
 		}
 		else if (Text_Manager::GetInstance()->messagePrompt == 9)
@@ -544,11 +544,15 @@ void Tutorial::Update(double dt)
 				OptionsManager::GetInstance()->saveHighscore();
 			}
 
+
+			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
+
+			// Update our entities
+			EntityManager::GetInstance()->Update(dt);
+
 			// Hardware Abstraction
 			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 			{
-				// Update our entities
-				EntityManager::GetInstance()->Update(dt);
 				theKeyboard->Read(dt);
 				theMouse->Read(dt);
 
@@ -616,7 +620,7 @@ void Tutorial::Update(double dt)
 				static bool completed = false;
 				/*For player critical hit cinematic*/
 				cinematic->targetType = CCinematic::C_Target_Text;
-				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt, "LIM GUAN SHENG");
+				cinematic->moveCamera(playerInfo->GetPos(), cinematic->cameraTarget, 100.f, dt, "TOWER");
 
 				cinematic->Update(dt);
 				camera.SetCameraPos(cinematic->GetCameraPos());
@@ -775,7 +779,7 @@ void Tutorial::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
 
-		if (weaponManager[playerInfo->GetWeapon()]->fired)
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("PISTOL");
 			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
@@ -789,7 +793,7 @@ void Tutorial::renderWeapon(void)
 		else
 			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
 
-		if (weaponManager[playerInfo->GetWeapon()]->fired)
+		if (weaponManager[playerInfo->GetWeapon()]->fired && !cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 		{
 			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
 			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
