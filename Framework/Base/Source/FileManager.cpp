@@ -1195,7 +1195,7 @@ void FileManager::EditEnemyFile(const string myFile)
 {
 	ofstream File;
 	File.open(myFile);
-	File << "type,displacementx,displacementy,displacementz,scalex,scaley,scalez,rotation\n";
+	File << "type,displacementx,displacementy,displacementz,scalex,scaley,scalez\n";
 
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
@@ -1206,8 +1206,7 @@ void FileManager::EditEnemyFile(const string myFile)
 			<< temp->GetPosition().z << "," 
 			<< temp->GetScale().x << "," 
 			<< temp->GetScale().y << "," 
-			<< temp->GetScale().z << ","
-			<< temp->GetRotate() << "\n";
+			<< temp->GetScale().z << "\n";
 	}
 }
 

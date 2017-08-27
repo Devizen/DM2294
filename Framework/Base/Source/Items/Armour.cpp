@@ -28,4 +28,5 @@ Armour * Create::theArmour(const std::string & _meshName, string ID, string atta
 	{
 		Inventory::GetInstance()->assign_storage(result);
 	}
+	return result;
 }

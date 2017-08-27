@@ -28,4 +28,6 @@ Shoe * Create::theShoe(const std::string & _meshName, string ID, string attack, 
 	{
 		Inventory::GetInstance()->assign_storage(result);
 	}
+	return result;
+
 }
