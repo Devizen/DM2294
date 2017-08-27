@@ -1,0 +1,6 @@
+type,displacementx,displacementy,displacementz,scalex,scaley,scalez
+3,74,-10,-409,4,4,4
+3,-74,-10,-409,4,4,4
+3,74,-10,-285,4,4,4
+3,-74,-10,-285,4,4,4
+4,0,-10,-347,3,3,3

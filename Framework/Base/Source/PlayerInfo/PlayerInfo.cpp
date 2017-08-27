@@ -18,6 +18,7 @@
 #include "../Application.h"
 
 #include "../Enemy/Patrol/Patrol.h"
+#include "../Attributes.h"
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -135,6 +136,13 @@ void CPlayerInfo::Init(void)
 
 	/*Set Bounding Box for player*/
 	SetAABB(Vector3(2.f, 10.f, 2.f), Vector3(-2.f, -10.f, -2.f));
+
+	if (GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) < GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXHEALTH))
+	{
+		deductHealthBy(GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH));
+		deductHealthBy(-GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXHEALTH));
+	}
+
 	//EntityManager::GetInstance()->AddPlayer(this);
 }
 
@@ -1146,6 +1154,9 @@ void CPlayerInfo::setLockedOn(void)
 			if ((*it)->GetPlayerProperty())
 				continue;
 
+			if ((*it)->GetState() == CEnemy3D::AI_STATE::DEAD)
+				continue;
+
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
 
 			/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
@@ -1157,6 +1168,9 @@ void CPlayerInfo::setLockedOn(void)
 		for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 		{
 			if ((*it)->GetPlayerProperty())
+				continue;
+
+			if ((*it)->GetState() == CEnemy3D::AI_STATE::DEAD)
 				continue;
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);

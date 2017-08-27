@@ -32,6 +32,7 @@ CTower::CTower(Mesh* _modelMesh)
 	speed = 0.1f;
 	mass = 100.f;
 	force.Set(200.f, 0.f, 0.f);
+	SetType(4);
 }
 
 
@@ -85,7 +86,21 @@ void CTower::Update(double dt)
 	//static Debug_Message* _debug = new Debug_Message();
 	//SetPortableDT(dt);
 	if (GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) <= 0)
-		SetState(AI_STATE::DEAD);
+	{
+		if (!demolished)
+		{
+			finalVelocity += gravity * static_cast<float>(dt) * speed;
+			Vector3 shake(Math::RandFloatMinMax(-0.5f, 0.5f), 0.f, Math::RandFloatMinMax(-0.5f, 0.5f));
+			position += finalVelocity + shake;
+			maxAABB += finalVelocity + shake;
+
+			if (maxAABB.y < -10.f)
+			{
+				SetState(AI_STATE::DEAD);
+				demolished = true;
+			}
+		}
+	}
 
 	switch (GetState())
 	{
@@ -116,16 +131,16 @@ void CTower::Update(double dt)
 		}
 		case DEAD:
 		{
-			if (!demolished)
-			{
-				finalVelocity += gravity * static_cast<float>(dt) * speed;
-				Vector3 shake(Math::RandFloatMinMax(-1.f, 1.f), 0.f, Math::RandFloatMinMax(-1.f, 1.f));
-				position += finalVelocity + shake;
-				maxAABB += finalVelocity + shake;
+			//if (!demolished)
+			//{
+			//	finalVelocity += gravity * static_cast<float>(dt) * speed;
+			//	Vector3 shake(Math::RandFloatMinMax(-1.f, 1.f), 0.f, Math::RandFloatMinMax(-1.f, 1.f));
+			//	position += finalVelocity + shake;
+			//	maxAABB += finalVelocity + shake;
 
-				if (maxAABB.y < -10.f)
-					demolished = true;
-			}
+			//	if (maxAABB.y < -10.f)
+			//		demolished = true;
+			//}
 			break;
 		}
 		case RECOVERY:
@@ -184,7 +199,7 @@ CTower* Create::Tower(const std::string& _meshName,
 	result->setDefenseTo(1);
 	result->SetType(4);
 	result->SetLight(true);
-
+	result->isTower = true;
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }

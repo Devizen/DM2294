@@ -28,6 +28,7 @@
 #include "Enemy\AnimatedEnemy\AnimatedEnemy.h"
 #include "Enemy\Enemy3D.h"
 #include "Enemy\Horde\Horde.h"
+#include "Enemy\Tower\Tower.h"
 #include "Map_Editor\Map_Editor.h"
 #include "ShopManager\ShopManager.h"
 #include "ShopManager\Shop.h"
@@ -834,6 +835,11 @@ bool FileManager::ReadEnemyFile(const string myFile)
 				if (theEnemyInfo.type == 3)
 				{
 					Create::Enemy3D("turret", Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
+						Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
+				}
+				if (theEnemyInfo.type == 4)
+				{
+					Create::Tower("TOWER", Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ), 0.f,
 						Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
 				}
 			}

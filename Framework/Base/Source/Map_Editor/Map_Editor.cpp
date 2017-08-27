@@ -127,6 +127,7 @@ void Map_Editor::renderObject(void)
 						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 						modelStack.PushMatrix();
 						modelStack.Translate(_displacement.x, _displacement.y, _displacement.z);
+						modelStack.Rotate(_rotate, 0.f, 1.f, 0.f);
 						modelStack.Scale(_scale.x, _scale.y, _scale.z);
 						RenderHelper::RenderMeshWithLight(MeshBuilder::GetInstance()->GetMesh("Wall"));
 						modelStack.PopMatrix();
@@ -393,7 +394,7 @@ void Map_Editor::updateOption(double dt)
 	static CPlayerInfo* _player = CPlayerInfo::GetInstance();
 
 	_displacement.Set(_player->GetTarget().x - _player->GetPos().x, -10.f, _player->GetTarget().z - _player->GetPos().z);
-	_displacement.Set(static_cast<int>((_displacement.x * 50.f) + _player->GetPos().x), -10.f, static_cast<int>((_displacement.z * 50.f) + _player->GetPos().z));
+	_displacement.Set(static_cast<float>((_displacement.x * 50.f) + _player->GetPos().x), -10.f, static_cast<float>((_displacement.z * 50.f) + _player->GetPos().z));
 
 	//cout << "Displacement: " << _displacement << endl;
 
@@ -717,9 +718,19 @@ void Map_Editor::updateOption(double dt)
 			{
 				cout << "CREATED" << endl;
 				cout << "Displacement: " << _displacement << endl;
-				Vector3 _minAABB(-_scale.x * 5.f, 0.f, -_scale.z);
-				Vector3 _maxAABB(_scale.x * 5.f, 0.f, _scale.z);
-				CFurniture* crate = Create::Furniture("Wall", _displacement, _scale);
+				Vector3 _minAABB(0.f, 0.f, 0.f);
+				Vector3 _maxAABB(0.f, 0.f, 0.f);
+				if (_rotate == 0 || _rotate == 180)
+				{
+					_minAABB.Set(-_scale.x * 8.f, 0.f, -_scale.z);
+					_maxAABB.Set(_scale.x * 8.f, 0.f, _scale.z);
+				}
+				else
+				{
+					_minAABB.Set(-_scale.x, 0.f, -_scale.z * 8.f);
+					_maxAABB.Set(_scale.x, 0.f, _scale.z * 8.f);
+				}
+				CFurniture* crate = Create::Furniture("Wall", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);

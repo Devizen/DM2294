@@ -135,8 +135,6 @@ void CWeaponInfo::Update(const double dt)
 	if (elapsedTime != timeBetweenShots)
 		elapsedTime += dt;
 
-	cout << "Elapsed: " << elapsedTime << endl;
-	cout << "Time Between: " << timeBetweenShots << endl;
 	if (elapsedTime > timeBetweenShots)
 	{
 		bFire = true;

@@ -192,7 +192,7 @@ void CMinimap::RenderUI()
 
 			modelStack.PushMatrix();
 				// Rotate the current transformation
-				modelStack.Rotate(m_iAngle, 0.0f, 0.0f, -1.0f);
+				modelStack.Rotate(static_cast<float>(m_iAngle), 0.0f, 0.0f, -1.0f);
 				if (m_cMinimap_Background)
 					RenderHelper::RenderMesh(m_cMinimap_Background);
 
@@ -277,7 +277,7 @@ void CMinimap::RenderUI()
 		try {
 			rotateAboutAxis = direction.Cross(displacement).Normalize();
 		}
-		catch (std::exception &e) {
+		catch (std::exception e) {
 			//std::cout << "Divide by Zero" << std::endl;
 		}
 		displacement *= 0.1f;
@@ -285,7 +285,7 @@ void CMinimap::RenderUI()
 		try {
 			modelStack.Rotate(angle, 0.f, 0.f, rotateAboutAxis.y);
 		}
-		catch (std::exception &e) {
+		catch (std::exception e) {
 			//std::cout << "Divide by Zero" << std::endl;
 		}
 		modelStack.Rotate(90.f, 0.f, 0.f, 1.f);

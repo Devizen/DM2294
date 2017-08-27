@@ -186,6 +186,7 @@ public:
 	void SetType(int newType) { this->type = newType; }
 	int GetType() { return type; }
 
+	bool isTower;
 private:
 	//ATTRIBUTES attributes;
 	int health;

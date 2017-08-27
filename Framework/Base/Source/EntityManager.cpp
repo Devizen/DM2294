@@ -33,33 +33,42 @@ void EntityManager::Update(double _dt)
 		{
 			CFurniture* furniture = (CFurniture*)*thatObj;
 			if (CheckProjectileCollision(bullet, furniture))
-			{
+			//{
 				bullet->SetStatus(false);
-				hit = true;
-			}
+			//	hit = true;
+			//}
 			else
 				continue;
 
 		}
 
-
-		for (list<CPlayerInfo*>::iterator playerObj = playerList.begin(); playerObj != playerList.end(); ++playerObj)
+		if (CheckProjectileToPlayerCollision(bullet, CPlayerInfo::GetInstance()))
 		{
-			CPlayerInfo* player = (CPlayerInfo*)*playerObj;
-			if (CheckProjectileToPlayerCollision(bullet, player))
-			{
-				CSoundEngine::GetInstance()->PlayASound("TAKEDAMAGE");
-				player->deductHealthBy(1.f);
-				player->setTookDamage(true);
-				bullet->SetStatus(false);
-				player->setTookDamage(false);
+			CSoundEngine::GetInstance()->PlayASound("TAKEDAMAGE");
+			CPlayerInfo::GetInstance()->deductHealthBy(1.f);
+			CPlayerInfo::GetInstance()->setTookDamage(true);
+			bullet->SetStatus(false);
+			CPlayerInfo::GetInstance()->setTookDamage(false);
 
-				CCameraEffects::GetInstance()->SetStatus_BloodScreen(true);
-			}
-			else
-				continue;
-
+			CCameraEffects::GetInstance()->SetStatus_BloodScreen(true);
 		}
+		//for (list<CPlayerInfo*>::iterator playerObj = playerList.begin(); playerObj != playerList.end(); ++playerObj)
+		//{
+		//	CPlayerInfo* player = (CPlayerInfo*)*playerObj;
+		//	if (CheckProjectileToPlayerCollision(bullet, player))
+		//	{
+		//		CSoundEngine::GetInstance()->PlayASound("TAKEDAMAGE");
+		//		player->deductHealthBy(1.f);
+		//		player->setTookDamage(true);
+		//		bullet->SetStatus(false);
+		//		player->setTookDamage(false);
+
+		//		CCameraEffects::GetInstance()->SetStatus_BloodScreen(true);
+		//	}
+		//	else
+		//		continue;
+
+		//}
 
 		for (list<CEnemy3D*>::iterator enemyObj = enemyList.begin(); enemyObj != enemyList.end(); ++enemyObj)
 		{
@@ -73,7 +82,8 @@ void EntityManager::Update(double _dt)
 			{
 				enemy->deductHealthBy(1);
 				bullet->SetStatus(false);
-				hit = true;
+				if (CProjectile::FROM_PLAYER)
+					hit = true;
 			
 				//if (bullet->bulletOriginated == CProjectile::FROM_PLAYER)
 				//{
@@ -370,7 +380,7 @@ void EntityManager::removeAllEntities(void)
 
 	while (fixedList.size() > 0)
 	{
-		EntityBase* fixed = fixedList.back();
+		EntityBase* fixed = dynamic_cast<EntityBase*>(fixedList.back());
 		delete fixed;
 		fixed = nullptr;
 		fixedList.pop_back();
@@ -378,7 +388,7 @@ void EntityManager::removeAllEntities(void)
 
 	while (enemyList.size() > 0)
 	{
-		CEnemy3D* enemy = enemyList.back();
+		CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(enemyList.back());
 		delete enemy;
 		enemy = nullptr;
 		enemyList.pop_back();

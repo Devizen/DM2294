@@ -273,7 +273,8 @@ void Level01::Init()
 
 	saveMapTime = 0;
 
-	//FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
+	FileManager::GetInstance()->ReadMapFile("Files//Level01.csv");
+	FileManager::GetInstance()->ReadEnemyFile("Files//Level01Enemy.csv");
 }
 
 void Level01::Update(double dt)

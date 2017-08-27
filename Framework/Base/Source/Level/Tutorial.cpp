@@ -244,9 +244,9 @@ void Tutorial::Init()
 	CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
 	CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
 	CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
-	//CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
-	//CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
-	//CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
+	CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
+	CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
+	CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
 	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
@@ -277,13 +277,13 @@ void Tutorial::Init()
 	turret->setMaxHealthTo(10);
 	turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
 	turret = Create::Enemy3D("turret", Vector3(24.f, -10.f, 250.f), Vector3(3.f, 3.f, 3.f), false);
-	turret->setHealthTo(10.f);
-	turret->setMaxHealthTo(10.f);
+	turret->setHealthTo(10);
+	turret->setMaxHealthTo(10);
 	turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
 	CAnimatedEnemy* _staticEnemy = Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head", Vector3(6.f, -10.f, 300.f), Vector3(3.f, 3.f, 3.f));
 	_staticEnemy->SetState(CEnemy3D::NO_AI_STATE);
-	_staticEnemy->setHealthTo(10.f);
-	_staticEnemy->setMaxHealthTo(10.f);
+	_staticEnemy->setHealthTo(10);
+	_staticEnemy->setMaxHealthTo(10);
 	_staticEnemy->setAttackTo(0);
 	_staticEnemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 	_staticEnemy->SetLight(true);
@@ -540,7 +540,7 @@ void Tutorial::Update(double dt)
 
 			if (playerInfo->getScore() > OptionsManager::GetInstance()->getHighscore())
 			{
-				OptionsManager::GetInstance()->setHighscore(playerInfo->getScore());
+				OptionsManager::GetInstance()->setHighscore(static_cast<int>(playerInfo->getScore()));
 				OptionsManager::GetInstance()->saveHighscore();
 			}
 
@@ -553,8 +553,8 @@ void Tutorial::Update(double dt)
 			// Hardware Abstraction
 			if (!cinematic->cinematicMode && !Text_Manager::GetInstance()->displayingText)
 			{
-				theKeyboard->Read(dt);
-				theMouse->Read(dt);
+				theKeyboard->Read(static_cast<float>(dt));
+				theMouse->Read(static_cast<float>(dt));
 
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
@@ -570,7 +570,7 @@ void Tutorial::Update(double dt)
 			GraphicsManager::GetInstance()->UpdateLights(dt);
 
 			// Update camera effects
-			theCameraEffects->Update(dt);
+			theCameraEffects->Update(static_cast<float>(dt));
 
 
 			/*Map Editor*/
@@ -695,7 +695,7 @@ void Tutorial::Update(double dt)
 		/*For resetting player status.*/
 		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
 		{
-			CPlayerInfo::GetInstance()->setHealthTo(100.f);
+			CPlayerInfo::GetInstance()->setHealthTo(100);
 			CPlayerInfo::GetInstance()->setScore(0.f);
 		}
 	}
@@ -1197,7 +1197,7 @@ void Tutorial::RenderPassMain(void)
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 800, 600);
-	glViewport(0, 0, Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight());
+	glViewport(static_cast<GLint>(0), static_cast<GLint>(0), static_cast<GLint>(Application::GetInstance().GetWindowWidth()), static_cast<GLint>(Application::GetInstance().GetWindowHeight()));
 	//glViewport(0, 0, m_worldWidth, m_worldHeight);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -1283,8 +1283,8 @@ void Tutorial::RenderPassMain(void)
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.f;
+	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.f;
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 	if (OptionsManager::GetInstance()->getEditingState())

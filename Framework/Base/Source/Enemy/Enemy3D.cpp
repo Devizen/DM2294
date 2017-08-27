@@ -17,7 +17,7 @@
 
 CEnemy3D::CEnemy3D(Mesh* _modelMesh)
 	: GenericEntity(NULL)
-	, defaultPosition(Vector3(0.0f,0.0f,0.0f))
+	, defaultPosition(Vector3(0.0f, 0.0f, 0.0f))
 	, defaultTarget(Vector3(0.0f, 0.0f, 0.0f))
 	, defaultUp(Vector3(0.0f, 0.0f, 0.0f))
 	, target(Vector3(0.0f, 0.0f, 0.0f))
@@ -33,6 +33,8 @@ CEnemy3D::CEnemy3D(Mesh* _modelMesh)
 	, playerProperty(false)
 	, whoCloser(NONE)
 	, previousPosition(0.f, 0.f, 0.f)
+	, shootDelay(0.f)
+	, isTower(false)
 {
 	this->modelMesh = _modelMesh;
 }
@@ -217,8 +219,13 @@ void CEnemy3D::Update(double dt)
 			//	cout << "Player Position: " << CPlayerInfo::GetInstance()->GetPos() << endl;
 			//}
 
+			cout << "In ALERT" << endl;
+			cout << "Player Property: " << playerProperty << endl;
+			cout << "Position: " << position << endl;
+			cout << "Shoot Delay: " << shootDelay << endl;
 			if (this->GetShootDelay() > 0.2f && GetAttribute(CAttributes::TYPE_HEALTH)> 0)
 			{
+				cout << "SHOOT" << endl;
 				/*Randomise X value by 0.1f so that the trajectory will not be always fixed.*/
 				CProjectile* _bullet = Create::Projectile("sphere", newPosition, Vector3(Math::RandFloatMinMax(viewVector.x - 0.1f, viewVector.x + 0.1f), viewVector.y, viewVector.z), 2.f, 100.f, NULL);
 				_bullet->bulletOriginated = CProjectile::FROM_ENEMY;
@@ -303,14 +310,13 @@ void CEnemy3D::Render(void)
 	{
 		if (!GetPlayerProperty())
 		{
-			if (whoCloser == PLAYER)
-				angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
-			else if (whoCloser == ENEMY && ReturnNearestEnemy() != nullptr)
+			if (whoCloser == ENEMY && ReturnNearestEnemy() != nullptr)
 				angleToFace = Math::RadianToDegree(atan2(ReturnNearestEnemy()->GetPos().x - this->position.x, ReturnNearestEnemy()->GetPos().z - this->position.z));
+			else
+				angleToFace = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetPos().x - this->position.x, CPlayerInfo::GetInstance()->GetPos().z - this->position.z));
 		}
 		else if (ReturnNearestEnemy() != nullptr)
 			angleToFace = Math::RadianToDegree(atan2(ReturnNearestEnemy()->GetPos().x - this->position.x, ReturnNearestEnemy()->GetPos().z - this->position.z));
-		modelStack.Rotate(angleToFace, 0.f, 1.f, 0.f);
 	}
 	if (state == RECOVERY)
 	{
@@ -458,6 +464,9 @@ CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)
 			if ((*it)->GetPlayerProperty())
 				continue;
 
+			if ((*it)->GetState() == AI_STATE::DEAD)
+				continue;
+
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
 
 			/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
@@ -472,6 +481,9 @@ CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)
 				continue;
 
 			if ((*it)->GetPlayerProperty())
+				continue;
+
+			if ((*it)->GetState() == AI_STATE::DEAD)
 				continue;
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
@@ -495,6 +507,9 @@ CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)
 			if (!(*it)->GetPlayerProperty())
 				continue;
 
+			if ((*it)->GetState() == AI_STATE::DEAD)
+				continue;
+
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
 
 			/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
@@ -509,6 +524,9 @@ CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)
 				continue;
 
 			if (!(*it)->GetPlayerProperty())
+				continue;
+
+			if ((*it)->GetState() == AI_STATE::DEAD)
 				continue;
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
@@ -616,7 +634,7 @@ void CEnemy3D::RenderHealthBar(void)
 	/*Colour health bar that depicts the enemy or ally.*/
 	modelStack.PushMatrix();
 	/*Keep the health bar fixed to the left of the enemy.*/
-	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), furtherDisplacement.z);
+	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), furtherDisplacement.z * 1.00000001f);
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
 	modelStack.Scale(MAX_HEALTH_SCALE * 1.1f, Application::GetInstance().GetWindowHeight() * 0.006f, 0.00001f);
@@ -761,7 +779,7 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 	result->SetAABB(_scale * 2.f, -_scale * 2.f);
 	result->SetMinAABB(-_scale * 2.f);
 	result->SetMaxAABB(_scale * 2.f);
-	result->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
+	result->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
 	result->setMaxHealthTo(10.f);
 	result->setHealthTo(10.f);
 	result->setAttackTo(1.f);
