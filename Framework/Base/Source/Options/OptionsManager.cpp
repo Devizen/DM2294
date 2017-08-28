@@ -68,7 +68,7 @@ bool OptionsManager::loadConfig(string filePath)
 	{
 		while (std::getline(file, data)) // To get you all the lines.
 		{
-			for (int i = 0; i < data.size(); ++i)
+			for (unsigned int i = 0; i < data.size(); ++i)
 			{
 				if (!storedType && data[i] != ',')
 					_type += data[i];

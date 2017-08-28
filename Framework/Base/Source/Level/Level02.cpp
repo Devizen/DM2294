@@ -273,21 +273,28 @@ void Level02::Init()
 	FileManager::GetInstance()->init();
 	EquipmentManager::GetInstance()->Init();
 
-	saveMapTime = 0;
-
-	Create::Quest("Test", "For Testing Purpose", CQuest::QUEST_MAIN, true);
+	Create::Quest("Test", "For Testing Purpose", CQuest::QUEST_MAIN, false);
 	Create::Quest("Test2", "To Test or not to test", CQuest::QUEST_MAIN, true);
-	Create::Quest("Test3", "Blindness Blindness Blindness", CQuest::QUEST_MAIN, true);
-	Create::Quest("Test4", "I need to pee", CQuest::QUEST_MAIN, true);
-	Create::Quest("Test5", "Lmao lol meme", CQuest::QUEST_MAIN, false);
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level02.csv");
 	FileManager::GetInstance()->ReadEnemyFile("Files//Level02Enemy.csv");
+
+	Create::Health("POWERUP_HEALTH", Vector3(60.f, 0.f, 28.f), Vector3(3.f, 3.f, 3.f));
+	Create::Bullet("POWERUP_BULLET", Vector3(88.f, 0.f, 65.f), Vector3(3.f, 3.f, 3.f));
+	Create::Bullet("POWERUP_BULLET", Vector3(-97.f, 0.f, 9.f), Vector3(3.f, 3.f, 3.f));
+	Create::Health("POWERUP_HEALTH", Vector3(-80.f, 0.f, 9.f), Vector3(3.f, 3.f, 3.f));
+	Create::Bullet("POWERUP_BULLET", Vector3(155.f, 0.f, 260.f), Vector3(3.f, 3.f, 3.f));
+	Create::Health("POWERUP_HEALTH", Vector3(170.f, 0.f, 200.f), Vector3(3.f, 3.f, 3.f));
+
+	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+	{
+		if ((*it)->isTower)
+			++currentTowerCount;
+	}
 }
 
 void Level02::Update(double dt)
 {
-	cout << "I AM IN LEVEL02 NOW" << endl;
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -295,9 +302,22 @@ void Level02::Update(double dt)
 	static bool pause = false;
 	static int renderOnce = 0;
 
-	saveMapTime += dt;
+	int towerCount = 0;
 
-	if (saveMapTime >= 10)
+	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+	{
+		if ((*it)->isTower)
+			++towerCount;
+	}
+
+	if (currentTowerCount != towerCount)
+	{
+
+		Create::Text("text", "Tower(s) left: " + to_string(towerCount), 0.f, 1.5f, CText::TEXT_BATTLE);
+		currentTowerCount = towerCount;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
 	{
 		FileManager::GetInstance()->EditMapFile("Files//Level02.csv");
 		FileManager::GetInstance()->EditEnemyFile("Files//Level02Enemy.csv");
@@ -507,8 +527,8 @@ void Level02::Update(double dt)
 			// Hardware Abstraction
 			if (!cinematicMode)
 			{
-				theKeyboard->Read(dt);
-				theMouse->Read(dt);
+				theKeyboard->Read((float)dt);
+				theMouse->Read((float)dt);
 
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
@@ -523,7 +543,7 @@ void Level02::Update(double dt)
 			GraphicsManager::GetInstance()->UpdateLights(dt);
 
 			// Update camera effects
-			theCameraEffects->Update(dt);
+			theCameraEffects->Update((float)dt);
 
 
 			/*Map Editor*/
@@ -663,8 +683,8 @@ void Level02::Update(double dt)
 	{
 		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
 		{
-			CPlayerInfo::GetInstance()->setHealthTo(100.f);
-			CPlayerInfo::GetInstance()->setScore(0.f);
+			CPlayerInfo::GetInstance()->setHealthTo((int)100.f);
+			CPlayerInfo::GetInstance()->setScore(0);
 		}
 	}
 }
@@ -1165,7 +1185,7 @@ void Level02::RenderPassMain(void)
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 800, 600);
-	glViewport(0, 0, Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight());
+	glViewport(0, 0, (GLsizei)Application::GetInstance().GetWindowWidth(), (GLsizei)Application::GetInstance().GetWindowHeight());
 	//glViewport(0, 0, m_worldWidth, m_worldHeight);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -1251,8 +1271,8 @@ void Level02::RenderPassMain(void)
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	int halfWindowWidth = (int)Application::GetInstance().GetWindowWidth() / 2;
+	int halfWindowHeight = (int)Application::GetInstance().GetWindowHeight() / 2;
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 	if (OptionsManager::GetInstance()->getEditingState())
@@ -1416,6 +1436,6 @@ void Level02::Exit()
 	GraphicsManager::GetInstance()->removeLightMap();
 
 	Text_Manager::GetInstance()->resetAll();
-	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	CPlayerInfo::GetInstance()->setKO_Count(0);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 }

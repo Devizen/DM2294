@@ -188,7 +188,7 @@ void Text_Manager::updateText(double dt)
 								text = nullptr;
 								textList.pop_back();
 								displayingText = false;
-								CPlayerInfo::GetInstance()->StopSway(dt);
+								CPlayerInfo::GetInstance()->StopSway((float)dt);
 								break;
 							}
 							else
@@ -197,7 +197,7 @@ void Text_Manager::updateText(double dt)
 								text = nullptr;
 								textList.pop_back();
 								displayingText = false;
-								CPlayerInfo::GetInstance()->StopSway(dt);
+								CPlayerInfo::GetInstance()->StopSway((float)dt);
 								break;
 							}
 						}

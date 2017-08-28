@@ -160,8 +160,16 @@ namespace Create
 	\param5 - Target value to achieve
 	****************************************************/
 	CQuest* Quest(const string& _questName = "Name", const string& _questDescription = "Description of quest", CQuest::QUEST_TYPE _questType = CQuest::QUEST_NONE, bool _questIsDone = true, CAttributes::ATTRIBUTE_TYPES _playersAttributeType = CAttributes::ATTRIBUTE_TYPES::TYPE_NONE, CQuest::COMPARISON_TYPE _compareType = CQuest::COMPARISON_TYPE::COMPARISON_NUM, int _questGoalValue = 0);
-	/*********************************************************
-	TO DO: Overload function to create more (different) quests
-	**********************************************************/
+	
+	/****************************************************
+	Creates quest with a random value
+	\param1 - Name of quest
+	\param2 - Description of quest
+	\param3 - Quest_Type
+	\param4 - Current value of targetted variable
+	\param5 - Target value to achieve of targetted variable
+	****************************************************//*
+	template<typename t>
+	CQuest* Quest(const string& _questName = "Name", const string& _questDescription = "Description of quest", CQuest::QUEST_TYPE _questType = CQuest::QUEST_NONE, bool _questIsDone = true, t currentValue, t _questGoalValue);*/
 };
 #endif

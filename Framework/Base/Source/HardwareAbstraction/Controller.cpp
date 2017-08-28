@@ -28,7 +28,7 @@ bool CController::Create(CPlayerInfo* thePlayerInfo)
 }
 
 // Read from the controller
-int CController::Read(const const float deltaTime)
+int CController::Read(const float deltaTime)
 {
 	if (_CONTROLLER_DEBUG)
 		cout << "CController::Read()" << endl;

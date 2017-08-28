@@ -166,12 +166,12 @@ public:
 	bool getTookDamage(void);
 
 	/*Set Score*/
-	void setScore(float _score);
+	void setScore(int _score);
 	/*Get Score*/
-	float getScore(void);
+	int getScore(void);
 
 	/*Set KO Count*/
-	void setKO_Count(float _KO_Count);
+	void setKO_Count(int _KO_Count);
 	/*Get KO Count*/
 	int getKO_Count(void);
 
@@ -233,7 +233,7 @@ private:
 	/*Boolean to activate camera effects if bullet hits player.*/
 	bool tookDamage;
 	/*Score*/
-	float score;
+	int score;
 
 	/*KO Count*/
 	int KO_Count;

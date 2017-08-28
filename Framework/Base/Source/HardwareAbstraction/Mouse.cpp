@@ -39,9 +39,9 @@ int CMouse::Read(const float deltaTime)
 
 	// Process the keys for customisation
 	if (mouse_diff_x != 0.0)
-		Look_LeftRight(deltaTime, true, mouse_diff_x);
+		Look_LeftRight(deltaTime, true, (const float)mouse_diff_x);
 	if (mouse_diff_y != 0.0)
-		Look_UpDown(deltaTime, true, mouse_diff_y);
+		Look_UpDown(deltaTime, true, (const float)mouse_diff_y);
 
 	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != thePlayerInfo->GetWeapon())
 		Change(deltaTime);

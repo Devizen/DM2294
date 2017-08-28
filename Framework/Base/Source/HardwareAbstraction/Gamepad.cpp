@@ -269,16 +269,16 @@ int CGamepad::Read(const float deltaTime)
 	}
 
 	// If the user presses A, then make him jump
-	if (GamepadController::GetInstance()->IsKeyDown(XINPUT_Buttons[0]) &&
+	if (GamepadController::GetInstance()->IsKeyDown((unsigned char)XINPUT_Buttons[0]) &&
 		thePlayerInfo->isOnGround())
 		Jump(true);
 
 	// If the user presses B, reload
-	if (GamepadController::GetInstance()->IsKeyDown(XINPUT_Buttons[1]))
+	if (GamepadController::GetInstance()->IsKeyDown((unsigned char)XINPUT_Buttons[1]))
 		Reload(deltaTime);
 
 	// If the user presses Y, change weapon
-	if (GamepadController::GetInstance()->IsKeyReleased(XINPUT_Buttons[3]))
+	if (GamepadController::GetInstance()->IsKeyReleased((unsigned char)XINPUT_Buttons[3]))
 	{
 		/*if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 0)
 			MouseController::GetInstance()->setYOffset(1);
@@ -292,7 +292,7 @@ int CGamepad::Read(const float deltaTime)
 		Reset();
 
 	//If the user presses X, change Posture
-	if (GamepadController::GetInstance()->IsKeyPressed(XINPUT_Buttons[2]))
+	if (GamepadController::GetInstance()->IsKeyPressed((unsigned char)XINPUT_Buttons[2]))
 		Posture(deltaTime);
 	//}
 

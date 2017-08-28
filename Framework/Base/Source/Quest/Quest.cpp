@@ -176,3 +176,16 @@ CQuest * Create::Quest(const string & _questName, const string & _questDescripti
 	CQuest_Manager::GetInstance()->addQuest(temp);
 	return temp;
 }
+/****************************************************
+Creates quest with a random value
+\param1 - Name of quest
+\param2 - Description of quest
+\param3 - Quest_Type
+\param4 - Current value of targetted variable
+\param5 - Target value to achieve of targetted variable
+****************************************************/
+//template<typename t>
+//CQuest * Create::Quest(const string & _questName, const string & _questDescription, CQuest::QUEST_TYPE _questType, bool _questIsDone, t currentValue, t _questGoalValue)
+//{
+//	return NULL;
+//}
