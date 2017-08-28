@@ -274,7 +274,7 @@ void Village::Init()
 
 	saveMapTime = 0;
 
-	//FileManager::GetInstance()->ReadMapFile("Files//Level Loader.csv");
+	FileManager::GetInstance()->ReadMapFile("Files//Village.csv");
 }
 
 void Village::Update(double dt)
