@@ -9,7 +9,7 @@
 
 Pathfinding::Pathfinding() :
 	pathFindingMode(false)
-	, path(0.f)
+	, path(0)
 	, targetObjectPosition(0.f, 0.f, 0.f)
 	, nearestPosition(0.f, 0.f, 0.f)
 	, positionWithoutY(0.f, 0.f, 0.f)

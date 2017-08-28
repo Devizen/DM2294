@@ -50,7 +50,7 @@ CPlayerInfo::CPlayerInfo(void)
     , theMinPitch(-80)
 	//, health(100)
 	, tookDamage(false)
-	, score(0.f)
+	, score(0)
 	, KO_Count(0)
 	, lockedOn(false)
 	, enemyPositionToLockOn(nullptr)
@@ -590,7 +590,7 @@ void CPlayerInfo::Update(double dt)
 
 	// Update minimap rotation angle
 	Vector3 viewUV = (target - position).Normalized();
-	CMinimap::GetInstance()->SetAngle(atan2(viewUV.z, viewUV.x) * 57.2883513685549146);
+	CMinimap::GetInstance()->SetAngle((int)atan2(viewUV.z, viewUV.x) * (int)57.2883513685549146);
 
 	// If a camera is attached to this playerInfo class, then update it
 	if (attachedCamera)
@@ -600,7 +600,7 @@ void CPlayerInfo::Update(double dt)
 		attachedCamera->SetCameraUp(up);
 	}
 
-	coolDownTimer += dt;
+	coolDownTimer += (float)dt;
 	if (coolDownTimer > 0.5)
 		secondaryWeapon->numOfStabs = 0;
 }
@@ -855,7 +855,7 @@ bool CPlayerInfo::ChangeWeapon(void)
 		if ((MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) >= 0) &&
 			(MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) < m_iNumOfWeapon))
 		{
-			m_iCurrentWeapon = MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET);
+			m_iCurrentWeapon = (int)MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET);
 		}
 	}
 
@@ -1058,17 +1058,17 @@ bool CPlayerInfo::getTookDamage(void)
 	return tookDamage;
 }
 
-void CPlayerInfo::setScore(float _score)
+void CPlayerInfo::setScore(int _score)
 {
 	score = _score;
 }
 
-float CPlayerInfo::getScore(void)
+int CPlayerInfo::getScore(void)
 {
 	return score;
 }
 
-void CPlayerInfo::setKO_Count(float _KO_Count)
+void CPlayerInfo::setKO_Count(int _KO_Count)
 {
 	KO_Count = _KO_Count;
 }

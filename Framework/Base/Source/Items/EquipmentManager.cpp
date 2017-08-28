@@ -235,7 +235,7 @@ void EquipmentManager::Render()
 	modelStack.PushMatrix();
 	// Display the Avatar
 
-	modelStack.Translate(pressCountX * 140, 160 - pressCountY * 145, 0);
+	modelStack.Translate((float)(pressCountX * 140.f), 160.f - (float)pressCountY * 145.f, 0.f);
 	modelStack.Scale(110, 110, 1);
 	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("SELECTION"));
 	modelStack.PopMatrix();

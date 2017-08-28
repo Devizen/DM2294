@@ -541,8 +541,8 @@ Mesh* MeshBuilder::GenerateCircle(const std::string &meshName, Color color, floa
 
 	for (int i = 0; i < 36; ++i)
 	{
-		yPos = sin(Math::DegreeToRadian(i * 10)) * 0.5f * length;
-		xPos = cos(Math::DegreeToRadian(i * 10)) * 0.5f * length;
+		yPos = sin(Math::DegreeToRadian(i * 10.f)) * 0.5f * length;
+		xPos = cos(Math::DegreeToRadian(i * 10.f)) * 0.5f * length;
 
 		v.pos.Set(xPos, yPos, 0);
 		v.color = color;

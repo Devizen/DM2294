@@ -349,6 +349,24 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("BGUN", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("BGUN")->textureID = LoadTGA("Image//BasicGun.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERSWORD", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERSWORD")->textureID = LoadTGA("Image//SoldierSword.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERGUN", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERGUN")->textureID = LoadTGA("Image//SoldierGun.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("CAPSWORD", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("CAPSWORD")->textureID = LoadTGA("Image//CaptainSword.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("CAPGUN", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("CAPGUN")->textureID = LoadTGA("Image//CaptainGun.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("EMPSWORD", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("EMPSWORD")->textureID = LoadTGA("Image//EmperorSword.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("EMPGUN", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("EMPGUN")->textureID = LoadTGA("Image//EmperorGun.tga");
+
 	MeshBuilder::GetInstance()->GenerateQuad("BSWORD", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("BSWORD")->textureID = LoadTGA("Image//BasicSword.tga");
 

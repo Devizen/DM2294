@@ -42,7 +42,7 @@ private:
 
 	std::vector<ParticleManager*> particleList;
 	unsigned MAX_PARTICLES = 1000;
-	int m_particleCount = 0;
+	float m_particleCount = 0.f;
 	Vector3 m_gravity = Vector3(0.0f, -9.8f, 0.0f);
 };
 

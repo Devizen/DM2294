@@ -45,7 +45,7 @@ void EntityManager::Update(double _dt)
 		if (CheckProjectileToPlayerCollision(bullet, CPlayerInfo::GetInstance()))
 		{
 			CSoundEngine::GetInstance()->PlayASound("TAKEDAMAGE");
-			CPlayerInfo::GetInstance()->deductHealthBy(1.f);
+			CPlayerInfo::GetInstance()->deductHealthBy(1);
 			CPlayerInfo::GetInstance()->setTookDamage(true);
 			bullet->SetStatus(false);
 			CPlayerInfo::GetInstance()->setTookDamage(false);

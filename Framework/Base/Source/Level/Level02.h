@@ -131,7 +131,7 @@ private:
 	float windowHeight;
 	float windowWidth;
 
-	double saveMapTime;
+	int currentTowerCount;
 };
 
 #endif

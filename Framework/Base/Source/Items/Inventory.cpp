@@ -203,7 +203,7 @@ void Inventory::RenderWeapon()
 	modelStack.PushMatrix();
 	// Display the Avatar
 
-	modelStack.Translate(-180 + pressCountX * 118, 135 - pressCountY * 135, 0);
+	modelStack.Translate(-180.f + (float)pressCountX * 118.f, 135.f - (float)pressCountY * 135.f, 0.f);
 	modelStack.Scale(100, 100, 1);
 	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("SELECTION"));
 	modelStack.PopMatrix();
@@ -227,7 +227,7 @@ void Inventory::RenderWeapon()
 		{
 			modelStack.PushMatrix();
 			// Translate the current transformation
-			modelStack.Translate(-180 + j * 118, 135 - k * 135, 0);
+			modelStack.Translate(-180.f + (float)j * 118.f, 135.f - (float)k * 135.f, 0.f);
 			// Scale the current transformation
 			modelStack.Scale(80, 80, 1);
 

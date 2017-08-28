@@ -63,11 +63,11 @@ bool FileManager::ReadPlayerFile(const string myFile)
 				continue;
 			}
 
-			for (int i = 0; i < data.size(); ++i)
+			for (unsigned int i = 0; i < data.size(); ++i)
 			{
 				if (nextData == 0)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -80,12 +80,12 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player hp
-					CPlayerInfo::GetInstance()->setHealthTo(stof(tempData));
+					CPlayerInfo::GetInstance()->setHealthTo(stoi(tempData));
 				}
 
-				if (nextData == 1)
+				else if (nextData == 1)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -98,12 +98,12 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player MP
-					CPlayerInfo::GetInstance()->setMP(stof(tempData));
+					CPlayerInfo::GetInstance()->setMP(stoi(tempData));
 				}
 
-				if (nextData == 2)
+				else if (nextData == 2)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -119,9 +119,9 @@ bool FileManager::ReadPlayerFile(const string myFile)
 					CPlayerInfo::GetInstance()->setAttackTo(stoi(tempData));
 				}
 
-				if (nextData == 3)
+				else if (nextData == 3)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -134,12 +134,12 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player Def
-					CPlayerInfo::GetInstance()->setDefenseTo(stof(tempData));
+					CPlayerInfo::GetInstance()->setDefenseTo(stoi(tempData));
 				}
 
-				if (nextData == 4)
+				else if (nextData == 4)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -155,9 +155,9 @@ bool FileManager::ReadPlayerFile(const string myFile)
 					CPlayerInfo::GetInstance()->setSpeed(stoi(tempData));
 				}
 
-				if (nextData == 5)
+				else if (nextData == 5)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -173,9 +173,9 @@ bool FileManager::ReadPlayerFile(const string myFile)
 					CPlayerInfo::GetInstance()->setGold(stoi(tempData));
 				}
 
-				if (nextData == 6)
+				else if (nextData == 6)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -191,9 +191,9 @@ bool FileManager::ReadPlayerFile(const string myFile)
 					CPlayerInfo::GetInstance()->setLevel(stoi(tempData));
 				}
 
-				if (nextData == 7)
+				else if (nextData == 7)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -206,7 +206,7 @@ bool FileManager::ReadPlayerFile(const string myFile)
 						}
 					}
 					//add to player exp
-					CPlayerInfo::GetInstance()->setEXP(stof(tempData));
+					CPlayerInfo::GetInstance()->setEXP(stoi(tempData));
 				}
 
 				++nextData;
@@ -239,11 +239,11 @@ bool FileManager::ReadWeaponFile( string myFile)
 				continue;
 			}
 
-			for (int i = 0; i < data.size(); ++i)
+			for (unsigned int i = 0; i < data.size(); ++i)
 			{
 				if (nextData == 0)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -258,9 +258,9 @@ bool FileManager::ReadWeaponFile( string myFile)
 					theEQInfo.name = tempData;
 				}
 
-				if (nextData == 1)
+				else if (nextData == 1)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -276,9 +276,9 @@ bool FileManager::ReadWeaponFile( string myFile)
 					theEQInfo.eqAtk = tempData;
 				}
 
-				if (nextData == 2)
+				else if (nextData == 2)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -294,9 +294,9 @@ bool FileManager::ReadWeaponFile( string myFile)
 					theEQInfo.eqDef = tempData;
 				}
 
-				if (nextData == 3)
+				else if (nextData == 3)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -312,9 +312,9 @@ bool FileManager::ReadWeaponFile( string myFile)
 					theEQInfo.eqSpeed = tempData;
 				}
 
-				if (nextData == 4)
+				else if (nextData == 4)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -330,9 +330,9 @@ bool FileManager::ReadWeaponFile( string myFile)
 					theEQInfo.eqId = tempData;
 				}
 
-				if (nextData == 5)
+				else if (nextData == 5)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -347,9 +347,9 @@ bool FileManager::ReadWeaponFile( string myFile)
 					theEQInfo.eqType = tempData;
 				}
 
-				if (nextData == 6)
+				else if (nextData == 6)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -361,7 +361,7 @@ bool FileManager::ReadWeaponFile( string myFile)
 							break;
 						}
 					}
-					theEQInfo.isEquipped = stoi(tempData);
+					theEQInfo.isEquipped = static_cast<bool>(stoi(tempData));
 				}
 
 				tempData = "";
@@ -400,11 +400,11 @@ bool FileManager::ReadMapFile(const string myFile)
 				continue;
 			}
 
-			for (int i = 0; i < data.size(); ++i)
+			for (unsigned int i = 0; i < data.size(); ++i)
 			{
 				if (nextData == 0)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -419,9 +419,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.type = tempData;
 				}
 
-				if (nextData == 1)
+				else if (nextData == 1)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -436,9 +436,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.posX = stof(tempData);
 				}
 
-				if (nextData == 2)
+				else if (nextData == 2)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -453,9 +453,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.posY = stof(tempData);
 				}
 
-				if (nextData == 3)
+				else if (nextData == 3)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -470,9 +470,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.posZ = stof(tempData);
 				}
 
-				if (nextData == 4)
+				else if (nextData == 4)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -487,9 +487,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.minAABBx = stof(tempData);
 				}
 
-				if (nextData == 5)
+				else if (nextData == 5)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -504,9 +504,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.minAABBy = stof(tempData);
 				}
 
-				if (nextData == 6)
+				else if (nextData == 6)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -521,9 +521,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.minAABBz = stof(tempData);
 				}
 
-				if (nextData == 7)
+				else if (nextData == 7)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -538,9 +538,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.maxAABBx = stof(tempData);
 				}
 
-				if (nextData == 8)
+				else if (nextData == 8)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -555,9 +555,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.maxAABBy = stof(tempData);
 				}
 
-				if (nextData == 9)
+				else if (nextData == 9)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -572,9 +572,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.maxAABBz = stof(tempData);
 				}
 
-				if (nextData == 10)
+				else if (nextData == 10)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -589,9 +589,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.scalex = stof(tempData);
 				}
 
-				if (nextData == 11)
+				else if (nextData == 11)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -606,9 +606,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.scaley = stof(tempData);
 				}
 
-				if (nextData == 12)
+				else if (nextData == 12)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -623,9 +623,9 @@ bool FileManager::ReadMapFile(const string myFile)
 					theOBJinfo.scalez = stof(tempData);
 				}
 
-				if (nextData == 13)
+				else if (nextData == 13)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -674,11 +674,11 @@ bool FileManager::ReadEnemyFile(const string myFile)
 				continue;
 			}
 
-			for (int i = 0; i < data.size(); ++i)
+			for (unsigned int i = 0; i < data.size(); ++i)
 			{
 				if (nextData == 0)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -693,9 +693,9 @@ bool FileManager::ReadEnemyFile(const string myFile)
 					theEnemyInfo.type = stoi(tempData);
 				}
 
-				if (nextData == 1)
+				else if (nextData == 1)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -710,9 +710,9 @@ bool FileManager::ReadEnemyFile(const string myFile)
 					theEnemyInfo.displacementX = stof(tempData);
 				}
 
-				if (nextData == 2)
+				else if (nextData == 2)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -727,9 +727,9 @@ bool FileManager::ReadEnemyFile(const string myFile)
 					theEnemyInfo.displacementY = stof(tempData);
 				}
 
-				if (nextData == 3)
+				else if (nextData == 3)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -744,9 +744,9 @@ bool FileManager::ReadEnemyFile(const string myFile)
 					theEnemyInfo.displacementZ = stof(tempData);
 				}
 
-				if (nextData == 4)
+				else if (nextData == 4)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -761,9 +761,9 @@ bool FileManager::ReadEnemyFile(const string myFile)
 					theEnemyInfo.scaleX= stof(tempData);
 				}
 
-				if (nextData == 5)
+				else if (nextData == 5)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -778,9 +778,9 @@ bool FileManager::ReadEnemyFile(const string myFile)
 					theEnemyInfo.scaleY = stof(tempData);
 				}
 
-				if (nextData == 6)
+				else if (nextData == 6)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -795,9 +795,9 @@ bool FileManager::ReadEnemyFile(const string myFile)
 					theEnemyInfo.scaleZ = stof(tempData);
 				}
 
-				if (nextData == 7)
+				else if (nextData == 7)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -825,19 +825,19 @@ bool FileManager::ReadEnemyFile(const string myFile)
 						Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
 				}
 
-				if (theEnemyInfo.type == 2)
+				else if (theEnemyInfo.type == 2)
 				{
 					Create::Horde("ROBOT",
 						Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
 						Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
 				}
 
-				if (theEnemyInfo.type == 3)
+				else if (theEnemyInfo.type == 3)
 				{
 					Create::Enemy3D("turret", Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ),
 						Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
 				}
-				if (theEnemyInfo.type == 4)
+				else if (theEnemyInfo.type == 4)
 				{
 					Create::Tower("TOWER", Vector3(theEnemyInfo.displacementX, theEnemyInfo.displacementY, theEnemyInfo.displacementZ), 0.f,
 						Vector3(theEnemyInfo.scaleX, theEnemyInfo.scaleY, theEnemyInfo.scaleZ));
@@ -875,11 +875,11 @@ bool FileManager::ReadShopFile(const string myFile)
 				continue;
 			}
 
-			for (int i = 0; i < data.size(); ++i)
+			for (unsigned int i = 0; i < data.size(); ++i)
 			{
 				if (nextData == 0)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -894,9 +894,9 @@ bool FileManager::ReadShopFile(const string myFile)
 					theShopInfo.name = tempData;
 				}
 
-				if (nextData == 1)
+				else if (nextData == 1)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -912,9 +912,9 @@ bool FileManager::ReadShopFile(const string myFile)
 					theShopInfo.eqAtk = tempData;
 				}
 
-				if (nextData == 2)
+				else if (nextData == 2)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -930,9 +930,9 @@ bool FileManager::ReadShopFile(const string myFile)
 					theShopInfo.eqDef = tempData;
 				}
 
-				if (nextData == 3)
+				else if (nextData == 3)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -948,9 +948,9 @@ bool FileManager::ReadShopFile(const string myFile)
 					theShopInfo.eqSpeed = tempData;
 				}
 
-				if (nextData == 4)
+				else if (nextData == 4)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -966,9 +966,9 @@ bool FileManager::ReadShopFile(const string myFile)
 					theShopInfo.eqId = tempData;
 				}
 
-				if (nextData == 5)
+				else if (nextData == 5)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -983,9 +983,9 @@ bool FileManager::ReadShopFile(const string myFile)
 					theShopInfo.eqType = tempData;
 				}
 
-				if (nextData == 6)
+				else if (nextData == 6)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -997,12 +997,12 @@ bool FileManager::ReadShopFile(const string myFile)
 							break;
 						}
 					}
-					theShopInfo.isEquipped = stoi(tempData);
+					theShopInfo.isEquipped = static_cast<bool>(stoi(tempData));
 				}
 
-				if (nextData == 7)
+				else if (nextData == 7)
 				{
-					for (int j = i; j < data.size(); ++j)
+					for (unsigned int j = i; j < data.size(); ++j)
 					{
 						if (data[j] != ',')
 						{
@@ -1038,7 +1038,7 @@ void FileManager::EditShopFile(const string myFile)
 	ofstream File;
 	File.open(myFile);
 	File << "Name,Attack,Defense,Speed,ID,Type,Equipped,Gold\n";
-	for (int i = 0; i < 3; i ++)
+	for (unsigned int i = 0; i < 3; i ++)
 	{
 		Equipment* temp = ShopManager::GetInstance()->getHelmVector()[i];
 		if (temp != NULL)
@@ -1054,7 +1054,7 @@ void FileManager::EditShopFile(const string myFile)
 		}
 	}
 
-	for (int i = 0; i < 3; i++)
+	for (unsigned int i = 0; i < 3; i++)
 	{
 		Equipment* temp = ShopManager::GetInstance()->getArmorVector()[i];
 		if (temp != NULL)
@@ -1070,7 +1070,7 @@ void FileManager::EditShopFile(const string myFile)
 		}
 	}
 
-	for (int i = 0; i < 3; i++)
+	for (unsigned int i = 0; i < 3; i++)
 	{
 		Equipment* temp = ShopManager::GetInstance()->getGloveVector()[i];
 		if (temp != NULL)
@@ -1086,7 +1086,7 @@ void FileManager::EditShopFile(const string myFile)
 		}
 	}
 
-	for (int i = 0; i < 3; i++)
+	for (unsigned int i = 0; i < 3; i++)
 	{
 		Equipment* temp = ShopManager::GetInstance()->getShoeVector()[i];
 		if (temp != NULL)
@@ -1102,7 +1102,7 @@ void FileManager::EditShopFile(const string myFile)
 		}
 	}
 
-	for (int i = 0; i < 3; i++)
+	for (unsigned int i = 0; i < 3; i++)
 	{
 		Equipment* temp = ShopManager::GetInstance()->getSwordVector()[i];
 		if (temp != NULL)
@@ -1118,7 +1118,7 @@ void FileManager::EditShopFile(const string myFile)
 		}
 	}
 
-	for (int i = 0; i < 3; i++)
+	for (unsigned int i = 0; i < 3; i++)
 	{
 		Equipment* temp = ShopManager::GetInstance()->getGunVector()[i];
 		if (temp != NULL)
@@ -1140,7 +1140,7 @@ void FileManager::EditWeaponFile(const string myFile)
 	ofstream File;
 	File.open(myFile);
 	File << "Name,Attack,Defense,Speed,ID,Type,Equipped\n";
-	for (int i = 0; i < 6; i++)
+	for (unsigned int i = 0; i < 6; i++)
 	{
 		if (EquipmentManager::GetInstance()->ReturnList()[i] != NULL)
 		{
@@ -1155,7 +1155,7 @@ void FileManager::EditWeaponFile(const string myFile)
 		}
 	}
 
-	for (int i = 0; i < 12; i++)
+	for (unsigned int i = 0; i < 12; i++)
 	{
 		if (Inventory::GetInstance()->ReturnType()[i] != NULL)
 		{

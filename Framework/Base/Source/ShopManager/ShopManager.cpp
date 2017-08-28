@@ -92,7 +92,7 @@ void ShopManager::render()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-5, 50 - pressCountY * 110, 0);
+	modelStack.Translate(-5.f, 50.f - pressCountY * 110.f, 0.f);
 	modelStack.Scale(110, 110, 1);
 	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("SELECTION"));
 	modelStack.PopMatrix();
@@ -102,7 +102,7 @@ void ShopManager::render()
 		if (temp[i] != NULL)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(-5, 50 - i * 110, 0);
+			modelStack.Translate(-5.f, 50.f - i * 110.f, 0.f);
 			modelStack.Scale(70, 70, 1);
 			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh(temp[i]->getName()));
 			modelStack.PopMatrix();

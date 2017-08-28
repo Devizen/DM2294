@@ -55,6 +55,7 @@ int CAttributes::GetAttribute(ATTRIBUTE_TYPES type)
 	case TYPE_GOLD:
 		return this->GOLD;
 	}
+	return NULL;
 }
 /*
 Resets health to max
