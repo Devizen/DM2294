@@ -4,6 +4,11 @@
 #include "SceneManager.h"
 #include "GraphicsManager.h"
 #include "SoundEngine.h"
+#include "EntityManager.h"
+#include "PlayerInfo\PlayerInfo.h"
+#include "Cinematic\Cinematic.h"
+#include "Debugger\Debugger.h"
+#include "ParticleManager.h"
 
 //Include GLEW
 #include <GL/glew.h>
@@ -224,6 +229,12 @@ void Application::Exit()
 	glfwDestroyWindow(m_window);
 	//Finalize and clean up GLFW
 	glfwTerminate();
+
+	EntityManager::GetInstance()->Destroy();
+	CCinematic::GetInstance()->Destroy();
+	Debugger::GetInstance()->Destroy();
+	ParticleManager::GetInstance()->Destroy();
+	//CPlayerInfo::GetInstance()->Destroy();
 }
 
 void Application::UpdateInput()
