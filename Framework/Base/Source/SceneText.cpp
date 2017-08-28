@@ -577,7 +577,7 @@ void SceneText::Update(double dt)
 		FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 		FileManager::GetInstance()->CreateWeapon();
 
-		cout << "IN" << endl;
+		
 	}
 
 	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) > 0)

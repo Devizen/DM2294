@@ -11,6 +11,9 @@ programID(_programID)
 
 ShaderProgram::~ShaderProgram()
 {
+	if (uniformMap.size() > 0)
+		uniformMap.clear();
+
 	if (programID != SHADER_ERROR)
 		glDeleteProgram(programID);
 }

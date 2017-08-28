@@ -258,7 +258,6 @@ void Tutorial::Init()
 	{
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
-	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 	Inventory::GetInstance()->Init();
 
 	openInventory = false;
@@ -287,15 +286,10 @@ void Tutorial::Init()
 	_staticEnemy->setAttackTo(0);
 	_staticEnemy->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -_scale.y, -_scale.z));
 	_staticEnemy->SetLight(true);
-
-	//CTower* sTower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
-	//cout << sTower->GetMinAABB() << endl;
-	//cout << sTower->GetMaxAABB() << endl;
 }
 
 void Tutorial::Update(double dt)
 {
-	//cout << "I AM IN TUTORIAL NOW" << endl;
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -450,8 +444,6 @@ void Tutorial::Update(double dt)
 	{
 		FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 		FileManager::GetInstance()->CreateWeapon();
-
-		cout << "IN" << endl;
 	}
 
 	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) > 0)
@@ -497,7 +489,6 @@ void Tutorial::Update(double dt)
 				weaponType.precision(4);
 				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
 				{
-					//cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
 					if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 1)
 					{
 						weaponName = "Assault Rifle";
@@ -596,7 +587,7 @@ void Tutorial::Update(double dt)
 				cinematic->SetCameraPos(camera.GetCameraPos());
 				cinematic->SetCameraTarget(camera.GetCameraTarget());
 				cinematic->SetCameraUp(camera.GetCameraUp());
-				cout << "Attached Camera" << endl;
+				
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(&camera);
 				cinematic->cinematicMode = false;
@@ -609,7 +600,6 @@ void Tutorial::Update(double dt)
 				cinematic->SetCameraTarget(camera.GetCameraTarget());
 				cinematic->SetCameraUp(camera.GetCameraUp());
 
-				cout << "Attached Cinematic" << endl;
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
 				cinematic->cinematicMode = true;
@@ -626,8 +616,6 @@ void Tutorial::Update(double dt)
 				camera.SetCameraPos(cinematic->GetCameraPos());
 				camera.SetCameraTarget(cinematic->GetCameraTarget());
 				camera.SetCameraUp(cinematic->GetCameraUp());
-
-				//cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
 
 			if (!cinematic->cinematicMode)
@@ -1006,7 +994,7 @@ void Tutorial::pauseOptions(double dt, bool &pause)
 	if (!choseType && !changedInput)
 	{
 		static int option = 20;
-		cout << "Choose Type to Edit." << endl;
+
 		if (KeyboardController::GetInstance()->IsKeyDown('1'))
 			option = 0;
 		if (KeyboardController::GetInstance()->IsKeyDown('2'))
@@ -1052,8 +1040,6 @@ void Tutorial::pauseOptions(double dt, bool &pause)
 
 	if (choseType && !changedInput)
 	{
-		cout << input << endl;
-		//cout << "Current Input: " << input->getKey() << endl;
 		if (KeyboardController::GetInstance()->IsKeyPressed('A'))
 			input->setKey('A');
 		if (KeyboardController::GetInstance()->IsKeyPressed('B'))
@@ -1142,8 +1128,6 @@ void Tutorial::pauseOptions(double dt, bool &pause)
 			pause = false;
 		}
 	}
-
-	cout << "TEST" << endl;
 
 }
 

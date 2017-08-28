@@ -614,7 +614,10 @@ void MeshBuilder::removeMeshMap(void)
 		meshName = "";
 		Mesh* mesh = it->second;
 		if (mesh != nullptr)
+		{
 			delete mesh;
+			mesh = nullptr;
+		}
 
 		it = meshMap.erase(it);
 	}

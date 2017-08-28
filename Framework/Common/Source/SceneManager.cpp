@@ -200,7 +200,6 @@ void SceneManager::initShader(void)
 
 	MeshBuilder::GetInstance()->GenerateText("IMPACT", 16, 16);
 	MeshBuilder::GetInstance()->GetMesh("IMPACT")->textureID = LoadTGA("Image//IMPACT.tga");
-	MeshBuilder::GetInstance()->GetMesh("IMPACT")->material.kAmbient.Set(1, 1, 0);
 
 	/*Enemy Turret*/
 	MeshBuilder::GetInstance()->GenerateOBJ("turret", "OBJ//turret.obj");
@@ -376,7 +375,9 @@ void SceneManager::initShader(void)
 	/*Player Health Bar Color*/
 	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
 
-
+	/*Translucent Quad*/
+	MeshBuilder::GetInstance()->GenerateQuad("TRANS_QUAD", Color(1.f, 1.f, 1.f), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("TRANS_QUAD")->textureID = LoadTGA("Image//TRANS_QUAD.tga");
 	/*Minimap Enlarged*/
 	MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_ENLARGED", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("MINIMAP_ENLARGED")->textureID = LoadTGA("Image//minimap//minimapStencil.tga");

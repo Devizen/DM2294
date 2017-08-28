@@ -4,11 +4,23 @@
 #include "SceneManager.h"
 #include "GraphicsManager.h"
 #include "SoundEngine.h"
+
+/*For deleting singletons.*/
 #include "EntityManager.h"
 #include "PlayerInfo\PlayerInfo.h"
 #include "Cinematic\Cinematic.h"
 #include "Debugger\Debugger.h"
 #include "ParticleManager.h"
+#include "Text_Display\Text_Manager\Text_Manager.h"
+#include "FileManager.h"
+#include "Options\OptionsManager.h"
+#include "Items\EquipmentManager.h"
+#include "Items\Inventory.h"
+#include "Minimap\Minimap.h"
+#include "Map_Editor\Map_Editor.h"
+#include "MeshBuilder.h"
+#include "GraphicsManager.h"
+#include "CameraEffects\CameraEffects.h"
 
 //Include GLEW
 #include <GL/glew.h>
@@ -230,11 +242,23 @@ void Application::Exit()
 	//Finalize and clean up GLFW
 	glfwTerminate();
 
+	/*Destroying Singletons to prevent memory leaks.*/
 	EntityManager::GetInstance()->Destroy();
 	CCinematic::GetInstance()->Destroy();
 	Debugger::GetInstance()->Destroy();
 	ParticleManager::GetInstance()->Destroy();
-	//CPlayerInfo::GetInstance()->Destroy();
+	SceneManager::GetInstance()->Destroy();
+	Text_Manager::GetInstance()->Destroy();
+	FileManager::GetInstance()->Destroy();
+	OptionsManager::GetInstance()->Destroy();
+	EquipmentManager::GetInstance()->Destroy();
+	Inventory::GetInstance()->Destroy();
+	CPlayerInfo::GetInstance()->Destroy();
+	CMeleeInfo::GetInstance()->Destroy();
+	Map_Editor::GetInstance()->Destroy();
+	MeshBuilder::GetInstance()->Destroy();
+	GraphicsManager::GetInstance()->Destroy();
+	//CCameraEffects::GetInstance()->Destroy();
 }
 
 void Application::UpdateInput()

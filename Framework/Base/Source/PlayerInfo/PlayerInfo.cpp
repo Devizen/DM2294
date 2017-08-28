@@ -34,12 +34,12 @@ CPlayerInfo::CPlayerInfo(void)
 	, m_dFallSpeed(0.0)
 	, m_dFallAcceleration(-10.0)
 	, m_dElapsedTime(0.0)
-	, attachedCamera(NULL)
-	, m_pTerrain(NULL)
-	, primaryWeapon(NULL)
-	, secondaryWeapon(NULL)
+	, attachedCamera(nullptr)
+	, m_pTerrain(nullptr)
+	, primaryWeapon(nullptr)
+	, secondaryWeapon(nullptr)
 	, theCurrentPosture(STAND)
-	, weaponManager(NULL)
+	, weaponManager(nullptr)
 	, m_iCurrentWeapon(0)
 	, m_fCameraSwayAngle(0.0f)
 	, m_fCameraSwayDeltaAngle(0.1f)
@@ -74,11 +74,11 @@ CPlayerInfo::~CPlayerInfo(void)
 		delete secondaryWeapon;
 		secondaryWeapon = NULL;
 	}
-	if (primaryWeapon)
-	{
-		delete primaryWeapon;
-		primaryWeapon = NULL;
-	}
+	//if (primaryWeapon)
+	//{
+	//	delete primaryWeapon;
+	//	primaryWeapon = NULL;
+	//}
 	m_pTerrain = NULL;
 }
 
@@ -105,7 +105,6 @@ void CPlayerInfo::Init(void)
 	if (primaryWeapon == nullptr)
 		primaryWeapon = new CPistol();
 	primaryWeapon->Init();
-	cout << "Primary Weapon From Player: " << primaryWeapon << endl;
 	if (secondaryWeapon == nullptr)
 		secondaryWeapon = new CKnife();
 	secondaryWeapon->Init();
@@ -1159,7 +1158,6 @@ void CPlayerInfo::setLockedOn(void)
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
 
-			/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
 			nearestDistance = (Vector3(enemyWithoutY.x - thisWithoutY.x, -10.f, enemyWithoutY.z - thisWithoutY.z)).LengthSquared();
 			enemyPositionToLockOn = (CEnemy3D*)*it;
 			break;

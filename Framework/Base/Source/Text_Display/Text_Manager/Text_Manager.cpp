@@ -404,7 +404,7 @@ void Text_Manager::renderText(void)
 						modelStack.Scale(text->scaleBackground, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 
 						Mesh* modelMesh;
-						modelMesh = MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 1.0f), 1.0f);
+						modelMesh = MeshBuilder::GetInstance()->GetMesh("TRANS_QUAD");
 						RenderHelper::RenderMesh(modelMesh);
 						modelStack.PopMatrix();
 
@@ -424,7 +424,7 @@ void Text_Manager::renderText(void)
 						modelStack.Scale(text->scaleBackground, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 
 						Mesh* modelMesh;
-						modelMesh = MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 1.0f), 1.0f);
+						modelMesh = MeshBuilder::GetInstance()->GetMesh("TRANS_QUAD");
 						RenderHelper::RenderMesh(modelMesh);
 						modelStack.PopMatrix();
 

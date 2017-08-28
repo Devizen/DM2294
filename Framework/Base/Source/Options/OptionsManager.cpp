@@ -21,6 +21,14 @@ OptionsManager::OptionsManager() :
 
 OptionsManager::~OptionsManager()
 {
+	while (controls.size() > 0)
+	{
+		Controls* object = controls.back();
+		delete object;
+		object = nullptr;
+
+		controls.pop_back();
+	}
 }
 
 

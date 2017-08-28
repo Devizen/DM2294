@@ -47,6 +47,8 @@ Map_Editor::Map_Editor() :
 	, addWaypoint(false)
 	, _enemy(nullptr)
 	, turret(nullptr)
+	, _horde(nullptr)
+	, _tower(nullptr)
 	, lastCreatedType(CREATED_NONE)
 	, scaleAxis(SCALE_ALL)
 	, enemyNo(0)
@@ -55,6 +57,29 @@ Map_Editor::Map_Editor() :
 
 Map_Editor::~Map_Editor()
 {
+	if (_enemy)
+	{
+		delete _enemy;
+		_enemy = nullptr;
+	}
+
+	if (turret)
+	{
+		delete turret;
+		turret = nullptr;
+	}
+
+	if (_horde)
+	{
+		delete _horde;
+		_horde = nullptr;
+	}
+
+	if (_tower)
+	{
+		delete _tower;
+		_tower = nullptr;
+	}
 }
 
 void Map_Editor::renderObject(void)
