@@ -483,7 +483,7 @@ void SceneText::Init()
 	FileManager::GetInstance()->ReadEnemyFile("Files//Enemy Loader.csv");
 	FileManager::GetInstance()->ReadShopFile("Files/Shop.csv");
 
-	CTower* sTower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
+	//CTower* sTower = Create::Tower("TOWER", Vector3(150.f, -10.f, 180.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
 }
 
 void SceneText::Update(double dt)
@@ -498,7 +498,7 @@ void SceneText::Update(double dt)
 
 	saveMapTime += dt;
 
-	if (saveMapTime >= 10)
+	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
 	{
 		FileManager::GetInstance()->EditMapFile("Files//Level Loader.csv");
 		FileManager::GetInstance()->EditEnemyFile("Files//Enemy Loader.csv");

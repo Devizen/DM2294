@@ -393,20 +393,20 @@ void Mainmenu::Update(double dt)
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
 		{
 			SceneManager::GetInstance()->SetActiveScene("Tutorial");
+			break;
 		}
-		break;
 	case 2:
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
 		{
 			SceneManager::GetInstance()->SetActiveScene("Selection");
+			break;
 		}
-		break;
 	case 3:
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
 		{
 			exit(0);
+			break;
 		}
-		break;
 	default:
 		break;
 	}

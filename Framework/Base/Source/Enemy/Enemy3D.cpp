@@ -347,8 +347,11 @@ bool CEnemy3D::CheckInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 	Vector3 thisWithoutY(defaultPosition.x, -10.f, defaultPosition.z);
 	Vector3 playerWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
 	Vector3 enemyWithoutY(0.f, 0.f, 0.f);
-	if (ReturnNearestEnemy() != nullptr)
+	if (ReturnNearestEnemy() != nullptr && ReturnNearestEnemy()->GetPlayerProperty())
+	{
 		enemyWithoutY = ReturnNearestEnemy()->GetPos();
+		whoCloser = ENEMY;
+	}
 
 
 	Vector3 boundaryMin = Vector3(minBoundary.x + thisWithoutY.x, -10.f, minBoundary.z + thisWithoutY.z);
@@ -421,12 +424,14 @@ bool CEnemy3D::CheckInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 		if (ReturnNearestEnemy() == nullptr)
 			return false;
 
-		whoCloser = ENEMY;
 		Vector3 enemyMin = Vector3(ReturnNearestEnemy()->GetMinAABB().x + enemyWithoutY.x, -10.f, ReturnNearestEnemy()->GetMinAABB().z + enemyWithoutY.z);
 		Vector3 enemyMax = Vector3(ReturnNearestEnemy()->GetMaxAABB().x + enemyWithoutY.x, -10.f, ReturnNearestEnemy()->GetMaxAABB().z + enemyWithoutY.z);
 
 		if (boundaryMin <= enemyMax && boundaryMax >= enemyMin)
+		{
+			whoCloser = ENEMY;
 			return true;
+		}
 
 		else
 			return false;

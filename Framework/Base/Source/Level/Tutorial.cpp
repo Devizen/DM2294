@@ -680,6 +680,8 @@ void Tutorial::Update(double dt)
 				SceneManager::GetInstance()->SetActiveScene("Level04");
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
 				SceneManager::GetInstance()->SetActiveScene("Village");
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F7))
+				SceneManager::GetInstance()->SetActiveScene("Start");
 
 			if (playerInfo->getLockedOn())
 			{

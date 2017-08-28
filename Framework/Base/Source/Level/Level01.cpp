@@ -331,7 +331,7 @@ void Level01::Update(double dt)
 	if (towerCount == 0)
 	{
 		//Create::Text("text", "Great Job!\nTutorial Completed!", 0.f, 2.f, CText::TEXT_CONVERSATION);
-		SceneManager::GetInstance()->SetActiveScene("Level02");
+		SceneManager::GetInstance()->SetActiveScene("Village");
 	}
 
 	//Calculating aspect ratio

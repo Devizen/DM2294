@@ -348,6 +348,9 @@
     <ClCompile Include="Source\Level\Selection.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level\Village.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -586,6 +589,9 @@
     </ClInclude>
     <ClInclude Include="Source\Physics\Physics.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Village.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

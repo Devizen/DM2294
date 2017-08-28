@@ -49,6 +49,7 @@
     <ClCompile Include="Source\Level\Mainmenu.cpp" />
     <ClCompile Include="Source\Level\Selection.cpp" />
     <ClCompile Include="Source\Level\Tutorial.cpp" />
+    <ClCompile Include="Source\Level\Village.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Map_Editor\Map_Editor.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="Source\Level\Mainmenu.h" />
     <ClInclude Include="Source\Level\Selection.h" />
     <ClInclude Include="Source\Level\Tutorial.h" />
+    <ClInclude Include="Source\Level\Village.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\Map_Editor\Map_Editor.h" />
     <ClInclude Include="Source\Minimap\Minimap.h" />
