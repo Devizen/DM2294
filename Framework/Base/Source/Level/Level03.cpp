@@ -222,8 +222,8 @@ void Level03::Init()
 	// Create the playerinfo instance, which manages all information about the player
 	playerInfo = CPlayerInfo::GetInstance();
 	playerInfo->Init();
-	playerInfo->SetPos(Vector3(0.f, 0.f, 360.f));
-	playerInfo->SetTarget(Vector3(0.f, 0.f, 350.f));
+	playerInfo->SetPos(Vector3(-35.f, 0.f, 490.f));
+	playerInfo->SetTarget(Vector3(-35.f, 0.f, 480.f));
 
 	// Create and attach the camera to the scene
 	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -364,21 +364,8 @@ void Level03::Init()
 	FileManager::GetInstance()->ReadMapFile("Files//Level03.csv");
 	FileManager::GetInstance()->ReadEnemyFile("Files//Level03Enemy.csv");
 
-	static CTower* tower;
-	tower = Create::Tower("TOWER", Vector3(200.f, -10.f, -200.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
-	tower->setHealthTo(10);
-	tower->setMaxHealthTo(10);
-	tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
+	cinematic->cinematicMode = true;
 
-	tower = Create::Tower("TOWER", Vector3(0.f, -10.f, -200.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
-	tower->setHealthTo(10);
-	tower->setMaxHealthTo(10);
-	tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
-
-	tower = Create::Tower("TOWER", Vector3(-200.f, -10.f, -200.f), 0.f, Vector3(3.f, 3.f, 3.f), false);
-	tower->setHealthTo(10);
-	tower->setMaxHealthTo(10);
-	tower->SetMaxAABB(Vector3(tower->GetMaxAABB().x, 80.f, tower->GetMaxAABB().z));
 }
 
 void Level03::Update(double dt)
@@ -393,11 +380,27 @@ void Level03::Update(double dt)
 
 	saveMapTime += dt;
 
-
-	if (saveMapTime >= 10)
+	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
 	{
 		FileManager::GetInstance()->EditMapFile("Files//Level03.csv");
 		FileManager::GetInstance()->EditEnemyFile("Files//Level03Enemy.csv");
+	}
+
+	int towerCount = 0;
+	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+	{
+		if ((*it)->isTower)
+			++towerCount;
+	}
+	if (currentTowerCount != towerCount)
+	{
+
+		Create::Text("text", "Tower(s) left: " + to_string(towerCount), 0.f, 1.5f, CText::TEXT_BATTLE);
+		currentTowerCount = towerCount;
+	}
+	if (towerCount == 0)
+	{
+		SceneManager::GetInstance()->SetActiveScene("Village");
 	}
 
 
@@ -643,7 +646,7 @@ void Level03::Update(double dt)
 					theMinimap->enlargedMap = true;
 			}
 
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
+			/*if (KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
 			{
 				cinematic->SetCameraPos(camera.GetCameraPos());
 				cinematic->SetCameraTarget(camera.GetCameraTarget());
@@ -665,25 +668,24 @@ void Level03::Update(double dt)
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
 				cinematicMode = true;
-			}
+			}*/
 
-			if (cinematicMode)
+			if (cinematic->cinematicMode)
 			{
 				static bool completed = false;
+				playerInfo->DetachCamera();
+				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
+				/*For Scene Cinematics*/
 				if (cinematic->numberOfPositions == 0)
 				{
-					cinematic->targetType = CCinematic::C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(200.f, 200.f, 200.f), 100.f, dt);
+				cinematic->targetType = CCinematic::C_Destination;
+				cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(-60, 50, -40), 100.f, dt);
 				}
 				else if (cinematic->numberOfPositions == 1)
 				{
-					cinematic->targetType = CCinematic::C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(400.f, 200.f, 100.f), 100.f, dt);
-				}
-				else if (cinematic->numberOfPositions == 2)
-				{
-					cinematic->targetType = CCinematic::C_Target;
-					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(0.f, 100.f, 0.f), 100.f, dt);
+					cinematic->targetType = CCinematic::C_Destination;
+					cinematic->moveCamera(cinematic->GetCameraPos(), Vector3(-60, 50, -40), 100.f, dt);
+					Create::Text("text", "Objective: Destroy All 3 Towers", 0.f, 2.f, CText::TEXT_BATTLE);
 					completed = true;
 					if (completed)
 					{
@@ -693,19 +695,17 @@ void Level03::Update(double dt)
 						cout << "Attached Camera" << endl;
 						playerInfo->DetachCamera();
 						playerInfo->AttachCamera(&camera);
-						cinematicMode = false;
+						cinematic->cinematicMode = false;
 						cinematic->numberOfPositions = 0;
 					}
-
 				}
 
 				cinematic->Update(dt);
 				camera.SetCameraPos(cinematic->GetCameraPos());
 				camera.SetCameraTarget(cinematic->GetCameraTarget());
 				camera.SetCameraUp(cinematic->GetCameraUp());
-
-				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
+			
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
 				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
@@ -744,6 +744,8 @@ void Level03::Update(double dt)
 				SceneManager::GetInstance()->SetActiveScene("Level03");
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F4))
 				SceneManager::GetInstance()->SetActiveScene("Level04");
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_F6))
+				SceneManager::GetInstance()->SetActiveScene("Village");
 
 			if (playerInfo->getLockedOn())
 			{

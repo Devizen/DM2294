@@ -392,7 +392,7 @@ void Selection::Update(double dt)
 	case 1:
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
 		{
-			//SceneManager::GetInstance()->SetActiveScene("Tutorial"); village
+			SceneManager::GetInstance()->SetActiveScene("Village"); 
 		}
 		break;
 	case 2:
