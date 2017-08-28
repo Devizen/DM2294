@@ -198,6 +198,10 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//comic.tga");
 	MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
 
+	MeshBuilder::GetInstance()->GenerateText("IMPACT", 16, 16);
+	MeshBuilder::GetInstance()->GetMesh("IMPACT")->textureID = LoadTGA("Image//IMPACT.tga");
+	MeshBuilder::GetInstance()->GetMesh("IMPACT")->material.kAmbient.Set(1, 1, 0);
+
 	/*Enemy Turret*/
 	MeshBuilder::GetInstance()->GenerateOBJ("turret", "OBJ//turret.obj");
 	MeshBuilder::GetInstance()->GetMesh("turret")->textureID = LoadTGA("Image//turret.tga");
