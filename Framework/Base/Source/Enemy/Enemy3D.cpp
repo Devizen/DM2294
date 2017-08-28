@@ -35,6 +35,7 @@ CEnemy3D::CEnemy3D(Mesh* _modelMesh)
 	, previousPosition(0.f, 0.f, 0.f)
 	, shootDelay(0.f)
 	, isTower(false)
+	, isRobot(false)
 {
 	this->modelMesh = _modelMesh;
 }
@@ -261,6 +262,7 @@ void CEnemy3D::Update(double dt)
 	//	updateTower(dt);
 	//else if (enemyBehavior == ENEMY_BEHAVIOR::PATROL)
 	//	updatePatrol(dt);
+	cout << "STATE: " << state << endl;
 }
 
 // Constrain the position within the borders
@@ -347,95 +349,67 @@ bool CEnemy3D::CheckInsideBoundary(Vector3 minBoundary, Vector3 maxBoundary)
 	Vector3 thisWithoutY(defaultPosition.x, -10.f, defaultPosition.z);
 	Vector3 playerWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
 	Vector3 enemyWithoutY(0.f, 0.f, 0.f);
-	if (ReturnNearestEnemy() != nullptr && ReturnNearestEnemy()->GetPlayerProperty())
-	{
-		enemyWithoutY = ReturnNearestEnemy()->GetPos();
-		whoCloser = ENEMY;
-	}
-
-
 	Vector3 boundaryMin = Vector3(minBoundary.x + thisWithoutY.x, -10.f, minBoundary.z + thisWithoutY.z);
 	Vector3 boundaryMax = Vector3(maxBoundary.x + thisWithoutY.x, -10.f, maxBoundary.z + thisWithoutY.z);
 
-	if (!this->GetPlayerProperty())
-	{
-		// << "Enemy to Enemy Player Distance: " << Vector3(enemyWithoutY.x - thisWithoutY.x, -10.f, enemyWithoutY.z - thisWithoutY.z).LengthSquared() << endl;
-		// << "Enemy to Player Distance: " << Vector3(playerWithoutY.x - thisWithoutY.x, -10.f, playerWithoutY.z - thisWithoutY.z).LengthSquared() << endl;
+	/*Check player first.*/
+	Vector3 playerMin = Vector3(CPlayerInfo::GetInstance()->GetMinAABB().x + playerWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMinAABB().z + playerWithoutY.z);
+	Vector3 playerMax = Vector3(CPlayerInfo::GetInstance()->GetMaxAABB().x + playerWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMaxAABB().z + playerWithoutY.z);
 
-		//cout << "Enemy Address: " << this << endl;
-		if (EntityManager::GetInstance()->returnEnemy().size() < 2)
+	if (!this->playerProperty)
+		if (boundaryMin <= playerMax && boundaryMax >= playerMin)
 		{
-			Vector3 playerMin = Vector3(CPlayerInfo::GetInstance()->GetMinAABB().x + playerWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMinAABB().z + playerWithoutY.z);
-			Vector3 playerMax = Vector3(CPlayerInfo::GetInstance()->GetMaxAABB().x + playerWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMaxAABB().z + playerWithoutY.z);
-
-			//cout << "Player Closer than Enemy with size < 2" << this << endl;
-			if (boundaryMin <= playerMax && boundaryMax >= playerMin)
-			{
-				whoCloser = PLAYER;
-				return true;
-			}
-			else
-				return false;
-		}
-		else if (ReturnNearestEnemy() != nullptr)
-		{
-			Vector3 displacementEnemy(ReturnNearestEnemy()->GetPos().x - position.x, -10.f, ReturnNearestEnemy()->GetPos().z - position.z);
-			Vector3 displacementPlayer(CPlayerInfo::GetInstance()->GetPos().x - position.x, -10.f, CPlayerInfo::GetInstance()->GetPos().z - position.z);
-
-			if (displacementEnemy.LengthSquared() < displacementPlayer.LengthSquared() && ReturnNearestEnemy()->GetPlayerProperty())
-			{
-				//cout << "Enemy Closer Than Player: " << this << endl;
-				//cout << "Nearest Enemy: " << (ReturnNearestEnemy()->GetPos() - this->GetPos()).LengthSquared() << " Player: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << " " << ReturnNearestEnemy()->GetPlayerProperty()  <<endl;
-				Vector3 enemyMin = Vector3(ReturnNearestEnemy()->GetMinAABB().x + ReturnNearestEnemy()->GetPos().x, -10.f, ReturnNearestEnemy()->GetMinAABB().z + ReturnNearestEnemy()->GetPos().z);
-				Vector3 enemyMax = Vector3(ReturnNearestEnemy()->GetMaxAABB().x + ReturnNearestEnemy()->GetPos().x, -10.f, ReturnNearestEnemy()->GetMaxAABB().z + ReturnNearestEnemy()->GetPos().z);
-
-
-				//cout << "Enemy Without Y: " << enemyWithoutY << endl;
-				//cout << boundaryMin << " <= " << enemyMax << " && " << boundaryMax << " >= " << enemyMin << endl;
-				if (boundaryMin <= enemyMax && boundaryMax >= enemyMin)
-				{
-					//cout << "Set Who Closer to Enemy" << endl;
-					whoCloser = ENEMY;
-					return true;
-				}
-				else
-					return false;
-			}
-		}
-		else
-		{
-			//cout << "Player Closer than Enemy" << this << endl;
-			//cout << "Nearest Enemy: " << (ReturnNearestEnemy()->GetPos() - this->GetPos()).LengthSquared() << " Player: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << " " << ReturnNearestEnemy()->GetPlayerProperty()<<  endl;
-			Vector3 playerMin = Vector3(CPlayerInfo::GetInstance()->GetMinAABB().x + playerWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMinAABB().z + playerWithoutY.z);
-			Vector3 playerMax = Vector3(CPlayerInfo::GetInstance()->GetMaxAABB().x + playerWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMaxAABB().z + playerWithoutY.z);
-
-			if (boundaryMin <= playerMax && boundaryMax >= playerMin)
-			{
-				//cout << "Set Who Closer to Player" << endl;
-				whoCloser = PLAYER;
-				return true;
-			}
-			else
-				return false;
-		}
-	}
-	else
-	{
-		if (ReturnNearestEnemy() == nullptr)
-			return false;
-
-		Vector3 enemyMin = Vector3(ReturnNearestEnemy()->GetMinAABB().x + enemyWithoutY.x, -10.f, ReturnNearestEnemy()->GetMinAABB().z + enemyWithoutY.z);
-		Vector3 enemyMax = Vector3(ReturnNearestEnemy()->GetMaxAABB().x + enemyWithoutY.x, -10.f, ReturnNearestEnemy()->GetMaxAABB().z + enemyWithoutY.z);
-
-		if (boundaryMin <= enemyMax && boundaryMax >= enemyMin)
-		{
-			whoCloser = ENEMY;
+			whoCloser = PLAYER;
 			return true;
 		}
 
+	/*Check Enemies*/
+	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+	{
+		if (this == (*it))
+			continue;
+
+		if ((*it)->GetState() == AI_STATE::DEAD)
+			continue;
+
+		/*If this enemy is a player converted enemy.*/
+		if (this->playerProperty)
+		{
+			/*If enemy is also a player converted enemy.*/
+			if ((*it)->playerProperty)
+				continue;
+			else
+			{
+				Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
+				Vector3 enemyMin = Vector3(CPlayerInfo::GetInstance()->GetMinAABB().x + enemyWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMinAABB().z + enemyWithoutY.z);
+				Vector3 enemyMax = Vector3(CPlayerInfo::GetInstance()->GetMaxAABB().x + enemyWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMaxAABB().z + enemyWithoutY.z);
+
+				if (boundaryMin <= enemyMax && boundaryMax >= enemyMin)
+				{
+					whoCloser = ENEMY;
+					return true;
+				}
+			}
+		}
+		/*If enemy is enemy*/
 		else
-			return false;
+		{
+			if (!(*it)->playerProperty)
+				continue;
+
+			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
+			Vector3 enemyMin = Vector3(CPlayerInfo::GetInstance()->GetMinAABB().x + enemyWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMinAABB().z + enemyWithoutY.z);
+			Vector3 enemyMax = Vector3(CPlayerInfo::GetInstance()->GetMaxAABB().x + enemyWithoutY.x, -10.f, CPlayerInfo::GetInstance()->GetMaxAABB().z + enemyWithoutY.z);
+
+			if (boundaryMin <= enemyMax && boundaryMax >= enemyMin)
+			{
+				whoCloser = ENEMY;
+				return true;
+			}
+		}
 	}
+	whoCloser = WHO_CLOSER::NONE;
+	return false;
 }
 
 CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)

@@ -275,11 +275,11 @@ void Tutorial::Init()
 	CEnemy3D* turret = Create::Enemy3D("turret", Vector3(-12.f, -10.f, 250.f), Vector3(3.f, 3.f, 3.f), false);
 	turret->setHealthTo(10);
 	turret->setMaxHealthTo(10);
-	turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
+	//turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
 	turret = Create::Enemy3D("turret", Vector3(24.f, -10.f, 250.f), Vector3(3.f, 3.f, 3.f), false);
 	turret->setHealthTo(10);
 	turret->setMaxHealthTo(10);
-	turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
+	//turret->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
 	CAnimatedEnemy* _staticEnemy = Create::AnimatedEnemy("ROBOT_CORE", "ROBOT_LeftArm", "ROBOT_RightArm", "ROBOT_LeftLeg", "ROBOT_RightLeg", "ROBOT_Head", Vector3(6.f, -10.f, 300.f), Vector3(3.f, 3.f, 3.f));
 	_staticEnemy->SetState(CEnemy3D::NO_AI_STATE);
 	_staticEnemy->setHealthTo(10);

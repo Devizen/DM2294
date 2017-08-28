@@ -187,6 +187,7 @@ public:
 	int GetType() { return type; }
 
 	bool isTower;
+	bool isRobot;
 private:
 	//ATTRIBUTES attributes;
 	int health;

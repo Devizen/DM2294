@@ -519,6 +519,7 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 
 	//cout << "Position in Create: " << _position << endl;
 	result->SetPosition(_position);
+
 	result->SetRotate(_rotate);
 	result->SetScale(_scale);
 	result->SetCollider(true);
@@ -530,6 +531,7 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -10.f, -_scale.z));
 	result->SetType(1);
 	result->SetLight(true);
+	result->isRobot = true;
 	EntityManager::GetInstance()->AddEnemy(result);
 	return result;
 }
