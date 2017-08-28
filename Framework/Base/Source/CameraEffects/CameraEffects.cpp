@@ -3,6 +3,7 @@
 #include "RenderHelper.h"
 #include "../EntityManager.h"
 #include "GL\glew.h"
+#include "../Application.h"
 
 CCameraEffects::CCameraEffects(void)
 	: m_iAngle(-90)
@@ -107,7 +108,7 @@ void CCameraEffects::RenderUI()
 		// Translate the current transformation
 		modelStack.Translate(position.x, position.y, position.z);
 		// Scale the current transformation
-		modelStack.Scale(scale.x, scale.y, scale.z);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight(), scale.z);
 
 		// Push the current transformation into the modelStack
 		modelStack.PushMatrix();
