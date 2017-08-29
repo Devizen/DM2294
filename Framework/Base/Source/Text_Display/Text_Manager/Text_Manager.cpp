@@ -338,18 +338,9 @@ void Text_Manager::updateText(double dt)
 
 							if (textList.size() > 0)
 							{
-								CText* tempText = textList.back();
-
-								/*Move the first text to the last in vector.*/
-								textList.back() = text;
-								/*First text change to last text.*/
-								text = tempText;
-								/*Remove first text.*/
 								delete text;
 								text = nullptr;
 								textList.pop_back();
-								/*Move last text back to the default position.*/
-								textList.back() = tempText;
 								characterCount = 0;
 								Text_Manager::GetInstance()->displayingText = false;
 								initialise = false;

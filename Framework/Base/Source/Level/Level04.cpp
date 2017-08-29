@@ -73,6 +73,7 @@ Level04::Level04()
 	, windowWidth(0.f)
 	//, m_worldHeight(0.f)
 	//, m_worldWidth(0.f)
+	, currentTowerCount(0)
 {
 }
 
@@ -361,25 +362,31 @@ void Level04::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level04.csv");
 	FileManager::GetInstance()->ReadEnemyFile("Files//Level04Enemy.csv");
+
+	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
+	{
+		if ((*it)->isTower)
+			++currentTowerCount;
+	}
 }
 
 void Level04::Update(double dt)
 {
-	cout << "I AM IN LEVEL04 NOW" << endl;
-	//Calculating aspect ratio
-	windowHeight = Application::GetInstance().GetWindowHeight();
-	windowWidth = Application::GetInstance().GetWindowWidth();
+	int towerCount = 0;
 
-	static bool pause = false;
-	static int renderOnce = 0;
-
-	saveMapTime += dt;
-
-	if (saveMapTime >= 10)
+	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
+		if ((*it)->isTower)
+			++towerCount;
+	}
+	cout << "I AM IN LEVEL04 NOW" << endl;
+	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
+	{	
 		FileManager::GetInstance()->EditMapFile("Files//Level04.csv");
 		FileManager::GetInstance()->EditEnemyFile("Files//Level04Enemy.csv");
 	}
+	static bool pause = false;
+	static int renderOnce = 0;
 
 
 	for (int i = 0; i < 17; ++i)
@@ -428,6 +435,19 @@ void Level04::Update(double dt)
 	if (openEQ)
 	{
 		EquipmentManager::GetInstance()->Update(dt);
+	}
+
+	if (currentTowerCount != towerCount)
+	{
+
+		Create::Text("text", "Tower(s) left: " + to_string(towerCount), 0.f, 1.5f, CText::TEXT_BATTLE);
+		currentTowerCount = towerCount;
+	}
+
+	if (towerCount == 0 || playerInfo->GetAttribute(CPlayerInfo::TYPE_HEALTH) <= 0)
+	{
+		//Create::Text("text", "Great Job!\nTutorial Completed!", 0.f, 2.f, CText::TEXT_CONVERSATION);
+		SceneManager::GetInstance()->SetActiveScene("Village");
 	}
 
 	//if (KeyboardController::GetInstance()->IsKeyDown('O')) {

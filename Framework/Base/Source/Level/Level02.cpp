@@ -75,8 +75,6 @@ Level02::Level02()
 	, cinematicMode(false)
 	, windowHeight(0.f)
 	, windowWidth(0.f)
-	//, m_worldHeight(0.f)
-	//, m_worldWidth(0.f)
 {
 }
 
@@ -141,32 +139,18 @@ void Level02::Init()
 	playerInfo->Init();
 
 	// Create and attach the camera to the scene
-	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	cinematic = CCinematic::GetInstance();
 	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
-	// Create entities into the scene
-	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
-	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
-	////GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
-	//Create::Entity("ring", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 
 	groundEntity = Create::Ground("snowGround", "snowGround");
 	groundEntity->SetLight(true);
 
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f), true);
-
-	///*Chair Test*/
-	//CFurniture* chair = Create::Furniture("Chair", Vector3(20.f, 0.f, 0.f), Vector3(1.f, 1.f, 1.f));
-	//chair->SetCollider(true);
-	//chair->SetLight(false);
-	//chair->SetAABB(Vector3(5.f, 5.f, 5.f), Vector3(-5.f, -5.f, -5.f));
-	//
-
 
 	SkyBoxEntity* theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
 		"SKYBOX_LEFT", "SKYBOX_RIGHT",
@@ -177,9 +161,6 @@ void Level02::Init()
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	groundEntity->SetLight(true);
 	playerInfo->SetTerrain(groundEntity);
-
-	//Create::Entity("PAUSE", Vector3(Application::GetInstance().GetWindowWidth() / 2.0f, Application::GetInstance().GetWindowHeight() / 2.0f, 1.f),
-	//	Vector3(100.f, 100.f, 100.f));
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -247,13 +228,6 @@ void Level02::Init()
 	// << "Primary Weapon From Scene: " << primaryWeapon << endl;
 	weaponManager = playerInfo->getWeaponManager();
 
-	/*Initialise Sounds*/
-	//CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
-	//CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
-	//CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
-	//CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
-	//CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
-	//CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
 	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
@@ -265,7 +239,6 @@ void Level02::Init()
 	{
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
-	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 	Inventory::GetInstance()->Init();
 
 	openInventory = false;
@@ -316,7 +289,8 @@ void Level02::Update(double dt)
 		Create::Text("text", "Tower(s) left: " + to_string(towerCount), 0.f, 1.5f, CText::TEXT_BATTLE);
 		currentTowerCount = towerCount;
 	}
-
+	if (towerCount < 1)
+		SceneManager::GetInstance()->SetActiveScene("Village");
 	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
 	{
 		FileManager::GetInstance()->EditMapFile("Files//Level02.csv");
@@ -372,18 +346,10 @@ void Level02::Update(double dt)
 		EquipmentManager::GetInstance()->Update(dt);
 	}
 
-	//if (KeyboardController::GetInstance()->IsKeyDown('O')) {
-	//	Mtx44 rotate;
-	//	rotate.SetToRotation(90 * dt, 1, 0, 0);
-	//	lights[0]->position = rotate * lights[0]->position;
-	//}
-
 	if (KeyboardController::GetInstance()->IsKeyPressed('K'))
 	{
 		FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 		FileManager::GetInstance()->CreateWeapon();
-
-		
 	}
 
 	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) > 0)
@@ -402,54 +368,7 @@ void Level02::Update(double dt)
 			// Update our entities
 			EntityManager::GetInstance()->Update(dt);
 			clearKeyDisplay();
-			/*Create random enemies around the map.*/
-			//createEnemies(dt);
-			/*Create random crates for player to hide behind.*/
-			//createCrates(dt);
-			/*Create random bullet power-up for player.*/
-			//createBullets(dt);
-			/*Create random health power-up for player.*/
-			//createHealth(dt);
-
-			//cout << "Light Position X: " << lights[0]->position.x << endl;
-			//cout << "Light Position Y: " << lights[0]->position.y << endl;
-			//cout << "Light Position Z: " << lights[0]->position.z << endl;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('I'))
-			//	lights[0]->position.z += 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('K'))
-			//	lights[0]->position.z -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('L'))
-			//	lights[0]->position.x += 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('J'))
-			//	lights[0]->position.x -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('U'))
-			//	lights[0]->position.y -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('O'))
-			//	lights[0]->position.y += 100.f * dt;
-
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-			{
-				cout << "Left Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-			{
-				cout << "Right Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-			{
-				cout << "Middle Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-			{
-				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-			}
-
+			
 			static float printInterval = 0;
 			printInterval += static_cast<float>(dt);
 
@@ -461,19 +380,16 @@ void Level02::Update(double dt)
 				weaponType.precision(4);
 				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
 				{
-					//cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
 					if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 1)
 					{
 						weaponName = "Assault Rifle";
 						EntityManager::GetInstance()->RemoveEntity(weaponUI);
-						//weaponUI = Create::Sprite2DObject("ASSAULT", Vector3(-350.0f, -250.0f, 0.f), Vector3(100.0f, 40.0f, 100.0f), true);
 					}
 				}
 				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 0)
 				{
 					weaponName = "Pistol";
 					EntityManager::GetInstance()->RemoveEntity(weaponUI);
-					//weaponUI = Create::Sprite2DObject("PISTOL", Vector3(-350.0f, -250.0f, 0.f), Vector3(50.0f, 50.0f, 50.0f), true);
 				}
 
 
@@ -497,12 +413,6 @@ void Level02::Update(double dt)
 			textObj[5]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[5]->SetText(ss.str());
 
-			///*Display player health.*/
-			//ss.str("");
-			//ss << "Health:" << playerInfo->GetAttribute(CAttributes::TYPE_HEALTH);
-			//textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
-			//textObj[23]->SetText(ss.str());
-
 			/*Display score*/
 			ss.str("");
 			ss << "Score:" << playerInfo->getScore();
@@ -510,13 +420,6 @@ void Level02::Update(double dt)
 			textObj[24]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[24]->SetColor(Color(1.f, 0.f, 0.f));
 			textObj[24]->SetText(ss.str());
-
-			//ss.str("");
-			//ss << "Highscore:" << OptionsManager::GetInstance()->getHighscore();
-			//textObj[25]->SetPosition(Vector3(textObj[24]->GetPosition().x- 200.f, textObj[24]->GetPosition().y -570.f, textObj[24]->GetPosition().z));
-			//textObj[25]->SetColor(Color(1.f, 0.f, 0.f));
-			//textObj[25]->SetText(ss.str());
-
 
 			if (playerInfo->getScore() > OptionsManager::GetInstance()->getHighscore())
 			{
@@ -533,18 +436,6 @@ void Level02::Update(double dt)
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
 			}
-
-			//// Update the player position and other details based on keyboard and mouse inputs
-			//playerInfo->Update(dt);
-
-			// Update NPC
-			//enemyInfo->Update(dt);
-			//anEnemy3D->SetTarget(playerInfo->GetPos());
-			GraphicsManager::GetInstance()->UpdateLights(dt);
-
-			// Update camera effects
-			theCameraEffects->Update((float)dt);
-
 
 			/*Map Editor*/
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD7) && !Map_Editor::GetInstance()->mapEditing)
@@ -625,7 +516,6 @@ void Level02::Update(double dt)
 				camera.SetCameraTarget(cinematic->GetCameraTarget());
 				camera.SetCameraUp(cinematic->GetCameraUp());
 
-				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
@@ -681,6 +571,7 @@ void Level02::Update(double dt)
 	}
 	else
 	{
+		SceneManager::GetInstance()->SetActiveScene("Village");
 		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
 		{
 			CPlayerInfo::GetInstance()->setHealthTo((int)100.f);
@@ -830,58 +721,6 @@ void Level02::renderWeaponUI(void)
 
 void Level02::createEnemies(double dt)
 {
-	//static bool once = false;
-
-	//if (!once)
-	//{
-	//	srand(time(NULL));
-	//	CPatrol* enemy = Create::Patrol("ROBOT", Vector3(50.f, -10.f, 0.f), Vector3(3.f, 3.f, 3.f));
-	//	enemy->SetAABB(Vector3(3.f, 7.f, 3.f), Vector3(-3.f, -7.f, -3.f));
-	//	//for (int i = 0; i < 10; ++i)
-	//	//{
-	//	//	enemy->addWaypoint(Vector3(Math::RandFloatMinMax(-50.f, 50.f), /*Math::RandFloatMinMax(0.f, 10.f)*/ -10.f, Math::RandFloatMinMax(-50.f, 50.f)));
-	//	//}
-	//	enemy->SetLight(true);
-	//	once = true;
-	//}
-
-	/*Tower*/
-	//static float increaseEnemies = 0.f;
-	//increaseEnemies += (float)dt;
-
-	//static int count = 0;
-	//if (count < 100)
-	//{
-	//	if (EntityManager::GetInstance()->enemyCount() < increaseEnemies / 3.f)
-	//	{
-	//		Vector3 newPosition(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-	//		Vector3 _minAABB(-5.f, 0.f, -5.f);
-	//		Vector3 _maxAABB(5.f, 5.f, 5.f);
-	//		Vector3 _scale(3.f, 3.f, 3.f);
-	//		/*While the new enemy collides with any other objects in the scene, keep randomising the position.*/
-	//		while (EntityManager::GetInstance()->getSpawnPosition(_minAABB, _maxAABB, newPosition))
-	//		{
-	//			newPosition.Set(Math::RandFloatMinMax(-350.f, 350.f), 0.f, Math::RandFloatMinMax(-350.f, 350.f));
-	//		}
-	//		// Create a CEnemy instance
-	//		//anEnemy3D = Create::Enemy3D("crate", Vector3(-20.0f, 0.0f, -20.0f), Vector3(2.f, 10.f, 3.f));
-	//		anEnemy3D = Create::Enemy3D("turret", newPosition, _scale);
-	//		//anEnemy3D->Init();
-	//		anEnemy3D->SetAlertBoundary(Vector3(-150.f, -10.f, -150.f), Vector3(150.f, 10.f, 150.f));
-	//		anEnemy3D->SetCollider(true);
-	//		anEnemy3D->SetLight(true);
-	//		anEnemy3D->SetAABB(Vector3(_scale.x, 0.f, _scale.z), Vector3(-_scale.x, -5.f, -_scale.z));
-	//		anEnemy3D->setMaxHealthTo(10.f);
-	//		anEnemy3D->setHealthTo(10.f);
-	//		anEnemy3D->setAttackTo(1.f);
-	//		anEnemy3D->setDefenseTo(1.f);
-	//		//anEnemy3D->SetTerrain(groundEntity);
-	//		anEnemy3D->SetLight(true);
-
-	//		++count;
-	//	}
-	//}
-
 }
 
 void Level02::createCrates(double dt)
@@ -1165,15 +1004,6 @@ void Level02::RenderPassGPass(void)
 		DepthFBO::GetInstance()->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
 	}
 
-	//if (lights[1]->type == Light::LIGHT_POINT)
-	{
-		//	DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
-	}
-	//else
-	{
-		//	DepthFBO::GetInstance()->m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
-	}
-
 	DepthFBO::GetInstance()->m_lightDepthView.SetToLookAt(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z, 0, 0, 0, 0, 1, 0);
 
 
@@ -1197,7 +1027,6 @@ void Level02::RenderPassMain(void)
 	//pass light depth texture 
 	DepthFBO::GetInstance()->BindForReading(GL_TEXTURE8);
 	SceneManager::GetInstance()->currProg->UpdateInt("shadowMap", 8);
-	//GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 
 	// Camera matrix
 	GraphicsManager::GetInstance()->GetViewMatrix().SetToIdentity();
@@ -1228,26 +1057,6 @@ void Level02::RenderPassMain(void)
 		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
 	}
 
-	/*if (lights[1]->type == Light::LIGHT_DIRECTIONAL)
-	{
-	Vector3 lightDir(lights[1]->position.x, lights[1]->position.y, lights[1]->position.z);
-	Vector3 lightDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lightDir;
-	currProg->UpdateVector3("lights[1].position_cameraspace", &lightDirection_cameraspace.x);
-	}
-	else if (lights[1]->type == Light::LIGHT_SPOT)
-	{
-	Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->position;
-	currProg->UpdateVector3("lights[1].position_cameraspace", &lightPosition_cameraspace.x);
-	Vector3 spotDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->spotDirection;
-	currProg->UpdateVector3("lights[1].spotDirection", &spotDirection_cameraspace.x);
-	}
-	else
-	{
-	Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->position;
-	currProg->UpdateVector3("lights[1].position_cameraspace", &lightPosition_cameraspace.x);
-	}*/
-
-
 	//RenderMesh(meshList[GEO_AXES], false);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -1256,14 +1065,6 @@ void Level02::RenderPassMain(void)
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
-
-	/*Debug Quad*/
-	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();
-	ms.PushMatrix();
-	ms.Scale(100, 100, 100);
-	RenderHelper::RenderMesh(TEMPDEPTHQUAD);
-	ms.PopMatrix();*/
-	/*------------------------------------------*/
 
 	//currProg->UpdateInt("fogParam.enabled", 1);
 	RenderWorld();
@@ -1345,7 +1146,6 @@ void Level02::RenderPassMain(void)
 void Level02::RenderWorld(void)
 {
 	/*Debug*/
-	//CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
 
 	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) <= 0)
 	{
@@ -1359,8 +1159,6 @@ void Level02::RenderWorld(void)
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
-	// Setup 3D pipeline then render 3D
-	//GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	EntityManager::GetInstance()->Render();
@@ -1371,22 +1169,6 @@ void Level02::RenderWorld(void)
 
 	ParticleManager::GetInstance()->renderAllParticle();
 
-
-	/*Debug Quad for Shadow*/
-	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();
-	ms.PushMatrix();
-	ms.Translate(0, 10, 10);
-	ms.Scale(5, 5, 5);
-	RenderHelper::RenderMeshWithLight(TEMPSPHERE);
-	ms.PopMatrix();
-
-	ms.PushMatrix();
-	ms.Translate(0, -8, 0);
-	ms.Rotate(-90, 1, 0, 0);
-	ms.Scale(1000, 1000, 1000);
-	RenderHelper::RenderMeshWithLight(TEMPQUAD);
-	ms.PopMatrix();*/
-	/*--------------------------------------------------------*/
 }
 
 void Level02::Exit()
@@ -1395,29 +1177,9 @@ void Level02::Exit()
 	GraphicsManager::GetInstance()->DetachCamera();
 	playerInfo->DetachCamera();
 
-	//	if (playerInfo->DropInstance() == false)
-	//	{
-	//#if _DEBUGMODE==1
-	//		cout << "Unable to drop PlayerInfo class" << endl;
-	//#endif
-	//	}
-
 	// Delete the lights
 	GraphicsManager::GetInstance()->RemoveLight("lights[0]");
 	GraphicsManager::GetInstance()->RemoveLight("lights[1]");
-
-
-	/*if (currProg)
-	{
-		delete currProg;
-		currProg = nullptr;
-	}
-
-	if (m_gPassShaderID)
-	{
-		delete m_gPassShaderID;
-		m_gPassShaderID = nullptr;
-	}*/
 
 	ParticleManager* particleManager = ParticleManager::GetInstance();
 	ParticleManager::GetInstance()->deleteParticle();
