@@ -374,6 +374,9 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("SELECTION", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("SELECTION")->textureID = LoadTGA("Image//Selection.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("SHOP", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SHOP")->textureID = LoadTGA("Image//Shop.tga");
+
 	/*Robot Troop*/
 	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT", "OBJ//ROBOT.obj");
 	MeshBuilder::GetInstance()->GetMesh("ROBOT")->textureID = LoadTGA("Image//ROBOT.tga");
