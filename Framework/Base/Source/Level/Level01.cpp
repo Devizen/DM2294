@@ -1411,4 +1411,5 @@ void Level01::Exit()
 	Text_Manager::GetInstance()->resetAll();
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
+	FileManager::GetInstance()->clearVector();
 }

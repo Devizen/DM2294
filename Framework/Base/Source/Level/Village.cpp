@@ -59,6 +59,8 @@
 #include <iostream>
 
 #include "../Attributes.h"
+#include "..//ShopManager/ShopManager.h"
+#include "..//ShopManager/Shop.h"
 
 using namespace std;
 
@@ -271,10 +273,13 @@ void Village::Init()
 	openEQ = false;
 	FileManager::GetInstance()->init();
 	EquipmentManager::GetInstance()->Init();
+	ShopManager::GetInstance()->init();
 
 	saveMapTime = 0;
 
 	FileManager::GetInstance()->ReadMapFile("Files//Village.csv");
+	FileManager::GetInstance()->ReadShopFile("Files/Shop.csv");
+
 }
 
 void Village::Update(double dt)
@@ -310,16 +315,23 @@ void Village::Update(double dt)
 		controlText[i]->SetScale(Vector3(windowWidth * 0.03f, windowWidth * 0.03f, 1.f));
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed('I') && !openEQ)
+	if (KeyboardController::GetInstance()->IsKeyPressed('I') && !openEQ && !openShop)
 	{
 		OptionsManager::GetInstance()->setEditingState(true);
 		openInventory = true;
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed('E') && !openInventory)
+	if (KeyboardController::GetInstance()->IsKeyPressed('E') && !openInventory && !openShop)
 	{
 		OptionsManager::GetInstance()->setEditingState(true);
 		openEQ = true;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed('F') && !openEQ && !openInventory)
+	{
+		OptionsManager::GetInstance()->setEditingState(true);
+		openShop = true;
+		ShopManager::GetInstance()->setList();
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('U'))
@@ -328,6 +340,7 @@ void Village::Update(double dt)
 		FileManager::GetInstance()->EditWeaponFile("Files//Inventory.csv");
 		openInventory = false;
 		openEQ = false;
+		openShop = false;
 	}
 
 	CPlayerInfo::GetInstance()->printAttributes();
@@ -340,6 +353,11 @@ void Village::Update(double dt)
 	if (openEQ)
 	{
 		EquipmentManager::GetInstance()->Update(dt);
+	}
+
+	if (openShop)
+	{
+		ShopManager::GetInstance()->update(dt);
 	}
 
 	//if (KeyboardController::GetInstance()->IsKeyDown('O')) {
@@ -1286,6 +1304,11 @@ void Village::RenderPassMain(void)
 
 	}
 
+	if (openShop)
+	{
+		ShopManager::GetInstance()->render();
+	}
+
 	//*Render KO Count*/
 	RenderHelper::GetInstance()->renderKOCount();
 	//*Render Player Health Bar*/
@@ -1408,4 +1431,5 @@ void Village::Exit()
 	Text_Manager::GetInstance()->resetAll();
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
+	FileManager::GetInstance()->clearVector();
 }

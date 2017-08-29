@@ -30,8 +30,6 @@ class Controls;
 
 class Level03 : public Scene
 {
-	//float m_worldHeight;
-	//float m_worldWidth;
 public:
 	Level03();
 	~Level03();
@@ -44,8 +42,6 @@ public:
 private:
 	Level03(SceneManager* _sceneMgr); // This is used to register to SceneManager
 
-	//ShaderProgram* currProg;
-	//ShaderProgram* m_gPassShaderID;
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;
 	FPSCamera camera;
@@ -76,13 +72,6 @@ private:
 	SpriteEntity* weaponUI;
 	SpriteEntity* hitDisplay;
 
-	/*DepthFBO; Shadow*/
-	//DepthFBO m_lightDepthFBO;
-	//Mtx44 m_lightDepthProj;
-	//Mtx44 m_lightDepthView;
-	/*0 for Render Pass Pre and 1 for Render Pass Main*/
-	//int m_renderPass;
-
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo** weaponManager;
 
@@ -96,12 +85,6 @@ private:
 
 	/*Render Weapon UI*/
 	void renderWeaponUI(void);
-
-	/*Create Random Enemies*/
-	void createEnemies(double dt);
-
-	/*Create Random Crates*/
-	void createCrates(double dt);
 
 	/*Create Random Bullets*/
 	void createBullets(double dt);
@@ -119,9 +102,6 @@ private:
 	void RenderPassMain(void);
 	void RenderWorld(void);
 
-	/*Render KO Count*/
-	void renderKO_Count(void);
-
 	bool openInventory;
 	bool openEQ;
 
@@ -130,8 +110,6 @@ private:
 
 	float windowHeight;
 	float windowWidth;
-
-	double saveMapTime;
 
 	int currentTowerCount;
 };
