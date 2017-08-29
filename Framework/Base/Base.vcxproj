@@ -42,6 +42,7 @@
     <ClCompile Include="Source\Items\Helmet.cpp" />
     <ClCompile Include="Source\Items\Inventory.cpp" />
     <ClCompile Include="Source\Items\Shoe.cpp" />
+    <ClCompile Include="Source\Level\Credits.cpp" />
     <ClCompile Include="Source\Level\Level01.cpp" />
     <ClCompile Include="Source\Level\Level02.cpp" />
     <ClCompile Include="Source\Level\Level03.cpp" />
@@ -114,6 +115,7 @@
     <ClInclude Include="Source\Items\Inventory.h" />
     <ClInclude Include="Source\Items\Shoe.h" />
     <ClInclude Include="Source\Items\Weapon.h" />
+    <ClInclude Include="Source\Level\Credits.h" />
     <ClInclude Include="Source\Level\Level01.h" />
     <ClInclude Include="Source\Level\Level02.h" />
     <ClInclude Include="Source\Level\Level03.h" />

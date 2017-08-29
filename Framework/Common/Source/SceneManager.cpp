@@ -443,4 +443,8 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("SelectionBack", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("SelectionBack")->textureID = LoadTGA("Image//Selection/Back.tga");
 
+	/*Credits*/
+	MeshBuilder::GetInstance()->GenerateQuad("CREDITS", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("CREDITS")->textureID = LoadTGA("Image//Mainmenu/CREDITS.tga");
+
 }

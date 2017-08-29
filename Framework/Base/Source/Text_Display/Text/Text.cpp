@@ -18,6 +18,7 @@ CText::CText(Mesh * _modelMesh) :
 	, scaleText(0.f)
 	, scaleBackground(0.f)
 	, textConversation(NULL)
+	, printSpeed(3.f)
 {
 }
 
@@ -25,7 +26,7 @@ CText::~CText()
 {
 }
 
-CText * Create::Text(const std::string & _meshName, string _message, float _durationElapsed, float _maxDuration, CText::TEXT_TYPE _textType)
+CText * Create::Text(const std::string & _meshName, string _message, float _durationElapsed, float _maxDuration, CText::TEXT_TYPE _textType, float _printSpeed)
 {
 	Mesh* _modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (_modelMesh == nullptr)
@@ -41,6 +42,7 @@ CText * Create::Text(const std::string & _meshName, string _message, float _dura
 	text->durationElapsed = _durationElapsed;
 	text->maxDuration = _maxDuration;
 	text->textType = _textType;
+	text->printSpeed = _printSpeed;
 
 	if (_textType != CText::TEXT_NONE)
 		Text_Manager::GetInstance()->addText(text);

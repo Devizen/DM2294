@@ -190,7 +190,6 @@ void Text_Manager::updateText(double dt)
 				else if (text->textType == CText::TEXT_IMPACT)
 				{
 					const float textSize = 0.1f;
-					const float printSpeed = 3.f;
 					bool preventCancel = false;
 					static int characterCount = 0;
 					static bool initialise = false;
@@ -236,7 +235,7 @@ void Text_Manager::updateText(double dt)
 							_text->durationElapsed += static_cast<float>(dt);
 
 							if (_text->scaleText >= (Application::GetInstance().GetWindowWidth() * textSize) && _text->activateText)
-								_text->scaleText -= static_cast<float>(dt) * Application::GetInstance().GetWindowWidth() * printSpeed;
+								_text->scaleText -= static_cast<float>(dt) * Application::GetInstance().GetWindowWidth() * text->printSpeed;
 							else
 								_text->activateText = false;
 						}
@@ -267,7 +266,7 @@ void Text_Manager::updateText(double dt)
 							_text->durationElapsed += static_cast<float>(dt);
 
 							if (_text->scaleText <= (Application::GetInstance().GetWindowWidth() * textSize * 10.f) && !_text->activateText)
-								_text->scaleText += static_cast<float>(dt) * Application::GetInstance().GetWindowWidth() * printSpeed;
+								_text->scaleText += static_cast<float>(dt) * Application::GetInstance().GetWindowWidth() * text->printSpeed;
 							else
 								_text->activateText = true;
 						}
@@ -298,7 +297,7 @@ void Text_Manager::updateText(double dt)
 							_text->durationElapsed += static_cast<float>(dt);
 
 							if (_text->scaleText >= (Application::GetInstance().GetWindowWidth() * textSize) && _text->activateText)
-								_text->scaleText -= static_cast<float>(dt) * Application::GetInstance().GetWindowWidth() * printSpeed;
+								_text->scaleText -= static_cast<float>(dt) * Application::GetInstance().GetWindowWidth() * text->printSpeed;
 							else
 								_text->activateText = false;
 						}

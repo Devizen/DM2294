@@ -318,6 +318,9 @@
     <ClCompile Include="Source\Level\Village.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level\Credits.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -528,6 +531,9 @@
       <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Level\Village.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Credits.h">
       <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>

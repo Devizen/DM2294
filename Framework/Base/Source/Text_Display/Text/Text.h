@@ -38,12 +38,18 @@ public:
 	float translateBackground;
 	float scaleText;
 	float scaleBackground;
+	float printSpeed;
 	vector<string>textConversation;
 	vector<CText*>textImpact;
 };
 
 namespace Create
 {
-	CText* Text(const std::string& _meshName = "text", string _message = "", float _durationElapsed = 0.f, float _maxDuration = 1.f, CText::TEXT_TYPE _textType = CText::TEXT_NONE);
+	CText* Text(const std::string& _meshName = "text"
+		, string _message = ""
+		, float _durationElapsed = 0.f
+		, float _maxDuration = 1.f
+		, CText::TEXT_TYPE _textType = CText::TEXT_NONE
+		, float _printSpeed = 3.f);
 };
 #endif

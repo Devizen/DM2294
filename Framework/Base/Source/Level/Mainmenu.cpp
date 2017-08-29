@@ -260,6 +260,8 @@ void Mainmenu::Update(double dt)
 		SceneManager::GetInstance()->SetActiveScene("Level03");
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
 		SceneManager::GetInstance()->SetActiveScene("Level04");
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD0))
+		SceneManager::GetInstance()->SetActiveScene("Credits");
 
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP))
 	{
@@ -273,19 +275,19 @@ void Mainmenu::Update(double dt)
 	switch (selectedChoice)
 	{
 	case 1:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
 		{
 			SceneManager::GetInstance()->SetActiveScene("Tutorial");
 			break;
 		}
 	case 2:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
 		{
 			SceneManager::GetInstance()->SetActiveScene("Selection");
 			break;
 		}
 	case 3:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
 		{
 			exit(0);
 			break;
