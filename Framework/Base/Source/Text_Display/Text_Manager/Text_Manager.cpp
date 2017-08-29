@@ -17,7 +17,8 @@
 /*Sound Engine to play sound for text.*/
 #include "../../SoundEngine.h"
 
-using std::cout;
+using std::
+;
 using std::endl;
 
 Text_Manager::Text_Manager() :
@@ -65,18 +66,6 @@ void Text_Manager::updateText(double dt)
 							delete text;
 							text = nullptr;
 							textList.pop_back();
-							//CText* tempText = textList.back();
-
-							///*Move the first text to the last in vector.*/
-							//textList.back() = text;
-							///*First text change to last text.*/
-							//text = tempText;
-							///*Remove first text.*/
-							//delete text;
-							//text = nullptr;
-							//textList.pop_back();
-							///*Move last text back to the default position.*/
-							//textList.back() = tempText;
 							break;
 						}
 						else
@@ -162,12 +151,7 @@ void Text_Manager::updateText(double dt)
 						}
 
 						++count;
-						cout << "Count: " << count << " and Message: " << text->textConversation[0] << endl;
-						cout << "Count: " << count << " and Message: " << text->textConversation[1] << endl;
-						cout << "Count: " << count << " and Message: " << text->textConversation[2] << endl;
 					}
-					cout << "Original Length: " << storeText.length() << " and " << "Message Length: " << text->message.size() << endl;
-
 					if (text->message.size() >= storeText.size())
 					{
 						if ((KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) || MouseController::GetInstance()->IsButtonPressed(MouseController::BUTTON_TYPE::LMB)) && !preventCancel)
@@ -521,7 +505,8 @@ void Text_Manager::renderText(void)
 
 void Text_Manager::addText(CText * _text)
 {
-	textList.push_back(_text);
+	if (textList.size() == 0)
+		textList.push_back(_text);
 }
 
 void Text_Manager::resetAll(void)
@@ -529,10 +514,16 @@ void Text_Manager::resetAll(void)
 	messagePrompt = 0;
 	cooldown = 0.f;
 	displayingText = false;
-
 	if (textList.size() > 0)
 	{
 		CText* text = textList.back();
+
+		if (text->textConversation.size() > 0)
+			text->textConversation.clear();
+
+		text->message = "";
+		text->durationElapsed = 0.f;
+
 		delete text;
 		text = nullptr;
 

@@ -53,11 +53,8 @@ void CEnemy3D::Init(void)
 	defaultUp.Set(0, 1, 0);
 
 	// Set the current values
-	//position.Set(10.0f, 0.0f, 0.0f);
-	//target.Set(10.0f, 0.0f, 450.0f);
-	//up.Set(0.0f, 1.0f, 0.0f);
 	position.Set(position.x, position.y, position.z);
-	cout << "Init Position : " << position << endl;
+	
 	target.Set(10.0f, 0.0f, 450.0f);
 	up.Set(0.0f, 1.0f, 0.0f);
 
@@ -258,11 +255,6 @@ void CEnemy3D::Update(double dt)
 	}
 	if (GetAttribute(CAttributes::TYPE_HEALTH) <= 0 && state != RECOVERY)
 		state = DEAD;
-	//if (enemyBehavior == ENEMY_BEHAVIOR::TOWER)
-	//	updateTower(dt);
-	//else if (enemyBehavior == ENEMY_BEHAVIOR::PATROL)
-	//	updatePatrol(dt);
-	cout << "STATE: " << state << endl;
 }
 
 // Constrain the position within the borders
@@ -433,7 +425,6 @@ CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
 
-			/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
 			nearestDistance = (Vector3(enemyWithoutY.x - thisWithoutY.x, -10.f, enemyWithoutY.z - thisWithoutY.z)).LengthSquared();
 			enemy = (CEnemy3D*)*it;
 			break;
@@ -476,7 +467,6 @@ CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
 
-			/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
 			nearestDistance = (Vector3(enemyWithoutY.x - thisWithoutY.x, -10.f, enemyWithoutY.z - thisWithoutY.z)).LengthSquared();
 			enemy = (CEnemy3D*)*it;
 			break;
@@ -681,10 +671,7 @@ bool CEnemy3D::CheckCollision(void)
 
 	Vector3 playerMin(CPlayerInfo::GetInstance()->GetPos().x + CPlayerInfo::GetInstance()->GetMinAABB().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z + CPlayerInfo::GetInstance()->GetMinAABB().z);
 	Vector3 playerMax(CPlayerInfo::GetInstance()->GetPos().x + CPlayerInfo::GetInstance()->GetMaxAABB().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z + CPlayerInfo::GetInstance()->GetMaxAABB().z);
-	//Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + CPlayerInfo::GetInstance()->GetPos();
-	//Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + CPlayerInfo::GetInstance()->GetPos();
 
-	//cout << position << " >= " << playerMin << " && " << position << " <= " << playerMax << endl;
 	if (positionWithoutYMax >= playerMin && positionWithoutYMin <= playerMax)
 		return true;
 
@@ -732,7 +719,7 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 
 	CEnemy3D* result = new CEnemy3D(modelMesh);
 
-	//cout << "Position in Create: " << _position << endl;
+	
 	result->SetPosition(_position);
 	result->setDefaultPosition(_position);
 	result->SetPos(_position);

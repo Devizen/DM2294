@@ -421,14 +421,6 @@ void Map_Editor::updateOption(double dt)
 	_displacement.Set(_player->GetTarget().x - _player->GetPos().x, -10.f, _player->GetTarget().z - _player->GetPos().z);
 	_displacement.Set(static_cast<float>((_displacement.x * 50.f) + _player->GetPos().x), -10.f, static_cast<float>((_displacement.z * 50.f) + _player->GetPos().z));
 
-	//cout << "Displacement: " << _displacement << endl;
-
-	//cout << "Option Selection " << optionSelectionLevel << endl;
-	//cout << "Object Type " << objectType << endl;
-	//cout << "Environment Object " << environmentObject << endl;
-	//cout << "Enemy Object " << enemyObject << endl;
-	//cout << "Update Displacement: " << _displacement << endl;
-
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD4))
 	{
 		if (optionSelectionLevel == OBJECT_SELECT && optionSelectionLevel != ENVIRONMENT_SELECT && optionSelectionLevel != ENEMY_SELECT)
@@ -469,7 +461,6 @@ void Map_Editor::updateOption(double dt)
 			objectType = ENEMY;
 			if (objectType == ENEMY)
 			{
-				cout << "Enemy Object: " << enemyObject << endl;
 				if (enemyObject == ENEMY_OBJECT_NONE)
 					enemyObject = TOWER;
 
@@ -532,7 +523,6 @@ void Map_Editor::updateOption(double dt)
 
 			if (objectType == ENEMY)
 			{
-				cout << "Enemy Object: " << enemyObject << endl;
 				if (enemyObject == ENEMY_OBJECT_NONE)
 					enemyObject = ROBOT;
 
@@ -559,7 +549,6 @@ void Map_Editor::updateOption(double dt)
 	/*Back to first option.*/
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD7))
 	{
-		cout << "PRESSED NUMPAD 7 " << optionSelectionLevel << endl;
 		if (optionSelectionLevel == ENVIRONMENT_SELECT || optionSelectionLevel == ENEMY_SELECT || optionSelectionLevel == OPTION_SELECT_NONE)
 		{
 			optionSelectionLevel = OBJECT_SELECT;
@@ -661,88 +650,61 @@ void Map_Editor::updateOption(double dt)
 		{
 			if (environmentObject == CRATE)
 			{
-				cout << "CREATED" << endl;
-				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
 				CFurniture* crate = Create::Furniture("crate", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
-				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
-				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
-				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
 				lastCreatedType = CREATED_ENVIRONMENT;
 			}
 
 			if (environmentObject == WATCHTOWER)
 			{
-				cout << "CREATED" << endl;
-				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
 				CFurniture* crate = Create::Furniture("WatchTower", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
-				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
-				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
-				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
 				lastCreatedType = CREATED_ENVIRONMENT;
 			}
 
 			if (environmentObject == BARRICADE)
 			{
-				cout << "CREATED" << endl;
-				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
 				CFurniture* crate = Create::Furniture("Barricade", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
-				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
-				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
-				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
 				lastCreatedType = CREATED_ENVIRONMENT;
 			}
 
 			if (environmentObject == STATUE)
 			{
-				cout << "CREATED" << endl;
-				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
 				CFurniture* crate = Create::Furniture("Statue", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
-				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
-				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
-				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
 				lastCreatedType = CREATED_ENVIRONMENT;
 			}
 
 			if (environmentObject == BARREL)
 			{
-				cout << "CREATED" << endl;
-				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(-_scale.x, 0.f, -_scale.z);
 				Vector3 _maxAABB(_scale);
 				CFurniture* crate = Create::Furniture("Barrel", _displacement, _scale, _rotate);
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
-				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
-				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
-				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
 				lastCreatedType = CREATED_ENVIRONMENT;
 			}
 
 			if (environmentObject == WALL)
 			{
-				cout << "CREATED" << endl;
-				cout << "Displacement: " << _displacement << endl;
 				Vector3 _minAABB(0.f, 0.f, 0.f);
 				Vector3 _maxAABB(0.f, 0.f, 0.f);
 				if (_rotate == 0 || _rotate == 180)
@@ -759,9 +721,6 @@ void Map_Editor::updateOption(double dt)
 				crate->SetCollider(true);
 				crate->SetLight(true);
 				crate->SetAABB(_maxAABB, _minAABB);
-				//cout << "_minAABB: " << crate->GetMinAABB() << endl;
-				//cout << "_maxAABB: " << crate->GetMaxAABB() << endl;
-				//crate->SetPosition(Vector3(0.f, -10.f, 0.f));
 				lastCreatedType = CREATED_ENVIRONMENT;
 			}
 		}
@@ -788,7 +747,6 @@ void Map_Editor::updateOption(double dt)
 			{
 				enemyNo = 2;
 
-				cout << "Create Displacement: " << _displacement << endl;
 				_horde = Create::Horde("ROBOT", _displacement, _scale);
 				lastCreatedType = CREATED_ENEMY_HORDE;
 			}
@@ -796,7 +754,6 @@ void Map_Editor::updateOption(double dt)
 			{
 				enemyNo = 3;
 
-				cout << "Create Displacement: " << _displacement << endl;
 				turret = Create::Enemy3D("turret", _displacement, _scale);
 				lastCreatedType = CREATED_ENEMY;
 			}
@@ -804,7 +761,6 @@ void Map_Editor::updateOption(double dt)
 			{
 				enemyNo = 4;
 
-				cout << "Create Displacement: " << _displacement << endl;
 				_tower = Create::Tower("TOWER", _displacement, _rotate, _scale);
 				lastCreatedType = CREATED_ENEMY;
 			}

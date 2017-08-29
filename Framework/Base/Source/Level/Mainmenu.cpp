@@ -349,7 +349,6 @@ void Mainmenu::Init()
 	{
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
-	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 	Inventory::GetInstance()->Init();
 
 	/*openInventory = false;
@@ -770,7 +769,6 @@ void Mainmenu::pauseOptions(double dt, bool &pause)
 	if (!choseType && !changedInput)
 	{
 		static int option = 20;
-		cout << "Choose Type to Edit." << endl;
 		if (KeyboardController::GetInstance()->IsKeyDown('1'))
 			option = 0;
 		if (KeyboardController::GetInstance()->IsKeyDown('2'))
@@ -816,8 +814,6 @@ void Mainmenu::pauseOptions(double dt, bool &pause)
 
 	if (choseType && !changedInput)
 	{
-		cout << input << endl;
-		//cout << "Current Input: " << input->getKey() << endl;
 		if (KeyboardController::GetInstance()->IsKeyPressed('A'))
 			input->setKey('A');
 		if (KeyboardController::GetInstance()->IsKeyPressed('B'))
@@ -906,9 +902,6 @@ void Mainmenu::pauseOptions(double dt, bool &pause)
 			pause = false;
 		}
 	}
-
-	cout << "TEST" << endl;
-
 }
 
 void Mainmenu::clearKeyDisplay(void)

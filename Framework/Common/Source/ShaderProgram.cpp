@@ -26,7 +26,6 @@ unsigned int ShaderProgram::GetProgramID()
 void ShaderProgram::SetProgramID(const unsigned int _programID)
 {
 	programID = _programID;
-	cout << programID;
 }
 
 unsigned int ShaderProgram::AddUniform(const std::string& _name)
