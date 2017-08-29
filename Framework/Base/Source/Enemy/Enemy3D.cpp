@@ -223,9 +223,13 @@ void CEnemy3D::Update(double dt)
 		}
 		case DEAD:
 		{
-			CPlayerInfo::GetInstance()->setScore(CPlayerInfo::GetInstance()->getScore() + 100);
-			int _KO_Count = CPlayerInfo::GetInstance()->getKO_Count() + 1;
-			CPlayerInfo::GetInstance()->setKO_Count(_KO_Count);
+			if (!playerProperty)
+			{
+				CPlayerInfo::GetInstance()->setScore(CPlayerInfo::GetInstance()->getScore() + 100);
+				int _KO_Count = CPlayerInfo::GetInstance()->getKO_Count() + 1;
+				CPlayerInfo::GetInstance()->setKO_Count(_KO_Count);
+				CPlayerInfo::GetInstance()->setGold(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) + 100);
+			}
 
 			CSoundEngine::GetInstance()->PlayASound("EXPLODE");
 

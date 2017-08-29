@@ -312,6 +312,12 @@ void Level01::Update(double dt)
 			++towerCount;
 	}
 
+	if (CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) != OptionsManager::GetInstance()->getHighscore())
+	{
+		OptionsManager::GetInstance()->setHighscore(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD));
+		OptionsManager::GetInstance()->saveHighscore();
+	}
+
 	if (currentTowerCount != towerCount)
 	{
 
@@ -330,7 +336,6 @@ void Level01::Update(double dt)
 
 	if (towerCount == 0)
 	{
-		//Create::Text("text", "Great Job!\nTutorial Completed!", 0.f, 2.f, CText::TEXT_CONVERSATION);
 		SceneManager::GetInstance()->SetActiveScene("Village");
 		zoomToBoss = false;
 	}
@@ -341,14 +346,6 @@ void Level01::Update(double dt)
 
 	static bool pause = false;
 	static int renderOnce = 0;
-
-
-	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
-	{
-		FileManager::GetInstance()->EditMapFile("Files//Level01.csv");
-		FileManager::GetInstance()->EditEnemyFile("Files//Level01Enemy.csv");
-	}
-
 
 	for (int i = 0; i < 17; ++i)
 	{
@@ -1416,4 +1413,5 @@ void Level01::Exit()
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	FileManager::GetInstance()->clearVector();
+	OptionsManager::GetInstance()->saveHighscore();
 }

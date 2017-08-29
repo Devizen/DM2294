@@ -16,7 +16,6 @@ class EquipmentManager : public Singleton <EquipmentManager>
 
 	int pressCountX;
 	int pressCountY;
-	double textTime;
 	bool showText;
 public:
 	void AssignEquipment(Equipment* newEQ);
@@ -27,6 +26,7 @@ public:
 	void Init();
 	void Update(double dt);
 	void Render();
+	double textTime;
 
 	void merge_sort(Equipment* data_set[], int start_index, int end_index);
 	void merge(Equipment* data_set[], int start_index, int middle_index, int end_index);

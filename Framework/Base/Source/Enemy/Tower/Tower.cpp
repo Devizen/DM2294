@@ -97,6 +97,9 @@ void CTower::Update(double dt)
 			if (maxAABB.y < -10.f)
 			{
 				SetState(AI_STATE::DEAD);
+				int _KO_Count = CPlayerInfo::GetInstance()->getKO_Count() + 1;
+				CPlayerInfo::GetInstance()->setKO_Count(_KO_Count);
+				CPlayerInfo::GetInstance()->setGold(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) + 500);
 				demolished = true;
 			}
 		}

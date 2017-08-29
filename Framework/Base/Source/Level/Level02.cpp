@@ -278,6 +278,12 @@ void Level02::Update(double dt)
 
 	int towerCount = 0;
 
+	if (CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) != OptionsManager::GetInstance()->getHighscore())
+	{
+		OptionsManager::GetInstance()->setHighscore(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD));
+		OptionsManager::GetInstance()->saveHighscore();
+	}
+
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{
 		if ((*it)->isTower)
@@ -292,12 +298,6 @@ void Level02::Update(double dt)
 	}
 	if (towerCount < 1)
 		SceneManager::GetInstance()->SetActiveScene("Village");
-	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
-	{
-		FileManager::GetInstance()->EditMapFile("Files//Level02.csv");
-		FileManager::GetInstance()->EditEnemyFile("Files//Level02Enemy.csv");
-	}
-
 
 	for (int i = 0; i < 17; ++i)
 	{
@@ -1202,4 +1202,5 @@ void Level02::Exit()
 	CPlayerInfo::GetInstance()->setKO_Count(0);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	FileManager::GetInstance()->clearVector();
+	OptionsManager::GetInstance()->saveHighscore();
 }

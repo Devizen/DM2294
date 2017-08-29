@@ -380,7 +380,13 @@ void Level04::Update(double dt)
 		if ((*it)->isTower)
 			++towerCount;
 	}
-	cout << "I AM IN LEVEL04 NOW" << endl;
+	
+	if (CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) != OptionsManager::GetInstance()->getHighscore())
+	{
+		OptionsManager::GetInstance()->setHighscore(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD));
+		OptionsManager::GetInstance()->saveHighscore();
+	}
+
 	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
 	{	
 		FileManager::GetInstance()->EditMapFile("Files//Level04.csv");
@@ -1516,4 +1522,5 @@ void Level04::Exit()
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	FileManager::GetInstance()->clearVector();
+	OptionsManager::GetInstance()->saveHighscore();
 }

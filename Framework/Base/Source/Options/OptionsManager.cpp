@@ -13,6 +13,8 @@ using std::stoi;
 using std::cout;
 using std::endl;
 
+#include "../PlayerInfo/PlayerInfo.h"
+
 OptionsManager::OptionsManager() :
 	editingState(false)
 	, highscore(0)
@@ -164,8 +166,10 @@ bool OptionsManager::loadHighscore(string filePath)
 			highscore = stoi(data);
 		}
 		file.close();
+		CPlayerInfo::GetInstance()->setGold(highscore);
 		return true;
 	}
+	
 	return false;
 }
 

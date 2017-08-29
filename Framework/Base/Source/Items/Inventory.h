@@ -21,13 +21,13 @@ class Inventory : public Singleton <Inventory>
 	bool showDiscardText;
 	bool showEquipText;
 
-	double DiscardTextTime;
-	double EquipTextTime;
+
 public:
 
 	Inventory() {};
 	~Inventory() {};
-
+	double DiscardTextTime;
+	double EquipTextTime;
 	void Init();
 	void Update(double dt);
 	Equipment** ReturnType();

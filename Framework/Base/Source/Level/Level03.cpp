@@ -266,10 +266,10 @@ void Level03::Update(double dt)
 	static bool pause = false;
 	static int renderOnce = 0;
 
-	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
+	if (CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) != OptionsManager::GetInstance()->getHighscore())
 	{
-		FileManager::GetInstance()->EditMapFile("Files//Level03.csv");
-		FileManager::GetInstance()->EditEnemyFile("Files//Level03Enemy.csv");
+		OptionsManager::GetInstance()->setHighscore(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD));
+		OptionsManager::GetInstance()->saveHighscore();
 	}
 
 	int towerCount = 0;
@@ -1237,4 +1237,5 @@ void Level03::Exit()
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	FileManager::GetInstance()->clearVector();
+	OptionsManager::GetInstance()->saveHighscore();
 }

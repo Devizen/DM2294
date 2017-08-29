@@ -301,6 +301,12 @@ void Tutorial::Update(double dt)
 	saveMapTime += dt;
 	static CTower* tower;
 
+	if (CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) != OptionsManager::GetInstance()->getHighscore())
+	{
+		OptionsManager::GetInstance()->setHighscore(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD));
+		OptionsManager::GetInstance()->saveHighscore();
+	}
+
 	if (!Text_Manager::GetInstance()->displayingText)
 	{
 		if (Text_Manager::GetInstance()->messagePrompt == 0)
@@ -1449,5 +1455,6 @@ void Tutorial::Exit()
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
 	FileManager::GetInstance()->clearVector();
+	OptionsManager::GetInstance()->saveHighscore();
 	_CrtDumpMemoryLeaks();
 }

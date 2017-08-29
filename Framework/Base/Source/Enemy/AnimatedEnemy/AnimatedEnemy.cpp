@@ -383,6 +383,9 @@ void CAnimatedEnemy::Update(double dt)
 	if (GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) <= 0)
 	{
 		state = DEAD;
+		int _KO_Count = CPlayerInfo::GetInstance()->getKO_Count() + 1;
+		CPlayerInfo::GetInstance()->setKO_Count(_KO_Count);
+		CPlayerInfo::GetInstance()->setGold(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) + 1000);
 		rotationSetZero();
 	}
 
