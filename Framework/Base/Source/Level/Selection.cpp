@@ -990,7 +990,7 @@ void Selection::pauseOptions(double dt, bool &pause)
 	if (!choseType && !changedInput)
 	{
 		static int option = 20;
-		cout << "Choose Type to Edit." << endl;
+		
 		if (KeyboardController::GetInstance()->IsKeyDown('1'))
 			option = 0;
 		if (KeyboardController::GetInstance()->IsKeyDown('2'))
@@ -1036,8 +1036,8 @@ void Selection::pauseOptions(double dt, bool &pause)
 
 	if (choseType && !changedInput)
 	{
-		cout << input << endl;
-		//cout << "Current Input: " << input->getKey() << endl;
+		
+		
 		if (KeyboardController::GetInstance()->IsKeyPressed('A'))
 			input->setKey('A');
 		if (KeyboardController::GetInstance()->IsKeyPressed('B'))
@@ -1127,7 +1127,7 @@ void Selection::pauseOptions(double dt, bool &pause)
 		}
 	}
 
-	cout << "TEST" << endl;
+	
 
 }
 

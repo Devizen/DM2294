@@ -123,6 +123,13 @@ void CProjectile::Update(double dt)
 	position.Set(	position.x + (float)(theDirection.x * dt * m_fSpeed),
 					position.y + (float)(theDirection.y * dt * m_fSpeed),
 					position.z + (float)(theDirection.z * dt * m_fSpeed));
+
+	if (bulletOriginated == FROM_PLAYER)
+		if ((position - defaultPosition).LengthSquared() > 20000.f)
+		{
+			SetStatus(false);
+			SetIsDone(true);
+		}
 }
 
 
@@ -164,6 +171,7 @@ CProjectile* Create::Projectile(const std::string& _meshName,
 	result->SetStatus(true);
 	result->SetCollider(true);
 	result->SetSource(_source);
+	result->defaultPosition = _position;
 	EntityManager::GetInstance()->AddProjectile(result);
 
 	return result;

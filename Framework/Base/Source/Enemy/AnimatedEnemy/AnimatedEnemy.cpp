@@ -210,7 +210,7 @@ void CAnimatedEnemy::Update(double dt)
 				if (GetWhoCloser() == ENEMY && ReturnNearestEnemy() != nullptr)
 				{
 					enemyWithoutY = Vector3(ReturnNearestEnemy()->GetPos().x, -10.f, ReturnNearestEnemy()->GetPos().z);
-					//cout << "Enemy without Y: " << enemyWithoutY << endl;
+					
 					displacement = Vector3(enemyWithoutY.x - thisWithoutY.x, position.y, enemyWithoutY.z - thisWithoutY.z);
 				}
 				else if (GetWhoCloser() == PLAYER)
@@ -219,7 +219,6 @@ void CAnimatedEnemy::Update(double dt)
 				/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
 				if (displacement.LengthSquared() > 100.f)
 				{
-					//cout << "MOVING TOWARDS ALERT" << endl;
 					position += displacement.Normalized() * (float)dt * GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
 					previousPosition = position;
 				}
@@ -233,7 +232,7 @@ void CAnimatedEnemy::Update(double dt)
 	}
 	else if (state == ATTACK && !pathFindingMode)
 	{
-		cout << "IN ATTACK" << endl;
+		//cout << "IN ATTACK" << endl;
 		if (CheckCollision())
 		{
 			position = previousPosition;
@@ -244,11 +243,11 @@ void CAnimatedEnemy::Update(double dt)
 			if (CheckInsideBoundary(GetMinAlertBoundary(), GetMaxAlertBoundary()))
 			{
 				Vector3 displacement(0.f, 0.f, 0.f);
-				cout << "WHO CLOSER: " << GetWhoCloser() << endl;
+				
 				if (GetWhoCloser() == ENEMY && ReturnNearestEnemy() != nullptr)
 				{
 					enemyWithoutY = Vector3(ReturnNearestEnemy()->GetPos().x, -10.f, ReturnNearestEnemy()->GetPos().z);
-					//cout << "Enemy without Y: " << enemyWithoutY << endl;
+					
 					displacement = Vector3(enemyWithoutY.x - thisWithoutY.x, position.y, enemyWithoutY.z - thisWithoutY.z);
 				}
 				else if (GetWhoCloser() == PLAYER)
@@ -256,9 +255,7 @@ void CAnimatedEnemy::Update(double dt)
 
 
 				displacement = playerWithoutY - thisWithoutY;
-				// << "ReturnNearestEnemy(): " << ReturnNearestEnemy()->GetPos()  << endl;
-				//cout << "Displacement Squared: " << displacement.LengthSquared() << endl;
-
+				
 				/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
 				if (displacement.LengthSquared() > 50.f)
 				{
@@ -469,9 +466,9 @@ void CAnimatedEnemy::Render(void)
 		{
 			Vector3 _position = (Vector3)*it;
 
-			if (_position == Vector3(/*nearestPath().x*/nearestPosition.x, -10.f, /*nearestPath().z*/nearestPosition.z))
+			if (_position == Vector3(nearestPosition.x, -10.f, nearestPosition.z))
 				continue;
-			//cout << _position <<  " and " << nearestPath() << endl;
+			
 
 			modelStack.PushMatrix();
 			modelStack.Translate(_position.x, _position.y, _position.z);
@@ -517,7 +514,7 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 
 	CAnimatedEnemy* result = new CAnimatedEnemy(modelMesh, modelMesh2, modelMesh3, modelMesh4, modelMesh5, modelMesh6);
 
-	//cout << "Position in Create: " << _position << endl;
+	
 	result->SetPosition(_position);
 
 	result->SetRotate(_rotate);
@@ -529,6 +526,8 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->pathFindingMode = false;
 	result->SetAlertBoundary(Vector3(-100.f, -10.f, -100.f), Vector3(100.f, 10.f, 100.f));
 	result->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -10.f, -_scale.z));
+	result->setHealth(10);
+	result->setMaxHealthTo(10);
 	result->SetType(1);
 	result->SetLight(true);
 	result->isRobot = true;

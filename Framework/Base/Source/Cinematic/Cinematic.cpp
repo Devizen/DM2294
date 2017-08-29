@@ -121,12 +121,9 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 		case C_Target:
 		{
 			Vector3 _target = cameraTarget - position;
-			cout << "Position: " << cameraPosition << endl;
-			cout << "Destination: " << cameraTarget << endl;
 			try
 			{
 				target = cameraTarget;
-				cout << "Displacement Target: " << _target.LengthSquared() << endl;
 				if (_target.LengthSquared() >= 1000.f)
 					position += _target.Normalized() * _speed * (float)dt;
 				else
@@ -142,12 +139,9 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 		case C_Target_Text:
 		{
 			Vector3 _target = cameraTarget - position;
-			cout << "Position: " << cameraPosition << endl;
-			cout << "Destination: " << cameraTarget << endl;
 			try
 			{
 				target = cameraTarget;
-				cout << "Displacement Target Text: " << _target.LengthSquared() << endl;
 				if (_target.LengthSquared() >= 2000.f)
 					position += _target.Normalized() * _speed * (float)dt;
 				else
@@ -165,13 +159,10 @@ void CCinematic::moveCamera(Vector3 _position, Vector3 _destination, float _spee
 		case C_Destination:
 		{
 			Vector3 _target = _destination - _position;
-			cout << "Position: " << _position << endl;
-			cout << "Destination: " << _destination << endl;
-			cout << "Target: " << target << endl;
+
 			target = _destination;
 			try
 			{
-				cout << "Displacement Destination: " << (_destination - _position).Length() << endl;
 				if ((_destination - _position).LengthSquared() >= 1000.f)
 					position += _target.Normalized() * _speed * (float)dt;
 				else

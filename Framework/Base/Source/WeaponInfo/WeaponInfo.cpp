@@ -165,7 +165,6 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 				distanceBetween = target - _source->GetPos();
 				distanceBetween *= 3.f;
 				distanceBetween += _source->GetPos();
-				cout << "CAME IN " << endl;
 			}
 			else
 			{
@@ -173,22 +172,6 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 				shiftForward *= 3.f;
 
 				distanceBetween += _source->GetPos() + shiftForward;
-				/*Vector3 rightVector = target.Normalized().Cross(_source->GetUp());
-				_source->GetUp();*/
-				//Vector3 tempTarget(target);
-				//Vector3 tempPosition(position);
-
-				//while ((tempTarget - tempPosition).LengthSquared() > 200.f)
-				//{
-				//	cout << "Temp Target: " << tempTarget << endl;
-				//	cout << "Temp Distance: " << (tempTarget - tempPosition).LengthSquared() << endl;
-				//	tempTarget -= static_cast<float>(portableDT) * tempPosition;
-				//}
-
-				//distanceBetween = tempTarget - position;
-				//distanceBetween *= 3.f;
-				//distanceBetween += position;
-				//tempTarget.Set(0.f, 0.f, 0.f);
 			}
 			CProjectile* aProjectile = Create::Projectile("sphere", 
 															distanceBetween,

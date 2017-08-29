@@ -371,7 +371,7 @@ void Village::Update(double dt)
 		FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 		FileManager::GetInstance()->CreateWeapon();
 
-		cout << "IN" << endl;
+		
 	}
 
 	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) > 0)
@@ -557,7 +557,7 @@ void Village::Update(double dt)
 				cinematic->SetCameraPos(camera.GetCameraPos());
 				cinematic->SetCameraTarget(camera.GetCameraTarget());
 				cinematic->SetCameraUp(camera.GetCameraUp());
-				cout << "Attached Camera" << endl;
+				
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(&camera);
 				cinematicMode = false;
@@ -570,7 +570,7 @@ void Village::Update(double dt)
 				cinematic->SetCameraTarget(camera.GetCameraTarget());
 				cinematic->SetCameraUp(camera.GetCameraUp());
 
-				cout << "Attached Cinematic" << endl;
+				
 				playerInfo->DetachCamera();
 				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
 				cinematicMode = true;
@@ -599,7 +599,7 @@ void Village::Update(double dt)
 						cinematic->SetCameraPos(camera.GetCameraPos());
 						cinematic->SetCameraTarget(camera.GetCameraTarget());
 						cinematic->SetCameraUp(camera.GetCameraUp());
-						cout << "Attached Camera" << endl;
+						
 						playerInfo->DetachCamera();
 						playerInfo->AttachCamera(&camera);
 						cinematicMode = false;
@@ -979,7 +979,7 @@ void Village::pauseOptions(double dt, bool &pause)
 	if (!choseType && !changedInput)
 	{
 		static int option = 20;
-		cout << "Choose Type to Edit." << endl;
+		
 		if (KeyboardController::GetInstance()->IsKeyDown('1'))
 			option = 0;
 		if (KeyboardController::GetInstance()->IsKeyDown('2'))
@@ -1025,8 +1025,8 @@ void Village::pauseOptions(double dt, bool &pause)
 
 	if (choseType && !changedInput)
 	{
-		cout << input << endl;
-		//cout << "Current Input: " << input->getKey() << endl;
+		
+		
 		if (KeyboardController::GetInstance()->IsKeyPressed('A'))
 			input->setKey('A');
 		if (KeyboardController::GetInstance()->IsKeyPressed('B'))
@@ -1116,7 +1116,7 @@ void Village::pauseOptions(double dt, bool &pause)
 		}
 	}
 
-	cout << "TEST" << endl;
+	
 
 }
 

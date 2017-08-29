@@ -52,7 +52,7 @@ void CTower::Init(void)
 	//target.Set(10.0f, 0.0f, 450.0f);
 	//up.Set(0.0f, 1.0f, 0.0f);
 	position.Set(position.x, position.y, position.z);
-	cout << "Init Position : " << position << endl;
+	
 	target.Set(10.0f, 0.0f, 450.0f);
 	up.Set(0.0f, 1.0f, 0.0f);
 
@@ -182,7 +182,7 @@ CTower* Create::Tower(const std::string& _meshName,
 
 	CTower* result = new CTower(modelMesh);
 
-	//cout << "Position in Create: " << _position << endl;
+	
 	result->SetPosition(_position);
 	result->setDefaultPosition(_position);
 	result->SetPos(_position);

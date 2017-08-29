@@ -21,6 +21,14 @@ OptionsManager::OptionsManager() :
 
 OptionsManager::~OptionsManager()
 {
+	while (controls.size() > 0)
+	{
+		Controls* object = controls.back();
+		delete object;
+		object = nullptr;
+
+		controls.pop_back();
+	}
 }
 
 
@@ -93,11 +101,6 @@ bool OptionsManager::loadConfig(string filePath)
 
 			controls.push_back(newInput);
 		}
-
-		for (vector<Controls*>::iterator it = controls.begin(); it != controls.end(); ++it)
-		{
-			cout << (*it)->getKey() << endl;
-		}
 		file.close();
 		return true;
 	}
@@ -136,7 +139,6 @@ bool OptionsManager::defaultConfig(void)
 	i--;
 	content.erase(content.end() - 1);/*Erase last.*/
 
-	cout << i << " characters read...\n";
 	infile.close();
 
 	outfile << content; /*Save content in.*/

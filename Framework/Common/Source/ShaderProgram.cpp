@@ -11,6 +11,9 @@ programID(_programID)
 
 ShaderProgram::~ShaderProgram()
 {
+	if (uniformMap.size() > 0)
+		uniformMap.clear();
+
 	if (programID != SHADER_ERROR)
 		glDeleteProgram(programID);
 }
@@ -23,7 +26,6 @@ unsigned int ShaderProgram::GetProgramID()
 void ShaderProgram::SetProgramID(const unsigned int _programID)
 {
 	programID = _programID;
-	cout << programID;
 }
 
 unsigned int ShaderProgram::AddUniform(const std::string& _name)

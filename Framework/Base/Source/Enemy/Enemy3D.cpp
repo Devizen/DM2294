@@ -53,11 +53,8 @@ void CEnemy3D::Init(void)
 	defaultUp.Set(0, 1, 0);
 
 	// Set the current values
-	//position.Set(10.0f, 0.0f, 0.0f);
-	//target.Set(10.0f, 0.0f, 450.0f);
-	//up.Set(0.0f, 1.0f, 0.0f);
 	position.Set(position.x, position.y, position.z);
-	cout << "Init Position : " << position << endl;
+	
 	target.Set(10.0f, 0.0f, 450.0f);
 	up.Set(0.0f, 1.0f, 0.0f);
 
@@ -258,11 +255,6 @@ void CEnemy3D::Update(double dt)
 	}
 	if (GetAttribute(CAttributes::TYPE_HEALTH) <= 0 && state != RECOVERY)
 		state = DEAD;
-	//if (enemyBehavior == ENEMY_BEHAVIOR::TOWER)
-	//	updateTower(dt);
-	//else if (enemyBehavior == ENEMY_BEHAVIOR::PATROL)
-	//	updatePatrol(dt);
-	cout << "STATE: " << state << endl;
 }
 
 // Constrain the position within the borders
@@ -433,7 +425,6 @@ CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
 
-			/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
 			nearestDistance = (Vector3(enemyWithoutY.x - thisWithoutY.x, -10.f, enemyWithoutY.z - thisWithoutY.z)).LengthSquared();
 			enemy = (CEnemy3D*)*it;
 			break;
@@ -476,7 +467,6 @@ CEnemy3D * CEnemy3D::ReturnNearestEnemy(void)
 
 			Vector3 enemyWithoutY((*it)->GetPos().x, -10.f, (*it)->GetPos().z);
 
-			/*cout << "From " << this << " aim " << (CEnemy3D*)*it << endl;*/
 			nearestDistance = (Vector3(enemyWithoutY.x - thisWithoutY.x, -10.f, enemyWithoutY.z - thisWithoutY.z)).LengthSquared();
 			enemy = (CEnemy3D*)*it;
 			break;
@@ -585,37 +575,38 @@ void CEnemy3D::RenderHealthBar(void)
 
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 
-	/*Black health bar that depicts the total health of enemy.*/
-	modelStack.PushMatrix();
-	/*Keep the health bar fixed to the left of the enemy.*/
-	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), furtherDisplacement.z);
-	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
-	/*Scale it according to the health left.*/
-	modelStack.Scale(MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.001f);
-	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("BLACK"));
-	modelStack.PopMatrix();
 
 	/*Colour health bar that depicts the enemy or ally.*/
 	modelStack.PushMatrix();
 	/*Keep the health bar fixed to the left of the enemy.*/
-	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), furtherDisplacement.z * 1.00000001f);
+	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), (furtherDisplacement.z / 1.01f) * 1.011f);
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
-	modelStack.Scale(MAX_HEALTH_SCALE * 1.1f, Application::GetInstance().GetWindowHeight() * 0.006f, 0.00001f);
+	modelStack.Scale(MAX_HEALTH_SCALE * 1.1f, Application::GetInstance().GetWindowHeight() * 0.006f, 0.0000001f);
 	if (playerProperty)
 		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("ALLY"));
 	else
 		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("ENEMY"));
 	modelStack.PopMatrix();
 
+	/*Black health bar that depicts the total health of enemy.*/
+	modelStack.PushMatrix();
+	/*Keep the health bar fixed to the left of the enemy.*/
+	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), furtherDisplacement.z);
+	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
+	/*Scale it according to the health left.*/
+	modelStack.Scale(MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.0000001f);
+	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("BLACK"));
+	modelStack.PopMatrix();
+
 	/*Health Bar above enemy head*/
 	modelStack.PushMatrix();
 	/*Keep the health bar fixed to the left of the enemy.*/
-	modelStack.Translate(position.x/*+ minAABB.x + ((attributes.HEALTH / attributes.MAX_HEALTH) * MAX_HEALTH_SCALE) * 0.5f*/, position.y + (maxAABB.y - position.y), position.z);
+	modelStack.Translate(position.x, position.y + (maxAABB.y - position.y), position.z);
 	/*Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());*/
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
-	modelStack.Scale((static_cast<float>(GetAttribute(CAttributes::TYPE_HEALTH)) / static_cast<float>(GetAttribute(CAttributes::TYPE_MAXHEALTH))) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.01f);
+	modelStack.Scale((static_cast<float>(GetAttribute(CAttributes::TYPE_HEALTH)) / static_cast<float>(GetAttribute(CAttributes::TYPE_MAXHEALTH))) * MAX_HEALTH_SCALE, Application::GetInstance().GetWindowHeight() * 0.005f, 0.0000001f);
 
 	/*Set health bar to green colour before damage.*/
 	if (GetAttribute(CAttributes::TYPE_HEALTH) / GetAttribute(CAttributes::TYPE_MAXHEALTH) == 1)
@@ -681,10 +672,7 @@ bool CEnemy3D::CheckCollision(void)
 
 	Vector3 playerMin(CPlayerInfo::GetInstance()->GetPos().x + CPlayerInfo::GetInstance()->GetMinAABB().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z + CPlayerInfo::GetInstance()->GetMinAABB().z);
 	Vector3 playerMax(CPlayerInfo::GetInstance()->GetPos().x + CPlayerInfo::GetInstance()->GetMaxAABB().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z + CPlayerInfo::GetInstance()->GetMaxAABB().z);
-	//Vector3 playerMin = CPlayerInfo::GetInstance()->GetMinAABB() + CPlayerInfo::GetInstance()->GetPos();
-	//Vector3 playerMax = CPlayerInfo::GetInstance()->GetMaxAABB() + CPlayerInfo::GetInstance()->GetPos();
 
-	//cout << position << " >= " << playerMin << " && " << position << " <= " << playerMax << endl;
 	if (positionWithoutYMax >= playerMin && positionWithoutYMin <= playerMax)
 		return true;
 
@@ -732,7 +720,7 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 
 	CEnemy3D* result = new CEnemy3D(modelMesh);
 
-	//cout << "Position in Create: " << _position << endl;
+	
 	result->SetPosition(_position);
 	result->setDefaultPosition(_position);
 	result->SetPos(_position);
