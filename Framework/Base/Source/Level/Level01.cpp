@@ -150,25 +150,11 @@ void Level01::Init()
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
-	// Create entities into the scene
-	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
-	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
-	////GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
-	//Create::Entity("ring", Vector3(0.0f, 0.0f, 0.0f)); // Reference
-
 	groundEntity = Create::Ground("snowGround", "snowGround");
 	groundEntity->SetLight(true);
 
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f), true);
-
-	///*Chair Test*/
-	//CFurniture* chair = Create::Furniture("Chair", Vector3(20.f, 0.f, 0.f), Vector3(1.f, 1.f, 1.f));
-	//chair->SetCollider(true);
-	//chair->SetLight(false);
-	//chair->SetAABB(Vector3(5.f, 5.f, 5.f), Vector3(-5.f, -5.f, -5.f));
-	//
-
 
 	SkyBoxEntity* theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
 		"SKYBOX_LEFT", "SKYBOX_RIGHT",
@@ -179,9 +165,6 @@ void Level01::Init()
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	groundEntity->SetLight(true);
 	playerInfo->SetTerrain(groundEntity);
-
-	//Create::Entity("PAUSE", Vector3(Application::GetInstance().GetWindowWidth() / 2.0f, Application::GetInstance().GetWindowHeight() / 2.0f, 1.f),
-	//	Vector3(100.f, 100.f, 100.f));
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -250,12 +233,6 @@ void Level01::Init()
 	weaponManager = playerInfo->getWeaponManager();
 
 	/*Initialise Sounds*/
-	//CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
-	//CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
-	//CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
-	//CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
-	//CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
-	//CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
 	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
@@ -424,23 +401,6 @@ void Level01::Update(double dt)
 		{
 			clearKeyDisplay();
 
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-			{
-				cout << "Left Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-			{
-				cout << "Right Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-			{
-				cout << "Middle Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-			{
-				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-			}
-
 			static float printInterval = 0;
 			printInterval += static_cast<float>(dt);
 
@@ -452,7 +412,6 @@ void Level01::Update(double dt)
 				weaponType.precision(4);
 				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
 				{
-					//cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
 					if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 1)
 					{
 						weaponName = "Assault Rifle";
@@ -520,8 +479,8 @@ void Level01::Update(double dt)
 			{
 				EntityManager::GetInstance()->Update(dt); // Update our entities
 
-				theKeyboard->Read(dt);
-				theMouse->Read(dt);
+				theKeyboard->Read(static_cast<float>(dt));
+				theMouse->Read(static_cast<float>(dt));
 
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
@@ -536,7 +495,7 @@ void Level01::Update(double dt)
 			GraphicsManager::GetInstance()->UpdateLights(dt);
 
 			// Update camera effects
-			theCameraEffects->Update(dt);
+			theCameraEffects->Update(static_cast<float>(dt));
 
 
 			/*Map Editor*/
@@ -557,33 +516,9 @@ void Level01::Update(double dt)
 					theMinimap->enlargedMap = true;
 			}
 
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
-			{
-				cinematic->SetCameraPos(camera.GetCameraPos());
-				cinematic->SetCameraTarget(camera.GetCameraTarget());
-				cinematic->SetCameraUp(camera.GetCameraUp());
-				
-				playerInfo->DetachCamera();
-				playerInfo->AttachCamera(&camera);
-				cinematicMode = false;
-				cinematic->numberOfPositions = 0;
-			}
-
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RSHIFT))
-			{
-				cinematic->SetCameraPos(camera.GetCameraPos());
-				cinematic->SetCameraTarget(camera.GetCameraTarget());
-				cinematic->SetCameraUp(camera.GetCameraUp());
-
-				
-				playerInfo->DetachCamera();
-				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
-				cinematicMode = true;
-			}
-
 			if (cinematic->cinematicMode)
 			{
-				playerInfo->StopSway(dt);
+				playerInfo->StopSway(static_cast<float>(dt));
 				static bool completed = false;
 				/*For player critical hit cinematic*/
 				cinematic->targetType = CCinematic::C_Target_Text;
@@ -606,15 +541,6 @@ void Level01::Update(double dt)
 				playerInfo->AttachCamera(&camera);
 				cinematic->numberOfPositions = 0;
 			}
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Conversation Message that Prints.It also goes to the second line.\nThere's also a third line.", 0.f, 2.f, CText::TEXT_CONVERSATION);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 
 			/*Update text display.*/
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)
@@ -658,11 +584,6 @@ void Level01::Update(double dt)
 	}
 	else
 	{
-		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
-		{
-			CPlayerInfo::GetInstance()->setHealthTo(100.f);
-			CPlayerInfo::GetInstance()->setScore(0.f);
-		}
 	}
 }
 
@@ -1157,7 +1078,7 @@ void Level01::RenderPassMain(void)
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 800, 600);
-	glViewport(0, 0, Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight());
+	glViewport(0, 0, static_cast<GLsizei>(Application::GetInstance().GetWindowWidth()), static_cast<GLsizei>(Application::GetInstance().GetWindowHeight()));
 	//glViewport(0, 0, m_worldWidth, m_worldHeight);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -1243,8 +1164,8 @@ void Level01::RenderPassMain(void)
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	int halfWindowWidth = static_cast<int>(Application::GetInstance().GetWindowWidth() / 2);
+	int halfWindowHeight = static_cast<int>(Application::GetInstance().GetWindowHeight() / 2);
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 	if (OptionsManager::GetInstance()->getEditingState())
@@ -1369,13 +1290,6 @@ void Level01::Exit()
 	GraphicsManager::GetInstance()->DetachCamera();
 	playerInfo->DetachCamera();
 
-	//	if (playerInfo->DropInstance() == false)
-	//	{
-	//#if _DEBUGMODE==1
-	//		cout << "Unable to drop PlayerInfo class" << endl;
-	//#endif
-	//	}
-
 	// Delete the lights
 	GraphicsManager::GetInstance()->RemoveLight("lights[0]");
 	GraphicsManager::GetInstance()->RemoveLight("lights[1]");
@@ -1398,7 +1312,7 @@ void Level01::Exit()
 	GraphicsManager::GetInstance()->removeLightMap();
 
 	Text_Manager::GetInstance()->resetAll();
-	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	CPlayerInfo::GetInstance()->setKO_Count(0);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	FileManager::GetInstance()->clearVector();
 	OptionsManager::GetInstance()->saveHighscore();

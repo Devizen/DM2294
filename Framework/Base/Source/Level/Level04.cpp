@@ -350,7 +350,6 @@ void Level04::Init()
 	{
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
-	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 	Inventory::GetInstance()->Init();
 
 	openInventory = false;
@@ -487,54 +486,7 @@ void Level04::Update(double dt)
 			// Update our entities
 			EntityManager::GetInstance()->Update(dt);
 			clearKeyDisplay();
-			/*Create random enemies around the map.*/
-			//createEnemies(dt);
-			/*Create random crates for player to hide behind.*/
-			//createCrates(dt);
-			/*Create random bullet power-up for player.*/
-			//createBullets(dt);
-			/*Create random health power-up for player.*/
-			//createHealth(dt);
-
-			//cout << "Light Position X: " << lights[0]->position.x << endl;
-			//cout << "Light Position Y: " << lights[0]->position.y << endl;
-			//cout << "Light Position Z: " << lights[0]->position.z << endl;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('I'))
-			//	lights[0]->position.z += 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('K'))
-			//	lights[0]->position.z -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('L'))
-			//	lights[0]->position.x += 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('J'))
-			//	lights[0]->position.x -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('U'))
-			//	lights[0]->position.y -= 100.f * dt;
-
-			//if (KeyboardController::GetInstance()->IsKeyDown('O'))
-			//	lights[0]->position.y += 100.f * dt;
-
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-			{
-				cout << "Left Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-			{
-				cout << "Right Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-			{
-				cout << "Middle Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-			{
-				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-			}
-
+			
 			static float printInterval = 0;
 			printInterval += static_cast<float>(dt);
 
@@ -546,7 +498,6 @@ void Level04::Update(double dt)
 				weaponType.precision(4);
 				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
 				{
-					//cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
 					if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 1)
 					{
 						weaponName = "Assault Rifle";
@@ -582,12 +533,6 @@ void Level04::Update(double dt)
 			textObj[5]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[5]->SetText(ss.str());
 
-			///*Display player health.*/
-			//ss.str("");
-			//ss << "Health:" << playerInfo->GetAttribute(CAttributes::TYPE_HEALTH);
-			//textObj[23]->SetColor(Color(1.f, 0.f, 0.f));
-			//textObj[23]->SetText(ss.str());
-
 			/*Display score*/
 			ss.str("");
 			ss << "Gold:" << playerInfo->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD);
@@ -595,13 +540,6 @@ void Level04::Update(double dt)
 			textObj[24]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[24]->SetColor(Color(1.f, 0.f, 0.f));
 			textObj[24]->SetText(ss.str());
-
-			//ss.str("");
-			//ss << "Highscore:" << OptionsManager::GetInstance()->getHighscore();
-			//textObj[25]->SetPosition(Vector3(textObj[24]->GetPosition().x- 200.f, textObj[24]->GetPosition().y -570.f, textObj[24]->GetPosition().z));
-			//textObj[25]->SetColor(Color(1.f, 0.f, 0.f));
-			//textObj[25]->SetText(ss.str());
-
 
 			if (playerInfo->getScore() > OptionsManager::GetInstance()->getHighscore())
 			{
@@ -612,23 +550,17 @@ void Level04::Update(double dt)
 			// Hardware Abstraction
 			if (!cinematicMode)
 			{
-				theKeyboard->Read(dt);
-				theMouse->Read(dt);
+				theKeyboard->Read(static_cast<float>(dt));
+				theMouse->Read(static_cast<float>(dt));
 
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
 			}
 
-			//// Update the player position and other details based on keyboard and mouse inputs
-			//playerInfo->Update(dt);
-
-			// Update NPC
-			//enemyInfo->Update(dt);
-			//anEnemy3D->SetTarget(playerInfo->GetPos());
 			GraphicsManager::GetInstance()->UpdateLights(dt);
 
 			// Update camera effects
-			theCameraEffects->Update(dt);
+			theCameraEffects->Update(static_cast<float>(dt));
 
 
 			/*Map Editor*/
@@ -647,30 +579,6 @@ void Level04::Update(double dt)
 					theMinimap->enlargedMap = false;
 				else
 					theMinimap->enlargedMap = true;
-			}
-
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
-			{
-				cinematic->SetCameraPos(camera.GetCameraPos());
-				cinematic->SetCameraTarget(camera.GetCameraTarget());
-				cinematic->SetCameraUp(camera.GetCameraUp());
-				
-				playerInfo->DetachCamera();
-				playerInfo->AttachCamera(&camera);
-				cinematicMode = false;
-				cinematic->numberOfPositions = 0;
-			}
-
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RSHIFT))
-			{
-				cinematic->SetCameraPos(camera.GetCameraPos());
-				cinematic->SetCameraTarget(camera.GetCameraTarget());
-				cinematic->SetCameraUp(camera.GetCameraUp());
-
-				
-				playerInfo->DetachCamera();
-				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
-				cinematicMode = true;
 			}
 
 			if (cinematicMode)
@@ -710,17 +618,7 @@ void Level04::Update(double dt)
 				camera.SetCameraTarget(cinematic->GetCameraTarget());
 				camera.SetCameraUp(cinematic->GetCameraUp());
 
-				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Conversation Message that Prints.It also goes to the second line.\nThere's also a third line.", 0.f, 2.f, CText::TEXT_CONVERSATION);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 
 			/*Update text display.*/
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)
@@ -764,11 +662,6 @@ void Level04::Update(double dt)
 	}
 	else
 	{
-		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
-		{
-			CPlayerInfo::GetInstance()->setHealthTo(100.f);
-			CPlayerInfo::GetInstance()->setScore(0.f);
-		}
 	}
 }
 
@@ -1268,7 +1161,7 @@ void Level04::RenderPassMain(void)
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 800, 600);
-	glViewport(0, 0, Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight());
+	glViewport(0, 0, static_cast<GLsizei>(Application::GetInstance().GetWindowWidth()), static_cast<GLsizei>(Application::GetInstance().GetWindowHeight()));
 	//glViewport(0, 0, m_worldWidth, m_worldHeight);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -1354,8 +1247,8 @@ void Level04::RenderPassMain(void)
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	int halfWindowWidth = static_cast<int>(Application::GetInstance().GetWindowWidth() / 2);
+	int halfWindowHeight = static_cast<int>(Application::GetInstance().GetWindowHeight() / 2);
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 	if (OptionsManager::GetInstance()->getEditingState())
@@ -1478,13 +1371,6 @@ void Level04::Exit()
 	GraphicsManager::GetInstance()->DetachCamera();
 	playerInfo->DetachCamera();
 
-	//	if (playerInfo->DropInstance() == false)
-	//	{
-	//#if _DEBUGMODE==1
-	//		cout << "Unable to drop PlayerInfo class" << endl;
-	//#endif
-	//	}
-
 	// Delete the lights
 	GraphicsManager::GetInstance()->RemoveLight("lights[0]");
 	GraphicsManager::GetInstance()->RemoveLight("lights[1]");
@@ -1519,7 +1405,7 @@ void Level04::Exit()
 	GraphicsManager::GetInstance()->removeLightMap();
 
 	Text_Manager::GetInstance()->resetAll();
-	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	CPlayerInfo::GetInstance()->setKO_Count(0);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	FileManager::GetInstance()->clearVector();
 	OptionsManager::GetInstance()->saveHighscore();

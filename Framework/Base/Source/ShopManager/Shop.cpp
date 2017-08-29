@@ -16,6 +16,7 @@ Shop * Create::ShopItems(const std::string& _meshName, string ID, string attack,
 	result->SetName(_meshName);
 	result->setGold(gold);
 	ShopManager::GetInstance()->PushBackIntoList(result, type);
+	return result;
 }
 
 void Shop::setGold(int gold)

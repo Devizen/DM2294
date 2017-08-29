@@ -150,26 +150,26 @@ void CAnimatedEnemy::UpdatesRotationValue(double dt)
 	*/
 	if (bArmRotationPositive)
 	{
-		leftArmRotation += rotationSpeed*dt;
-		rightArmRotation -= rotationSpeed*dt;
+		leftArmRotation += rotationSpeed * static_cast<float>(dt);
+		rightArmRotation -= rotationSpeed * static_cast<float>(dt);
 	}
 	else
 	{
-		leftArmRotation -= rotationSpeed*dt;
-		rightArmRotation += rotationSpeed*dt;
+		leftArmRotation -= rotationSpeed * static_cast<float>(dt);
+		rightArmRotation += rotationSpeed * static_cast<float>(dt);
 	}
 	/*
 	Left leg rotates the opposite direction as right leg
 	*/
 	if (bLegRotationPositive)
 	{
-		leftLegRotation += rotationSpeed*dt;
-		rightLegRotation -= rotationSpeed*dt;
+		leftLegRotation += rotationSpeed * static_cast<float>(dt);
+		rightLegRotation -= rotationSpeed * static_cast<float>(dt);
 	}
 	else
 	{
-		leftLegRotation -= rotationSpeed*dt;
-		rightLegRotation += rotationSpeed*dt;
+		leftLegRotation -= rotationSpeed * static_cast<float>(dt);
+		rightLegRotation += rotationSpeed * static_cast<float>(dt);
 	}
 }
 /*
@@ -205,7 +205,6 @@ void CAnimatedEnemy::Update(double dt)
 	/*If enemy is IDLE, check if player or player object stepped into the boundary.*/
 	if (state == IDLE && !pathFindingMode)
 	{
-		//cout << "IN IDLE" << endl;
 		if (CheckInsideBoundary(GetMinAlertBoundary(), GetMaxAlertBoundary()))
 		{
 			state = ALERT;
@@ -226,14 +225,13 @@ void CAnimatedEnemy::Update(double dt)
 					previousPosition = position;
 
 				Vector3 returnToDefaultPosition(defaultPosition - position);
-				position += returnToDefaultPosition.Normalized() * (float)dt * GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+				position += returnToDefaultPosition.Normalized() * (float)dt * static_cast<float>(GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED));
 			}
 		}
 	}
 
 	else if (state == ALERT && !pathFindingMode)
 	{
-		//cout << "IN ALERT" << endl;
 		if (CheckCollision())
 		{
 			position = previousPosition;
@@ -257,7 +255,7 @@ void CAnimatedEnemy::Update(double dt)
 				/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
 				if (displacement.LengthSquared() > 100.f)
 				{
-					position += displacement.Normalized() * (float)dt * GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+					position += displacement.Normalized() * (float)dt * static_cast<float>(GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED));
 					previousPosition = position;
 				}
 				else
@@ -276,7 +274,6 @@ void CAnimatedEnemy::Update(double dt)
 	}
 	else if (state == ATTACK && !pathFindingMode)
 	{
-		//cout << "IN ATTACK" << endl;
 		if (CheckCollision())
 		{
 			position = previousPosition;
@@ -303,7 +300,7 @@ void CAnimatedEnemy::Update(double dt)
 				/*Using comparison of magnitude to mimic the real world environment where if the a person just left you not long ago, you will be more alerted and prepare if the person will return.*/
 				if (displacement.LengthSquared() > 50.f)
 				{
-					position += displacement.Normalized() * (float)dt * GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+					position += displacement.Normalized() * (float)dt * static_cast<float>(GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED));
 					previousPosition = position;
 				}
 				else
@@ -366,7 +363,7 @@ void CAnimatedEnemy::Update(double dt)
 		}
 
 		if ((nearestPosition - Vector3(position.x, -10.f, position.z)).LengthSquared() > 0.1f)
-			position += directionToGo * (float)dt * GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+			position += directionToGo * (float)dt * static_cast<float>(GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED));
 		else
 		{
 			while (path.size() > 0)

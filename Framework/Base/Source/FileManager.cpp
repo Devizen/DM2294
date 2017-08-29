@@ -1047,7 +1047,7 @@ void FileManager::EditShopFile(const string myFile)
 	File << "Name,Attack,Defense,Speed,ID,Type,Equipped,Gold\n";
 	for (unsigned int i = 0; i < 3; i ++)
 	{
-		Equipment* temp = ShopManager::GetInstance()->getHelmVector()[i];
+		Equipment* temp = ShopManager::GetInstance()->getHelm()[i];
 		if (temp != NULL)
 		{
 			File << temp->getName() << ","
@@ -1063,7 +1063,7 @@ void FileManager::EditShopFile(const string myFile)
 
 	for (unsigned int i = 0; i < 3; i++)
 	{
-		Equipment* temp = ShopManager::GetInstance()->getArmorVector()[i];
+		Equipment* temp = ShopManager::GetInstance()->getArmor()[i];
 		if (temp != NULL)
 		{
 			File << temp->getName() << ","
@@ -1079,7 +1079,7 @@ void FileManager::EditShopFile(const string myFile)
 
 	for (unsigned int i = 0; i < 3; i++)
 	{
-		Equipment* temp = ShopManager::GetInstance()->getGloveVector()[i];
+		Equipment* temp = ShopManager::GetInstance()->getGlove()[i];
 		if (temp != NULL)
 		{
 			File << temp->getName() << ","
@@ -1095,7 +1095,7 @@ void FileManager::EditShopFile(const string myFile)
 
 	for (unsigned int i = 0; i < 3; i++)
 	{
-		Equipment* temp = ShopManager::GetInstance()->getShoeVector()[i];
+		Equipment* temp = ShopManager::GetInstance()->getShoe()[i];
 		if (temp != NULL)
 		{
 			File << temp->getName() << ","
@@ -1111,7 +1111,7 @@ void FileManager::EditShopFile(const string myFile)
 
 	for (unsigned int i = 0; i < 3; i++)
 	{
-		Equipment* temp = ShopManager::GetInstance()->getSwordVector()[i];
+		Equipment* temp = ShopManager::GetInstance()->getSword()[i];
 		if (temp != NULL)
 		{
 			File << temp->getName() << ","
@@ -1127,7 +1127,7 @@ void FileManager::EditShopFile(const string myFile)
 
 	for (unsigned int i = 0; i < 3; i++)
 	{
-		Equipment* temp = ShopManager::GetInstance()->getGunVector()[i];
+		Equipment* temp = ShopManager::GetInstance()->getGun()[i];
 		if (temp != NULL)
 		{
 			File << temp->getName() << ","
@@ -1228,13 +1228,7 @@ void FileManager::PrintWeaponFile()
 	for (vector<FileManager::EQ_Info>::iterator it = masterList.begin(); it != masterList.end(); ++it)
 	{
 		FileManager::EQ_Info store = (FileManager::EQ_Info)(*it);
-		cout << store.name << ", "
-			<< store.eqAtk << ", "
-			<< store.eqDef << ", "
-			<< store.eqSpeed << ", "
-			<< store.eqId << ", "
-			<< store.isEquipped << ", "
-			<< store.eqType << endl;
+		
 	}
 }
 

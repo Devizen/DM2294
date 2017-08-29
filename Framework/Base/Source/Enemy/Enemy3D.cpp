@@ -156,7 +156,7 @@ void CEnemy3D::Update(double dt)
 		case IDLE:
 		{
 			/*Real-time loop control, check if player is within boundary every 1 second.*/
-			m_fElapsedTimeBeforeUpdate += dt;
+			m_fElapsedTimeBeforeUpdate += static_cast<float>(dt);
 			if (m_fElapsedTimeBeforeUpdate > 1.0f)
 				m_fElapsedTimeBeforeUpdate = 0.0f;
 
@@ -246,11 +246,11 @@ void CEnemy3D::Update(double dt)
 		}
 		case RECOVERY:
 		{
-			m_fElapsedTimeBeforeUpdate += dt;
+			m_fElapsedTimeBeforeUpdate += static_cast<float>(dt);
 			if (m_fElapsedTimeBeforeUpdate > 1.0f)
 			{
 				health = 3;
-				setHealthTo(10.f);
+				setHealthTo(10);
 				state = IDLE;
 				m_fElapsedTimeBeforeUpdate = 0.f;
 			}
@@ -728,10 +728,10 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 	result->SetMinAABB(-_scale * 2.f);
 	result->SetMaxAABB(_scale * 2.f);
 	result->SetAlertBoundary(Vector3(-80.f, -10.f, -80.f), Vector3(80.f, 10.f, 80.f));
-	result->setMaxHealthTo(10.f);
-	result->setHealthTo(10.f);
-	result->setAttackTo(1.f);
-	result->setDefenseTo(1.f);
+	result->setMaxHealthTo(10);
+	result->setHealthTo(10);
+	result->setAttackTo(1);
+	result->setDefenseTo(1);
 	result->SetType(3);
 	result->SetLight(true);
 	EntityManager::GetInstance()->AddEnemy(result);

@@ -94,92 +94,7 @@ void Mainmenu::Init()
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
-	//Application::GetInstance().setAspectRatioHeight(100.f);
-	//Application::GetInstance().setAspectRatioWidth(Application::GetInstance().getAspectRatioHeight() * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight());
-	//m_worldWidth = m_worldHeight * (float)Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight();
-	//m_worldHeight = (float)Application::GetInstance().GetWindowHeight();
-	//m_worldWidth = (float)Application::GetInstance().GetWindowWidth();
-
-	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
-	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
-	//m_gPassShaderID = GraphicsManager::GetInstance()->LoadShader("gpass", "Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
-
-	//// Tell the shader program to store these uniform locations
-	//currProg->AddUniform("MVP");
-	//currProg->AddUniform("MV");
-	//currProg->AddUniform("MV_inverse_transpose");
-	//currProg->AddUniform("material.kAmbient");
-	//currProg->AddUniform("material.kDiffuse");
-	//currProg->AddUniform("material.kSpecular");
-	//currProg->AddUniform("material.kShininess");
-	//currProg->AddUniform("lightEnabled");
-	//currProg->AddUniform("numLights");
-	//currProg->AddUniform("lights[0].type");
-	//currProg->AddUniform("lights[0].position_cameraspace");
-	//currProg->AddUniform("lights[0].color");
-	//currProg->AddUniform("lights[0].power");
-	//currProg->AddUniform("lights[0].kC");
-	//currProg->AddUniform("lights[0].kL");
-	//currProg->AddUniform("lights[0].kQ");
-	//currProg->AddUniform("lights[0].spotDirection");
-	//currProg->AddUniform("lights[0].cosCutoff");
-	//currProg->AddUniform("lights[0].cosInner");
-	//currProg->AddUniform("lights[0].exponent");
-	//currProg->AddUniform("lights[1].type");
-	//currProg->AddUniform("lights[1].position_cameraspace");
-	//currProg->AddUniform("lights[1].color");
-	//currProg->AddUniform("lights[1].power");
-	//currProg->AddUniform("lights[1].kC");
-	//currProg->AddUniform("lights[1].kL");
-	//currProg->AddUniform("lights[1].kQ");
-	//currProg->AddUniform("lights[1].spotDirection");
-	//currProg->AddUniform("lights[1].cosCutoff");
-	//currProg->AddUniform("lights[1].cosInner");
-	//currProg->AddUniform("lights[1].exponent");
-	//currProg->AddUniform("colorTextureEnabled");
-	//currProg->AddUniform("colorTexture");
-	//currProg->AddUniform("textEnabled");
-	//currProg->AddUniform("textColor");
-
-	///*Fog*/
-	//currProg->AddUniform("fogParam.color");
-	//currProg->AddUniform("fogParam.start");
-	//currProg->AddUniform("fogParam.end");
-	//currProg->AddUniform("fogParam.density");
-	//currProg->AddUniform("fogParam.type");
-	//currProg->AddUniform("fogParam.enabled");
-
-	///*Shadow*/
-	//currProg->AddUniform("lightDepthMVP");
-	//currProg->AddUniform("shadowMap");
-
-	//m_gPassShaderID->AddUniform("lightDepthMVP");
-	//m_gPassShaderID->AddUniform("colorTextureEnabled[0]");
-	//m_gPassShaderID->AddUniform("colorTexture[0]");
-	//m_gPassShaderID->AddUniform("colorTextureEnabled[1]");
-	//m_gPassShaderID->AddUniform("colorTexture[1]");
-	//m_gPassShaderID->AddUniform("colorTextureEnabled[2]");
-	//m_gPassShaderID->AddUniform("colorTexture[2]");
-
-	//m_parameters[U_FOG_COLOR] = glGetUniformLocation(m_programID, "fogParam.color");
-	//m_parameters[U_FOG_START] = glGetUniformLocation(m_programID, "fogParam.start");
-	//m_parameters[U_FOG_END] = glGetUniformLocation(m_programID, "fogParam.end");
-	//m_parameters[U_FOG_DENSITY] = glGetUniformLocation(m_programID, "fogParam.density");
-	//m_parameters[U_FOG_TYPE] = glGetUniformLocation(m_programID, "fogParam.type");
-	//m_parameters[U_FOG_ENABLED] = glGetUniformLocation(m_programID, "fogParam.enabled");
-
-	///*Shadow*/
-	//m_parameters[U_LIGHT_DEPTH_MVP_GPASS] = glGetUniformLocation(m_gPassShaderID, "lightDepthMVP");
-	//m_parameters[U_LIGHT_DEPTH_MVP] = glGetUniformLocation(m_programID, "lightDepthMVP");
-	//m_parameters[U_SHADOW_MAP] = glGetUniformLocation(m_programID, "shadowMap");
-
-	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[0]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE] = glGetUniformLocation(m_gPassShaderID, "colorTexture[0]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED1] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[1]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE1] = glGetUniformLocation(m_gPassShaderID, "colorTexture[1]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED2] = glGetUniformLocation(m_gPassShaderID, "colorTextureEnabled[2]");
-	//m_parameters[U_SHADOW_COLOR_TEXTURE2] = glGetUniformLocation(m_gPassShaderID, "colorTexture[2]");
-
+	
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
 
@@ -231,25 +146,11 @@ void Mainmenu::Init()
 	playerInfo->AttachCamera(&camera);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
-	// Create entities into the scene
-	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
-	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
-	////GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
-	//Create::Entity("ring", Vector3(0.0f, 0.0f, 0.0f)); // Reference
-
 	groundEntity = Create::Ground("snowGround", "snowGround");
 	groundEntity->SetLight(true);
 
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f), true);
-
-	///*Chair Test*/
-	//CFurniture* chair = Create::Furniture("Chair", Vector3(20.f, 0.f, 0.f), Vector3(1.f, 1.f, 1.f));
-	//chair->SetCollider(true);
-	//chair->SetLight(false);
-	//chair->SetAABB(Vector3(5.f, 5.f, 5.f), Vector3(-5.f, -5.f, -5.f));
-	//
-
 
 	SkyBoxEntity* theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
 		"SKYBOX_LEFT", "SKYBOX_RIGHT",
@@ -260,9 +161,6 @@ void Mainmenu::Init()
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	groundEntity->SetLight(true);
 	playerInfo->SetTerrain(groundEntity);
-
-	//Create::Entity("PAUSE", Vector3(Application::GetInstance().GetWindowWidth() / 2.0f, Application::GetInstance().GetWindowHeight() / 2.0f, 1.f),
-	//	Vector3(100.f, 100.f, 100.f));
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -331,13 +229,6 @@ void Mainmenu::Init()
 	// << "Primary Weapon From Scene: " << primaryWeapon << endl;
 	weaponManager = playerInfo->getWeaponManager();
 
-	/*Initialise Sounds*/
-	//CSoundEngine::GetInstance()->AddSound("PISTOL", "Sound\\SFX\\PISTOL.ogg");
-	//CSoundEngine::GetInstance()->AddSound("ASSAULT", "Sound\\SFX\\ASSAULT.ogg");
-	//CSoundEngine::GetInstance()->AddSound("TAKEDAMAGE", "Sound\\SFX\\TAKEDAMAGE.ogg");
-	//CSoundEngine::GetInstance()->AddSound("RELOAD", "Sound\\SFX\\RELOAD.ogg");
-	//CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
-	//CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
 	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
@@ -351,16 +242,9 @@ void Mainmenu::Init()
 	}
 	Inventory::GetInstance()->Init();
 
-	/*openInventory = false;
-	openEQ = false;*/
 	FileManager::GetInstance()->init();
 	EquipmentManager::GetInstance()->Init();
 
-	//saveMapTime = 0;
-
-	//FileManager::GetInstance()->ReadMapFile("Files//Mainmenu.csv");
-	//FileManager::GetInstance()->ReadEnemyFile("Files//MainmenuEnemy.csv");
-	
 	selectedChoice = 1;
 }
 
@@ -1000,26 +884,6 @@ void Mainmenu::RenderPassMain(void)
 		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
 	}
 
-	/*if (lights[1]->type == Light::LIGHT_DIRECTIONAL)
-	{
-	Vector3 lightDir(lights[1]->position.x, lights[1]->position.y, lights[1]->position.z);
-	Vector3 lightDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lightDir;
-	currProg->UpdateVector3("lights[1].position_cameraspace", &lightDirection_cameraspace.x);
-	}
-	else if (lights[1]->type == Light::LIGHT_SPOT)
-	{
-	Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->position;
-	currProg->UpdateVector3("lights[1].position_cameraspace", &lightPosition_cameraspace.x);
-	Vector3 spotDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->spotDirection;
-	currProg->UpdateVector3("lights[1].spotDirection", &spotDirection_cameraspace.x);
-	}
-	else
-	{
-	Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[1]->position;
-	currProg->UpdateVector3("lights[1].position_cameraspace", &lightPosition_cameraspace.x);
-	}*/
-
-
 	//RenderMesh(meshList[GEO_AXES], false);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -1028,18 +892,6 @@ void Mainmenu::RenderPassMain(void)
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
-
-	/*Debug Quad*/
-	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();
-	ms.PushMatrix();
-	ms.Scale(100, 100, 100);
-	RenderHelper::RenderMesh(TEMPDEPTHQUAD);
-	ms.PopMatrix();*/
-	/*------------------------------------------*/
-
-	//currProg->UpdateInt("fogParam.enabled", 1);
-	//RenderWorld();
-	//currProg->UpdateInt("fogParam.enabled", 0);
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
@@ -1062,17 +914,6 @@ void Mainmenu::RenderPassMain(void)
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
-	//EntityManager::GetInstance()->RenderUI();
-
-	/*Render Weapon*/
-	//renderWeapon();
-
-	//*Render Camera Effects*/
-	//theCameraEffects->RenderUI();
-
-	//*Render Weapon UI*/
-	//renderWeaponUI();
-
 	switch (selectedChoice)
 	{
 	case 1:
@@ -1092,28 +933,6 @@ void Mainmenu::RenderPassMain(void)
 	renderMainMenuStart();
 	renderMainMenuLevels();
 	renderMainMenuQuit();
-
-
-	//*Render Hit*/
-	//if (EntityManager::GetInstance()->getHit())
-		//renderHit();
-
-	//if (openInventory)
-	//{
-		//Inventory::GetInstance()->RenderWeapon();
-	//}
-
-	//if (openEQ)
-	//{
-		//EquipmentManager::GetInstance()->Render();
-		//CPlayerInfo::GetInstance()->RenderAttribute();
-
-	//}
-
-	//*Render KO Count*/
-	//RenderHelper::GetInstance()->renderKOCount();
-	//*Render Player Health Bar*/
-	//RenderHelper::GetInstance()->renderPlayerHealth();
 
 	/*Render Map Editor Options.*/
 	if (Map_Editor::GetInstance()->mapEditing)
@@ -1136,82 +955,15 @@ void Mainmenu::RenderPassMain(void)
 	glDisable(GL_BLEND);
 }
 
-//void Mainmenu::RenderWorld(void)
-//{
-//	/*Debug*/
-//	//CPlayerInfo::GetInstance()->setHealth(CPlayerInfo::GetInstance()->getHealth() - 5);
-//
-//	if (playerInfo->GetAttribute(CAttributes::TYPE_HEALTH) <= 0)
-//	{
-//		Mesh* modelMesh;
-//		modelMesh = MeshBuilder::GetInstance()->GetMesh("GAMEOVER");
-//		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-//		modelStack.PushMatrix();
-//		modelStack.Translate(0.f, 0.f, 0.f);
-//		modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
-//		modelStack.Scale(400.f, 300.f, 1.f);
-//		RenderHelper::RenderMesh(modelMesh);
-//		modelStack.PopMatrix();
-//	}
-//	// Setup 3D pipeline then render 3D
-//	//GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-//	GraphicsManager::GetInstance()->AttachCamera(&camera);
-//
-//	EntityManager::GetInstance()->Render();
-//
-//
-//	if (Map_Editor::GetInstance()->mapEditing)
-//		Map_Editor::GetInstance()->renderObject();
-//
-//	ParticleManager::GetInstance()->renderAllParticle();
-//
-//
-//	/*Debug Quad for Shadow*/
-//	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();
-//	ms.PushMatrix();
-//	ms.Translate(0, 10, 10);
-//	ms.Scale(5, 5, 5);
-//	RenderHelper::RenderMeshWithLight(TEMPSPHERE);
-//	ms.PopMatrix();
-//
-//	ms.PushMatrix();
-//	ms.Translate(0, -8, 0);
-//	ms.Rotate(-90, 1, 0, 0);
-//	ms.Scale(1000, 1000, 1000);
-//	RenderHelper::RenderMeshWithLight(TEMPQUAD);
-//	ms.PopMatrix();*/
-//	/*--------------------------------------------------------*/
-//}
-
 void Mainmenu::Exit()
 {
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
 	playerInfo->DetachCamera();
 
-	//	if (playerInfo->DropInstance() == false)
-	//	{
-	//#if _DEBUGMODE==1
-	//		cout << "Unable to drop PlayerInfo class" << endl;
-	//#endif
-	//	}
-
 	// Delete the lights
 	GraphicsManager::GetInstance()->RemoveLight("lights[0]");
 	GraphicsManager::GetInstance()->RemoveLight("lights[1]");
-
-
-	//if (currProg)
-	//{
-	//	delete currProg;
-	//	currProg = nullptr;
-	//}
-
-	//if (m_gPassShaderID)
-	//{
-	//	delete m_gPassShaderID;
-	//	m_gPassShaderID = nullptr;
-	//}
 
 	ParticleManager* particleManager = ParticleManager::GetInstance();
 	ParticleManager::GetInstance()->deleteParticle();
@@ -1235,7 +987,7 @@ void Mainmenu::Exit()
 		cinematic = nullptr;
 	}
 	Text_Manager::GetInstance()->resetAll();
-	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	CPlayerInfo::GetInstance()->setKO_Count(0);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	FileManager::GetInstance()->clearVector();
 }

@@ -61,9 +61,6 @@
     <Filter Include="Map_Editor">
       <UniqueIdentifier>{065952a4-708b-4fc0-9a73-c93baec6b8f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Options\Scene2D">
-      <UniqueIdentifier>{373b0346-ef0f-444d-94b4-47543aaa8fd8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Enemy3D\Horde">
       <UniqueIdentifier>{b78d823c-8489-4f9f-9722-daf37a0806a0}</UniqueIdentifier>
     </Filter>
@@ -155,36 +152,6 @@
     </ClCompile>
     <ClCompile Include="Source\GenericEntity.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\Scene2D.cpp">
-      <Filter>Options\Scene2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\Map.cpp">
-      <Filter>Options\Scene2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\PlayerInfo2D.cpp">
-      <Filter>Options\Scene2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\Animation.cpp">
-      <Filter>Options\Scene2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\Enemy.cpp">
-      <Filter>Options\Scene2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\Strategy.cpp">
-      <Filter>Options\Scene2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\Strategy_Kill.cpp">
-      <Filter>Options\Scene2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\Goodies.cpp">
-      <Filter>Options\Scene2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\GoodiesFactory.cpp">
-      <Filter>Options\Scene2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2D\TreasureChest.cpp">
-      <Filter>Options\Scene2D</Filter>
     </ClCompile>
     <ClCompile Include="Source\SoundEngine.cpp">
       <Filter>SoundEngine</Filter>
@@ -397,36 +364,6 @@
     </ClInclude>
     <ClInclude Include="Source\GenericEntity.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\Scene2D.h">
-      <Filter>Options\Scene2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\Map.h">
-      <Filter>Options\Scene2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\PlayerInfo2D.h">
-      <Filter>Options\Scene2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\Animation.h">
-      <Filter>Options\Scene2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\Enemy.h">
-      <Filter>Options\Scene2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\Strategy.h">
-      <Filter>Options\Scene2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\Strategy_Kill.h">
-      <Filter>Options\Scene2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\Goodies.h">
-      <Filter>Options\Scene2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\GoodiesFactory.h">
-      <Filter>Options\Scene2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2D\TreasureChest.h">
-      <Filter>Options\Scene2D</Filter>
     </ClInclude>
     <ClInclude Include="Source\SoundEngine.h">
       <Filter>SoundEngine</Filter>

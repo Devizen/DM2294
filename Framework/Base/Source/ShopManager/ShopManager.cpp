@@ -77,8 +77,14 @@ void ShopManager::update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('B'))
 	{
-		Inventory::GetInstance()->assign_storage(temp[pressCountY]);
+		if (CPlayerInfo::GetInstance()->GetAttribute(CPlayerInfo::TYPE_GOLD) >= temp[pressCountY]->getGold())
+		{
+			CPlayerInfo::GetInstance()->increaseGoldBy(-temp[pressCountY]->getGold());
+			Inventory::GetInstance()->assign_storage(temp[pressCountY]);
+		}
 	}
+
+	cout << temp[pressCountY]->getGold() << endl;
 }
 
 void ShopManager::render()
@@ -106,6 +112,8 @@ void ShopManager::render()
 			modelStack.Scale(70, 70, 1);
 			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh(temp[i]->getName()));
 			modelStack.PopMatrix();
+
+			
 		}
 	}
 
@@ -113,6 +121,32 @@ void ShopManager::render()
 	modelStack.Translate(-90, 180.f, 0.f);
 	modelStack.Scale(100, 100, 35);
 	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), name, Color(0.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	message = to_string(temp[pressCountY]->getGold());
+	modelStack.PushMatrix();
+	modelStack.Translate(100, 50.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(100, 80.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Item Cost: ", Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	string message2 = to_string(CPlayerInfo::GetInstance()->GetAttribute(CPlayerInfo::TYPE_GOLD));
+	modelStack.PushMatrix();
+	modelStack.Translate(100, 10.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), message2, Color(1.f, 0.f, 0.f));
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(100, 30.f, 0.f);
+	modelStack.Scale(35, 35, 35);
+	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "Current Gold: ", Color(1.f, 0.f, 0.f));
 	modelStack.PopMatrix();
 }
 
@@ -242,78 +276,78 @@ void ShopManager::PushBackIntoList(Equipment * result, int type)
 	}
 }
 
-void ShopManager::ArrangeVector(int type)
-{
-	Inventory::GetInstance()->assign_storage(temp[pressCountY]);
-
-	for (int i = pressCountY; i < 2; i++)
-	{
-		if (type == 0)
-		{
-			Equipment* temp = helmList[i + 1];
-			helmList[i] = temp;
-		}
-
-		if (type == 1)
-		{
-			Equipment* temp = armorList[i + 1];
-			armorList[i] = temp;
-		}
-
-		if (type == 2)
-		{
-			Equipment* temp = gloveList[i + 1];
-			gloveList[i] = temp;
-		}
-
-		if (type == 3)
-		{
-			Equipment* temp = shoeList[i + 1];
-			shoeList[i] = temp;
-		}
-
-		if (type == 4)
-		{
-			Equipment* temp = swordList[i + 1];
-			swordList[i] = temp;
-		}
-
-		if (type == 5)
-		{
-			Equipment* temp = gunList[i + 1];
-			gunList[i] = temp;
-		}
-	}
-
-	if (type == 0)
-	{
-		helmList[2] = NULL;
-	}
-
-	if (type == 1)
-	{
-		armorList[2] = NULL;
-	}
-
-	if (type == 2)
-	{
-		gloveList[2] = NULL;
-	}
-
-	if (type == 3)
-	{
-		shoeList[2] = NULL;
-	}
-
-	if (type == 4)
-	{
-		swordList[2] = NULL;
-	}
-
-	if (type == 5)
-	{
-		gunList[2] = NULL;
-	}
-
-	setList();
-}
+//void ShopManager::ArrangeVector(int type)
+//{
+//	Inventory::GetInstance()->assign_storage(temp[pressCountY]);
+//
+//	for (int i = pressCountY; i < 2; i++)
+//	{
+//		if (type == 0)
+//		{
+//			Equipment* temp = helmList[i + 1];
+//			helmList[i] = temp;
+//		}
+//
+//		if (type == 1)
+//		{
+//			Equipment* temp = armorList[i + 1];
+//			armorList[i] = temp;
+//		}
+//
+//		if (type == 2)
+//		{
+//			Equipment* temp = gloveList[i + 1];
+//			gloveList[i] = temp;
+//		}
+//
+//		if (type == 3)
+//		{
+//			Equipment* temp = shoeList[i + 1];
+//			shoeList[i] = temp;
+//		}
+//
+//		if (type == 4)
+//		{
+//			Equipment* temp = swordList[i + 1];
+//			swordList[i] = temp;
+//		}
+//
+//		if (type == 5)
+//		{
+//			Equipment* temp = gunList[i + 1];
+//			gunList[i] = temp;
+//		}
+//	}
+//
+//	if (type == 0)
+//	{
+//		helmList[2] = NULL;
+//	}
+//
+//	if (type == 1)
+//	{
+//		armorList[2] = NULL;
+//	}
+//
+//	if (type == 2)
+//	{
+//		gloveList[2] = NULL;
+//	}
+//
+//	if (type == 3)
+//	{
+//		shoeList[2] = NULL;
+//	}
+//
+//	if (type == 4)
+//	{
+//		swordList[2] = NULL;
+//	}
+//
+//	if (type == 5)
+//	{
+//		gunList[2] = NULL;
+//	}
+//
+//	setList();
+//}

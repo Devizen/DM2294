@@ -456,30 +456,6 @@ void Level02::Update(double dt)
 					theMinimap->enlargedMap = true;
 			}
 
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
-			{
-				cinematic->SetCameraPos(camera.GetCameraPos());
-				cinematic->SetCameraTarget(camera.GetCameraTarget());
-				cinematic->SetCameraUp(camera.GetCameraUp());
-				
-				playerInfo->DetachCamera();
-				playerInfo->AttachCamera(&camera);
-				cinematicMode = false;
-				cinematic->numberOfPositions = 0;
-			}
-
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RSHIFT))
-			{
-				cinematic->SetCameraPos(camera.GetCameraPos());
-				cinematic->SetCameraTarget(camera.GetCameraTarget());
-				cinematic->SetCameraUp(camera.GetCameraUp());
-
-				
-				playerInfo->DetachCamera();
-				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
-				cinematicMode = true;
-			}
-
 			if (cinematicMode)
 			{
 				static bool completed = false;
@@ -518,15 +494,6 @@ void Level02::Update(double dt)
 				camera.SetCameraUp(cinematic->GetCameraUp());
 
 			}
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Conversation Message that Prints.It also goes to the second line.\nThere's also a third line.", 0.f, 2.f, CText::TEXT_CONVERSATION);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 
 			CQuest_Manager::GetInstance()->updateQuest(dt);
 
@@ -573,11 +540,6 @@ void Level02::Update(double dt)
 	else
 	{
 		SceneManager::GetInstance()->SetActiveScene("Village");
-		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
-		{
-			CPlayerInfo::GetInstance()->setHealthTo((int)100.f);
-			CPlayerInfo::GetInstance()->setScore(0);
-		}
 	}
 }
 

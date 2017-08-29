@@ -467,7 +467,6 @@ void SceneText::Init()
 	{
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
-	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 	Inventory::GetInstance()->Init();
 
 	openInventory = false;
@@ -488,7 +487,6 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
-	//cout << "I AM IN SCENETEXT NOW" << endl;
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -627,22 +625,6 @@ void SceneText::Update(double dt)
 			//if (KeyboardController::GetInstance()->IsKeyDown('O'))
 			//	lights[0]->position.y += 100.f * dt;
 
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-			{
-				cout << "Left Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-			{
-				cout << "Right Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-			{
-				cout << "Middle Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-			{
-				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-			}
 
 			static float printInterval = 0;
 			printInterval += static_cast<float>(dt);
@@ -721,8 +703,8 @@ void SceneText::Update(double dt)
 			// Hardware Abstraction
 			if (!CCinematic::GetInstance()->cinematicMode)
 			{
-				theKeyboard->Read(dt);
-				theMouse->Read(dt);
+				theKeyboard->Read(static_cast<float>(dt));
+				theMouse->Read(static_cast<float>(dt));
 
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
@@ -737,7 +719,7 @@ void SceneText::Update(double dt)
 			GraphicsManager::GetInstance()->UpdateLights(dt);
 
 			// Update camera effects
-			theCameraEffects->Update(dt);
+			theCameraEffects->Update(static_cast<float>(dt));
 
 
 			/*Map Editor*/
@@ -822,7 +804,6 @@ void SceneText::Update(double dt)
 				camera.SetCameraTarget(cinematic->GetCameraTarget());
 				camera.SetCameraUp(cinematic->GetCameraUp());
 
-				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
 
 			if (!cinematic->cinematicMode)
@@ -883,8 +864,8 @@ void SceneText::Update(double dt)
 	{
 		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
 		{
-			CPlayerInfo::GetInstance()->setHealthTo(100.f);
-			CPlayerInfo::GetInstance()->setScore(0.f);
+			CPlayerInfo::GetInstance()->setHealthTo(100);
+			CPlayerInfo::GetInstance()->setScore(0);
 		}
 	}
 }
@@ -1385,7 +1366,7 @@ void SceneText::RenderPassMain(void)
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 800, 600);
-	glViewport(0, 0, Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight());
+	glViewport(0, 0, static_cast<GLsizei>(Application::GetInstance().GetWindowWidth()), static_cast<GLsizei>(Application::GetInstance().GetWindowHeight()));
 	//glViewport(0, 0, m_worldWidth, m_worldHeight);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -1471,8 +1452,8 @@ void SceneText::RenderPassMain(void)
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	int halfWindowWidth = static_cast<int>(Application::GetInstance().GetWindowWidth() / 2);
+	int halfWindowHeight = static_cast<int>(Application::GetInstance().GetWindowHeight() / 2);
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 	if (OptionsManager::GetInstance()->getEditingState())
@@ -1646,6 +1627,6 @@ void SceneText::Exit()
 	//}
 
 	Text_Manager::GetInstance()->resetAll();
-	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	CPlayerInfo::GetInstance()->setKO_Count(0);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 }
