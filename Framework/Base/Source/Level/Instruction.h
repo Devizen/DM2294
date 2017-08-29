@@ -1,5 +1,5 @@
-#ifndef MAINMENU_H
-#define MAINMENU_H
+#ifndef INSTRUCTION_H
+#define INSTRUCTION_H
 
 #include "Scene.h"
 #include "Mtx44.h"
@@ -28,13 +28,13 @@ class CCinematic;
 /*Forward Declaration*/
 class Controls;
 
-class Mainmenu : public Scene
+class Instruction : public Scene
 {
 	//float m_worldHeight;
 	//float m_worldWidth;
 public:
-	Mainmenu();
-	~Mainmenu();
+	Instruction();
+	~Instruction();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -42,10 +42,10 @@ public:
 	virtual void Exit();
 
 private:
-	Mainmenu(SceneManager* _sceneMgr); // This is used to register to SceneManager
+	Instruction(SceneManager* _sceneMgr); // This is used to register to SceneManager
 
-									  //ShaderProgram* currProg;
-									  //ShaderProgram* m_gPassShaderID;
+									   //ShaderProgram* currProg;
+									   //ShaderProgram* m_gPassShaderID;
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;
 	FPSCamera camera;
@@ -63,9 +63,9 @@ private:
 	GenericEntity* theCube;
 	CEnemy3D* anEnemy3D;	// This is the CEnemy class for 3D use.
 
-	static Mainmenu* sInstance; // The pointer to the object that gets registered
+	static Instruction* sInstance; // The pointer to the object that gets registered
 
-							   /*Controls*/
+								/*Controls*/
 	vector<Controls*>controls;
 	TextEntity* controlText[17];
 	Controls* input;
@@ -100,14 +100,9 @@ private:
 	/*Render HIT*/
 	//void renderHit(void);
 
-	/*Render MAINMENU*/
-	void renderMainMenu(void);
-	void renderMainMenuTitle(void);
-	void renderMainMenuStart(void);
-	void renderMainMenuInstructions(void);
-	void renderMainMenuLevels(void);
-	void renderMainMenuQuit(void);
-	void renderMainMenuCredit(void);
+	/*Render Instruction*/
+	void renderInstruction(void);
+	void renderInstructionnBack(void);
 
 	/*Current highscore*/
 	//int currentHighscore;
@@ -133,7 +128,7 @@ private:
 #endif
 
 template<typename T>
-inline string Mainmenu::checkInput(T input)
+inline string Instruction::checkInput(T input)
 {
 	if (input == 1)
 		return "Left Click";

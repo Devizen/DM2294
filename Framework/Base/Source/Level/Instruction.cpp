@@ -1,4 +1,4 @@
-#include "Mainmenu.h"
+#include "Instruction.h"
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
 
@@ -62,9 +62,9 @@
 
 using namespace std;
 
-Mainmenu* Mainmenu::sInstance = new Mainmenu(SceneManager::GetInstance());
+Instruction* Instruction::sInstance = new Instruction(SceneManager::GetInstance());
 
-Mainmenu::Mainmenu()
+Instruction::Instruction()
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	//, currentHighscore(0)
@@ -76,25 +76,25 @@ Mainmenu::Mainmenu()
 {
 }
 
-Mainmenu::Mainmenu(SceneManager* _sceneMgr)
+Instruction::Instruction(SceneManager* _sceneMgr)
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
 	//, currentHighscore(0)
 	//, cinematicMode(false)
 {
-	_sceneMgr->AddScene("Mainmenu", this);
+	_sceneMgr->AddScene("Instruction", this);
 }
 
-Mainmenu::~Mainmenu()
+Instruction::~Instruction()
 {
 }
 
-void Mainmenu::Init()
+void Instruction::Init()
 {
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
-	
+
 	// Tell the graphics manager to use the shader we just loaded
 	GraphicsManager::GetInstance()->SetActiveShader("default");
 
@@ -248,7 +248,7 @@ void Mainmenu::Init()
 	selectedChoice = 1;
 }
 
-void Mainmenu::Update(double dt)
+void Instruction::Update(double dt)
 {
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD1))
 		SceneManager::GetInstance()->SetActiveScene("Tutorial");
@@ -263,11 +263,11 @@ void Mainmenu::Update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP))
 	{
-		selectedChoice = Math::Max(1,selectedChoice - 1);
+		selectedChoice = Math::Max(1, selectedChoice - 1);
 	}
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN))
 	{
-		selectedChoice = Math::Min(selectedChoice + 1, 5);
+		selectedChoice = Math::Min(selectedChoice + 1, 1);
 	}
 
 	switch (selectedChoice)
@@ -275,31 +275,7 @@ void Mainmenu::Update(double dt)
 	case 1:
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
 		{
-			SceneManager::GetInstance()->SetActiveScene("Tutorial");
-			break;
-		}
-	case 2:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
-		{
-			SceneManager::GetInstance()->SetActiveScene("Instruction");
-			break;
-		}
-	case 3:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
-		{
-			SceneManager::GetInstance()->SetActiveScene("Selection");
-			break;
-		}
-	case 4:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
-		{
-			exit(0);
-			break;
-		}
-	case 5:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
-		{
-			SceneManager::GetInstance()->SetActiveScene("Credits");
+			SceneManager::GetInstance()->SetActiveScene("Mainmenu");
 			break;
 		}
 	default:
@@ -307,13 +283,13 @@ void Mainmenu::Update(double dt)
 	}
 }
 
-void Mainmenu::Render()
+void Instruction::Render()
 {
 	RenderPassGPass();
 	RenderPassMain();
 }
 
-void Mainmenu::displayControls(void)
+void Instruction::displayControls(void)
 {
 	std::ostringstream ss;
 	ss << "[Enter] to save changes.";
@@ -368,105 +344,13 @@ void Mainmenu::displayControls(void)
 	controlText[0]->SetText(ss.str());
 }
 
-//void Mainmenu::renderWeapon(void)
-//{
-//	Mesh* modelMesh;
-//	if (playerInfo->GetWeapon() == 0)
-//		modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_PISTOL");
-//	if (playerInfo->GetWeapon() == 1)
-//		modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_ASSAULT");
-//
-//	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-//	modelStack.PushMatrix();
-//	if (playerInfo->GetWeapon() == 0)
-//	{
-//		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-//			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.4f, 0.f);
-//		else
-//			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
-//
-//		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-//		{
-//			CSoundEngine::GetInstance()->PlayASound("PISTOL");
-//			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
-//		}
-//		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.3f, Application::GetInstance().GetWindowWidth() * 0.2f, 1.f);
-//	}
-//	if (playerInfo->GetWeapon() == 1)
-//	{
-//		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-//			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.4f, 0.f);
-//		else
-//			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
-//
-//		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-//		{
-//			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
-//			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-//		}
-//		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.3f, Application::GetInstance().GetWindowWidth() * 0.2f, 1.f);
-//	}
-//	RenderHelper::RenderMesh(modelMesh);
-//	modelStack.PopMatrix();
-//}
-
-//void Mainmenu::renderWeaponUI(void)
-//{
-//	Mesh* modelMesh;
-//	if (playerInfo->GetWeapon() == 0)
-//		modelMesh = MeshBuilder::GetInstance()->GetMesh("PISTOL");
-//	if (playerInfo->GetWeapon() == 1)
-//		modelMesh = MeshBuilder::GetInstance()->GetMesh("ASSAULT");
-//
-//	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-//	modelStack.PushMatrix();
-//	if (playerInfo->GetWeapon() == 0)
-//	{
-//		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-//			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.225f, 0.f);
-//		else
-//			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.1525f, 0.f);
-//
-//		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-//			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-//		modelStack.Scale(windowWidth * 0.05f, windowWidth * 0.05f, 1.f);
-//	}
-//	if (playerInfo->GetWeapon() == 1)
-//	{
-//		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-//			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.225f, 0.f);
-//		else
-//			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.1525f, 0.f);
-//
-//		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-//			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-//		modelStack.Scale(windowWidth * 0.1f, windowWidth * 0.04f, 1.f);
-//	}
-//	RenderHelper::RenderMesh(modelMesh);
-//	modelStack.PopMatrix();
-//}
-
-//void Mainmenu::renderHit(void)
-//{
-//
-//	Mesh* modelMesh;
-//	modelMesh = MeshBuilder::GetInstance()->GetMesh("HIT");
-//	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-//	modelStack.PushMatrix();
-//	modelStack.Translate(0.f, 150.f, 0.f);
-//	modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
-//	modelStack.Scale(200.f, 200.f, 1.f);
-//	RenderHelper::RenderMesh(modelMesh);
-//	modelStack.PopMatrix();
-//}
-
-void Mainmenu::renderMainMenu(void)
+void Instruction::renderInstruction(void)
 {
 	Mesh* modelMesh;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
 	{
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenu");
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstruction");
 		modelStack.PushMatrix();
 		//modelStack.Scale(500, 500, 0);
 		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.99f, Application::GetInstance().GetWindowHeight() * 0.99f, 0);
@@ -475,7 +359,7 @@ void Mainmenu::renderMainMenu(void)
 	}
 	else
 	{
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenu");
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstruction");
 		modelStack.PushMatrix();
 		//modelStack.Scale(500, 500, 0);
 		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.99f, Application::GetInstance().GetWindowHeight() * 0.99f, 0);
@@ -484,31 +368,7 @@ void Mainmenu::renderMainMenu(void)
 	}
 }
 
-void Mainmenu::renderMainMenuTitle(void)
-{
-	Mesh* modelMesh;
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-	{
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuTitle");
-		modelStack.PushMatrix();
-		modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.35f , 0.f);
-		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6f, Application::GetInstance().GetWindowHeight() * .09f, 1.f);
-		RenderHelper::RenderMesh(modelMesh);
-		modelStack.PopMatrix();
-	}
-	else
-	{
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuTitle");
-		modelStack.PushMatrix();
-		modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.35f, 0.f);
-		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6f, Application::GetInstance().GetWindowHeight() * .09f, 1.f);
-		RenderHelper::RenderMesh(modelMesh);
-		modelStack.PopMatrix();
-	}
-}
-
-void Mainmenu::renderMainMenuStart(void)
+void Instruction::renderInstructionnBack(void)
 {
 	Mesh* modelMesh;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
@@ -516,195 +376,7 @@ void Mainmenu::renderMainMenuStart(void)
 	{
 		if (selectedChoice == 1)
 		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.15f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-		else
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.15f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-	}
-	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
-	{
-		if (selectedChoice == 1)
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.15f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-		else
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.15f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-	}
-}
-
-void Mainmenu::renderMainMenuInstructions(void)
-{
-	Mesh* modelMesh;
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-	{
-		if (selectedChoice == 2)
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn");
-			modelStack.PushMatrix();
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-		else
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn");
-			modelStack.PushMatrix();
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-	}
-	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
-	{
-		if (selectedChoice == 2)
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn");
-			modelStack.PushMatrix();
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-		else
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn");
-			modelStack.PushMatrix();
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-	}
-}
-
-void Mainmenu::renderMainMenuLevels(void)
-{
-	Mesh* modelMesh;
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-	{
-		if (selectedChoice == 3)
-		{		
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.15f, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-		else
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.15f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-	}
-	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
-	{
-		if (selectedChoice == 3)
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.15f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-		else
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.15f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-	}
-}
-
-void Mainmenu::renderMainMenuQuit(void)
-{
-	Mesh* modelMesh;
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-	{
-		if (selectedChoice == 4)
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.3f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-		else
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.3f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-	}
-	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
-	{
-		if (selectedChoice == 4)
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.3f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-		else
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
-			modelStack.PushMatrix();
-			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.3f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
-			RenderHelper::RenderMesh(modelMesh);
-			modelStack.PopMatrix();
-		}
-	}
-}
-
-void Mainmenu::renderMainMenuCredit(void)
-{
-	Mesh* modelMesh;
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-	{
-		if (selectedChoice == 5)
-		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuCredits");
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionBack");
 			modelStack.PushMatrix();
 			modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
 			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.1f, 1.f);
@@ -713,7 +385,7 @@ void Mainmenu::renderMainMenuCredit(void)
 		}
 		else
 		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuCredits");
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionBack");
 			modelStack.PushMatrix();
 			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
 			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
@@ -723,9 +395,9 @@ void Mainmenu::renderMainMenuCredit(void)
 	}
 	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
 	{
-		if (selectedChoice == 5)
+		if (selectedChoice == 1)
 		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuCredits");
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionBack");
 			modelStack.PushMatrix();
 			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
 			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.1f, 1.f);
@@ -734,7 +406,7 @@ void Mainmenu::renderMainMenuCredit(void)
 		}
 		else
 		{
-			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuCredits");
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionBack");
 			modelStack.PushMatrix();
 			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
 			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
@@ -744,7 +416,7 @@ void Mainmenu::renderMainMenuCredit(void)
 	}
 }
 
-void Mainmenu::pauseOptions(double dt, bool &pause)
+void Instruction::pauseOptions(double dt, bool &pause)
 {
 	OptionsManager::GetInstance()->setEditingState(true);
 	static bool choseType = false;
@@ -896,7 +568,7 @@ void Mainmenu::pauseOptions(double dt, bool &pause)
 	}
 }
 
-void Mainmenu::clearKeyDisplay(void)
+void Instruction::clearKeyDisplay(void)
 {
 	for (int i = 0; i < 17; ++i)
 	{
@@ -904,7 +576,7 @@ void Mainmenu::clearKeyDisplay(void)
 	}
 }
 
-void Mainmenu::RenderPassGPass(void)
+void Instruction::RenderPassGPass(void)
 {
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_PRE;
 
@@ -944,7 +616,7 @@ void Mainmenu::RenderPassGPass(void)
 	//RenderWorld();
 }
 
-void Mainmenu::RenderPassMain(void)
+void Instruction::RenderPassMain(void)
 {
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -1005,7 +677,7 @@ void Mainmenu::RenderPassMain(void)
 	glDisable(GL_DEPTH_TEST);
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.f;
-	GraphicsManager::GetInstance()->SetOrthographicProjection(static_cast<double>(-halfWindowWidth), static_cast<double>(halfWindowWidth), 
+	GraphicsManager::GetInstance()->SetOrthographicProjection(static_cast<double>(-halfWindowWidth), static_cast<double>(halfWindowWidth),
 		static_cast<double>(-halfWindowHeight), static_cast<double>(halfWindowHeight), static_cast<double>(-10), static_cast<double>(10));
 	GraphicsManager::GetInstance()->DetachCamera();
 	if (OptionsManager::GetInstance()->getEditingState())
@@ -1025,24 +697,20 @@ void Mainmenu::RenderPassMain(void)
 	/*switch (selectedChoice)
 	{
 	case 1:
-		renderMainMenu();
-		break;
+	renderInstruction();
+	break;
 	case 2:
-		renderMainMenuLevels();
-		break;
+	renderInstructionLevels();
+	break;
 	case 3:
-		renderMainMenuQuit();
-		break;
+	renderInstructionQuit();
+	break;
 	default:
-		break;
+	break;
 	}*/
-	renderMainMenu();
-	renderMainMenuTitle();
-	renderMainMenuStart();
-	renderMainMenuInstructions();
-	renderMainMenuLevels();
-	renderMainMenuQuit();
-	renderMainMenuCredit();
+
+	renderInstruction();
+	renderInstructionnBack();
 
 	/*Render Map Editor Options.*/
 	if (Map_Editor::GetInstance()->mapEditing)
@@ -1065,7 +733,7 @@ void Mainmenu::RenderPassMain(void)
 	glDisable(GL_BLEND);
 }
 
-void Mainmenu::Exit()
+void Instruction::Exit()
 {
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
