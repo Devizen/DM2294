@@ -71,6 +71,7 @@ Mainmenu::Mainmenu()
 	//, cinematicMode(false)
 	, windowHeight(0.f)
 	, windowWidth(0.f)
+	, splashScreen(0.f)
 	//, m_worldHeight(0.f)
 	//, m_worldWidth(0.f)
 {
@@ -79,6 +80,7 @@ Mainmenu::Mainmenu()
 Mainmenu::Mainmenu(SceneManager* _sceneMgr)
 	: theMinimap(NULL)
 	, theCameraEffects(NULL)
+	, splashScreen(0.f)
 	//, currentHighscore(0)
 	//, cinematicMode(false)
 {
@@ -246,54 +248,72 @@ void Mainmenu::Init()
 	EquipmentManager::GetInstance()->Init();
 
 	selectedChoice = 1;
+	splashScreen = 0.f;
 }
 
 void Mainmenu::Update(double dt)
 {
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD1))
-		SceneManager::GetInstance()->SetActiveScene("Tutorial");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD2))
-		SceneManager::GetInstance()->SetActiveScene("Level01");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD3))
-		SceneManager::GetInstance()->SetActiveScene("Level02");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD4))
-		SceneManager::GetInstance()->SetActiveScene("Level03");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
-		SceneManager::GetInstance()->SetActiveScene("Level04");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD0))
-		SceneManager::GetInstance()->SetActiveScene("Credits");
+	splashScreen += static_cast<float>(dt);
 
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP))
+	if (splashScreen >= 2.f)
 	{
-		selectedChoice = Math::Max(1,selectedChoice - 1);
-	}
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN))
-	{
-		selectedChoice = Math::Min(selectedChoice + 1, 3);
-	}
-
-	switch (selectedChoice)
-	{
-	case 1:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
-		{
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD1))
 			SceneManager::GetInstance()->SetActiveScene("Tutorial");
-			break;
-		}
-	case 2:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD2))
+			SceneManager::GetInstance()->SetActiveScene("Level01");
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD3))
+			SceneManager::GetInstance()->SetActiveScene("Level02");
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD4))
+			SceneManager::GetInstance()->SetActiveScene("Level03");
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
+			SceneManager::GetInstance()->SetActiveScene("Level04");
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD0))
+			SceneManager::GetInstance()->SetActiveScene("Credits");
+
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP))
 		{
-			SceneManager::GetInstance()->SetActiveScene("Selection");
-			break;
+			selectedChoice = Math::Max(1, selectedChoice - 1);
 		}
-	case 3:
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN))
 		{
-			exit(0);
+			selectedChoice = Math::Min(selectedChoice + 1, 5);
+		}
+
+		switch (selectedChoice)
+		{
+		case 1:
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
+			{
+				SceneManager::GetInstance()->SetActiveScene("Tutorial");
+				break;
+			}
+		case 2:
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
+			{
+				SceneManager::GetInstance()->SetActiveScene("Instruction");
+				break;
+			}
+		case 3:
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
+			{
+				SceneManager::GetInstance()->SetActiveScene("Selection");
+				break;
+			}
+		case 4:
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
+			{
+				exit(0);
+				break;
+			}
+		case 5:
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && !KeyboardController::GetInstance()->IsKeyDown(VK_LMENU))
+			{
+				SceneManager::GetInstance()->SetActiveScene("Credits");
+				break;
+			}
+		default:
 			break;
 		}
-	default:
-		break;
 	}
 }
 
@@ -358,98 +378,6 @@ void Mainmenu::displayControls(void)
 	controlText[0]->SetText(ss.str());
 }
 
-//void Mainmenu::renderWeapon(void)
-//{
-//	Mesh* modelMesh;
-//	if (playerInfo->GetWeapon() == 0)
-//		modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_PISTOL");
-//	if (playerInfo->GetWeapon() == 1)
-//		modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER_ASSAULT");
-//
-//	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-//	modelStack.PushMatrix();
-//	if (playerInfo->GetWeapon() == 0)
-//	{
-//		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-//			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.4f, 0.f);
-//		else
-//			modelStack.Translate(windowWidth * 0.4f, -windowHeight * 0.35f, 0.f);
-//
-//		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-//		{
-//			CSoundEngine::GetInstance()->PlayASound("PISTOL");
-//			modelStack.Rotate(-20.f, 0.f, 0.f, 1.f);
-//		}
-//		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.3f, Application::GetInstance().GetWindowWidth() * 0.2f, 1.f);
-//	}
-//	if (playerInfo->GetWeapon() == 1)
-//	{
-//		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-//			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.4f, 0.f);
-//		else
-//			modelStack.Translate(windowWidth * 0.3f, -windowHeight * 0.35f, 0.f);
-//
-//		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-//		{
-//			CSoundEngine::GetInstance()->PlayASound("ASSAULT");
-//			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-//		}
-//		modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.3f, Application::GetInstance().GetWindowWidth() * 0.2f, 1.f);
-//	}
-//	RenderHelper::RenderMesh(modelMesh);
-//	modelStack.PopMatrix();
-//}
-
-//void Mainmenu::renderWeaponUI(void)
-//{
-//	Mesh* modelMesh;
-//	if (playerInfo->GetWeapon() == 0)
-//		modelMesh = MeshBuilder::GetInstance()->GetMesh("PISTOL");
-//	if (playerInfo->GetWeapon() == 1)
-//		modelMesh = MeshBuilder::GetInstance()->GetMesh("ASSAULT");
-//
-//	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-//	modelStack.PushMatrix();
-//	if (playerInfo->GetWeapon() == 0)
-//	{
-//		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-//			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.225f, 0.f);
-//		else
-//			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.1525f, 0.f);
-//
-//		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-//			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-//		modelStack.Scale(windowWidth * 0.05f, windowWidth * 0.05f, 1.f);
-//	}
-//	if (playerInfo->GetWeapon() == 1)
-//	{
-//		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-//			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.225f, 0.f);
-//		else
-//			modelStack.Translate(-windowWidth * 0.425f, -windowHeight * 0.1525f, 0.f);
-//
-//		if (!weaponManager[playerInfo->GetWeapon()]->GetCanFire())
-//			modelStack.Rotate(-10.f, 0.f, 0.f, 1.f);
-//		modelStack.Scale(windowWidth * 0.1f, windowWidth * 0.04f, 1.f);
-//	}
-//	RenderHelper::RenderMesh(modelMesh);
-//	modelStack.PopMatrix();
-//}
-
-//void Mainmenu::renderHit(void)
-//{
-//
-//	Mesh* modelMesh;
-//	modelMesh = MeshBuilder::GetInstance()->GetMesh("HIT");
-//	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-//	modelStack.PushMatrix();
-//	modelStack.Translate(0.f, 150.f, 0.f);
-//	modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
-//	modelStack.Scale(200.f, 200.f, 1.f);
-//	RenderHelper::RenderMesh(modelMesh);
-//	modelStack.PopMatrix();
-//}
-
 void Mainmenu::renderMainMenu(void)
 {
 	Mesh* modelMesh;
@@ -508,6 +436,7 @@ void Mainmenu::renderMainMenuStart(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
 			modelStack.PushMatrix();
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.15f, 0.f);
 			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
@@ -516,6 +445,7 @@ void Mainmenu::renderMainMenuStart(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
 			modelStack.PushMatrix();
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.15f, 0.f);
 			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
@@ -527,6 +457,7 @@ void Mainmenu::renderMainMenuStart(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
 			modelStack.PushMatrix();
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.15f, 0.f);
 			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
@@ -534,6 +465,51 @@ void Mainmenu::renderMainMenuStart(void)
 		else
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuStart");
+			modelStack.PushMatrix();
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.15f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+	}
+}
+
+void Mainmenu::renderMainMenuInstructions(void)
+{
+	Mesh* modelMesh;
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+	{
+		if (selectedChoice == 2)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn");
+			modelStack.PushMatrix();
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn");
+			modelStack.PushMatrix();
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+	}
+	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
+	{
+		if (selectedChoice == 2)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn");
+			modelStack.PushMatrix();
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .15f, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn");
 			modelStack.PushMatrix();
 			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
@@ -548,7 +524,7 @@ void Mainmenu::renderMainMenuLevels(void)
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
 	{
-		if (selectedChoice == 2)
+		if (selectedChoice == 3)
 		{		
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
 			modelStack.PushMatrix();
@@ -569,7 +545,7 @@ void Mainmenu::renderMainMenuLevels(void)
 	}
 	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
 	{
-		if (selectedChoice == 2)
+		if (selectedChoice == 3)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuLevels");
 			modelStack.PushMatrix();
@@ -596,7 +572,7 @@ void Mainmenu::renderMainMenuQuit(void)
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
 	{
-		if (selectedChoice == 3)
+		if (selectedChoice == 4)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
 			modelStack.PushMatrix();
@@ -617,7 +593,7 @@ void Mainmenu::renderMainMenuQuit(void)
 	}
 	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
 	{
-		if (selectedChoice == 3)
+		if (selectedChoice == 4)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuQuit");
 			modelStack.PushMatrix();
@@ -632,6 +608,54 @@ void Mainmenu::renderMainMenuQuit(void)
 			modelStack.PushMatrix();
 			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.3f, 0.f);
 			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+	}
+}
+
+void Mainmenu::renderMainMenuCredit(void)
+{
+	Mesh* modelMesh;
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+	{
+		if (selectedChoice == 5)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuCredits");
+			modelStack.PushMatrix();
+			modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.1f, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuCredits");
+			modelStack.PushMatrix();
+			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+	}
+	else if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() > 1.5f)
+	{
+		if (selectedChoice == 5)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuCredits");
+			modelStack.PushMatrix();
+			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.1f, 1.f);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("MainMenuCredits");
+			modelStack.PushMatrix();
+			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -916,7 +940,7 @@ void Mainmenu::RenderPassMain(void)
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
-	switch (selectedChoice)
+	/*switch (selectedChoice)
 	{
 	case 1:
 		renderMainMenu();
@@ -929,20 +953,47 @@ void Mainmenu::RenderPassMain(void)
 		break;
 	default:
 		break;
+	}*/
+	if (splashScreen >= 2.f)
+	{
+		renderMainMenu();
+		renderMainMenuTitle();
+		renderMainMenuStart();
+		renderMainMenuInstructions();
+		renderMainMenuLevels();
+		renderMainMenuQuit();
+		renderMainMenuCredit();
+
+		/*Render Map Editor Options.*/
+		if (Map_Editor::GetInstance()->mapEditing)
+			Map_Editor::GetInstance()->renderOption();
+
+		/*Render text display.*/
+		if (Text_Manager::GetInstance()->returnTextList().size() > 0)
+			Text_Manager::GetInstance()->renderText();
 	}
-	renderMainMenu();
-	renderMainMenuTitle();
-	renderMainMenuStart();
-	renderMainMenuLevels();
-	renderMainMenuQuit();
+	else
+	{
+		Mesh* modelMesh;
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("SPLASH");
+			modelStack.PushMatrix();
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.99f, Application::GetInstance().GetWindowHeight() * 0.99f, 0);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+		else
+		{
+			modelMesh = MeshBuilder::GetInstance()->GetMesh("SPLASH");
+			modelStack.PushMatrix();
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.99f, Application::GetInstance().GetWindowHeight() * 0.99f, 0);
+			RenderHelper::RenderMesh(modelMesh);
+			modelStack.PopMatrix();
+		}
+	}
 
-	/*Render Map Editor Options.*/
-	if (Map_Editor::GetInstance()->mapEditing)
-		Map_Editor::GetInstance()->renderOption();
-
-	/*Render text display.*/
-	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
-		Text_Manager::GetInstance()->renderText();
 
 	glEnable(GL_DEPTH_TEST);
 

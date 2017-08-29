@@ -43,11 +43,6 @@ bool Debugger::GetDebuggerMode(void)
 
 void Debugger::Update()
 {
-	for (map<string, string>::iterator it = messageList.begin(); it != messageList.end(); ++it)
-	{
-		cout << it->first << it->second << endl;
-	}
-
 	if (messageList.size() > 0)
 		messageList.clear();
 }

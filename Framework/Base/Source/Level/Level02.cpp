@@ -265,6 +265,10 @@ void Level02::Init()
 		if ((*it)->isTower)
 			++currentTowerCount;
 	}
+
+	FileManager::GetInstance()->CreateWeapon();
+	CPlayerInfo::GetInstance()->resetAttribute();
+	EquipmentManager::GetInstance()->AddAttributes();
 }
 
 void Level02::Update(double dt)

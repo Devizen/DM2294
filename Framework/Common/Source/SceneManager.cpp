@@ -423,6 +423,12 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GetMesh("MainMenuLevels")->textureID = LoadTGA("Image//Mainmenu/Menulevels.tga");
 	MeshBuilder::GetInstance()->GenerateQuad("MainMenuQuit", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("MainMenuQuit")->textureID = LoadTGA("Image//Mainmenu/Menuquit.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MainMenuCredits", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MainMenuCredits")->textureID = LoadTGA("Image//Mainmenu/Credits.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MainMenuInstruction", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MainMenuInstruction")->textureID = LoadTGA("Image//Mainmenu/Instruction.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MainMenuInstructionBtn", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn")->textureID = LoadTGA("Image//Mainmenu/InstructionBtn.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("SelectionMenu", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("SelectionMenu")->textureID = LoadTGA("Image//Mainmenu/MenuBackground.tga");
@@ -446,5 +452,9 @@ void SceneManager::initShader(void)
 	/*Credits*/
 	MeshBuilder::GetInstance()->GenerateQuad("CREDITS", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("CREDITS")->textureID = LoadTGA("Image//Mainmenu/CREDITS.tga");
+
+	/*Splash Screen*/
+	MeshBuilder::GetInstance()->GenerateQuad("SPLASH", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("SPLASH")->textureID = LoadTGA("Image//Mainmenu/SPLASH.tga");
 
 }

@@ -74,6 +74,8 @@ void EntityManager::Update(double _dt)
 				{
 					hit = true;
 					enemy->deductHealthBy(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK));
+					if (CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) == 0)
+						enemy->deductHealthBy(1);
 				}
 			
 				bullet->SetStatus(false);

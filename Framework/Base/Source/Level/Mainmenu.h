@@ -104,8 +104,10 @@ private:
 	void renderMainMenu(void);
 	void renderMainMenuTitle(void);
 	void renderMainMenuStart(void);
+	void renderMainMenuInstructions(void);
 	void renderMainMenuLevels(void);
 	void renderMainMenuQuit(void);
+	void renderMainMenuCredit(void);
 
 	/*Current highscore*/
 	//int currentHighscore;
@@ -126,6 +128,7 @@ private:
 	//double saveMapTime;
 
 	int selectedChoice;
+	float splashScreen;
 };
 
 #endif

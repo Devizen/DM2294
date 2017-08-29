@@ -275,6 +275,9 @@ void Credits::Update(double dt)
 	/*Update text display.*/
 	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
 		Text_Manager::GetInstance()->updateText(dt);
+
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_BACK) || KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) || MouseController::GetInstance()->IsButtonPressed(MouseController::BUTTON_TYPE::LMB))
+		SceneManager::GetInstance()->SetActiveScene("Mainmenu");
 }
 
 void Credits::Render()

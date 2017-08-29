@@ -321,6 +321,9 @@
     <ClCompile Include="Source\Level\Credits.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level\Instruction.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -534,6 +537,9 @@
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="Source\Level\Credits.h">
+          <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level\Instruction.h">
       <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
