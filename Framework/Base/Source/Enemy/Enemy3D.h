@@ -109,11 +109,6 @@ public:
 	// Render
 	virtual void Render(void);
 
-	/*Set Health*/
-	void setHealth(int _health);
-	/*Get Health*/
-	int getHealth(void);
-
 	/*Set A.I State*/
 	void SetState(AI_STATE _state);
 	/*Get A.I State*/

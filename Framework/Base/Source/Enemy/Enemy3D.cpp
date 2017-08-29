@@ -315,17 +315,6 @@ void CEnemy3D::Render(void)
 	if (GetAttribute(CAttributes::TYPE_HEALTH) > 0.f)
 		RenderHealthBar();
 }
-
-void CEnemy3D::setHealth(int _health)
-{
-	health = _health;
-}
-
-int CEnemy3D::getHealth(void)
-{
-	return health;
-}
-
 void CEnemy3D::SetState(AI_STATE _state)
 {
 	state = _state;
@@ -566,12 +555,15 @@ void CEnemy3D::RenderHealthBar(void)
 	Vector3 displacement(CPlayerInfo::GetInstance()->GetPos() - this->GetPos());
 	/*Calculate the displacement from player to enemy.*/
 	Vector3 furtherDisplacement(this->GetPos() - CPlayerInfo::GetInstance()->GetPos());
+	Vector3 furthestDisplacement(this->GetPos() - CPlayerInfo::GetInstance()->GetPos());
 	/*Move the position slightly further away to prevent Z-Axis fighting.*/
 	furtherDisplacement *= 1.01f;
+	furthestDisplacement *= 1.012f;
 	/*Get the player position.*/
 	Vector3 playerPosition(CPlayerInfo::GetInstance()->GetPos());
 	/*Add the displacement with player position to bring the further than displacement Vector3 to prevent Z-Axis fighting.*/
 	furtherDisplacement = furtherDisplacement + playerPosition;
+	furthestDisplacement = furthestDisplacement + playerPosition;
 
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 
@@ -579,7 +571,7 @@ void CEnemy3D::RenderHealthBar(void)
 	/*Colour health bar that depicts the enemy or ally.*/
 	modelStack.PushMatrix();
 	/*Keep the health bar fixed to the left of the enemy.*/
-	modelStack.Translate(furtherDisplacement.x, furtherDisplacement.y + (maxAABB.y - furtherDisplacement.y), (furtherDisplacement.z / 1.01f) * 1.011f);
+	modelStack.Translate(furthestDisplacement.x, furthestDisplacement.y + (maxAABB.y - furthestDisplacement.y), furthestDisplacement.z);
 	modelStack.Rotate(Math::RadianToDegree(atan2f(displacement.x, displacement.z)), 0.f, 1.f, 0.f);
 	/*Scale it according to the health left.*/
 	modelStack.Scale(MAX_HEALTH_SCALE * 1.1f, Application::GetInstance().GetWindowHeight() * 0.006f, 0.0000001f);

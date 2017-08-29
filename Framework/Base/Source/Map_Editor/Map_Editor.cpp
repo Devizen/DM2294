@@ -57,29 +57,6 @@ Map_Editor::Map_Editor() :
 
 Map_Editor::~Map_Editor()
 {
-	if (_enemy)
-	{
-		delete _enemy;
-		_enemy = nullptr;
-	}
-
-	if (turret)
-	{
-		delete turret;
-		turret = nullptr;
-	}
-
-	if (_horde)
-	{
-		delete _horde;
-		_horde = nullptr;
-	}
-
-	if (_tower)
-	{
-		delete _tower;
-		_tower = nullptr;
-	}
 }
 
 void Map_Editor::renderObject(void)

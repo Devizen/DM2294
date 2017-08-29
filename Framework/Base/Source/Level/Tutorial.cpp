@@ -1447,5 +1447,6 @@ void Tutorial::Exit()
 
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	FileManager::GetInstance()->clearVector();
 	_CrtDumpMemoryLeaks();
 }
