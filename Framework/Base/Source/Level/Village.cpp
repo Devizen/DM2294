@@ -336,9 +336,48 @@ void Village::Update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('F') && !openEQ && !openInventory)
 	{
-		OptionsManager::GetInstance()->setEditingState(true);
-		openShop = true;
-		ShopManager::GetInstance()->setList();
+		
+		if (playerInfo->GetPos().x >= -60
+			&& playerInfo->GetPos().x <= -30
+			&& playerInfo->GetPos().z >= -440
+			&& playerInfo->GetPos().z <= -400)
+		{
+			SceneManager::GetInstance()->SetActiveScene("Level01");
+		}
+
+		if (playerInfo->GetPos().x >= 360
+			&& playerInfo->GetPos().x <= 400
+			&& playerInfo->GetPos().z >= -120
+			&& playerInfo->GetPos().z <= -80)
+		{
+			SceneManager::GetInstance()->SetActiveScene("Level02");
+		}
+
+		if (playerInfo->GetPos().x >= 40
+			&& playerInfo->GetPos().x <= -80
+			&& playerInfo->GetPos().z >= 360
+			&& playerInfo->GetPos().z <= 440)
+		{
+			SceneManager::GetInstance()->SetActiveScene("Level03");
+		}
+
+		if (playerInfo->GetPos().x >= -380
+			&& playerInfo->GetPos().x <= -340
+			&& playerInfo->GetPos().z >= -60
+			&& playerInfo->GetPos().z <= -20)
+		{
+			SceneManager::GetInstance()->SetActiveScene("Level04");
+		}
+
+		if (playerInfo->GetPos().x >= 5
+			&& playerInfo->GetPos().x <= 25
+			&& playerInfo->GetPos().z >= -160
+			&& playerInfo->GetPos().z <= -120)
+		{
+			OptionsManager::GetInstance()->setEditingState(true);
+			openShop = true;
+			ShopManager::GetInstance()->setList();
+		}
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('U'))
