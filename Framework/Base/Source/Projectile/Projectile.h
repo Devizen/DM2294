@@ -51,6 +51,10 @@ public:
 	};
 
 	enum BULLET_ORIGINATED bulletOriginated;
+
+	/*Default spawn position to calculate how far the bullet went.*/
+	Vector3 defaultPosition;
+
 protected:
 	// The model mesh for this projectile
 	Mesh* modelMesh;

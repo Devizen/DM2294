@@ -17,8 +17,7 @@
 /*Sound Engine to play sound for text.*/
 #include "../../SoundEngine.h"
 
-using std::
-;
+using std::cout;
 using std::endl;
 
 Text_Manager::Text_Manager() :
