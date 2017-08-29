@@ -91,6 +91,7 @@ public:
 	//// Get the terrain for the player info
 	//GroundEntity* GetTerrain(void);
 
+	void UpdateAttackRotation(double dt);
 	void UpdatesRotationValue(double dt);
 	void rotationSetZero();
 

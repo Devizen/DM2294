@@ -74,7 +74,40 @@ void CAnimatedEnemy::Reset(void)
 	target = defaultTarget;
 	up = defaultUp;
 }
+/*
+Update rotation for Enemy attacking
+*/
+void CAnimatedEnemy::UpdateAttackRotation(double dt)
+{
+	leftLegRotation = 0.f;
+	rightLegRotation = 0.f;
+	rightArmRotation = 0.f;
+	/*
+	Limits arm rotation between 45.f - 135.f degrees
+	*/
+	if (leftArmRotation >= -20.f)
+	{
+		bArmRotationPositive = false;
+	}
+	else if (leftArmRotation <= -100.f)
+	{
+		bArmRotationPositive = true;
+	}
 
+	float rotationSpeed = 200.f; //Speed of rotation
+
+	/*
+	Left arm rotates the opposite direction as right arm
+	*/
+	if (bArmRotationPositive)
+	{
+		leftArmRotation += rotationSpeed * static_cast<float>(dt);
+	}
+	else
+	{
+		leftArmRotation -= rotationSpeed * static_cast<float>(dt);
+	}
+}
 /*
 Updates rotational values for arms and legs
 */
@@ -153,8 +186,10 @@ void CAnimatedEnemy::rotationSetZero()
 void CAnimatedEnemy::Update(double dt)
 {
 	/*If the enemy is not at default position, keep it moving.*/
-	if ((defaultPosition - position).LengthSquared() > 250.f)
+	if ((defaultPosition - position).LengthSquared() > 250.f && state != ATTACK)
 		UpdatesRotationValue(dt);
+	else if (state == ATTACK)
+		UpdateAttackRotation(dt);
 	else
 		rotationSetZero();
 
@@ -172,7 +207,10 @@ void CAnimatedEnemy::Update(double dt)
 	{
 		//cout << "IN IDLE" << endl;
 		if (CheckInsideBoundary(GetMinAlertBoundary(), GetMaxAlertBoundary()))
+		{
 			state = ALERT;
+			rotationSetZero();
+		}
 		else
 		{
 			/*If player is not in boundary and enemy is not at the default location, move it back to default location.*/
@@ -223,10 +261,16 @@ void CAnimatedEnemy::Update(double dt)
 					previousPosition = position;
 				}
 				else
+				{
 					state = ATTACK;
+					rotationSetZero();
+				}
 			}
 			else
+			{
 				state = IDLE;
+				rotationSetZero();
+			}
 		}
 
 	}
@@ -271,10 +315,14 @@ void CAnimatedEnemy::Update(double dt)
 				}
 			}
 			else
+			{
 				state = IDLE;
+				rotationSetZero();
+			}
 		}
 
 		state = IDLE;
+		rotationSetZero();
 	}
 	
 	if (pathFindingMode)
@@ -333,7 +381,10 @@ void CAnimatedEnemy::Update(double dt)
 	}
 
 	if (GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) <= 0)
+	{
 		state = DEAD;
+		rotationSetZero();
+	}
 
 	/*Update enemy facing direction.*/
 	if (pathFindingMode)
