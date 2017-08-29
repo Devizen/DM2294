@@ -316,7 +316,8 @@ void Level02::Update(double dt)
 		Create::Text("text", "Tower(s) left: " + to_string(towerCount), 0.f, 1.5f, CText::TEXT_BATTLE);
 		currentTowerCount = towerCount;
 	}
-
+	if (towerCount < 1)
+		SceneManager::GetInstance()->SetActiveScene("Village");
 	if (KeyboardController::GetInstance()->IsKeyPressed('N'))
 	{
 		FileManager::GetInstance()->EditMapFile("Files//Level02.csv");
