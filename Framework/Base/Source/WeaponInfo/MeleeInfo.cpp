@@ -10,6 +10,7 @@ CMeleeInfo::CMeleeInfo()
 	, elapsedTime(0.0)
 	, bFire(true)
 	, numOfStabs(0)
+	, meleeRange(0.1f)
 {
 }
 
@@ -81,33 +82,25 @@ void CMeleeInfo::Update(const double dt)
 // Discharge this weapon
 void CMeleeInfo::StabEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source)
 {
-	//if (bFire)
-	//{
-		//Place holder for melee system (stabbing style)
-
-		Vector3 distanceBetween(target - position);
-		distanceBetween *= 3.f;
-		distanceBetween += position;
-		CProjectile* aProjectile = Create::Projectile("sphere", 
-														distanceBetween,
-														(target - position).Normalized(), /*Direction*/
-														meleeRange, /*Lifespan of Bullet*/
-														0.f, /*Speed*/
-														_source);
-		aProjectile->SetCollider(true);
-		aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-		aProjectile->bulletOriginated = CProjectile::FROM_PLAYER;
-		//bFire = false;
-		cout << "MELLEEEEE" << endl;
-		numOfStabs++;
-		cout << "numOfStabs :" << numOfStabs << endl;
-	//}
+	Vector3 distanceBetween(target - position);
+	distanceBetween *= 3.f;
+	distanceBetween += position;
+	CProjectile* aProjectile = Create::Projectile("sphere", 
+													distanceBetween,
+													(target - position).Normalized(), 
+													meleeRange,
+													0.f,
+													_source);
+	aProjectile->SetCollider(true);
+	aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+	aProjectile->bulletOriginated = CProjectile::FROM_PLAYER;
+	numOfStabs++;
 }
 
 void CMeleeInfo::SlashEnemy(Vector3 position, Vector3 target, CPlayerInfo* _source)
 {
 	Vector3 topOfPlayer(position.x, position.y * 5.f, position.z);
-	Vector3 slashDown(target.x - position.x, /*(target.y ) - */(position.y * 4.f), target.z - position.z);
+	Vector3 slashDown(target.x - position.x, (position.y * 4.f), target.z - position.z);
 	float increaseSlashDisplacement = 10.0f;
 	float translateDown = 0.f;
 
@@ -116,7 +109,7 @@ void CMeleeInfo::SlashEnemy(Vector3 position, Vector3 target, CPlayerInfo* _sour
 		CProjectile* aTriggerBox = Create::Projectile("cubeBox",
 			Vector3(topOfPlayer.x, topOfPlayer.y - translateDown, topOfPlayer.z) + (slashDown.Normalized() * increaseSlashDisplacement),
 			slashDown.Normalized(),
-			0.5,
+			0.01f,
 			0.0f,
 			_source);
 		aTriggerBox->SetCollider(true);
@@ -129,17 +122,5 @@ void CMeleeInfo::SlashEnemy(Vector3 position, Vector3 target, CPlayerInfo* _sour
 
 		translateDown += 0.1f;
 	}
-	//Vector3 distance(target - position);
-	//distance *= 3.f; 
-	//distance += position; 
-	//CProjectile* aTriggerBox = Create::Projectile("cubeBox",
-	//	distance,
-	//	(target - position).Normalized(),
-	//	0.5f,
-	//	0.0f,
-	//	_source);
-	//aTriggerBox->SetCollider(true);
-	//aTriggerBox->SetAABB(Vector3(8.0f, 0.5f, 4.0f), Vector3(-8.0f, -0.5f, -4.0f));
-	cout << "SLASHED FROM TOP TO DOWN" << endl;
 }
 

@@ -526,8 +526,8 @@ CAnimatedEnemy* Create::AnimatedEnemy(const std::string& _core,
 	result->pathFindingMode = false;
 	result->SetAlertBoundary(Vector3(-100.f, -10.f, -100.f), Vector3(100.f, 10.f, 100.f));
 	result->SetAABB(Vector3(_scale.x, _scale.y * 3.f, _scale.z), Vector3(-_scale.x, -10.f, -_scale.z));
-	result->setHealth(15);
-	result->setMaxHealthTo(15);
+	result->setHealth(10);
+	result->setMaxHealthTo(10);
 	result->SetType(1);
 	result->SetLight(true);
 	result->isRobot = true;
