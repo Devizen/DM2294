@@ -1381,18 +1381,6 @@ void Level01::Exit()
 	GraphicsManager::GetInstance()->RemoveLight("lights[1]");
 
 
-	//if (currProg)
-	//{
-	//	delete currProg;
-	//	currProg = nullptr;
-	//}
-
-	//if (m_gPassShaderID)
-	//{
-	//	delete m_gPassShaderID;
-	//	m_gPassShaderID = nullptr;
-	//}
-
 	ParticleManager* particleManager = ParticleManager::GetInstance();
 	ParticleManager::GetInstance()->deleteParticle();
 
