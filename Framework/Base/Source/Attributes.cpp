@@ -174,11 +174,6 @@ void CAttributes::setEXP(int exp)
 
 void CAttributes::printAttributes()
 {
-	//cout << "Health: " << HEALTH << endl;
-	//cout << "Attack: " << ATTACK << endl;
-	//cout << "Defense: " << DEFENSE << endl;
-	//cout << "Speed: " << SPEED << endl;
-	//cout << endl;
 }
 
 void CAttributes::addAttack(int newAttack)

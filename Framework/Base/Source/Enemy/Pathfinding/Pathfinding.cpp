@@ -52,7 +52,6 @@ void Pathfinding::checkPathCollision(Vector3 _scale)
 		{
 			CFurniture* object = (CFurniture*)*objIt;
 
-			//cout << "Object to Path Distance " << (pathToGo - object->GetPosition()).LengthSquared() << endl;
 			if ((pathToGo - object->GetPosition()).LengthSquared() < 200.f)
 			{
 				it = path.erase(it);
@@ -79,8 +78,6 @@ void Pathfinding::checkPathCollision(Vector3 _scale)
 
 			if (enemy == this)
 				continue;
-
-			//cout << "Displacement: " << (pathToGo - Vector3(enemy->GetPos().x, -10.f, enemy->GetPos().z)).LengthSquared() << endl;
 
 			if ((pathToGo - Vector3(enemy->GetPos().x, -10.f, enemy->GetPos().z)).LengthSquared() < 200.f)
 			{
@@ -116,8 +113,6 @@ Vector3 Pathfinding::nearestPath(void)
 	{
 		Vector3 nextPath = (Vector3)*it;
 
-		//cout << "Object to Path Distance " << (targetObjectPosition - nextPath).LengthSquared() << endl;
-
 		if (nextPath == nearest)
 			continue;
 
@@ -134,6 +129,5 @@ Vector3 Pathfinding::nearestPath(void)
 	//nearest.y = _enemy->GetPos().y;
 	nearestPosition = nearest;
 
-	//cout << "Object to Nearest Distance " << (targetObjectPosition - nearest).LengthSquared() << endl;
 	return nearest;
 }

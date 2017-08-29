@@ -109,10 +109,6 @@ void Inventory::Update(double dt)
 			}
 		}
 
-		else if (EquipmentManager::GetInstance()->ReturnList()[0] == NULL)
-		{
-			cout << "ISEQUIPPED" << endl;
-		}
 	}
 
 	if (showDiscardText == true)
@@ -147,7 +143,6 @@ void Inventory::assign_storage(Equipment* object)
 
 			storage[i]->setStatus(false);
 			count++;
-			cout << count << endl;
 			break;
 		}
 	}
@@ -162,22 +157,6 @@ Equipment** Inventory::ReturnType()
 
 void Inventory::remove_storage(int position)
 {
-	//for (auto it = Inventory::GetInstance()->storage.begin(); it != Inventory::GetInstance()->storage.end();++it)
-	//{
-	//	if (position != count)
-	//	{
-	//		++count;
-	//		continue;
-	//	}
-	//	Equipment* find = (Equipment*)*it;
-	//	cout << "Address in Inventory: " << find << endl;
-	//	storage.remove(find);
-	//	delete find;
-	//	find = nullptr;
-	//	//Inventory::GetInstance()->storage.erase(it);
-	//	//storage.pop_back();
-	//	break;
-	//}
 	for (int i = position; i < 11; i++)
 	{
 		Equipment* temp = storage[i + 1];

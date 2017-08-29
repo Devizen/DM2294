@@ -53,7 +53,6 @@ void ParticleManager::updateParticle(double dt)
 		{
 			particle->particle_IsActive = false;
 			m_particleCount--;
-			//cout << m_particleCount << endl;
 		}
 	}
 }

@@ -467,9 +467,6 @@ bool EntityManager::CheckSphereCollision(CProjectile *ThisEntity, CFurniture *Th
 	float magnitude = relativePosition.LengthSquared();
 	float totalDisance = ThisEntity->GetScale().x + ThatEntity->GetScale().x;
 
-	//cout << "Magnitude: " << magnitude << endl;
-	//cout << "Total Distance: " << totalDisance << endl;
-
 	if (magnitude > totalDisance)
 		return false;
 	else
@@ -500,34 +497,12 @@ bool EntityManager::CheckAABBCollision(Vector3 _minAABB, Vector3 _maxAABB, Vecto
 		Vector3 enemyMin = enemy->GetMinAABB() + Vector3(enemy->GetPosition().x, -5.f, enemy->GetPosition().z);
 		Vector3 enemyMax = enemy->GetMaxAABB() + Vector3(enemy->GetPosition().x, -5.f, enemy->GetPosition().z);
 
-		//cout << playerMin << " and " << playerMax << endl;
-		//cout << enemyMin << " and " << enemyMax << endl;
-
 		if (playerMin < enemyMax && playerMax > enemyMin)
 			return true;
 		else
 			continue;
 	}
 
-	//for (list<EntityBase*>::iterator thatObj = itemList.begin(); thatObj != itemList.end(); ++thatObj)
-	//{
-	//	EntityBase* item = (EntityBase*)*thatObj;
-	//	Vector3 itemMin = item->GetMinAABB() + Vector3(item->GetPosition().x, -5.f, item->GetPosition().z);
-	//	Vector3 itemMax = item->GetMaxAABB() + Vector3(item->GetPosition().x, -5.f, item->GetPosition().z);
-
-
-	//	if ((playerMin.x < itemMax.x && playerMax.x > itemMin.x) &&
-	//		(playerMin.y < itemMax.y && playerMax.y > itemMin.y) &&
-	//		(playerMin.z < itemMax.z && playerMax.z > itemMin.z))
-	//		return true;
-	//	else
-	//		continue;
-	//}
-
-	//cout << "Player Position: " << ThisEntity->GetPos() << endl;
-	//cout << "Furniture Position: " << ThatEntity->GetPosition() << endl;
-	//cout << "Player Min Position: " << playerMin << endl;
-	//cout << "Player Max Position: " << playerMax << endl;
 	return false;
 }
 

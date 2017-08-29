@@ -180,29 +180,6 @@ int CGamepad::Read(const float deltaTime)
 	if (_CONTROLLER_KEYBOARD_DEBUG)
 		cout << "CGamepad::Read()" << endl;
 
-	/*Debugging Keyboard Controls*/
-	/*vector<Controls*>controls = OptionsManager::GetInstance()->getControls();
-
-	int count = 0;
-	static bool once = false;
-	if (!once)
-	{
-	for (vector<Controls*>::iterator it = controls.begin(); it != controls.end(); ++it)
-	{
-	Controls* key = (Controls*)*it;
-
-	cout << count << ": " << key->getKey() << endl;
-	cout << "Type: " << key->GetType() << endl;
-	++count;
-	}
-	}
-	once = true;*/
-
-	/*Using customised keys from Options Manager*/
-	/*Only activate controls when player is not editing the keys.*/
-	//if (!OptionsManager::GetInstance()->getEditingState())
-	//{
-
 	int count = 0;
 	static bool once = false;
 	if (!once)
@@ -212,8 +189,6 @@ int CGamepad::Read(const float deltaTime)
 		{
 			Controls* key = (Controls*)*it;
 
-			cout << count << ": " << key->getKey() << endl;
-			cout << "Type: " << key->GetType() << endl;
 			++count;
 		}
 	}
