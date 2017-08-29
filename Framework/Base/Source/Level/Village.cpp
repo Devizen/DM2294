@@ -279,6 +279,7 @@ void Village::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Village.csv");
 	FileManager::GetInstance()->ReadShopFile("Files/Shop.csv");
+	FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 
 }
 

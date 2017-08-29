@@ -723,7 +723,7 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 	result->SetAABB(_scale * 2.f, -_scale * 2.f);
 	result->SetMinAABB(-_scale * 2.f);
 	result->SetMaxAABB(_scale * 2.f);
-	result->SetAlertBoundary(Vector3(-70.f, -10.f, -70.f), Vector3(70.f, 10.f, 70.f));
+	result->SetAlertBoundary(Vector3(-80.f, -10.f, -80.f), Vector3(80.f, 10.f, 80.f));
 	result->setMaxHealthTo(10.f);
 	result->setHealthTo(10.f);
 	result->setAttackTo(1.f);

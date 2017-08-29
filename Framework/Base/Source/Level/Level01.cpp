@@ -278,6 +278,7 @@ void Level01::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level01.csv");
 	FileManager::GetInstance()->ReadEnemyFile("Files//Level01Enemy.csv");
+	FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 
 	/*Display Objective to Player.*/
 	Create::Text("text", "Demolish the towers in the map!", 0.f, 3.f, CText::TEXT_BATTLE);

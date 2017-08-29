@@ -378,6 +378,13 @@ bool FileManager::ReadWeaponFile( string myFile)
 		return false;
 	}
 	return true;
+
+	if (masterList.size() > 0)
+	{
+		CreateWeapon();
+		CPlayerInfo::GetInstance()->resetAttribute();
+		EquipmentManager::GetInstance()->AddAttributes();
+	}
 }
 
 bool FileManager::ReadMapFile(const string myFile)

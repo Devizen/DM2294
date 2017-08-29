@@ -268,6 +268,7 @@ void Tutorial::Init()
 	saveMapTime = 0;
 
 	FileManager::GetInstance()->ReadMapFile("Files//Tutorial.csv");
+	FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 
 	
 	Vector3 _scale(3.f, 3.f, 3.f);

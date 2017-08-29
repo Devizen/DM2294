@@ -250,6 +250,7 @@ void Level03::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level03.csv");
 	FileManager::GetInstance()->ReadEnemyFile("Files//Level03Enemy.csv");
+	FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 
 	cinematic->cinematicMode = true;
 

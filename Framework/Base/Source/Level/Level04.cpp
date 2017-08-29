@@ -362,6 +362,7 @@ void Level04::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level04.csv");
 	FileManager::GetInstance()->ReadEnemyFile("Files//Level04Enemy.csv");
+	FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 
 	for (list<CEnemy3D*>::iterator it = EntityManager::GetInstance()->returnEnemy().begin(); it != EntityManager::GetInstance()->returnEnemy().end(); ++it)
 	{

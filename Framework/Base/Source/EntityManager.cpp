@@ -42,17 +42,17 @@ void EntityManager::Update(double _dt)
 
 		}
 
-		if (CheckProjectileToPlayerCollision(bullet, CPlayerInfo::GetInstance()))
-		{
-			CSoundEngine::GetInstance()->PlayASound("TAKEDAMAGE");
-			CPlayerInfo::GetInstance()->deductHealthBy(1);
-			CPlayerInfo::GetInstance()->setTookDamage(true);
-			bullet->SetStatus(false);
-			CPlayerInfo::GetInstance()->setTookDamage(false);
+		if (bullet->bulletOriginated != CProjectile::FROM_PLAYER)
+			if (CheckProjectileToPlayerCollision(bullet, CPlayerInfo::GetInstance()))
+			{
+				CSoundEngine::GetInstance()->PlayASound("TAKEDAMAGE");
+				CPlayerInfo::GetInstance()->deductHealthBy(1);
+				CPlayerInfo::GetInstance()->setTookDamage(true);
+				bullet->SetStatus(false);
+				CPlayerInfo::GetInstance()->setTookDamage(false);
 
-			CCameraEffects::GetInstance()->SetStatus_BloodScreen(true);
-		}
-
+				CCameraEffects::GetInstance()->SetStatus_BloodScreen(true);
+			}
 
 		for (list<CEnemy3D*>::iterator enemyObj = enemyList.begin(); enemyObj != enemyList.end(); ++enemyObj)
 		{

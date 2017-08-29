@@ -251,6 +251,7 @@ void Level02::Init()
 
 	FileManager::GetInstance()->ReadMapFile("Files//Level02.csv");
 	FileManager::GetInstance()->ReadEnemyFile("Files//Level02Enemy.csv");
+	FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 
 	Create::Health("POWERUP_HEALTH", Vector3(60.f, 0.f, 28.f), Vector3(3.f, 3.f, 3.f));
 	Create::Bullet("POWERUP_BULLET", Vector3(88.f, 0.f, 65.f), Vector3(3.f, 3.f, 3.f));

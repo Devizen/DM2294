@@ -163,13 +163,13 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 			if (!_source->getLockedOn())
 			{
 				distanceBetween = target - _source->GetPos();
-				distanceBetween *= 10.f;
+				distanceBetween *= 5.f;
 				distanceBetween += _source->GetPos();
 			}
 			else
 			{
 				Vector3 shiftForward((_source->getEnemyPositionToLockOn()->GetPos() - _source->GetPos()).Normalized());
-				shiftForward *= 10.f;
+				shiftForward *= 5.f;
 
 				distanceBetween += _source->GetPos() + shiftForward;
 			}
