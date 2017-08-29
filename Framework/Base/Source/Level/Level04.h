@@ -132,6 +132,9 @@ private:
 	float windowWidth;
 
 	double saveMapTime;
+
+	/*Keep track of towers left.*/
+	int currentTowerCount;
 };
 
 #endif
