@@ -333,6 +333,45 @@ void Village::Update(double dt)
 		OptionsManager::GetInstance()->setEditingState(true);
 		openEQ = true;
 	}
+	if (playerInfo->GetPos().x >= -60
+		&& playerInfo->GetPos().x <= -30
+		&& playerInfo->GetPos().z >= -440
+		&& playerInfo->GetPos().z <= -400)
+	{
+		Create::Text("text", "Press [F] to enter Level 01!", 0.f, 5.f, CText::TEXT_BATTLE);
+	}
+
+	if (playerInfo->GetPos().x >= 360
+		&& playerInfo->GetPos().x <= 400
+		&& playerInfo->GetPos().z >= -120
+		&& playerInfo->GetPos().z <= -80)
+	{
+		Create::Text("text", "Press [F] to enter Level 02!", 0.f, 5.f, CText::TEXT_BATTLE);
+	}
+
+	if (playerInfo->GetPos().x >= 40
+		&& playerInfo->GetPos().x <= -80
+		&& playerInfo->GetPos().z >= 360
+		&& playerInfo->GetPos().z <= 440)
+	{
+		Create::Text("text", "Press [F] to enter Level 03!", 0.f, 5.f, CText::TEXT_BATTLE);
+	}
+
+	if (playerInfo->GetPos().x >= -380
+		&& playerInfo->GetPos().x <= -340
+		&& playerInfo->GetPos().z >= -60
+		&& playerInfo->GetPos().z <= -20)
+	{
+		Create::Text("text", "Press [F] to enter Level 04!", 0.f, 5.f, CText::TEXT_BATTLE);
+	}
+
+	if (playerInfo->GetPos().x >= 5
+		&& playerInfo->GetPos().x <= 25
+		&& playerInfo->GetPos().z >= -160
+		&& playerInfo->GetPos().z <= -120)
+	{
+		Create::Text("text", "Press [F] to enter Shop!", 0.f, 5.f, CText::TEXT_BATTLE);
+	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('F') && !openEQ && !openInventory)
 	{

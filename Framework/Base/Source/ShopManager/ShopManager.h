@@ -22,6 +22,7 @@ class ShopManager : public Singleton<ShopManager>
 	Equipment* temp[3];
 
 	string name;
+	string message;
 	int pressCountX;
 	int pressCountY;
 public: 
