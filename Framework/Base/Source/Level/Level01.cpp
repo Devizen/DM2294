@@ -277,6 +277,9 @@ void Level01::Init()
 	boss->setSpeed(60);
 
 	Text_Manager::GetInstance()->displayingText = false;
+	FileManager::GetInstance()->CreateWeapon();
+	CPlayerInfo::GetInstance()->resetAttribute();
+	EquipmentManager::GetInstance()->AddAttributes();
 }
 
 void Level01::Update(double dt)

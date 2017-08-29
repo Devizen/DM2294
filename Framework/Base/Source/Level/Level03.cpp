@@ -251,7 +251,9 @@ void Level03::Init()
 	FileManager::GetInstance()->ReadWeaponFile("Files//Inventory.csv");
 
 	cinematic->cinematicMode = true;
-
+	FileManager::GetInstance()->CreateWeapon();
+	CPlayerInfo::GetInstance()->resetAttribute();
+	EquipmentManager::GetInstance()->AddAttributes();
 }
 
 void Level03::Update(double dt)
