@@ -11,7 +11,6 @@
 #include "../Minimap/Minimap.h"
 #include "../EntityManager.h"
 
-/*Rendering Things; TODO: Shift all rendering stuff to RenderHelper.*/
 #include "MeshBuilder.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
@@ -19,6 +18,8 @@
 
 #include "../Enemy/Patrol/Patrol.h"
 #include "../Attributes.h"
+
+#include "SceneManager.h"
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -352,6 +353,8 @@ void CPlayerInfo::UpdateFreeFall(double dt)
  ********************************************************************************/
 void CPlayerInfo::Update(double dt)
 {
+	if (CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) <= 0)
+		SceneManager::GetInstance()->SetActiveScene("Village");
 	//double mouse_diff_x, mouse_diff_y;
 	//MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
 

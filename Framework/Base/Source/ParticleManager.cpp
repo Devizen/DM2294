@@ -32,7 +32,7 @@ void ParticleManager::updateParticle(double dt)
 		particle->type = particleObject_type::P_Water;
 		particle->particle_Scale.Set(1.0f, 5.0f, 1.0f);
 		particle->particle_Velocity.Set(0.0f, 0.0f, 0.0f);
-		particle->particle_Position.Set(CPlayerInfo::GetInstance()->GetPos().x + Math::RandFloatMinMax(-350, 350), 1000.f, CPlayerInfo::GetInstance()->GetPos().z + Math::RandFloatMinMax(-350, 350));
+		particle->particle_Position.Set(CPlayerInfo::GetInstance()->GetPos().x + Math::RandFloatMinMax(-200, 200), 1000.f, CPlayerInfo::GetInstance()->GetPos().z + Math::RandFloatMinMax(-200, 200));
 	}
 	//Update all particle
 	std::vector<ParticleManager*>::iterator it, end;

@@ -493,7 +493,7 @@ void Village::Update(double dt)
 
 			/*Display score*/
 			ss.str("");
-			ss << "Score:" << playerInfo->getScore();
+			ss << "Gold:" << playerInfo->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD);
 			textObj[24]->SetPosition(Vector3(-windowHeight * 0.1f, windowHeight * 0.48f, 0.f));
 			textObj[24]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[24]->SetColor(Color(1.f, 0.f, 0.f));

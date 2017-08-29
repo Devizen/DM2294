@@ -52,23 +52,7 @@ void EntityManager::Update(double _dt)
 
 			CCameraEffects::GetInstance()->SetStatus_BloodScreen(true);
 		}
-		//for (list<CPlayerInfo*>::iterator playerObj = playerList.begin(); playerObj != playerList.end(); ++playerObj)
-		//{
-		//	CPlayerInfo* player = (CPlayerInfo*)*playerObj;
-		//	if (CheckProjectileToPlayerCollision(bullet, player))
-		//	{
-		//		CSoundEngine::GetInstance()->PlayASound("TAKEDAMAGE");
-		//		player->deductHealthBy(1.f);
-		//		player->setTookDamage(true);
-		//		bullet->SetStatus(false);
-		//		player->setTookDamage(false);
 
-		//		CCameraEffects::GetInstance()->SetStatus_BloodScreen(true);
-		//	}
-		//	else
-		//		continue;
-
-		//}
 
 		for (list<CEnemy3D*>::iterator enemyObj = enemyList.begin(); enemyObj != enemyList.end(); ++enemyObj)
 		{
@@ -80,17 +64,16 @@ void EntityManager::Update(double _dt)
 
 			if (CheckProjectileToEnemyCollision(bullet, enemy))
 			{
-				enemy->deductHealthBy(1);
-				bullet->SetStatus(false);
-				if (CProjectile::FROM_PLAYER)
+				if (bullet->bulletOriginated == CProjectile::FROM_ENEMY)
+					enemy->deductHealthBy(1);
+
+				if (bullet->bulletOriginated == CProjectile::FROM_PLAYER)
+				{
 					hit = true;
+					enemy->deductHealthBy(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK));
+				}
 			
-				//if (bullet->bulletOriginated == CProjectile::FROM_PLAYER)
-				//{
-				//	CCinematic::GetInstance()->cinematicMode = true; // Only when critical hit, then active cinematic mode
-				//	CCinematic::GetInstance()->cameraPosition = CPlayerInfo::GetInstance()->GetPos();
-				//	CCinematic::GetInstance()->cameraTarget = Vector3(enemy->GetPos().x, CPlayerInfo::GetInstance()->GetPos().y, enemy->GetPos().z);
-				//}
+				bullet->SetStatus(false);
 			}
 			else
 				continue;

@@ -430,7 +430,7 @@ void Level03::Update(double dt)
 
 			/*Display score*/
 			ss.str("");
-			ss << "Score:" << playerInfo->getScore();
+			ss << "Gold:" << playerInfo->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD);
 			textObj[24]->SetPosition(Vector3(-windowHeight * 0.1f, windowHeight * 0.48f, 0.f));
 			textObj[24]->SetScale(Vector3(windowWidth * 0.04f, windowWidth * 0.04f, 1.f));
 			textObj[24]->SetColor(Color(1.f, 0.f, 0.f));
@@ -1077,42 +1077,44 @@ void Level03::RenderPassMain(void)
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
-	EntityManager::GetInstance()->RenderUI();
-
-	/*Render Weapon*/
-	renderWeapon();
-
-	//*Render Camera Effects*/
-	theCameraEffects->RenderUI();
-
-	//*Render Weapon UI*/
-	renderWeaponUI();
-
-	//*Render Hit*/
-	if (EntityManager::GetInstance()->getHit())
-		renderHit();
-
-	if (openInventory)
+	if (!cinematic->cinematicMode)
 	{
-		Inventory::GetInstance()->RenderWeapon();
+		EntityManager::GetInstance()->RenderUI();
+
+		/*Render Weapon*/
+		renderWeapon();
+
+		//*Render Camera Effects*/
+		theCameraEffects->RenderUI();
+
+		//*Render Weapon UI*/
+		renderWeaponUI();
+
+		//*Render Hit*/
+		if (EntityManager::GetInstance()->getHit())
+			renderHit();
+
+		if (openInventory)
+		{
+			Inventory::GetInstance()->RenderWeapon();
+		}
+
+		if (openEQ)
+		{
+			EquipmentManager::GetInstance()->Render();
+			CPlayerInfo::GetInstance()->RenderAttribute();
+
+		}
+
+		//*Render KO Count*/
+		RenderHelper::GetInstance()->renderKOCount();
+		//*Render Player Health Bar*/
+		RenderHelper::GetInstance()->renderPlayerHealth();
+
+		/*Render Map Editor Options.*/
+		if (Map_Editor::GetInstance()->mapEditing)
+			Map_Editor::GetInstance()->renderOption();
 	}
-
-	if (openEQ)
-	{
-		EquipmentManager::GetInstance()->Render();
-		CPlayerInfo::GetInstance()->RenderAttribute();
-
-	}
-
-	//*Render KO Count*/
-	RenderHelper::GetInstance()->renderKOCount();
-	//*Render Player Health Bar*/
-	RenderHelper::GetInstance()->renderPlayerHealth();
-
-	/*Render Map Editor Options.*/
-	if (Map_Editor::GetInstance()->mapEditing)
-		Map_Editor::GetInstance()->renderOption();
-
 	/*Render text display.*/
 	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
 		Text_Manager::GetInstance()->renderText();
