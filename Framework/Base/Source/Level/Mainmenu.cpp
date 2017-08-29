@@ -987,7 +987,7 @@ void Mainmenu::Exit()
 		cinematic = nullptr;
 	}
 	Text_Manager::GetInstance()->resetAll();
-	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	CPlayerInfo::GetInstance()->setKO_Count(0);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	FileManager::GetInstance()->clearVector();
 }

@@ -282,10 +282,10 @@ void EntityManager::AddEnemy(CEnemy3D * _newEntity)
 	enemyList.push_back(_newEntity);
 }
 
-void EntityManager::AddPatrolEnemy(Patrol * _newEntity)
-{
-	patrolList.push_back(_newEntity);
-}
+//void EntityManager::AddPatrolEnemy(Patrol * _newEntity)
+//{
+//	patrolList.push_back(_newEntity);
+//}
 
 void EntityManager::AddItem(EntityBase * _newEntity)
 {
@@ -383,13 +383,13 @@ void EntityManager::removeAllEntities(void)
 		itemList.pop_back();
 	}
 
-	while (patrolList.size() > 0)
+	/*while (patrolList.size() > 0)
 	{
 		Patrol* patrol = patrolList.back();
 		delete patrol;
 		patrol = nullptr;
 		patrolList.pop_back();
-	}
+	}*/
 	//std::list<CPlayerInfo*> playerList;
 }
 

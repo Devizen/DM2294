@@ -505,8 +505,8 @@ void Selection::renderSelectionTitle(void)
 	{
 		modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionTitle");
 		modelStack.PushMatrix();
-		modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.35, 0);
-		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6, Application::GetInstance().GetWindowHeight() * .09, 1.f);
+		modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.35f, 0.f);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6f, Application::GetInstance().GetWindowHeight() * .09f, 1.f);
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
@@ -514,8 +514,8 @@ void Selection::renderSelectionTitle(void)
 	{
 		modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionTitle");
 		modelStack.PushMatrix();
-		modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.35, 0);
-		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6, Application::GetInstance().GetWindowHeight() * .09, 1.f);
+		modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.35f, 0.f);
+		modelStack.Scale(Application::GetInstance().GetWindowWidth() * .6f, Application::GetInstance().GetWindowHeight() * .09f, 1.f);
 		RenderHelper::RenderMesh(modelMesh);
 		modelStack.PopMatrix();
 	}
@@ -531,8 +531,8 @@ void Selection::renderSelectionVillage(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionVillageTown");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.2, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.2f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -540,8 +540,8 @@ void Selection::renderSelectionVillage(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionVillageTown");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.2, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.2f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -552,8 +552,8 @@ void Selection::renderSelectionVillage(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionVillageTown");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.2, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.2f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -561,8 +561,8 @@ void Selection::renderSelectionVillage(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionVillageTown");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.2, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.2f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -579,8 +579,8 @@ void Selection::renderSelectionTutorial(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionTutorial");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.08, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.08f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -588,8 +588,8 @@ void Selection::renderSelectionTutorial(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionTutorial");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.08, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.08f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -600,8 +600,8 @@ void Selection::renderSelectionTutorial(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionTutorial");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.08, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.08f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -609,8 +609,8 @@ void Selection::renderSelectionTutorial(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionTutorial");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * 0.08, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * 0.08f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -627,8 +627,8 @@ void Selection::renderSelectionLevel1(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel1");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.04, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.04f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -636,8 +636,8 @@ void Selection::renderSelectionLevel1(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel1");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.04 , 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.04f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -648,8 +648,8 @@ void Selection::renderSelectionLevel1(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel1");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.04, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.04f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -657,8 +657,8 @@ void Selection::renderSelectionLevel1(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel1");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.04, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.04f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -675,8 +675,8 @@ void Selection::renderSelectionLevel2(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel2");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.16, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.16f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -684,8 +684,8 @@ void Selection::renderSelectionLevel2(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel2");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.16, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.16f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -696,8 +696,8 @@ void Selection::renderSelectionLevel2(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel2");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.16, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.16f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -705,8 +705,8 @@ void Selection::renderSelectionLevel2(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel2");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.16, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.16f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -723,8 +723,8 @@ void Selection::renderSelectionLevel3(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel3");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.28, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.28f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -732,8 +732,8 @@ void Selection::renderSelectionLevel3(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel3");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.28, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.28f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -744,8 +744,8 @@ void Selection::renderSelectionLevel3(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel3");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.28, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.28f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -753,8 +753,8 @@ void Selection::renderSelectionLevel3(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel3");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.28, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.28f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -771,8 +771,8 @@ void Selection::renderSelectionLevel4(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel4");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.4, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -780,8 +780,8 @@ void Selection::renderSelectionLevel4(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel4");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.4, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -792,8 +792,8 @@ void Selection::renderSelectionLevel4(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel4");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.4, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .4f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -801,8 +801,8 @@ void Selection::renderSelectionLevel4(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionLevel4");
 			modelStack.PushMatrix();
-			modelStack.Translate(0, Application::GetInstance().GetWindowHeight() * -0.4, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25, Application::GetInstance().GetWindowHeight() * .1, 1.f);
+			modelStack.Translate(0.f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .25f, Application::GetInstance().GetWindowHeight() * .1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -819,8 +819,8 @@ void Selection::renderSelectionBack(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionBack");
 			modelStack.PushMatrix();
-			modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.4, Application::GetInstance().GetWindowHeight() * -0.4, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1, Application::GetInstance().GetWindowHeight() * 0.1, 1.f);
+			modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -828,8 +828,8 @@ void Selection::renderSelectionBack(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionBack");
 			modelStack.PushMatrix();
-			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4, Application::GetInstance().GetWindowHeight() * -0.4, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1, Application::GetInstance().GetWindowHeight() * 0.05, 1.f);
+			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -840,8 +840,8 @@ void Selection::renderSelectionBack(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionBack");
 			modelStack.PushMatrix();
-			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4, Application::GetInstance().GetWindowHeight() * -0.4, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1, Application::GetInstance().GetWindowHeight() * 0.1, 1.f);
+			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.1f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -849,8 +849,8 @@ void Selection::renderSelectionBack(void)
 		{
 			modelMesh = MeshBuilder::GetInstance()->GetMesh("SelectionBack");
 			modelStack.PushMatrix();
-			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4, Application::GetInstance().GetWindowHeight() * -0.4, 0);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1, Application::GetInstance().GetWindowHeight() * 0.05, 1.f);
+			modelStack.Translate(Application::GetInstance().GetWindowWidth()* 0.4f, Application::GetInstance().GetWindowHeight() * -0.4f, 0.f);
+			modelStack.Scale(Application::GetInstance().GetWindowWidth() * .1f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
 			RenderHelper::RenderMesh(modelMesh);
 			modelStack.PopMatrix();
 		}
@@ -1068,7 +1068,7 @@ void Selection::RenderPassMain(void)
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 800, 600);
-	glViewport(0, 0, Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight());
+	glViewport(0, 0, static_cast<GLsizei>(Application::GetInstance().GetWindowWidth()), static_cast<GLsizei>(Application::GetInstance().GetWindowHeight()));
 	//glViewport(0, 0, m_worldWidth, m_worldHeight);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -1154,8 +1154,8 @@ void Selection::RenderPassMain(void)
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	int halfWindowWidth = static_cast<int>(Application::GetInstance().GetWindowWidth() / 2);
+	int halfWindowHeight = static_cast<int>(Application::GetInstance().GetWindowHeight() / 2);
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 	if (OptionsManager::GetInstance()->getEditingState())
@@ -1328,6 +1328,6 @@ void Selection::Exit()
 		cinematic = nullptr;
 	}
 	Text_Manager::GetInstance()->resetAll();
-	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	CPlayerInfo::GetInstance()->setKO_Count(0);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 }

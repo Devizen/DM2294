@@ -35,7 +35,7 @@
 #include "SceneText.h"
 #include "Level\Tutorial.h"
 
-#include "vld.h"
+//#include "vld.h"
 
 GLFWwindow* m_window;
 

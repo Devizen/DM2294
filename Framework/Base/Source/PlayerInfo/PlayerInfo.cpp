@@ -1206,6 +1206,7 @@ CEnemy3D* CPlayerInfo::getLockedOnPosition(void)
 {
 	if (lockedOn)
 		return enemyPositionToLockOn;
+	return NULL;
 }
 
 vector<CEnemy3D*>& CPlayerInfo::returnLockOnList(void)

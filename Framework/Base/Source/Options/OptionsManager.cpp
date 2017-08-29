@@ -49,6 +49,7 @@ int OptionsManager::getInput(int _type)
 			return control->getKey();
 
 	}
+	return NULL;
 }
 
 bool OptionsManager::getEditingState(void)

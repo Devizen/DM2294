@@ -14,8 +14,8 @@ class CCollider;
 class CProjectile;
 class CFurniture;
 class CEnemy3D;
-class CPlayerInfo;
-class Patrol;
+class CPlayerInfo;/*
+class Patrol;*/
 class CCinematic;
 
 class EntityManager : public Singleton<EntityManager>
@@ -30,8 +30,8 @@ public:
 	void AddProjectile(CProjectile* _newEntity);
 	void AddFixed(CFurniture* _newEntity);
 	void AddPlayer(CPlayerInfo* _newEntity);
-	void AddEnemy(CEnemy3D* _newEntity);
-	void AddPatrolEnemy(Patrol* _newEntity);
+	void AddEnemy(CEnemy3D* _newEntity);/*
+	void AddPatrolEnemy(Patrol* _newEntity);*/
 	void AddItem(EntityBase* _newEntity);
 	bool RemoveEntity(EntityBase* _existingEntity);
 	bool RemoveEnemy(CEnemy3D* _existingEntity);
@@ -78,8 +78,8 @@ private:
 	std::list<CFurniture*> fixedList;
 	std::list<CPlayerInfo*> playerList;
 	std::list<CEnemy3D*> enemyList;
-	std::list<EntityBase*>itemList;
-	std::list<Patrol*>patrolList;
+	std::list<EntityBase*>itemList;/*
+	std::list<Patrol*>patrolList;*/
 
 	bool hit;
 

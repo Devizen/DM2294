@@ -479,8 +479,8 @@ void Level01::Update(double dt)
 			{
 				EntityManager::GetInstance()->Update(dt); // Update our entities
 
-				theKeyboard->Read(dt);
-				theMouse->Read(dt);
+				theKeyboard->Read(static_cast<float>(dt));
+				theMouse->Read(static_cast<float>(dt));
 
 				// Update the player position and other details based on keyboard and mouse inputs
 				playerInfo->Update(dt);
@@ -495,7 +495,7 @@ void Level01::Update(double dt)
 			GraphicsManager::GetInstance()->UpdateLights(dt);
 
 			// Update camera effects
-			theCameraEffects->Update(dt);
+			theCameraEffects->Update(static_cast<float>(dt));
 
 
 			/*Map Editor*/
@@ -518,7 +518,7 @@ void Level01::Update(double dt)
 
 			if (cinematic->cinematicMode)
 			{
-				playerInfo->StopSway(dt);
+				playerInfo->StopSway(static_cast<float>(dt));
 				static bool completed = false;
 				/*For player critical hit cinematic*/
 				cinematic->targetType = CCinematic::C_Target_Text;
@@ -1078,7 +1078,7 @@ void Level01::RenderPassMain(void)
 	DepthFBO::GetInstance()->m_renderPass = DepthFBO::RENDER_PASS_MAIN;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glViewport(0, 0, 800, 600);
-	glViewport(0, 0, Application::GetInstance().GetWindowWidth(), Application::GetInstance().GetWindowHeight());
+	glViewport(0, 0, static_cast<GLsizei>(Application::GetInstance().GetWindowWidth()), static_cast<GLsizei>(Application::GetInstance().GetWindowHeight()));
 	//glViewport(0, 0, m_worldWidth, m_worldHeight);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -1164,8 +1164,8 @@ void Level01::RenderPassMain(void)
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	int halfWindowWidth = static_cast<int>(Application::GetInstance().GetWindowWidth() / 2);
+	int halfWindowHeight = static_cast<int>(Application::GetInstance().GetWindowHeight() / 2);
 	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 	GraphicsManager::GetInstance()->DetachCamera();
 	if (OptionsManager::GetInstance()->getEditingState())
@@ -1324,7 +1324,7 @@ void Level01::Exit()
 	GraphicsManager::GetInstance()->removeLightMap();
 
 	Text_Manager::GetInstance()->resetAll();
-	CPlayerInfo::GetInstance()->setKO_Count(0.f);
+	CPlayerInfo::GetInstance()->setKO_Count(0);
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
 	FileManager::GetInstance()->clearVector();
 	OptionsManager::GetInstance()->saveHighscore();
