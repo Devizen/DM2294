@@ -25,6 +25,9 @@ Player is suppose to destroy towers in each level to proceed
 >'Q'/Scroll up     - Change weapon
 >'M'               - Open enlarged minimap
 >Tab               - Locks on to nearest enemy
+>Backspace         - Enter options
+~~~~~~~~~~~~~~~~~~~~~~~~Village~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>'F' - (when near statue)transition to different Level
 ~~~~~~~~~~~~~~~~~~~~~~~Inventory~~~~~~~~~~~~~~~~~~~~~~~~~~~
 >'W' - Cycle Up
 >'S' - Cycle Down

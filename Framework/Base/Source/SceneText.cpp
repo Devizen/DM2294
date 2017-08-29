@@ -467,7 +467,6 @@ void SceneText::Init()
 	{
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
-	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 	Inventory::GetInstance()->Init();
 
 	openInventory = false;
@@ -488,7 +487,6 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
-	//cout << "I AM IN SCENETEXT NOW" << endl;
 	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
@@ -627,22 +625,6 @@ void SceneText::Update(double dt)
 			//if (KeyboardController::GetInstance()->IsKeyDown('O'))
 			//	lights[0]->position.y += 100.f * dt;
 
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-			{
-				cout << "Left Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-			{
-				cout << "Right Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-			{
-				cout << "Middle Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-			{
-				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-			}
 
 			static float printInterval = 0;
 			printInterval += static_cast<float>(dt);
@@ -822,7 +804,6 @@ void SceneText::Update(double dt)
 				camera.SetCameraTarget(cinematic->GetCameraTarget());
 				camera.SetCameraUp(cinematic->GetCameraUp());
 
-				cout << "Number of Positions: " << cinematic->numberOfPositions << endl;
 			}
 
 			if (!cinematic->cinematicMode)

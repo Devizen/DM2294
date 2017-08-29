@@ -38,7 +38,6 @@ void CHorde::Reset(void)
 // Update
 void CHorde::Update(double dt)
 {
-	//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
 	if (CheckInsideBoundary(minAlertBoundary, maxAlertBoundary))
 		state = ALERT;
 	else
@@ -93,7 +92,6 @@ void CHorde::Render(void)
 
 		catch (string Error)
 		{
-			cout << "Divide by Zero" << endl;
 		}
 	}
 	else if (state == CEnemy3D::AI_STATE::ALERT)
@@ -104,7 +102,6 @@ void CHorde::Render(void)
 
 		catch (string Error)
 		{
-			cout << "Divide by Zero" << endl;
 		}
 	}
 	modelStack.Rotate(angleToFace, 0.f, 1.f, 0.f);

@@ -467,24 +467,6 @@ void Tutorial::Update(double dt)
 		if (!OptionsManager::GetInstance()->getEditingState())
 		{
 			clearKeyDisplay();
-			/*Create random enemies around the map.*/
-			//createEnemies(dt);
-			/*Create random crates for player to hide behind.*/
-			//createCrates(dt);
-			/*Create random bullet power-up for player.*/
-			//createBullets(dt);
-			/*Create random health power-up for player.*/
-			//createHealth(dt);
-
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-				cout << "Left Mouse Button was released!" << endl;
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-				cout << "Right Mouse Button was released!" << endl;
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-				cout << "Middle Mouse Button was released!" << endl;
-			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-
 			static float printInterval = 0;
 			printInterval += static_cast<float>(dt);
 
@@ -559,12 +541,6 @@ void Tutorial::Update(double dt)
 
 			}
 
-			//// Update the player position and other details based on keyboard and mouse inputs
-			//playerInfo->Update(dt);
-
-			// Update NPC
-			//enemyInfo->Update(dt);
-			//anEnemy3D->SetTarget(playerInfo->GetPos());
 			GraphicsManager::GetInstance()->UpdateLights(dt);
 
 			// Update camera effects
@@ -589,29 +565,6 @@ void Tutorial::Update(double dt)
 					theMinimap->enlargedMap = true;
 			}
 
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
-			{
-				cinematic->SetCameraPos(camera.GetCameraPos());
-				cinematic->SetCameraTarget(camera.GetCameraTarget());
-				cinematic->SetCameraUp(camera.GetCameraUp());
-				
-				playerInfo->DetachCamera();
-				playerInfo->AttachCamera(&camera);
-				cinematic->cinematicMode = false;
-				cinematic->numberOfPositions = 0;
-			}
-
-			if (KeyboardController::GetInstance()->IsKeyPressed(VK_RSHIFT))
-			{
-				cinematic->SetCameraPos(camera.GetCameraPos());
-				cinematic->SetCameraTarget(camera.GetCameraTarget());
-				cinematic->SetCameraUp(camera.GetCameraUp());
-
-				playerInfo->DetachCamera();
-				playerInfo->AttachCamera(dynamic_cast<FPSCamera*>(cinematic));
-				cinematic->cinematicMode = true;
-			}
-
 			if (cinematic->cinematicMode)
 			{
 				static bool completed = false;
@@ -634,15 +587,6 @@ void Tutorial::Update(double dt)
 				playerInfo->AttachCamera(&camera);
 				cinematic->numberOfPositions = 0;
 			}
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "OFFICER", 0.f, 2.f, CText::TEXT_IMPACT);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
 
 			/*Update text display.*/
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)
@@ -690,12 +634,6 @@ void Tutorial::Update(double dt)
 	}
 	else
 	{
-		/*For resetting player status.*/
-		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
-		{
-			CPlayerInfo::GetInstance()->setHealthTo(100);
-			CPlayerInfo::GetInstance()->setScore(0.f);
-		}
 	}
 }
 
@@ -1405,29 +1343,9 @@ void Tutorial::Exit()
 	GraphicsManager::GetInstance()->DetachCamera();
 	playerInfo->DetachCamera();
 
-	//	if (playerInfo->DropInstance() == false)
-	//	{
-	//#if _DEBUGMODE==1
-	//		cout << "Unable to drop PlayerInfo class" << endl;
-	//#endif
-	//	}
-
 	// Delete the lights
 	GraphicsManager::GetInstance()->RemoveLight("lights[0]");
 	GraphicsManager::GetInstance()->RemoveLight("lights[1]");
-
-
-	//if (currProg)
-	//{
-	//	delete currProg;
-	//	currProg = nullptr;
-	//}
-
-	//if (m_gPassShaderID)
-	//{
-	//	delete m_gPassShaderID;
-	//	m_gPassShaderID = nullptr;
-	//}
 
 	ParticleManager* particleManager = ParticleManager::GetInstance();
 	ParticleManager::GetInstance()->deleteParticle();

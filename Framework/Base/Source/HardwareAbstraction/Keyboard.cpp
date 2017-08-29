@@ -70,8 +70,6 @@ int CKeyboard::Read(const float deltaTime)
 		{
 			Controls* key = (Controls*)*it;
 
-			cout << count << ": " << key->getKey() << endl;
-			cout << "Type: " << key->GetType() << endl;
 			++count;
 		}
 	}

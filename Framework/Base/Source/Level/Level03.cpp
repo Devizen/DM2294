@@ -139,7 +139,6 @@ void Level03::Init()
 	playerInfo->SetTarget(Vector3(-35.f, 0.f, 480.f));
 
 	// Create and attach the camera to the scene
-	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
 	cinematic = CCinematic::GetInstance();
 	cinematic->Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
@@ -240,7 +239,6 @@ void Level03::Init()
 	{
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
-	cout << "Particle List Size in Scene: " << particleList.size() << endl;
 	Inventory::GetInstance()->Init();
 
 	openInventory = false;
@@ -258,8 +256,6 @@ void Level03::Init()
 
 void Level03::Update(double dt)
 {
-	//cout << "I AM IN LEVEL03 NOW" << endl;	
-	//Calculating aspect ratio
 	windowHeight = Application::GetInstance().GetWindowHeight();
 	windowWidth = Application::GetInstance().GetWindowWidth();
 
@@ -372,23 +368,6 @@ void Level03::Update(double dt)
 			EntityManager::GetInstance()->Update(dt);
 			clearKeyDisplay();
 
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-			{ 
-				cout << "Left Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-			{
-				cout << "Right Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-			{
-				cout << "Middle Mouse Button was released!" << endl;
-			}
-			if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-			{
-				cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-			}
-
 			static float printInterval = 0;
 			printInterval += static_cast<float>(dt);
 
@@ -400,7 +379,6 @@ void Level03::Update(double dt)
 				weaponType.precision(4);
 				if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
 				{
-					//cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
 					if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) == 1)
 					{
 						weaponName = "Assault Rifle";
@@ -520,16 +498,6 @@ void Level03::Update(double dt)
 				camera.SetCameraUp(cinematic->GetCameraUp());
 			}
 			
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('Z') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Battle Message.", 0.f, 2.f, CText::TEXT_BATTLE);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('X') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "Hello World Test Conversation Message that Prints.It also goes to the second line.\nThere's also a third line.", 0.f, 2.f, CText::TEXT_CONVERSATION);
-
-			if (KeyboardController::GetInstance()->IsKeyPressed('C') && Text_Manager::GetInstance()->returnTextList().size() < 1)
-				Create::Text("text", "HELLO.\nHELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.HELLO.", 0.f, 2.f, CText::TEXT_CONVERSATION);
-
 			/*Update text display.*/
 			if (Text_Manager::GetInstance()->returnTextList().size() > 0)
 				Text_Manager::GetInstance()->updateText(dt);
@@ -576,11 +544,6 @@ void Level03::Update(double dt)
 	}
 	else
 	{
-		if (KeyboardController::GetInstance()->IsKeyPressed('G'))
-		{
-			CPlayerInfo::GetInstance()->setHealthTo(100.f);
-			CPlayerInfo::GetInstance()->setScore(0.f);
-		}
 	}
 }
 
@@ -1192,13 +1155,6 @@ void Level03::Exit()
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
 	playerInfo->DetachCamera();
-
-	//	if (playerInfo->DropInstance() == false)
-	//	{
-	//#if _DEBUGMODE==1
-	//		cout << "Unable to drop PlayerInfo class" << endl;
-	//#endif
-	//	}
 
 	// Delete the lights
 	GraphicsManager::GetInstance()->RemoveLight("lights[0]");

@@ -68,14 +68,12 @@ void EquipmentManager::UnEquip(int countX, int countY)
 		swap = true;
 	}
 
-	cout << "Type: " <<  TypeToUnEquip << endl;
 	for (int i = 0; i < 6; i++)
 	{
 		if (EqList[i] != NULL)
 		{
 			if (EqList[i]->GetType() == TypeToUnEquip)
 			{
-				cout << "EQ TYPE: " << EqList[i]->GetType() << endl;
 				PosToUnequip = i;
 				showText = true;
 
@@ -87,22 +85,6 @@ void EquipmentManager::UnEquip(int countX, int countY)
 	}
 	CPlayerInfo::GetInstance()->resetAttribute();
 	AddAttributes();
-	//cout << "Unequip: " << PosToUnEquip << endl;
-	//for (int i = 0; i < 6; i++)
-	//{
-	//	if (EqList[i] != NULL)
-	//	{
-	//		count++;
-	//	}
-	//}
-
-	//merge_sort(EqList, 0, count-1);
-	//EqList[PosToUnEquip] = NULL;
-	//for (int i = PosToUnequip; i < 6 - 1; i++)
-	//{
-	//	Equipment* temp = EqList[i + 1];
-	//	EqList[i] = temp;
-	//}
 	
 }
 

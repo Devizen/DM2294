@@ -1228,13 +1228,7 @@ void FileManager::PrintWeaponFile()
 	for (vector<FileManager::EQ_Info>::iterator it = masterList.begin(); it != masterList.end(); ++it)
 	{
 		FileManager::EQ_Info store = (FileManager::EQ_Info)(*it);
-		cout << store.name << ", "
-			<< store.eqAtk << ", "
-			<< store.eqDef << ", "
-			<< store.eqSpeed << ", "
-			<< store.eqId << ", "
-			<< store.isEquipped << ", "
-			<< store.eqType << endl;
+		
 	}
 }
 

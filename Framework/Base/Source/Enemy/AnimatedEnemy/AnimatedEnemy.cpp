@@ -205,7 +205,6 @@ void CAnimatedEnemy::Update(double dt)
 	/*If enemy is IDLE, check if player or player object stepped into the boundary.*/
 	if (state == IDLE && !pathFindingMode)
 	{
-		//cout << "IN IDLE" << endl;
 		if (CheckInsideBoundary(GetMinAlertBoundary(), GetMaxAlertBoundary()))
 		{
 			state = ALERT;
@@ -233,7 +232,6 @@ void CAnimatedEnemy::Update(double dt)
 
 	else if (state == ALERT && !pathFindingMode)
 	{
-		//cout << "IN ALERT" << endl;
 		if (CheckCollision())
 		{
 			position = previousPosition;
@@ -276,7 +274,6 @@ void CAnimatedEnemy::Update(double dt)
 	}
 	else if (state == ATTACK && !pathFindingMode)
 	{
-		//cout << "IN ATTACK" << endl;
 		if (CheckCollision())
 		{
 			position = previousPosition;

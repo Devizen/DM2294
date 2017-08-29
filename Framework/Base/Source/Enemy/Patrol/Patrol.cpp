@@ -40,16 +40,13 @@ void CPatrol::Update(double dt)
 		if (CheckCollision())
 		{
 			position = previousPosition;
-			cout << "COLLIDED" << endl;
 			pathFindingMode = true;
 		}
 		else
 		{
 			previousPosition = position;
-			cout << "NO COLLISION" << endl;
 		}
 
-		//cout << "Displacement: " << (CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() << endl;
 		if ((CPlayerInfo::GetInstance()->GetPos() - this->GetPos()).LengthSquared() < 100.f * 100.f && CheckInsideBoundary(minAlertBoundary, maxAlertBoundary))
 			state = ALERT;
 		else
@@ -81,7 +78,6 @@ void CPatrol::Update(double dt)
 			}
 			case ALERT:
 			{
-				cout << "ALERT FIND" << endl;
 				Vector3 positionWithoutY(CPlayerInfo::GetInstance()->GetPos().x, -10.f, CPlayerInfo::GetInstance()->GetPos().z);
 				Vector3 displacement(positionWithoutY - this->GetPos());
 
@@ -104,7 +100,6 @@ void CPatrol::Update(double dt)
 				updatePathfinding(position, scale, dt);
 				checked = true;
 			}
-			cout << "Displacement to Nearest Path: " << (nearestPath() - position).LengthSquared() << endl;
 			//if ((nearestPath() - position).LengthSquared() > 0.1f)
 			//	position += (nearestPath() - position).Normalized() * (float)dt * 20.f;
 			if ((nearestPath() - position).LengthSquared() > 0.1f)
@@ -119,7 +114,6 @@ void CPatrol::Update(double dt)
 				checked = false;
 				nearestPath().SetZero();
 			}
-			cout << "PATH FIND" << endl;
 		}
 	//}
 }
@@ -138,7 +132,6 @@ void CPatrol::Render(void)
 
 		catch (string Error)
 		{
-			cout << "Divide by Zero" << endl;
 		}
 	}
 	else
