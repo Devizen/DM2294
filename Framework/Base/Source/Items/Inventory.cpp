@@ -78,30 +78,35 @@ void Inventory::Update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('F'))
 	{
-		DeleteWeapon();
-		showDiscardText = true;
-		DiscardTextTime = 0;
+		if (storage[pressCountX + (pressCountY * 4)] != NULL)
+		{
+			DeleteWeapon();
+			showDiscardText = true;
+			DiscardTextTime = 0;
+		}
 	}
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('E'))
 	{
 		for (int i = 0; i < 6; i++)
 		{
-			if (EquipmentManager::GetInstance()->ReturnList()[i] != NULL)
+			if (EquipmentManager::GetInstance()->ReturnList()[i] != NULL && storage[pressCountX + (pressCountY * 4)] != NULL)
 			{
 				if (storage[pressCountX + (pressCountY * 4)]->GetType() == EquipmentManager::GetInstance()->ReturnList()[i]->GetType())
 				{
-					currentEquipped = true;
+					currentEquipped = true; // dont equip if the item of same type is there alr
 				}
 			}
 		}
 		if (currentEquipped == false)
 		{
-			if (EquipmentManager::GetInstance()->ReturnList())
+			if (storage[pressCountX + (pressCountY * 4)] != NULL)
+			{
 				EquipWeapon();
-			showEquipText = true;
-			EquipTextTime = 0;
-			currentEquipped = false;
+				showEquipText = true;
+				EquipTextTime = 0;
+				currentEquipped = false;
+			}
 		}
 	}
 
@@ -171,14 +176,19 @@ void Inventory::remove_storage(int position)
 	for (int i = position; i < 11; i++)
 	{
 		Equipment* temp = storage[i + 1];
-		storage[i] = temp;
+		if (temp != NULL)
+		{
+			storage[i] = temp;
+		}
+		else
+		{
+			storage[i] = NULL;
+		}
 	}
 	storage[11] = NULL;
 
 	CPlayerInfo::GetInstance()->resetAttribute();
 	EquipmentManager::GetInstance()->AddAttributes();
-
-
 }
 
 void Inventory::RenderWeapon()
@@ -272,6 +282,7 @@ void Inventory::DeleteWeapon()
 void Inventory::EquipWeapon()
 {
 	int PosToEquip = pressCountX + (pressCountY * 4);
+
 	storage[PosToEquip]->setStatus(true);
 	EquipmentManager::GetInstance()->AssignEquipment(storage[PosToEquip]);
 	storage[PosToEquip] = NULL;
