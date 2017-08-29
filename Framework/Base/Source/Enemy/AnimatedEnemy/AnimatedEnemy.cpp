@@ -380,9 +380,6 @@ void CAnimatedEnemy::Update(double dt)
 	if (GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) <= 0)
 	{
 		state = DEAD;
-		int _KO_Count = CPlayerInfo::GetInstance()->getKO_Count() + 1;
-		CPlayerInfo::GetInstance()->setKO_Count(_KO_Count);
-		CPlayerInfo::GetInstance()->setGold(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) + 1000);
 		rotationSetZero();
 	}
 
@@ -453,7 +450,12 @@ void CAnimatedEnemy::Update(double dt)
 		angleToFace += static_cast<float>(dt) * 1000.f;
 
 		if (angleToFace >= 1000.f)
+		{
+			int _KO_Count = CPlayerInfo::GetInstance()->getKO_Count() + 1;
+			CPlayerInfo::GetInstance()->setKO_Count(_KO_Count);
+			CPlayerInfo::GetInstance()->setGold(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_GOLD) + 1000);
 			SetIsDone(true);
+		}
 	}
 }
 

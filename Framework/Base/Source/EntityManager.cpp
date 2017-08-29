@@ -62,6 +62,9 @@ void EntityManager::Update(double _dt)
 			if (enemy->GetPlayerProperty() && bullet->bulletOriginated == CProjectile::FROM_PLAYER)
 				continue;
 
+			if (enemy->GetState() == CEnemy3D::DEAD)
+				continue;
+
 			if (CheckProjectileToEnemyCollision(bullet, enemy))
 			{
 				if (bullet->bulletOriginated == CProjectile::FROM_ENEMY)
