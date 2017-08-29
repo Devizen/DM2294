@@ -228,7 +228,12 @@ void Level02::Init()
 	// << "Primary Weapon From Scene: " << primaryWeapon << endl;
 	weaponManager = playerInfo->getWeaponManager();
 
-	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
+	srand(time(NULL));
+	int randomTrack = rand() % 100 + 2;
+	if (randomTrack == 0)
+		CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
+	else
+		CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\INTENSE.ogg", true);
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
 	//m_lightDepthFBO.Init(1024, 1024);

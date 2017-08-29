@@ -338,7 +338,12 @@ void Level04::Init()
 	//CSoundEngine::GetInstance()->AddSound("EXPLODE", "Sound\\SFX\\EXPLODE.ogg");
 	//CSoundEngine::GetInstance()->AddSound("HEAL", "Sound\\SFX\\HEAL.ogg");
 
-	//CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
+	srand(time(NULL));
+	int randomTrack = rand() % 100 + 2;
+	if (randomTrack == 0)
+		CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\HURRY.ogg", true);
+	else
+		CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\INTENSE.ogg", true);
 
 	/*Shadow*/
 	DepthFBO::GetInstance()->Init(1024, 1024);
