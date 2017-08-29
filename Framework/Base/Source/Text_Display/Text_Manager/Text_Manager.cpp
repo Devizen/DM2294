@@ -187,7 +187,7 @@ void Text_Manager::updateText(double dt)
 					}
 				}
 
-				if (text->textType == CText::TEXT_IMPACT)
+				else if (text->textType == CText::TEXT_IMPACT)
 				{
 					const float textSize = 0.1f;
 					const float printSpeed = 3.f;
@@ -352,6 +352,25 @@ void Text_Manager::updateText(double dt)
 					}
 
 				}
+				else if (text->textType == CText::TEXT_STAY)
+				{
+					if (CPlayerInfo::GetInstance()->inBoundary)
+					{
+						text->scaleBackground = Application::GetInstance().GetWindowWidth() * 2.f;
+						text->scaleText = Application::GetInstance().GetWindowWidth() * 0.04f;
+					}
+					else
+					{
+						if (textList.size() > 0)
+						{
+							delete text;
+							text = nullptr;
+							textList.pop_back();
+							Text_Manager::GetInstance()->displayingText = false;
+							break;
+						}
+					}
+				}
 			break;
 		}
 	}
@@ -484,6 +503,49 @@ void Text_Manager::renderText(void)
 
 							characterOffset += 0.05f;
 						}
+					}
+				}
+				else if (text->textType == CText::TEXT_STAY)
+				{
+					if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
+					{
+						/*Quad for the text to display onto.*/
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
+						modelStack.Scale(text->scaleBackground, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+
+						Mesh* modelMesh;
+						modelMesh = MeshBuilder::GetInstance()->GetMesh("TRANS_QUAD");
+						RenderHelper::RenderMesh(modelMesh);
+						modelStack.PopMatrix();
+
+						/*Display text.*/
+						modelStack.PushMatrix();
+						modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
+						modelStack.Scale(text->scaleText, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+						RenderHelper::RenderText(text->modelMesh, text->message, Color(1.f, 0.f, 0.f));
+						modelStack.PopMatrix();
+					}
+					else
+					{
+						/*Quad for the text to display onto.*/
+						MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+						modelStack.PushMatrix();
+						modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
+						modelStack.Scale(text->scaleBackground, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+
+						Mesh* modelMesh;
+						modelMesh = MeshBuilder::GetInstance()->GetMesh("TRANS_QUAD");
+						RenderHelper::RenderMesh(modelMesh);
+						modelStack.PopMatrix();
+
+						/*Display text.*/
+						modelStack.PushMatrix();
+						modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
+						modelStack.Scale(text->scaleText, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+						RenderHelper::RenderText(text->modelMesh, text->message, Color(1.f, 0.f, 0.f));
+						modelStack.PopMatrix();
 					}
 				}
 

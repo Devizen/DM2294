@@ -56,6 +56,7 @@ CPlayerInfo::CPlayerInfo(void)
 	, lockedOn(false)
 	, enemyPositionToLockOn(nullptr)
 	,coolDownTimer(0)
+	, inBoundary(false)
 {
 }
 

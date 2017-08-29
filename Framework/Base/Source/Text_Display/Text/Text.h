@@ -23,6 +23,7 @@ public:
 		TEXT_CONVERSATION = 0,
 		TEXT_BATTLE,
 		TEXT_IMPACT,
+		TEXT_STAY,
 		TEXT_NONE
 	};
 

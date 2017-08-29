@@ -337,40 +337,54 @@ void Village::Update(double dt)
 		&& playerInfo->GetPos().z >= -440
 		&& playerInfo->GetPos().z <= -400)
 	{
-		Create::Text("text", "Press [F] to enter Level 01!", 0.f, 5.f, CText::TEXT_BATTLE);
+		playerInfo->inBoundary = true;
+		Create::Text("text", "Press [F] to enter Level 01!", 0.f, 5.f, CText::TEXT_STAY);
 	}
-
+	else
+		playerInfo->inBoundary = false;
 	if (playerInfo->GetPos().x >= 360
 		&& playerInfo->GetPos().x <= 400
 		&& playerInfo->GetPos().z >= -120
 		&& playerInfo->GetPos().z <= -80)
 	{
-		Create::Text("text", "Press [F] to enter Level 02!", 0.f, 5.f, CText::TEXT_BATTLE);
+		playerInfo->inBoundary = true;
+		Create::Text("text", "Press [F] to enter Level 02!", 0.f, 5.f, CText::TEXT_STAY);
 	}
+	else
+		playerInfo->inBoundary = false;
 
 	if (playerInfo->GetPos().x >= 40
-		&& playerInfo->GetPos().x <= -80
+		&& playerInfo->GetPos().x <= 80
 		&& playerInfo->GetPos().z >= 360
 		&& playerInfo->GetPos().z <= 440)
 	{
-		Create::Text("text", "Press [F] to enter Level 03!", 0.f, 5.f, CText::TEXT_BATTLE);
+		playerInfo->inBoundary = true;
+		Create::Text("text", "Press [F] to enter Level 03!", 0.f, 5.f, CText::TEXT_STAY);
 	}
-
+	else
+		playerInfo->inBoundary = false;
 	if (playerInfo->GetPos().x >= -380
 		&& playerInfo->GetPos().x <= -340
 		&& playerInfo->GetPos().z >= -60
 		&& playerInfo->GetPos().z <= -20)
 	{
-		Create::Text("text", "Press [F] to enter Level 04!", 0.f, 5.f, CText::TEXT_BATTLE);
+		playerInfo->inBoundary = true;
+		Create::Text("text", "Press [F] to enter Level 04!", 0.f, 5.f, CText::TEXT_STAY);
 	}
+	else
+		playerInfo->inBoundary = false;
 
 	if (playerInfo->GetPos().x >= 5
 		&& playerInfo->GetPos().x <= 25
 		&& playerInfo->GetPos().z >= -160
-		&& playerInfo->GetPos().z <= -120)
+		&& playerInfo->GetPos().z <= -120
+		&& !openShop)
 	{
-		Create::Text("text", "Press [F] to enter Shop!", 0.f, 5.f, CText::TEXT_BATTLE);
+		playerInfo->inBoundary = true;
+		Create::Text("text", "Press [F] to enter Shop!", 0.f, 5.f, CText::TEXT_STAY);
 	}
+	else
+		playerInfo->inBoundary = false;
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('F') && !openEQ && !openInventory)
 	{
@@ -392,7 +406,7 @@ void Village::Update(double dt)
 		}
 
 		if (playerInfo->GetPos().x >= 40
-			&& playerInfo->GetPos().x <= -80
+			&& playerInfo->GetPos().x <= 80
 			&& playerInfo->GetPos().z >= 360
 			&& playerInfo->GetPos().z <= 440)
 		{
@@ -444,6 +458,15 @@ void Village::Update(double dt)
 
 	if (openShop)
 	{
+		playerInfo->inBoundary = false;
+		if (Text_Manager::GetInstance()->returnTextList().size() > 0)
+		{
+			CText* clearText = Text_Manager::GetInstance()->returnTextList().back();
+			delete clearText;
+			clearText = nullptr;
+
+			Text_Manager::GetInstance()->returnTextList().pop_back();
+		}
 		ShopManager::GetInstance()->update(dt);
 	}
 

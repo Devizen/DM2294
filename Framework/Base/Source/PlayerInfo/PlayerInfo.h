@@ -197,6 +197,7 @@ public:
 	/*Set Default Target*/
 	void SetDefaultTarget(Vector3 _defaultTarget);
 
+	bool inBoundary;
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;

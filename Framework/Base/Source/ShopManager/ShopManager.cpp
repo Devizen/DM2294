@@ -84,7 +84,7 @@ void ShopManager::update(double dt)
 		}
 	}
 
-	cout << temp[pressCountY]->getGold() << endl;
+//	cout << temp[pressCountY]->getGold() << endl;
 }
 
 void ShopManager::render()
