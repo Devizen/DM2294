@@ -285,6 +285,13 @@ void Level03::Update(double dt)
 	}
 	if (towerCount == 0)
 	{
+		Create::Text("text", "Towers destroyed", 0.f, 1.5f, CText::TEXT_BATTLE);
+		SceneManager::GetInstance()->SetActiveScene("Village");
+	}
+
+	if (playerInfo->GetAttribute(CPlayerInfo::TYPE_HEALTH) <= 0)
+	{
+		Create::Text("text", "Respawning you in village.", 0.f, 1.5f, CText::TEXT_BATTLE);
 		SceneManager::GetInstance()->SetActiveScene("Village");
 	}
 

@@ -129,9 +129,9 @@ void CPlayerInfo::Init(void)
 	}*/
 
 	m_fCameraSwayAngle = 0.0f;
-	m_fCameraSwayDeltaAngle = 1.0f;
-	m_fCameraSwayAngle_LeftLimit = -5.0f;
-	m_fCameraSwayAngle_RightLimit = 5.0f;
+	m_fCameraSwayDeltaAngle = 0.5f;
+	m_fCameraSwayAngle_LeftLimit = -3.0f;
+	m_fCameraSwayAngle_RightLimit = 3.0f;
 	m_bCameraSwayDirection = false;
 
 	/*Set Bounding Box for player*/
