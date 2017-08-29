@@ -163,7 +163,7 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 			if (!_source->getLockedOn())
 			{
 				distanceBetween = target - _source->GetPos();
-				distanceBetween *= 3.f;
+				distanceBetween *= 5.f;
 				distanceBetween += _source->GetPos();
 			}
 			else
