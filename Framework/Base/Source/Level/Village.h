@@ -124,6 +124,7 @@ private:
 
 	bool openInventory;
 	bool openEQ;
+	bool openShop;
 
 	/*Cinematic*/
 	bool cinematicMode;
