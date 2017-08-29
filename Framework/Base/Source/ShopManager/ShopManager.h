@@ -35,12 +35,12 @@ public:
 
 	void setList();
 	void PushBackIntoList(Equipment* result, int type);
-	void ArrangeVector(int type);
+	//void ArrangeVector(int type);
 
-	Equipment** getHelmVector() { return helmList; }
-	Equipment** getArmorVector() { return armorList; }
-	Equipment** getGloveVector() { return gloveList; }
-	Equipment** getShoeVector() { return shoeList; }
-	Equipment** getSwordVector() { return swordList; }
-	Equipment** getGunVector() { return gunList; }
+	Equipment** getHelm() { return helmList; }
+	Equipment** getArmor() { return armorList; }
+	Equipment** getGlove() { return gloveList; }
+	Equipment** getShoe() { return shoeList; }
+	Equipment** getSword() { return swordList; }
+	Equipment** getGun() { return gunList; }
 };
