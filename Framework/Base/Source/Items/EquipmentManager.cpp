@@ -77,6 +77,8 @@ void EquipmentManager::UnEquip(int countX, int countY)
 			{
 				cout << "EQ TYPE: " << EqList[i]->GetType() << endl;
 				PosToUnequip = i;
+				showText = true;
+
 				Inventory::GetInstance()->assign_storage(EqList[PosToUnequip]);
 				EqList[PosToUnequip] = NULL;
 				break;
@@ -196,7 +198,6 @@ void EquipmentManager::Update(double dt)
 		if (Inventory::GetInstance()->ReturnType()[11] == NULL)
 		{
 			UnEquip(pressCountX, pressCountY);
-			showText = true;
 			textTime = 0;
 		}
 	}

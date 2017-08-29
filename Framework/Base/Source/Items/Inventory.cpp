@@ -90,7 +90,7 @@ void Inventory::Update(double dt)
 	{
 		for (int i = 0; i < 6; i++)
 		{
-			if (EquipmentManager::GetInstance()->ReturnList()[i] != NULL && storage[pressCountX + (pressCountY * 4)] != NULL)
+			if (EquipmentManager::GetInstance()->ReturnList()[i] != NULL)
 			{
 				if (storage[pressCountX + (pressCountY * 4)]->GetType() == EquipmentManager::GetInstance()->ReturnList()[i]->GetType())
 				{
@@ -107,6 +107,11 @@ void Inventory::Update(double dt)
 				EquipTextTime = 0;
 				currentEquipped = false;
 			}
+		}
+
+		else if (EquipmentManager::GetInstance()->ReturnList()[0] == NULL)
+		{
+			cout << "ISEQUIPPED" << endl;
 		}
 	}
 

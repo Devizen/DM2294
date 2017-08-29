@@ -267,19 +267,21 @@ void Village::Init()
 		particleManager->pushParticle(particleObject_type::P_Water);
 	}
 	cout << "Particle List Size in Scene: " << particleList.size() << endl;
-	Inventory::GetInstance()->Init();
 
 	openInventory = false;
 	openEQ = false;
 	FileManager::GetInstance()->init();
 	EquipmentManager::GetInstance()->Init();
+	Inventory::GetInstance()->Init();
+
 	ShopManager::GetInstance()->init();
 
 	saveMapTime = 0;
 
 	FileManager::GetInstance()->ReadMapFile("Files//Village.csv");
 	FileManager::GetInstance()->ReadShopFile("Files/Shop.csv");
-
+	FileManager::GetInstance()->ReadWeaponFile("Files/Inventory.csv");
+	FileManager::GetInstance()->CreateWeapon();
 }
 
 void Village::Update(double dt)
@@ -341,6 +343,9 @@ void Village::Update(double dt)
 		openInventory = false;
 		openEQ = false;
 		openShop = false;
+		EquipmentManager::GetInstance()->textTime = 0;
+		Inventory::GetInstance()->DiscardTextTime = 0;
+		Inventory::GetInstance()->EquipTextTime = 0;
 	}
 
 	CPlayerInfo::GetInstance()->printAttributes();
