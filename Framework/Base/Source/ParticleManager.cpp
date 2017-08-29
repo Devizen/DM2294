@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "MeshBuilder.h"
 #include "GraphicsManager.h"
+#include "PlayerInfo\PlayerInfo.h"
 #include "RenderHelper.h"
 #include <iostream>
 
@@ -29,9 +30,9 @@ void ParticleManager::updateParticle(double dt)
 	{
 		ParticleManager* particle = getParticle();
 		particle->type = particleObject_type::P_Water;
-		particle->particle_Scale.Set(5.0f, 5.0f, 5.0f);
+		particle->particle_Scale.Set(1.0f, 5.0f, 1.0f);
 		particle->particle_Velocity.Set(0.0f, 0.0f, 0.0f);
-		particle->particle_Position.Set(Math::RandFloatMinMax(-350, 350), 1000.f, Math::RandFloatMinMax(-350, 350));
+		particle->particle_Position.Set(CPlayerInfo::GetInstance()->GetPos().x + Math::RandFloatMinMax(-350, 350), 1000.f, CPlayerInfo::GetInstance()->GetPos().z + Math::RandFloatMinMax(-350, 350));
 	}
 	//Update all particle
 	std::vector<ParticleManager*>::iterator it, end;
@@ -88,7 +89,7 @@ void ParticleManager::renderParticle()
 	{
 	case P_Water:
 		Mesh* modelMesh;
-		modelMesh = MeshBuilder::GetInstance()->GetMesh("cube");
+		modelMesh = MeshBuilder::GetInstance()->GetMesh("RAIN");
 		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 		modelStack.PushMatrix();
 		modelStack.Translate(particle_Position.x, particle_Position.y, particle_Position.z);

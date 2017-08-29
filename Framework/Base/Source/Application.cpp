@@ -249,7 +249,7 @@ void Application::Exit()
 	ParticleManager::GetInstance()->Destroy();
 	SceneManager::GetInstance()->Destroy();
 	Text_Manager::GetInstance()->Destroy();
-//	FileManager::GetInstance()->Destroy();
+	FileManager::GetInstance()->Destroy();
 	OptionsManager::GetInstance()->Destroy();
 	EquipmentManager::GetInstance()->Destroy();
 	Inventory::GetInstance()->Destroy();
