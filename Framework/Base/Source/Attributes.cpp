@@ -13,7 +13,7 @@ CAttributes::CAttributes()
 	, EXP(0)
 	, MAX_EXP(1)
 	, LEVEL(1)
-	,SPEED(10)
+	,SPEED(1)
 {
 }
 
@@ -70,6 +70,9 @@ Deduct health by amount specified in parameter
 void CAttributes::deductHealthBy(int amount)
 {
 	this->HEALTH -= amount;
+	/*Cap the health at 0.*/
+	if (this->HEALTH < 0)
+		this->HEALTH = 0;
 }
 /*
 Increase health by amount specified in parameter
@@ -83,7 +86,7 @@ Set health to amount specified in parameter
 */
 void CAttributes::setHealthTo(int _amount)
 {
-	HEALTH = _amount;
+	this->HEALTH = _amount;
 }
 /*
 Increase level by one
@@ -125,7 +128,7 @@ Set Max Health to amount specified in parameter
 */
 void CAttributes::setMaxHealthTo(int _amount)
 {
-	MAX_HEALTH = _amount;
+	this->MAX_HEALTH = _amount;
 }
 /*
 Sets attributes base on CAttribute specified in parameter
@@ -144,32 +147,32 @@ void CAttributes::operator=(CAttributes newAttributes)
 
 void CAttributes::setLevel(int level)
 {
-	LEVEL = level;
+	this->LEVEL = level;
 }
 
 void CAttributes::setSpeed(int speed)
 {
-	SPEED = speed;
+	this->SPEED = speed;
 }
 
 void CAttributes::setGold(int gold)
 {
-	GOLD = gold;
+	this->GOLD = gold;
 }
 
 void CAttributes::setMP(int mana)
 {
-	MANA = mana;
+	this->MANA = mana;
 }
 
 void CAttributes::setMaxMP(int maxMana)
 {
-	MAX_MANA = maxMana;
+	this->MAX_MANA = maxMana;
 }
 
 void CAttributes::setEXP(int exp)
 {
-	EXP = exp;
+	this->EXP = exp;
 }
 
 void CAttributes::printAttributes()
@@ -178,15 +181,15 @@ void CAttributes::printAttributes()
 
 void CAttributes::addAttack(int newAttack)
 {
-	ATTACK += newAttack;
+	this->ATTACK += newAttack;
 }
 
 void CAttributes::addDefence(int newDefence)
 {
-	DEFENSE += newDefence;
+	this->DEFENSE += newDefence;
 }
 
 void CAttributes::addSpeed(int newSpeed)
 {
-	SPEED += newSpeed;
+	this->SPEED += newSpeed;
 }

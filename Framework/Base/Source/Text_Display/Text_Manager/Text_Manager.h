@@ -6,8 +6,10 @@
 
 #include "SingletonTemplate.h"
 #include <vector>
+#include <string>
 
 using std::vector;
+using std::string;
 
 class CText;
 
@@ -26,6 +28,16 @@ public:
 	size_t messagePrompt;
 	float cooldown;
 	void resetAll(void);
+
+	int characterCount;
+	bool initialise;
+	int textState;
+	bool playOnce;
+
+	string storeText;
+	int count;
+	bool erase;
+	int lineCount;
 
 private:
 	vector<CText*>textList;

@@ -6,7 +6,6 @@
 #include "GL\glew.h"
 #include "../../Base/Source/DepthFBO.h"
 #include "../../Base/Source/Attributes.h"
-#include "../../Base/Source/PlayerInfo/PlayerInfo.h"
 #include "../../Base/Source/Application.h"
 #include "MeshBuilder.h"
 
@@ -183,45 +182,4 @@ void RenderHelper::RenderText(Mesh* _mesh, const std::string& _text, Color _colo
 
 	GraphicsManager::GetInstance()->UnbindTexture(0);
 	currProg->UpdateInt("textEnabled", 0);
-}
-
-void RenderHelper::renderPlayerHealth(void)
-{
-	CPlayerInfo* player = CPlayerInfo::GetInstance();
-	/*Calculating the alignment offset of health bar. Value is based on the scaling.*/
-	float healthBarOffset = CPlayerInfo::GetInstance()->GetAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth() * 0.005f;
-
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelStack.PushMatrix();
-	modelStack.LoadIdentity();
-
-	/*Translate the health bar to the left bottom of screen with offset that align the health bar.*/
-	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-		modelStack.Translate((-Application::GetInstance().GetWindowWidth() * 0.49f) + (healthBarOffset) * 0.5f, -Application::GetInstance().GetWindowHeight() * 0.4f, 0.f);
-	else
-		modelStack.Translate((-Application::GetInstance().GetWindowWidth() * 0.49f) + (healthBarOffset) * 0.5f, -Application::GetInstance().GetWindowHeight() * 0.35f, 0.f);
-	modelStack.Scale(CPlayerInfo::GetInstance()->GetAttribute(CAttributes::TYPE_HEALTH) * Application::GetInstance().GetWindowWidth() * 0.005f, Application::GetInstance().GetWindowHeight() * 0.05f, 1.f);
-	
-	/*Changing the health bar colour according to player health left %. 100% == Green, > 20% == Yellow and below 20% == Red.*/
-	if (player->GetAttribute(CAttributes::TYPE_HEALTH) == player->GetAttribute(CAttributes::TYPE_MAXHEALTH))
-		MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
-	else if (player->GetAttribute(CAttributes::TYPE_HEALTH) / player->GetAttribute(CAttributes::TYPE_MAXHEALTH) > 0.2f)
-		MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(1.f, 1.0f, 0.0f), 1.0f);
-	else
-		MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(1.f, 0.0f, 0.0f), 1.0f);
-	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("PLAYER_HEALTH_BAR"));
-	modelStack.PopMatrix();
-}
-
-void RenderHelper::renderKOCount(void)
-{
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelStack.PushMatrix();
-	if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
-		modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.3f, -Application::GetInstance().GetWindowHeight() * 0.2f, 0.f);
-	else
-		modelStack.Translate(Application::GetInstance().GetWindowWidth() * 0.3f, -Application::GetInstance().GetWindowHeight() * 0.1f, 0.f);
-	modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.1f, Application::GetInstance().GetWindowWidth() * 0.1f, 1.f);
-	RenderHelper::RenderText(MeshBuilder::GetInstance()->GetMesh("text"), "KO:" + to_string(CPlayerInfo::GetInstance()->getKO_Count()), Color(1.f, 0.f, 0.f));
-	modelStack.PopMatrix();
 }

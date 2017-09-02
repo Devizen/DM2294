@@ -49,5 +49,7 @@ CText * Create::Text(const std::string & _meshName, string _message, float _dura
 	if (_textType != CText::TEXT_BATTLE)
 		Text_Manager::GetInstance()->displayingText = true;
 
+	Text_Manager::GetInstance()->storeText = _message;
+
 	return text;
 }

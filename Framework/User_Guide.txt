@@ -1,0 +1,70 @@
+---------------DW(Dynamic Warrior)-------------------------
+This is a guide to the controls of our game, DW.
+~~~~~~~~~~~~~~~~~~~~~~~Brief description~~~~~~~~~~~~~~~~~~~
+Player is suppose to destroy towers in each level to proceed
+~~~~~~~~~~~~~~~~~~~~~~~~~Movement~~~~~~~~~~~~~~~~~~~~~~~~~~
+>'W' - Move forward
+>'S' - Move backwards
+>'A' - Move left
+>'D' - Move right
+~~~~~~~~~~~~~~~~~~~~~~~Camera Movement~~~~~~~~~~~~~~~~~~~~~
+>Mouse
+
+**OR**
+
+>Keyboard
+ >Left arrow  -rotate camera to left
+ >Right arrow -rotate camera to right
+ >Up arrow    -rotate camera to up
+ >Down arrow  -rotate camera to down
+~~~~~~~~~~~~~~~~~~~~~Other controls~~~~~~~~~~~~~~~~~~~~~~~~
+>Left mouse click  - Fire weapon
+>Right mouse click - Melee attack(6th consecutive melee does a special melee attack)
+>Space             - Jump
+>left Ctrl         - change posture from Stand up->crouch->Prone->Stand up respectively
+>'Q'/Scroll up     - Change weapon
+>'M'               - Open enlarged minimap
+>Tab               - Locks on to nearest enemy
+>Backspace         - Enter options
+~~~~~~~~~~~~~~~~~~~~~~~~Village~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>'F' - (when near statue)transition to different Level
+~~~~~~~~~~~~~~~~~~~~~~~Inventory~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>'W' - Cycle Up
+>'S' - Cycle Down
+>'A' - Cycle Left
+>'D' - Cycle Right
+>'I' - Access inventory 
+>'E' - Equip item
+>'F' - Discard item
+>'U' - Close inventory
+~~~~~~~~~~~~~~~~~~~~~~~~~Shop~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>'W' - Cycle Up
+>'S' - Cycle Down
+>'A' - Cycle Left
+>'D' - Cycle Right
+>'F' - Access Buy Menu 
+>'B' - Buy item highlighted
+>'U' - Close inventory
+>'E' - Access Equipment
+~~~~~~~~~~~~~~~~~~~~~~~Equipment~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>'W' - Cycle Up
+>'S' - Cycle Down
+>'A' - Cycle Left
+>'D' - Cycle Right
+>'Q' - Unequip item
+>'U' - Close inventory
+~~~~~~~~~~~~~~~~~~~~~Map Editor(Developer use)~~~~~~~~~~~~~
+>'7'      - Open map editor
+>'9'      - Close map editor
+>'4'      - Choose enemies
+	      - Cycle left
+>'6'      - Choose map objects
+	      - Cycle Right
+>'1'      - Scale down
+>'3'      - Scale up
+>'8'      - Rotate enemy/object
+>'5'      - Place chosen enemy/object
+>'0'      - Remove most recently placed enemy/object
+>Left Alt - Change scale axis
+>'N'      - Saves map items and enemies
+-----------------------END---------------------------------

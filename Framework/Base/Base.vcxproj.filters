@@ -13,65 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="PlayerInfo">
-      <UniqueIdentifier>{ee63a848-364d-4119-9628-05cc3d6a4b17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SkyBox">
-      <UniqueIdentifier>{37a125cd-b9e3-4b31-923e-1226145f54a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="WeaponInfo">
-      <UniqueIdentifier>{7dbec654-2f78-40a8-a3ff-38691d57358e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SoundEngine">
       <UniqueIdentifier>{2aaf3674-dd40-4973-8e30-884ed6f8146a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enemy3D">
-      <UniqueIdentifier>{4d113500-1c58-4f6d-8a3c-b0f4ac066e31}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="HardwareAnstraction">
-      <UniqueIdentifier>{6a134e59-fa4e-4823-9e3b-e4969457dd11}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CameraEffects">
-      <UniqueIdentifier>{70e3c1bb-10b7-426e-8382-b2bafebb873c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Options">
-      <UniqueIdentifier>{099dc81c-b850-457a-9072-7d134c6157fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object">
-      <UniqueIdentifier>{e19ace3e-b066-46c7-a83b-5beede55692d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PlayerInfo\Projectile">
-      <UniqueIdentifier>{e55b5c68-9d98-4cde-ba44-f0d28d0cf437}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Equipment">
-      <UniqueIdentifier>{2c9b00e8-1ca5-4f4e-a390-e428afa5b910}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="FileManager">
-      <UniqueIdentifier>{58fbf11e-11ff-4355-8248-fd50ce9f9a1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Inventory">
-      <UniqueIdentifier>{8305aae4-f9e1-4bc5-8257-7d92774e0f7c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Minimap">
-      <UniqueIdentifier>{7b57e043-2491-4545-a9b7-6078a432213b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enemy3D\Patrol">
-      <UniqueIdentifier>{2b125580-86a5-4d95-b0db-6cafde7fa78a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Map_Editor">
       <UniqueIdentifier>{065952a4-708b-4fc0-9a73-c93baec6b8f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Enemy3D\Horde">
-      <UniqueIdentifier>{b78d823c-8489-4f9f-9722-daf37a0806a0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Cinematic">
       <UniqueIdentifier>{d2f5fb59-278f-4763-85d7-1bac9daa0bfe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enemy3D\AnimatedEnemy">
-      <UniqueIdentifier>{deb7c554-f0c6-4305-962d-b7e446a40abd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enemy3D\Pathfinding">
-      <UniqueIdentifier>{1a4cf7cc-2fbd-42ba-a67f-8385424eff46}</UniqueIdentifier>
     </Filter>
     <Filter Include="Text_Display">
       <UniqueIdentifier>{639de436-410f-4a64-8296-a3500276fd25}</UniqueIdentifier>
@@ -82,26 +31,29 @@
     <Filter Include="Text_Display\Text">
       <UniqueIdentifier>{723c2f04-a0cf-448f-a4c9-a3330afd6088}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Level">
-      <UniqueIdentifier>{f9b4fb92-2bc8-4143-a125-2af284736878}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Quest">
-      <UniqueIdentifier>{1a6ed068-1218-4159-845f-2a5ba25a34c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Quest\Quest_Manager">
-      <UniqueIdentifier>{566ae725-2c21-405c-875a-8a75ad9d389c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enemy3D\Tower">
-      <UniqueIdentifier>{db51b8dd-4120-4d69-994d-ab60f0e8595b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ShopManager">
-      <UniqueIdentifier>{5f99713c-0f6b-40a8-beae-8354778b88fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Debugger">
       <UniqueIdentifier>{24f69075-1fe2-4c32-8bad-dd69b51a8e13}</UniqueIdentifier>
     </Filter>
     <Filter Include="Physics">
       <UniqueIdentifier>{3ab3c84a-1325-4564-807f-f1c411a74bb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World">
+      <UniqueIdentifier>{e9eba720-4117-47a1-afdd-04d23fcd14d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{48951b76-8be5-4543-9d17-bb08ff834072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{30d78019-88cd-46c4-b2df-4663326df0fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Battle">
+      <UniqueIdentifier>{6695e7dd-bbab-4afe-8e1b-0f8432c02953}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{bb8c26a4-2a06-4f19-b191-6badbffe62a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Adjuster">
+      <UniqueIdentifier>{9f0b9cbf-d0fc-4612-9d74-04975a5e30e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,161 +63,32 @@
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneText.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\FPSCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\OBJMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GroundEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\TextEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SpriteEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp">
-      <Filter>PlayerInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Projectile\Projectile.cpp">
-      <Filter>PlayerInfo\Projectile</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp">
-      <Filter>SkyBox</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\WeaponInfo\Pistol.cpp">
-      <Filter>WeaponInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\WeaponInfo\WeaponInfo.cpp">
-      <Filter>WeaponInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EntityManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GenericEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\SoundEngine.cpp">
       <Filter>SoundEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy\Enemy3D.cpp">
-      <Filter>Enemy3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HardwareAbstraction\Controller.cpp">
-      <Filter>HardwareAnstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HardwareAbstraction\Keyboard.cpp">
-      <Filter>HardwareAnstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Minimap\Minimap.cpp">
-      <Filter>Minimap</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CameraEffects\CameraEffects.cpp">
-      <Filter>CameraEffects</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HardwareAbstraction\Mouse.cpp">
-      <Filter>HardwareAnstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Options\OptionsManager.cpp">
-      <Filter>Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Options\Controls.cpp">
-      <Filter>Options</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\WeaponInfo\AssaultRifle.cpp">
-      <Filter>WeaponInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Object\Furniture.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="Source\DepthFBO.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Object\Bullet.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Object\Health.cpp">
-      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Attributes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ParticleManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\FileManager.cpp">
-      <Filter>FileManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Items\Armour.cpp">
-      <Filter>Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Items\Basic_Sword.cpp">
-      <Filter>Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Items\EquipmentManager.cpp">
-      <Filter>Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Items\Glove.cpp">
-      <Filter>Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Items\Gun.cpp">
-      <Filter>Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Items\Helmet.cpp">
-      <Filter>Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Items\Shoe.cpp">
-      <Filter>Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\HardwareAbstraction\Gamepad.cpp">
-      <Filter>HardwareAnstraction</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\Enemy_Type.cpp">
-      <Filter>Enemy3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp">
-      <Filter>Enemy3D\Patrol</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Map_Editor\Map_Editor.cpp">
       <Filter>Map_Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\WeaponInfo\Knife.cpp">
-      <Filter>WeaponInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\Horde\Horde.cpp">
-      <Filter>Enemy3D\Horde</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\WeaponInfo\MeleeInfo.cpp">
-      <Filter>WeaponInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\WeaponInfo\Knife.cpp">
-      <Filter>WeaponInfo</Filter>
     </ClCompile>
     <ClCompile Include="Source\Cinematic\Cinematic.cpp">
       <Filter>Cinematic</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Items\Inventory.cpp">
-      <Filter>Inventory</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Cinematic\Cinematic.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.cpp">
-      <Filter>Enemy3D\AnimatedEnemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
-      <Filter>Enemy3D\Pathfinding</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp">
-      <Filter>Enemy3D\Pathfinding</Filter>
     </ClCompile>
     <ClCompile Include="Source\Text_Display\Text\Text.cpp">
       <Filter>Text_Display\Text</Filter>
@@ -273,63 +96,39 @@
     <ClCompile Include="Source\Text_Display\Text_Manager\Text_Manager.cpp">
       <Filter>Text_Display\Text_Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Level\Tutorial.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Quest\Quest.cpp">
-      <Filter>Quest</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Quest\Quest_Manager\Quest_Manager.cpp">
-      <Filter>Quest\Quest_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Level\Level01.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Level\Level02.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Level\Level03.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Level\Level04.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\Tower\Tower.cpp">
-      <Filter>Enemy3D\Tower</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ShopManager\Shop.cpp">
-      <Filter>ShopManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ShopManager\ShopManager.cpp">
-      <Filter>ShopManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Debugger\Debugger.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Debugger\Debug_Message.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Level\Mainmenu.cpp">
-      <Filter>Level</Filter>
+    <ClCompile Include="Source\World\World.cpp">
+      <Filter>World</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Level\Selection.cpp">
-      <Filter>Level</Filter>
+    <ClCompile Include="Source\Player\Player.cpp">
+      <Filter>Player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Level\Village.cpp">
-      <Filter>Level</Filter>
+    <ClCompile Include="Source\Enemy\Enemy.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Level\Credits.cpp">
-      <Filter>Level</Filter>
+    <ClCompile Include="Source\Collision\Collision.cpp">
+      <Filter>Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Level\Instruction.cpp">
-      <Filter>Level</Filter>
+    <ClCompile Include="Source\Enemy\Enemy_Manager.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Battle\Battle.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Battle\Battle_Option.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Adjuster\Adjuster.cpp">
+      <Filter>Adjuster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\FPSCamera.h">
@@ -338,149 +137,23 @@
     <ClInclude Include="Source\OBJMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GroundEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\TextEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SpriteEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PlayerInfo\PlayerInfo.h">
-      <Filter>PlayerInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Projectile\Projectile.h">
-      <Filter>PlayerInfo\Projectile</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SkyBox\SkyBoxEntity.h">
-      <Filter>SkyBox</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\WeaponInfo\Pistol.h">
-      <Filter>WeaponInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\WeaponInfo\WeaponInfo.h">
-      <Filter>WeaponInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EntityManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GenericEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\SoundEngine.h">
       <Filter>SoundEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Enemy\Enemy3D.h">
-      <Filter>Enemy3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\HardwareAbstraction\Controller.h">
-      <Filter>HardwareAnstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\HardwareAbstraction\Keyboard.h">
-      <Filter>HardwareAnstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Minimap\Minimap.h">
-      <Filter>Minimap</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CameraEffects\CameraEffects.h">
-      <Filter>CameraEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\HardwareAbstraction\Mouse.h">
-      <Filter>HardwareAnstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Options\OptionsManager.h">
-      <Filter>Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Options\Controls.h">
-      <Filter>Options</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\WeaponInfo\AssaultRifle.h">
-      <Filter>WeaponInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Object\Furniture.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="Source\DepthFBO.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Object\Bullet.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Object\Health.h">
-      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\Attributes.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ParticleManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\FileManager.h">
-      <Filter>FileManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\Armour.h">
-      <Filter>Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\Basic_Sword.h">
-      <Filter>Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\Equipment.h">
-      <Filter>Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\EquipmentManager.h">
-      <Filter>Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\Glove.h">
-      <Filter>Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\Gun.h">
-      <Filter>Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\Helmet.h">
-      <Filter>Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\Shoe.h">
-      <Filter>Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\Weapon.h">
-      <Filter>Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\HardwareAbstraction\Gamepad.h">
-      <Filter>HardwareAnstraction</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy\Enemy_Type.h">
-      <Filter>Enemy3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy\Patrol\Patrol.h">
-      <Filter>Enemy3D\Patrol</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Map_Editor\Map_Editor.h">
       <Filter>Map_Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Source\WeaponInfo\Knife.h">
-      <Filter>WeaponInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy\Horde\Horde.h">
-      <Filter>Enemy3D\Horde</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\WeaponInfo\MeleeInfo.h">
-      <Filter>WeaponInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Items\Inventory.h">
-      <Filter>Inventory</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Cinematic\Cinematic.h">
       <Filter>Cinematic</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.h">
-      <Filter>Enemy3D\AnimatedEnemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy\Pathfinding\Pathfinding.h">
-      <Filter>Enemy3D\Pathfinding</Filter>
     </ClInclude>
     <ClInclude Include="Source\Text_Display\Text\Text.h">
       <Filter>Text_Display\Text</Filter>
@@ -488,59 +161,38 @@
     <ClInclude Include="Source\Text_Display\Text_Manager\Text_Manager.h">
       <Filter>Text_Display\Text_Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Level\Tutorial.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Quest\Quest.h">
-      <Filter>Quest</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Quest\Quest_Manager\Quest_Manager.h">
-      <Filter>Quest\Quest_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Level\Level01.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Level\Level02.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Level\Level03.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Level\Level04.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy\Tower\Tower.h">
-      <Filter>Enemy3D\Tower</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ShopManager\Shop.h">
-      <Filter>ShopManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ShopManager\ShopManager.h">
-      <Filter>ShopManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Debugger\Debugger.h">
       <Filter>Debugger</Filter>
     </ClInclude>
     <ClInclude Include="Source\Debugger\Debug_Message.h">
       <Filter>Debugger</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Level\Mainmenu.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Level\Selection.h">
-      <Filter>Level</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Physics\Physics.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Level\Village.h">
-      <Filter>Level</Filter>
+    <ClInclude Include="Source\World\World.h">
+      <Filter>World</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Level\Credits.h">
-          <Filter>Level</Filter>
+    <ClInclude Include="Source\Player\Player.h">
+      <Filter>Player</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Level\Instruction.h">
-      <Filter>Level</Filter>
+    <ClInclude Include="Source\Enemy\Enemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\Collision.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Enemy_Manager.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Battle\Battle.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Battle\Battle_Option.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Adjuster\Adjuster.h">
+      <Filter>Adjuster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

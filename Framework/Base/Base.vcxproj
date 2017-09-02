@@ -11,150 +11,52 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Adjuster\Adjuster.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Attributes.cpp" />
-    <ClCompile Include="Source\CameraEffects\CameraEffects.cpp" />
+    <ClCompile Include="Source\Battle\Battle.cpp" />
+    <ClCompile Include="Source\Battle\Battle_Option.cpp" />
     <ClCompile Include="Source\Cinematic\Cinematic.cpp" />
+    <ClCompile Include="Source\Collision\Collision.cpp" />
     <ClCompile Include="Source\Debugger\Debugger.cpp" />
     <ClCompile Include="Source\Debugger\Debug_Message.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
-    <ClCompile Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.cpp" />
-    <ClCompile Include="Source\Enemy\Enemy3D.cpp" />
-    <ClCompile Include="Source\Enemy\Enemy_Type.cpp" />
-    <ClCompile Include="Source\Enemy\Horde\Horde.cpp" />
-    <ClCompile Include="Source\Enemy\Pathfinding\Pathfinding.cpp" />
-    <ClCompile Include="Source\Enemy\Patrol\Patrol.cpp" />
-    <ClCompile Include="Source\Enemy\Tower\Tower.cpp" />
-    <ClCompile Include="Source\EntityManager.cpp" />
-    <ClCompile Include="Source\FileManager.cpp" />
+    <ClCompile Include="Source\Enemy\Enemy.cpp" />
+    <ClCompile Include="Source\Enemy\Enemy_Manager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
-    <ClCompile Include="Source\GenericEntity.cpp" />
-    <ClCompile Include="Source\GroundEntity.cpp" />
-    <ClCompile Include="Source\HardwareAbstraction\Controller.cpp" />
-    <ClCompile Include="Source\HardwareAbstraction\Gamepad.cpp" />
-    <ClCompile Include="Source\HardwareAbstraction\Keyboard.cpp" />
-    <ClCompile Include="Source\HardwareAbstraction\Mouse.cpp" />
-    <ClCompile Include="Source\Items\Armour.cpp" />
-    <ClCompile Include="Source\Items\Basic_Sword.cpp" />
-    <ClCompile Include="Source\Items\EquipmentManager.cpp" />
-    <ClCompile Include="Source\Items\Glove.cpp" />
-    <ClCompile Include="Source\Items\Gun.cpp" />
-    <ClCompile Include="Source\Items\Helmet.cpp" />
-    <ClCompile Include="Source\Items\Inventory.cpp" />
-    <ClCompile Include="Source\Items\Shoe.cpp" />
-    <ClCompile Include="Source\Level\Credits.cpp" />
-    <ClCompile Include="Source\Level\Instruction.cpp" />
-    <ClCompile Include="Source\Level\Level01.cpp" />
-    <ClCompile Include="Source\Level\Level02.cpp" />
-    <ClCompile Include="Source\Level\Level03.cpp" />
-    <ClCompile Include="Source\Level\Level04.cpp" />
-    <ClCompile Include="Source\Level\Mainmenu.cpp" />
-    <ClCompile Include="Source\Level\Selection.cpp" />
-    <ClCompile Include="Source\Level\Tutorial.cpp" />
-    <ClCompile Include="Source\Level\Village.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Map_Editor\Map_Editor.cpp" />
-    <ClCompile Include="Source\Minimap\Minimap.cpp" />
-    <ClCompile Include="Source\Object\Bullet.cpp" />
-    <ClCompile Include="Source\Object\Furniture.cpp" />
-    <ClCompile Include="Source\Object\Health.cpp" />
     <ClCompile Include="Source\OBJMesh.cpp" />
-    <ClCompile Include="Source\Options\Controls.cpp" />
-    <ClCompile Include="Source\Options\OptionsManager.cpp" />
-    <ClCompile Include="Source\ParticleManager.cpp" />
-    <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
-    <ClCompile Include="Source\Projectile\Projectile.cpp" />
-    <ClCompile Include="Source\Quest\Quest.cpp" />
-    <ClCompile Include="Source\Quest\Quest_Manager\Quest_Manager.cpp" />
-    <ClCompile Include="Source\SceneText.cpp" />
-    <ClCompile Include="Source\ShopManager\Shop.cpp" />
-    <ClCompile Include="Source\ShopManager\ShopManager.cpp" />
-    <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
+    <ClCompile Include="Source\Player\Player.cpp" />
     <ClCompile Include="Source\SoundEngine.cpp" />
-    <ClCompile Include="Source\SpriteEntity.cpp" />
-    <ClCompile Include="Source\TextEntity.cpp" />
     <ClCompile Include="Source\Text_Display\Text\Text.cpp" />
     <ClCompile Include="Source\Text_Display\Text_Manager\Text_Manager.cpp" />
-    <ClCompile Include="Source\WeaponInfo\AssaultRifle.cpp" />
-    <ClCompile Include="Source\WeaponInfo\Knife.cpp" />
-    <ClCompile Include="Source\WeaponInfo\MeleeInfo.cpp" />
-    <ClCompile Include="Source\WeaponInfo\Pistol.cpp" />
-    <ClCompile Include="Source\WeaponInfo\WeaponInfo.cpp" />
+    <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Adjuster\Adjuster.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Attributes.h" />
-    <ClInclude Include="Source\CameraEffects\CameraEffects.h" />
+    <ClInclude Include="Source\Battle\Battle.h" />
+    <ClInclude Include="Source\Battle\Battle_Option.h" />
     <ClInclude Include="Source\Cinematic\Cinematic.h" />
+    <ClInclude Include="Source\Collision\Collision.h" />
     <ClInclude Include="Source\Debugger\Debugger.h" />
     <ClInclude Include="Source\Debugger\Debug_Message.h" />
     <ClInclude Include="Source\DepthFBO.h" />
-    <ClInclude Include="Source\Enemy\AnimatedEnemy\AnimatedEnemy.h" />
-    <ClInclude Include="Source\Enemy\Enemy3D.h" />
-    <ClInclude Include="Source\Enemy\Enemy_Type.h" />
-    <ClInclude Include="Source\Enemy\Horde\Horde.h" />
-    <ClInclude Include="Source\Enemy\Pathfinding\Pathfinding.h" />
-    <ClInclude Include="Source\Enemy\Patrol\Patrol.h" />
-    <ClInclude Include="Source\Enemy\Tower\Tower.h" />
-    <ClInclude Include="Source\EntityManager.h" />
-    <ClInclude Include="Source\FileManager.h" />
+    <ClInclude Include="Source\Enemy\Enemy.h" />
+    <ClInclude Include="Source\Enemy\Enemy_Manager.h" />
     <ClInclude Include="Source\FPSCamera.h" />
-    <ClInclude Include="Source\GenericEntity.h" />
-    <ClInclude Include="Source\GroundEntity.h" />
-    <ClInclude Include="Source\HardwareAbstraction\Controller.h" />
-    <ClInclude Include="Source\HardwareAbstraction\Gamepad.h" />
-    <ClInclude Include="Source\HardwareAbstraction\Keyboard.h" />
-    <ClInclude Include="Source\HardwareAbstraction\Mouse.h" />
-    <ClInclude Include="Source\Items\Armour.h" />
-    <ClInclude Include="Source\Items\Basic_Sword.h" />
-    <ClInclude Include="Source\Items\Equipment.h" />
-    <ClInclude Include="Source\Items\EquipmentManager.h" />
-    <ClInclude Include="Source\Items\Glove.h" />
-    <ClInclude Include="Source\Items\Gun.h" />
-    <ClInclude Include="Source\Items\Helmet.h" />
-    <ClInclude Include="Source\Items\Inventory.h" />
-    <ClInclude Include="Source\Items\Shoe.h" />
-    <ClInclude Include="Source\Items\Weapon.h" />
-    <ClInclude Include="Source\Level\Credits.h" />
-    <ClInclude Include="Source\Level\Instruction.h" />
-    <ClInclude Include="Source\Level\Level01.h" />
-    <ClInclude Include="Source\Level\Level02.h" />
-    <ClInclude Include="Source\Level\Level03.h" />
-    <ClInclude Include="Source\Level\Level04.h" />
-    <ClInclude Include="Source\Level\Mainmenu.h" />
-    <ClInclude Include="Source\Level\Selection.h" />
-    <ClInclude Include="Source\Level\Tutorial.h" />
-    <ClInclude Include="Source\Level\Village.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\Map_Editor\Map_Editor.h" />
-    <ClInclude Include="Source\Minimap\Minimap.h" />
-    <ClInclude Include="Source\Object\Bullet.h" />
-    <ClInclude Include="Source\Object\Furniture.h" />
-    <ClInclude Include="Source\Object\Health.h" />
     <ClInclude Include="Source\OBJMesh.h" />
-    <ClInclude Include="Source\Options\Controls.h" />
-    <ClInclude Include="Source\Options\OptionsManager.h" />
-    <ClInclude Include="Source\ParticleManager.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
-    <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
-    <ClInclude Include="Source\Projectile\Projectile.h" />
-    <ClInclude Include="Source\Quest\Quest.h" />
-    <ClInclude Include="Source\Quest\Quest_Manager\Quest_Manager.h" />
-    <ClInclude Include="Source\SceneText.h" />
-    <ClInclude Include="Source\ShopManager\Shop.h" />
-    <ClInclude Include="Source\ShopManager\ShopManager.h" />
-    <ClInclude Include="Source\SkyBox\SkyBoxEntity.h" />
+    <ClInclude Include="Source\Player\Player.h" />
     <ClInclude Include="Source\SoundEngine.h" />
-    <ClInclude Include="Source\SpriteEntity.h" />
-    <ClInclude Include="Source\TextEntity.h" />
     <ClInclude Include="Source\Text_Display\Text\Text.h" />
     <ClInclude Include="Source\Text_Display\Text_Manager\Text_Manager.h" />
-    <ClInclude Include="Source\WeaponInfo\AssaultRifle.h" />
-    <ClInclude Include="Source\WeaponInfo\Knife.h" />
-    <ClInclude Include="Source\WeaponInfo\MeleeInfo.h" />
-    <ClInclude Include="Source\WeaponInfo\Pistol.h" />
-    <ClInclude Include="Source\WeaponInfo\WeaponInfo.h" />
+    <ClInclude Include="Source\World\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B172635-4E2B-46F1-A403-08F4194D00F5}</ProjectGuid>
@@ -188,8 +90,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files (x86)\Visual Leak Detector\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files (x86)\Visual Leak Detector\include;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Visual Leak Detector\lib\Win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

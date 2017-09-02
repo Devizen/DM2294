@@ -3,6 +3,7 @@
 
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
+#include "ShaderProgram.h"
 
 #include "shader.hpp"
 #include "MeshBuilder.h"
@@ -127,6 +128,20 @@ bool SceneManager::CheckSceneExist(const std::string& _name)
 	return sceneMap.count(_name) != 0;
 }
 
+string SceneManager::GetActiveScene(void)
+{
+	std::string sceneName = "";
+	for (std::map<std::string, Scene*>::iterator it = sceneMap.begin(); it != sceneMap.end(); ++it)
+	{
+		if (activeScene != it->second)
+			continue;
+
+		sceneName = it->first;
+		break;
+	}
+	return sceneName;
+}
+
 void SceneManager::initShader(void)
 {
 	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
@@ -201,39 +216,6 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateText("IMPACT", 16, 16);
 	MeshBuilder::GetInstance()->GetMesh("IMPACT")->textureID = LoadTGA("Image//IMPACT.tga");
 
-	/*Enemy Turret*/
-	MeshBuilder::GetInstance()->GenerateOBJ("turret", "OBJ//turret.obj");
-	MeshBuilder::GetInstance()->GetMesh("turret")->textureID = LoadTGA("Image//turret.tga");
-
-	/*Crate*/
-	MeshBuilder::GetInstance()->GenerateOBJ("crate", "OBJ//crate.obj");
-	MeshBuilder::GetInstance()->GetMesh("crate")->textureID = LoadTGA("Image//crate.tga");
-
-	/*WatchTower*/
-	MeshBuilder::GetInstance()->GenerateOBJ("WatchTower", "OBJ//WatchTower.obj");
-	MeshBuilder::GetInstance()->GetMesh("WatchTower")->textureID = LoadTGA("Image//WatchTower.tga");
-
-	/*Barricade*/
-	MeshBuilder::GetInstance()->GenerateOBJ("Barricade", "OBJ//Barricade.obj");
-	MeshBuilder::GetInstance()->GetMesh("Barricade")->textureID = LoadTGA("Image//Barricade.tga");
-
-	/*Statue*/
-	MeshBuilder::GetInstance()->GenerateOBJ("Statue", "OBJ//Statue.obj");
-	MeshBuilder::GetInstance()->GetMesh("Statue")->textureID = LoadTGA("Image//Statue.tga");
-
-	/*Barrel*/
-	MeshBuilder::GetInstance()->GenerateOBJ("Barrel", "OBJ//Barrel.obj");
-	MeshBuilder::GetInstance()->GetMesh("Barrel")->textureID = LoadTGA("Image//crate.tga");
-
-	/*Tower*/
-	MeshBuilder::GetInstance()->GenerateOBJ("TOWER", "OBJ//Tower.obj");
-	MeshBuilder::GetInstance()->GetMesh("TOWER")->textureID = LoadTGA("Image//Tower.tga");
-	
-	/*Wall*/
-	MeshBuilder::GetInstance()->GenerateOBJ("Wall", "OBJ//Wall.obj");
-	MeshBuilder::GetInstance()->GetMesh("Wall")->textureID = LoadTGA("Image//Wall_Texture.tga");
-
-
 	MeshBuilder::GetInstance()->GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	MeshBuilder::GetInstance()->GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
 	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 0), 18, 36, 0.5f);
@@ -247,51 +229,6 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateCube("PATH", Color(0.f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
-
-	MeshBuilder::GetInstance()->GenerateQuad("snowGround", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("snowGround")->textureID = LoadTGA("Image//SkyBox//nottingham_dn.tga");
-
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_LEFT", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_RIGHT", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_TOP", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BOTTOM", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_FRONT")->textureID = LoadTGA("Image//SkyBox//nottingham_ft.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BACK")->textureID = LoadTGA("Image//SkyBox//nottingham_bk.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_LEFT")->textureID = LoadTGA("Image//SkyBox//nottingham_lf.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureID = LoadTGA("Image//SkyBox//nottingham_rt.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//nottingham_up.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//nottingham_dn.tga");
-
-	MeshBuilder::GetInstance()->GenerateQuad("PISTOL", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("PISTOL")->textureID = LoadTGA("Image//PISTOL.tga");
-
-	MeshBuilder::GetInstance()->GenerateQuad("ASSAULT", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("ASSAULT")->textureID = LoadTGA("Image//ASSAULT.tga");
-
-	MeshBuilder::GetInstance()->GenerateQuad("PAUSE", Color(1, 0, 0), 1.f);
-
-	MeshBuilder::GetInstance()->GenerateQuad("PLAYER_PISTOL", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("PLAYER_PISTOL")->textureID = LoadTGA("Image//PLAYER_PISTOL.tga");
-
-	MeshBuilder::GetInstance()->GenerateQuad("PLAYER_ASSAULT", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("PLAYER_ASSAULT")->textureID = LoadTGA("Image//PLAYER_ASSAULT.tga");
-
-	/*Bullet*/
-	//MeshBuilder::GetInstance()->GenerateCube("POWERUP_BULLET", Color(0.f, 0.f, 1.f), 1.0f);
-	MeshBuilder::GetInstance()->GenerateOBJ("POWERUP_BULLET", "OBJ//POWERUP_BULLET.obj");
-	MeshBuilder::GetInstance()->GetMesh("POWERUP_BULLET")->textureID = LoadTGA("Image//POWERUP_BULLET.tga");
-	/*Health*/
-	//MeshBuilder::GetInstance()->GenerateCube("health", Color(0.f, 1.f, 0.f), 1.0f);
-	MeshBuilder::GetInstance()->GenerateOBJ("POWERUP_HEALTH", "OBJ//POWERUP_HEALTH.obj");
-	MeshBuilder::GetInstance()->GetMesh("POWERUP_HEALTH")->textureID = LoadTGA("Image//POWERUP_HEALTH.tga");
-	/*Hit*/
-	MeshBuilder::GetInstance()->GenerateQuad("HIT", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("HIT")->textureID = LoadTGA("Image//HIT.tga");
-	/*Game Over*/
-	MeshBuilder::GetInstance()->GenerateQuad("GAMEOVER", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("GAMEOVER")->textureID = LoadTGA("Image//GAMEOVER.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("INVENTORY", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("INVENTORY")->textureID = LoadTGA("Image//Inventory.tga");
@@ -371,28 +308,8 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("BSWORD", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("BSWORD")->textureID = LoadTGA("Image//BasicSword.tga");
 
-	MeshBuilder::GetInstance()->GenerateQuad("SELECTION", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SELECTION")->textureID = LoadTGA("Image//Selection.tga");
-
 	MeshBuilder::GetInstance()->GenerateQuad("SHOP", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("SHOP")->textureID = LoadTGA("Image//Shop.tga");
-
-	/*Robot Troop*/
-	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT", "OBJ//ROBOT.obj");
-	MeshBuilder::GetInstance()->GetMesh("ROBOT")->textureID = LoadTGA("Image//ROBOT.tga");
-
-	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_CORE", "OBJ//Robot_Torso.obj");
-	MeshBuilder::GetInstance()->GetMesh("ROBOT_CORE")->textureID = LoadTGA("Image//ROBOT.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_LeftArm", "OBJ//Robot_LeftArm.obj");
-	MeshBuilder::GetInstance()->GetMesh("ROBOT_LeftArm")->textureID = LoadTGA("Image//ROBOT.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_RightArm", "OBJ//Robot_RightArm.obj");
-	MeshBuilder::GetInstance()->GetMesh("ROBOT_RightArm")->textureID = LoadTGA("Image//ROBOT.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_LeftLeg", "OBJ//Robot_LeftLeg.obj");
-	MeshBuilder::GetInstance()->GetMesh("ROBOT_LeftLeg")->textureID = LoadTGA("Image//ROBOT.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_RightLeg", "OBJ//Robot_RightLeg.obj");
-	MeshBuilder::GetInstance()->GetMesh("ROBOT_RightLeg")->textureID = LoadTGA("Image//ROBOT.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("ROBOT_Head", "OBJ//Robot_Head.obj");
-	MeshBuilder::GetInstance()->GetMesh("ROBOT_Head")->textureID = LoadTGA("Image//ROBOT.tga");
 
 	/*Player Health Bar Color*/
 	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
@@ -413,48 +330,8 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_STENCIL", Color(1, 1, 1), 1.0f);
 	MeshBuilder::GetInstance()->GetMesh("MINIMAP_STENCIL")->textureID = LoadTGA("Image//minimap//minimapStencil.tga");
 
-	MeshBuilder::GetInstance()->GenerateQuad("MainMenu", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MainMenu")->textureID = LoadTGA("Image//Mainmenu/Menubackground.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("MainMenuTitle", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MainMenuTitle")->textureID = LoadTGA("Image//Mainmenu/Menutitle.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("MainMenuStart", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MainMenuStart")->textureID = LoadTGA("Image//Mainmenu/Menustart.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("MainMenuLevels", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MainMenuLevels")->textureID = LoadTGA("Image//Mainmenu/Menulevels.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("MainMenuQuit", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MainMenuQuit")->textureID = LoadTGA("Image//Mainmenu/Menuquit.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("MainMenuCredits", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MainMenuCredits")->textureID = LoadTGA("Image//Mainmenu/Credits.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("MainMenuInstruction", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MainMenuInstruction")->textureID = LoadTGA("Image//Mainmenu/Instruction.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("MainMenuInstructionBtn", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MainMenuInstructionBtn")->textureID = LoadTGA("Image//Mainmenu/InstructionBtn.tga");
-
-	MeshBuilder::GetInstance()->GenerateQuad("SelectionMenu", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SelectionMenu")->textureID = LoadTGA("Image//Mainmenu/MenuBackground.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("SelectionTitle", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SelectionTitle")->textureID = LoadTGA("Image//Selection/LevelSelection.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("SelectionTutorial", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SelectionTutorial")->textureID = LoadTGA("Image//Selection/Tutorial.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("SelectionVillageTown", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SelectionVillageTown")->textureID = LoadTGA("Image//Selection/VillageTown.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("SelectionLevel1", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SelectionLevel1")->textureID = LoadTGA("Image//Selection/Level1.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("SelectionLevel2", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SelectionLevel2")->textureID = LoadTGA("Image//Selection/Level2.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("SelectionLevel3", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SelectionLevel3")->textureID = LoadTGA("Image//Selection/Level3.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("SelectionLevel4", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SelectionLevel4")->textureID = LoadTGA("Image//Selection/Level4.tga");
-	MeshBuilder::GetInstance()->GenerateQuad("SelectionBack", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SelectionBack")->textureID = LoadTGA("Image//Selection/Back.tga");
-
-	/*Credits*/
-	MeshBuilder::GetInstance()->GenerateQuad("CREDITS", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("CREDITS")->textureID = LoadTGA("Image//Mainmenu/CREDITS.tga");
-
-	/*Splash Screen*/
-	MeshBuilder::GetInstance()->GenerateQuad("SPLASH", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SPLASH")->textureID = LoadTGA("Image//Mainmenu/SPLASH.tga");
+	/*Battle Scene*/
+	MeshBuilder::GetInstance()->GenerateQuad("B_GRASS", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("B_GRASS")->textureID = LoadTGA("Image//Battle/B_GRASS.tga");
 
 }

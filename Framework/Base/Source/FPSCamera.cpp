@@ -40,89 +40,6 @@ void FPSCamera::Update(double dt)
 	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
 	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
 
-	/*if(KeyboardController::GetInstance()->IsKeyDown('A'))
-	{
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		position -= right * CAMERA_SPEED * (float)dt;
-		target -= right * CAMERA_SPEED * (float)dt;
-	}
-	if(KeyboardController::GetInstance()->IsKeyDown('D'))
-	{
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		position += right * CAMERA_SPEED * (float)dt;
-		target += right * CAMERA_SPEED * (float)dt;
-	}
-	if(KeyboardController::GetInstance()->IsKeyDown('W'))
-	{
-		Vector3 view = (target - position).Normalized();
-		position += view * CAMERA_SPEED * (float)dt;
-		target += view * CAMERA_SPEED * (float)dt;
-	}
-	if(KeyboardController::GetInstance()->IsKeyDown('S'))
-	{
-		Vector3 view = (target - position).Normalized();
-		position -= view * CAMERA_SPEED * (float)dt;
-		target -= view * CAMERA_SPEED * (float)dt;
-	}
-	if(KeyboardController::GetInstance()->IsKeyDown(VK_LEFT))
-	{
-		Vector3 view = (target - position).Normalized();
-		float yaw = (float)(CAMERA_SPEED * (float)dt);
-		Mtx44 rotation;
-		rotation.SetToRotation(yaw, 0, 1, 0);
-		view = rotation * view;
-		target = position + view;
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-	}
-	if(KeyboardController::GetInstance()->IsKeyDown(VK_RIGHT))
-	{
-		Vector3 view = (target - position).Normalized();
-		float yaw = (float)(-CAMERA_SPEED * (float)dt);
-		Mtx44 rotation;
-		rotation.SetToRotation(yaw, 0, 1, 0);
-		view = rotation * view;
-		target = position + view;
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-	}
-	if(KeyboardController::GetInstance()->IsKeyDown(VK_UP))
-	{
-		float pitch = (float)(CAMERA_SPEED * (float)dt);
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-		Mtx44 rotation;
-		rotation.SetToRotation(pitch, right.x, right.y, right.z);
-		view = rotation * view;
-		target = position + view;
-	}
-	if(KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
-	{
-		float pitch = (float)(-CAMERA_SPEED * (float)dt);
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-		Mtx44 rotation;
-		rotation.SetToRotation(pitch, right.x, right.y, right.z);
-		view = rotation * view;
-		target = position + view;
-	}*/
-
 	//Update the camera direction based on mouse move
 	// left-right rotate
 	{
@@ -149,10 +66,7 @@ void FPSCamera::Update(double dt)
 		view = rotation * view;
 		target = position + view;
 	}
-	//if(KeyboardController::GetInstance()->IsKeyDown('R'))
-	//{
-	//	Reset();
-	//}
+
 }
 
 Vector3 FPSCamera::GetCameraPos() const
@@ -179,6 +93,41 @@ Vector3 FPSCamera::GetCameraUp() const
 void FPSCamera::SetCameraUp(Vector3 up)
 {
 	this->up = up;
+}
+
+void FPSCamera::MoveCamera(float move, MOVE_CAMERA direction)
+{
+	if (direction == MOVE_UP)
+	{
+		position.y += static_cast<float>(move);
+		target.y += static_cast<float>(move);
+	}
+	else if (direction == MOVE_DOWN)
+	{
+		position.y -= static_cast<float>(move);
+		target.y -= static_cast<float>(move);
+	}
+	else if (direction == MOVE_LEFT)
+	{
+		position.x -= static_cast<float>(move);
+		target.x -= static_cast<float>(move);
+	}
+	else if (direction == MOVE_RIGHT)
+	{
+		position.x += static_cast<float>(move);
+		target.x += static_cast<float>(move);
+	}
+	/*Z Axis is flipped.*/
+	else if (direction == MOVE_FORWARD)
+	{
+		position.z -= static_cast<float>(move);
+		target.z -= static_cast<float>(move);
+	}
+	else if (direction == MOVE_BACKWARD)
+	{
+		position.z += static_cast<float>(move);
+		target.z += static_cast<float>(move);
+	}
 }
 
 void FPSCamera::Reset()

@@ -6,6 +6,23 @@
 class FPSCamera : public CameraBase
 {
 public:
+	enum MOVE_CAMERA
+	{
+		MOVE_UP = 0,
+		MOVE_DOWN,
+		MOVE_LEFT,
+		MOVE_RIGHT,
+		MOVE_FORWARD,
+		MOVE_BACKWARD
+	};
+
+	enum LOOK_CAMERA
+	{
+		LOOK_UP = 0,
+		LOOK_DOWN,
+		LOOK_LEFT,
+		LOOK_RIGHT
+	};
 	FPSCamera();
 	virtual ~FPSCamera();
 
@@ -21,6 +38,8 @@ public:
 	virtual void SetCameraTarget(Vector3 pos);
 	virtual Vector3 GetCameraUp() const;
 	virtual void SetCameraUp(Vector3 pos);
+
+	virtual void MoveCamera(float move, MOVE_CAMERA direction);
 
 private:
 	Vector3 position;

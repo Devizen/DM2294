@@ -6,21 +6,13 @@
 #include "SoundEngine.h"
 
 /*For deleting singletons.*/
-#include "EntityManager.h"
-#include "PlayerInfo\PlayerInfo.h"
 #include "Cinematic\Cinematic.h"
 #include "Debugger\Debugger.h"
-#include "ParticleManager.h"
 #include "Text_Display\Text_Manager\Text_Manager.h"
 #include "FileManager.h"
-#include "Options\OptionsManager.h"
-#include "Items\EquipmentManager.h"
-#include "Items\Inventory.h"
-#include "Minimap\Minimap.h"
 #include "Map_Editor\Map_Editor.h"
 #include "MeshBuilder.h"
 #include "GraphicsManager.h"
-#include "CameraEffects\CameraEffects.h"
 
 //Include GLEW
 #include <GL/glew.h>
@@ -31,9 +23,6 @@
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "SceneText.h"
-#include "Level\Tutorial.h"
 
 //#include "vld.h"
 
@@ -204,7 +193,7 @@ void Application::Init()
 void Application::Run()
 {
 
-	SceneManager::GetInstance()->SetActiveScene("Mainmenu");
+	SceneManager::GetInstance()->SetActiveScene("World");
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
@@ -243,21 +232,16 @@ void Application::Exit()
 	glfwTerminate();
 
 	/*Destroying Singletons to prevent memory leaks.*/
-	EntityManager::GetInstance()->Destroy();
-	CCinematic::GetInstance()->Destroy();
-	Debugger::GetInstance()->Destroy();
-	ParticleManager::GetInstance()->Destroy();
-	SceneManager::GetInstance()->Destroy();
-	Text_Manager::GetInstance()->Destroy();
-	FileManager::GetInstance()->Destroy();
-	OptionsManager::GetInstance()->Destroy();
-	EquipmentManager::GetInstance()->Destroy();
-	Inventory::GetInstance()->Destroy();
-	CPlayerInfo::GetInstance()->Destroy();
-	CMeleeInfo::GetInstance()->Destroy();
-	Map_Editor::GetInstance()->Destroy();
-	MeshBuilder::GetInstance()->Destroy();
-	GraphicsManager::GetInstance()->Destroy();
+	//CCinematic::GetInstance()->Destroy();
+	//Debugger::GetInstance()->Destroy();
+	//ParticleManager::GetInstance()->Destroy();
+	//SceneManager::GetInstance()->Destroy();
+	//Text_Manager::GetInstance()->Destroy();
+	//EquipmentManager::GetInstance()->Destroy();
+	//Inventory::GetInstance()->Destroy();
+	//Map_Editor::GetInstance()->Destroy();
+	//MeshBuilder::GetInstance()->Destroy();
+	//GraphicsManager::GetInstance()->Destroy();
 	//CCameraEffects::GetInstance()->Destroy();
 }
 

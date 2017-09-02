@@ -4,9 +4,9 @@
 #include "SingletonTemplate.h"
 #include <map>
 #include <string>
-#include "ShaderProgram.h"
 
 class Scene;
+class ShaderProgram;
 
 class SceneManager : public Singleton<SceneManager>
 {
@@ -22,6 +22,7 @@ public:
 	void RemoveScene(const std::string& _name);
 	void SetActiveScene(const std::string& _name);
 	bool CheckSceneExist(const std::string& _name);
+	std::string GetActiveScene(void);
 	void initShader(void);
 	ShaderProgram* currProg;
 	ShaderProgram* m_gPassShaderID;

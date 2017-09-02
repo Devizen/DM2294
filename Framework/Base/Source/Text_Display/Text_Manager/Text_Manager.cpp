@@ -11,11 +11,12 @@
 /*For keypress to skip the text.*/
 #include "KeyboardController.h"
 #include "MouseController.h"
-/*To stop the camera from swaying.*/
-#include "../../Base/Source/PlayerInfo/PlayerInfo.h"
 #include <iostream>
 /*Sound Engine to play sound for text.*/
 #include "../../SoundEngine.h"
+
+/*Adjuster for positioning of mesh.*/
+#include "../../Adjuster/Adjuster.h"
 
 using std::cout;
 using std::endl;
@@ -24,6 +25,14 @@ Text_Manager::Text_Manager() :
 	displayingText(false)
 	, messagePrompt(0)
 	, cooldown(0.f)
+	, characterCount(0)
+	, initialise(false)
+	, textState(0)
+	, playOnce(false)
+	, count(0)
+	, erase(false)
+	, lineCount(0)
+	, storeText("")
 {
 }
 
@@ -78,11 +87,11 @@ void Text_Manager::updateText(double dt)
 				}
 				else if (text->textType == CText::TEXT_CONVERSATION)
 				{
-					static string storeText = text->message;
-					static int count = 0;
-					static bool erase = false;
-					static int lineCount = 0;
-					static int characterCount = 0;
+					//static string storeText = text->message;
+					//static int count = 0;
+					//static bool erase = false;
+					//static int lineCount = 0;
+					//static int characterCount = 0;
 					bool preventCancel = false;
 
 					if (!erase)
@@ -171,7 +180,6 @@ void Text_Manager::updateText(double dt)
 								text = nullptr;
 								textList.pop_back();
 								displayingText = false;
-								CPlayerInfo::GetInstance()->StopSway((float)dt);
 								break;
 							}
 							else
@@ -180,7 +188,6 @@ void Text_Manager::updateText(double dt)
 								text = nullptr;
 								textList.pop_back();
 								displayingText = false;
-								CPlayerInfo::GetInstance()->StopSway((float)dt);
 								break;
 							}
 						}
@@ -191,9 +198,10 @@ void Text_Manager::updateText(double dt)
 				{
 					const float textSize = 0.1f;
 					bool preventCancel = false;
-					static int characterCount = 0;
+		/*			static int characterCount = 0;
 					static bool initialise = false;
 					static int textState = 0;
+					static bool playOnce = false;*/
 
 					/*Push back a character to use.*/
 					if (!initialise)
@@ -216,7 +224,6 @@ void Text_Manager::updateText(double dt)
 						text->textImpact.back()->scaleText = Application::GetInstance().GetWindowWidth();
 					}
 
-					static bool playOnce = false;
 					if (text->textImpact.size() == text->message.size() && !text->textImpact.back()->activateText)
 					{
 						if (!playOnce)
@@ -344,6 +351,7 @@ void Text_Manager::updateText(double dt)
 								Text_Manager::GetInstance()->displayingText = false;
 								initialise = false;
 								playOnce = false;
+								preventCancel = false;
 								textState = 0;
 								break;
 							}
@@ -353,7 +361,7 @@ void Text_Manager::updateText(double dt)
 				}
 				else if (text->textType == CText::TEXT_STAY)
 				{
-					if (CPlayerInfo::GetInstance()->inBoundary)
+					/*if (CPlayerInfo::GetInstance()->inBoundary)
 					{
 						text->scaleBackground = Application::GetInstance().GetWindowWidth() * 2.f;
 						text->scaleText = Application::GetInstance().GetWindowWidth() * 0.04f;
@@ -368,7 +376,7 @@ void Text_Manager::updateText(double dt)
 							Text_Manager::GetInstance()->displayingText = false;
 							break;
 						}
-					}
+					}*/
 				}
 			break;
 		}
@@ -434,8 +442,8 @@ void Text_Manager::renderText(void)
 					MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 
 					modelStack.PushMatrix();
-					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
-					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 2.f, Application::GetInstance().GetWindowWidth() * 0.12f, 1.f);
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * -0.1725f, -Application::GetInstance().GetWindowWidth() * 0.2535f, 0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.655503f, Application::GetInstance().GetWindowWidth()  * 0.255f, 1.f);
 
 					Mesh* modelMesh;
 					modelMesh = MeshBuilder::GetInstance()->GenerateCube("cube", Color(0.f, 0.f, 0.f), 1.0f);
@@ -443,19 +451,25 @@ void Text_Manager::renderText(void)
 					modelStack.PopMatrix();
 
 					modelStack.PushMatrix();
-					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, Application::GetInstance().GetWindowHeight() * 0.05f, 0.f);
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f, 
+						Application::GetInstance().GetWindowHeight() * -0.195f,
+						0.f);
 					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 					RenderHelper::RenderText(text->modelMesh, text->textConversation[0], Color(1.f, 0.f, 0.f));
 					modelStack.PopMatrix();
 
 					modelStack.PushMatrix();
-					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, 0.f, 0.f);
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
+						Application::GetInstance().GetWindowHeight() * -0.250f,
+						0.f);
 					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 					RenderHelper::RenderText(text->modelMesh, text->textConversation[1], Color(1.f, 0.f, 0.f));
 					modelStack.PopMatrix();
 
 					modelStack.PushMatrix();
-					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.48f, -Application::GetInstance().GetWindowHeight() * 0.05f, 0.f);
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
+						Application::GetInstance().GetWindowHeight() * -0.305f,
+						0.f);
 					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 					RenderHelper::RenderText(text->modelMesh, text->textConversation[2], Color(1.f, 0.f, 0.f));
 					modelStack.PopMatrix();
@@ -565,6 +579,15 @@ void Text_Manager::resetAll(void)
 	messagePrompt = 0;
 	cooldown = 0.f;
 	displayingText = false;
+	characterCount = 0;
+	initialise = false;
+	textState = 0;
+	playOnce = false;
+
+	storeText = "";
+	count = 0;
+	erase = false;
+	lineCount = 0;
 	if (textList.size() > 0)
 	{
 		CText* text = textList.back();
