@@ -198,6 +198,7 @@ void CBattle::Render()
 
 void CBattle::Update(double dt)
 {
+	cout << "UPDATING BATTLE" << endl;
 	if (battleState)
 	{
 		static int damage = 0;
@@ -227,7 +228,7 @@ void CBattle::Update(double dt)
 				checkTurn = true;
 			}
 
-			if (turn == PLAYER_TURN)
+			else if (turn == PLAYER_TURN)
 			{
 				if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN))
 					++option;

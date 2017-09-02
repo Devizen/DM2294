@@ -46,8 +46,8 @@ void CAdjuster::Update(double dt)
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
 			position.y += (static_cast<float>(dt) * 0.1f);
 
-		cout << "Translate X: " << position.x << endl;
-		cout << "Translate Y: " << position.y << endl;
+		/*cout << "Translate X: " << position.x << endl;
+		cout << "Translate Y: " << position.y << endl;*/
 	}
 	else if (mode == SCALE_MODE)
 	{
@@ -63,8 +63,8 @@ void CAdjuster::Update(double dt)
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
 			scale.y -= (static_cast<float>(dt) * 0.1f);
 
-		cout << "Scale X: " << scale.x << endl;
-		cout << "Scale Y: " << scale.y << endl;
+		/*cout << "Scale X: " << scale.x << endl;
+		cout << "Scale Y: " << scale.y << endl;*/
 	}
 }
 
