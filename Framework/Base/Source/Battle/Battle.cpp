@@ -87,6 +87,185 @@ void CBattle::AddEnemy(CEnemy * _enemy)
 	battleList.push_back(_enemy);
 }
 
+void CBattle::PlayerAttack(double dt)
+{
+	static int damage = 0;
+	static bool playAttack = false;
+	static bool playDamaged = false;
+	static float waitForSound = 0.f;
+	static int shakeDirection = 0;
+
+	if (shake > 1.f)
+		shakeDirection = 1;
+	else if (shake < -1.f)
+		shakeDirection = 0;
+
+	if (!playAttack)
+	{
+		CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\PLAYER_ATTACK.ogg", false);
+		playAttack = true;
+	}
+
+	waitForSound += static_cast<float>(dt);
+
+	/*0.209f is the duration of PLAYER_ATTACK.ogg.*/
+	if (waitForSound > 0.5f && playAttack && !playDamaged)
+	{
+		srand(time(NULL));
+		int criticalChance = rand() % 2; /*Randomise from 0 to 1*/
+										 /*
+										 int criticalChance = rand() % 1 + 1;
+										 This does not work because it will force it to 1.
+										 It means randonmise a value between 0 and 0 but start at 1 which is always just 1.
+										 In simple words, it means that criticalChance is always randomised as 0 and it will just + 1 to it afterwards which gives 1.
+										 */
+
+		if (battleList.size() == 1)
+		{
+			if (criticalChance == 0)
+			{
+				CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\DAMAGED.ogg", false);
+				battleList.back()->deductHealthBy(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK));
+				damage = playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK);
+			}
+			else
+			{
+				CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\CRITICAL.ogg", false);
+				battleList.back()->deductHealthBy(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) * 2);
+				damage = playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) * 2;
+			}
+		}
+		waitForSound = 0.f;
+		playDamaged = true;
+	}
+	else if (waitForSound < 0.5f && playDamaged)
+	{
+		if (shakeDirection == 0)
+			shake += static_cast<float>(dt) * 100.f;
+		else if (shakeDirection == 1)
+			shake -= static_cast<float>(dt) * 100.f;
+	}
+	/*0.220f is the duration of DAMAGED.ogg.*/
+	else if (waitForSound > 0.5f && playDamaged)
+	{
+		string message = "Player damaged ";
+		message += std::to_string(damage);
+		message += " to ";
+		message += battleList.back()->GetName();
+		message += ".";
+		Create::Text("text", message, 0.f, 1.f, CText::TEXT_CONVERSATION);
+
+		fightState = ENEMY_ATTACK;
+		playAttack = false;
+		playDamaged = false;
+		waitForSound = 0.f;
+		shakeDirection = 0;
+		shake = 0.f;
+		damage = 0;
+	}
+}
+
+void CBattle::EnemyAttack(double dt)
+{
+	static int damage = 0;
+	static bool playAttack = false;
+	static bool playDamaged = false;
+	static float waitForSound = 0.f;
+	static int shakeDirection = 0;
+
+	if (shakeAll > 1.f)
+		shakeDirection = 1;
+	else if (shakeAll < -1.f)
+		shakeDirection = 0;
+
+	if (battleList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) > 0)
+	{
+
+		if (!playAttack)
+		{
+			CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\ENEMY_ATTACK.ogg", false);
+			playAttack = true;
+		}
+
+		waitForSound += static_cast<float>(dt);
+
+		/*0.228f is the duration of ENEMY_ATTACK.ogg.*/
+		if (waitForSound > 0.5f && playAttack && !playDamaged)
+		{
+			CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\DAMAGED.ogg", false);
+			playerList.back()->deductHealthBy(battleList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK));
+			damage = battleList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK);
+
+			waitForSound = 0.f;
+			playDamaged = true;
+		}
+		else if (waitForSound < 0.5f && playDamaged)
+		{
+			if (shakeDirection == 0)
+				shakeAll += static_cast<float>(dt) * 100.f;
+			//GetCamera()->SetCameraPos(Vector3(GetCamera()->GetCameraPos().x + static_cast<float>(dt) * 100.f, /*X-Axis.*/
+			//	GetCamera()->GetCameraPos().y, /*Y-Axis.*/
+			//	GetCamera()->GetCameraPos().z)); /*Z-Axis.*/
+			else if (shakeDirection == 1)
+				shakeAll -= static_cast<float>(dt) * 100.f;
+			//camera->MoveCamera(static_cast<float>(dt) * 100.f, FPSCamera::MOVE_RIGHT);
+			//GetCamera()->SetCameraPos(Vector3(GetCamera()->GetCameraPos().x - static_cast<float>(dt) * 100.f, /*X-Axis.*/
+			//	GetCamera()->GetCameraPos().y, /*Y-Axis.*/
+			//	GetCamera()->GetCameraPos().z)); /*Z-Axis.*/
+
+		}
+		/*0.220f is the duration of DAMAGED.ogg.*/
+		else if (waitForSound > 0.5f && playDamaged)
+		{
+			string message = battleList.back()->GetName();
+			message += " damaged ";
+			message += std::to_string(damage);
+			message += " to ";
+			message += "Player";
+			message += ".";
+			Create::Text("text", message, 0.f, 1.f, CText::TEXT_CONVERSATION);
+
+			turn = NO_ONE_TURN;
+			fightState = NO_ATTACK;
+			playAttack = false;
+			playDamaged = false;
+			waitForSound = 0.f;
+			checkTurn = false;
+			shakeAll = 0.f;
+			damage = 0;
+			//GetCamera()->SetCameraPos(Vector3(0.f, /*X-Axis.*/
+			//	GetCamera()->GetCameraPos().y, /*Y-Axis.*/
+			//	GetCamera()->GetCameraPos().z)); /*Z-Axis.*/
+		}
+	}
+	else
+	{
+		static bool playVictory = false;
+		static float waitForSound = 0.f;
+		if (!playVictory)
+		{
+			CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\VICTORY.ogg", false);
+			playVictory = true;
+		}
+		waitForSound += static_cast<float>(dt);
+		/*1.727f is the duration of DAMAGED.ogg.*/
+		if (waitForSound > 1.727f)
+		{
+			turn = NO_ONE_TURN;
+			fightState = NO_ATTACK;
+			playAttack = false;
+			playDamaged = false;
+			waitForSound = 0.f;
+			checkTurn = false;
+			shakeAll = 0.f;
+
+			Exit();
+			battleState = false;
+			playVictory = false;
+		}
+	}
+}
+
 void CBattle::Render()
 {
 	if (battleState)
@@ -240,6 +419,10 @@ void CBattle::Update(double dt)
 				{
 					if (option == Battle_Option::ATTACK_OPTION)
 						fightState = PLAYER_ATTACK;
+					else if (option == Battle_Option::DEFEND_OPTION)
+						fightState = PLAYER_DEFEND;
+					else if (option == Battle_Option::RUN_OPTION)
+						fightState = PLAYER_RUN;
 				}
 			}
 			else if (turn == ENEMY_TURN)
@@ -248,180 +431,9 @@ void CBattle::Update(double dt)
 			}
 		}
 		else if (fightState == PLAYER_ATTACK)
-		{
-			static bool playAttack = false;
-			static bool playDamaged = false;
-			static float waitForSound = 0.f;
-			static int shakeDirection = 0;
-
-			if (shake > 1.f)
-				shakeDirection = 1;
-			else if (shake < -1.f)
-				shakeDirection = 0;
-
-			if (!playAttack)
-			{
-				CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\PLAYER_ATTACK.ogg", false);
-				playAttack = true;
-			}
-
-			waitForSound += static_cast<float>(dt);
-
-			/*0.209f is the duration of PLAYER_ATTACK.ogg.*/
-			if (waitForSound > 0.5f && playAttack && !playDamaged)
-			{
-				srand(time(NULL));
-				int criticalChance = rand() % 2; /*Randomise from 0 to 1*/
-				/*
-				int criticalChance = rand() % 1 + 1;
-				This does not work because it will force it to 1.
-				It means randonmise a value between 0 and 0 but start at 1 which is always just 1.
-				In simple words, it means that criticalChance is always randomised as 0 and it will just + 1 to it afterwards which gives 1.
-				*/
-
-				if (battleList.size() == 1)
-				{
-					if (criticalChance == 0)
-					{
-						CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\DAMAGED.ogg", false);
-						battleList.back()->deductHealthBy(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK));
-						damage = playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK);
-					}
-					else
-					{
-						CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\CRITICAL.ogg", false);
-						battleList.back()->deductHealthBy(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) * 2);
-						damage = playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) * 2;
-					}
-				}
-				waitForSound = 0.f;
-				playDamaged = true;
-			}
-			else if (waitForSound < 0.5f && playDamaged)
-			{
-				if (shakeDirection == 0)
-					shake += static_cast<float>(dt) * 100.f;
-				else if (shakeDirection == 1)
-					shake -= static_cast<float>(dt) * 100.f;
-			}
-			/*0.220f is the duration of DAMAGED.ogg.*/
-			else if (waitForSound > 0.5f && playDamaged)
-			{
-				string message = "Player damaged ";
-				message += std::to_string(damage);
-				message += " to ";
-				message += battleList.back()->GetName();
-				message += ".";
-				Create::Text("text", message, 0.f, 1.f, CText::TEXT_CONVERSATION);
-
-				fightState = ENEMY_ATTACK;
-				playAttack = false;
-				playDamaged = false;
-				waitForSound = 0.f;
-				shakeDirection = 0;
-				shake = 0.f;
-				damage = 0;
-			}
-		}
+			PlayerAttack(dt);
 		else if (fightState == ENEMY_ATTACK)
-		{
-			static bool playAttack = false;
-			static bool playDamaged = false;
-			static float waitForSound = 0.f;
-			static int shakeDirection = 0;
-
-			if (shakeAll > 1.f)
-				shakeDirection = 1;
-			else if (shakeAll < -1.f)
-				shakeDirection = 0;
-
-			if (battleList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH) > 0)
-			{
-
-				if (!playAttack)
-				{
-					CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\ENEMY_ATTACK.ogg", false);
-					playAttack = true;
-				}
-
-				waitForSound += static_cast<float>(dt);
-
-				/*0.228f is the duration of ENEMY_ATTACK.ogg.*/
-				if (waitForSound > 0.5f && playAttack && !playDamaged)
-				{
-					CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\DAMAGED.ogg", false);
-					playerList.back()->deductHealthBy(battleList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK));
-					damage = battleList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK);
-
-					waitForSound = 0.f;
-					playDamaged = true;
-				}
-				else if (waitForSound < 0.5f && playDamaged)
-				{
-					if (shakeDirection == 0)
-						shakeAll += static_cast<float>(dt) * 100.f;
-						//GetCamera()->SetCameraPos(Vector3(GetCamera()->GetCameraPos().x + static_cast<float>(dt) * 100.f, /*X-Axis.*/
-						//	GetCamera()->GetCameraPos().y, /*Y-Axis.*/
-						//	GetCamera()->GetCameraPos().z)); /*Z-Axis.*/
-					else if (shakeDirection == 1)
-						shakeAll -= static_cast<float>(dt) * 100.f;
-						//camera->MoveCamera(static_cast<float>(dt) * 100.f, FPSCamera::MOVE_RIGHT);
-						//GetCamera()->SetCameraPos(Vector3(GetCamera()->GetCameraPos().x - static_cast<float>(dt) * 100.f, /*X-Axis.*/
-						//	GetCamera()->GetCameraPos().y, /*Y-Axis.*/
-						//	GetCamera()->GetCameraPos().z)); /*Z-Axis.*/
-
-				}
-				/*0.220f is the duration of DAMAGED.ogg.*/
-				else if (waitForSound > 0.5f && playDamaged)
-				{
-					string message = battleList.back()->GetName();
-					message += " damaged ";
-					message += std::to_string(damage);
-					message += " to ";
-					message += "Player";
-					message += ".";
-					Create::Text("text", message, 0.f, 1.f, CText::TEXT_CONVERSATION);
-
-					turn = NO_ONE_TURN;
-					fightState = NO_ATTACK;
-					playAttack = false;
-					playDamaged = false;
-					waitForSound = 0.f;
-					checkTurn = false;
-					shakeAll = 0.f;
-					damage = 0;
-					//GetCamera()->SetCameraPos(Vector3(0.f, /*X-Axis.*/
-					//	GetCamera()->GetCameraPos().y, /*Y-Axis.*/
-					//	GetCamera()->GetCameraPos().z)); /*Z-Axis.*/
-				}
-			}
-			else
-			{
-				static bool playVictory = false;
-				static float waitForSound = 0.f;
-				if (!playVictory)
-				{
-					CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\VICTORY.ogg", false);
-					playVictory = true;
-				}
-				waitForSound += static_cast<float>(dt);
-				/*1.727f is the duration of DAMAGED.ogg.*/
-				if (waitForSound > 1.727f)
-				{
-					turn = NO_ONE_TURN;
-					fightState = NO_ATTACK;
-					playAttack = false;
-					playDamaged = false;
-					waitForSound = 0.f;
-					checkTurn = false;
-					shakeAll = 0.f;
-
-					Exit();
-					battleState = false;
-					playVictory = false;
-				}
-			}
-		}
+			EnemyAttack(dt);
 	}
 }
 

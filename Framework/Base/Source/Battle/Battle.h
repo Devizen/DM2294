@@ -20,6 +20,10 @@ class CBattle
 	{
 		PLAYER_ATTACK = 0,
 		ENEMY_ATTACK,
+		PLAYER_DEFEND,
+		ENEMY_DEFEND,
+		PLAYER_RUN,
+		ENEMY_RUN,
 		NO_ATTACK
 	};
 public:
@@ -34,6 +38,13 @@ public:
 
 	void AddPlayer(CPlayer* _player);
 	void AddEnemy(CEnemy* _enemy);
+
+	void PlayerAttack(double dt);
+	void EnemyAttack(double dt);
+	void PlayerDefend(double dt);
+	void EnemyDefend(double dt);
+	void PlayerRun(double dt);
+	void EnemyRun(double dt);
 
 	void Render();
 	void Update(double dt);
