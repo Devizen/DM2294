@@ -46,7 +46,7 @@ void CBattle::Init(void)
 	shake = 0.f;
 	shakeAll = 0.f;
 	fightState = NO_ATTACK;
-	option = Battle_Option::ATTACK_OPTION;
+	option = ECBattle_Option::ATTACK_OPTION;
 	adjustX = 0.f;
 	adjustY = 0.f;
 	scaleX = 0.f;
@@ -374,7 +374,7 @@ void CBattle::Render()
 		RenderHelper::GetInstance()->RenderText(_mesh, "RUN", Color(1.f, 1.f, 0.f));
 		modelStack.PopMatrix();
 
-		if (option == Battle_Option::ATTACK_OPTION)
+		if (option == ECBattle_Option::ATTACK_OPTION)
 		{
 			_mesh = MeshBuilder::GetInstance()->GetMesh("PATH");
 			modelStack.PushMatrix();
@@ -384,7 +384,7 @@ void CBattle::Render()
 			RenderHelper::GetInstance()->RenderMesh(_mesh);
 			modelStack.PopMatrix();
 		}
-		else if (option == Battle_Option::DEFEND_OPTION)
+		else if (option == ECBattle_Option::DEFEND_OPTION)
 		{
 			_mesh = MeshBuilder::GetInstance()->GetMesh("PATH");
 			modelStack.PushMatrix();
@@ -394,7 +394,7 @@ void CBattle::Render()
 			RenderHelper::GetInstance()->RenderMesh(_mesh);
 			modelStack.PopMatrix();
 		}
-		else if (option == Battle_Option::RUN_OPTION)
+		else if (option == ECBattle_Option::RUN_OPTION)
 		{
 			_mesh = MeshBuilder::GetInstance()->GetMesh("PATH");
 			modelStack.PushMatrix();
@@ -430,11 +430,11 @@ void CBattle::Update(double dt)
 
 				if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN))
 				{
-					if (option == Battle_Option::ATTACK_OPTION)
+					if (option == ECBattle_Option::ATTACK_OPTION)
 						fightState = PLAYER_ATTACK;
-					else if (option == Battle_Option::DEFEND_OPTION)
+					else if (option == ECBattle_Option::DEFEND_OPTION)
 						fightState = PLAYER_DEFEND;
-					else if (option == Battle_Option::RUN_OPTION)
+					else if (option == ECBattle_Option::RUN_OPTION)
 						fightState = PLAYER_RUN;
 				}
 			}

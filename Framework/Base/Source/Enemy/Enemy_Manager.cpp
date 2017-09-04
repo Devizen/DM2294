@@ -1,5 +1,6 @@
 #include "Enemy_Manager.h"
 #include "Enemy.h"
+#include "SceneManager.h"
 #include "../Player/Player.h"
 #include "../Collision/Collision.h"
 #include <utility>
@@ -93,41 +94,44 @@ void CEnemy_Manager::Update(double dt)
 	if (createEnemy)
 	{
 		srand(static_cast<unsigned>(time(NULL)));
-		int x = rand() % 171 + (-85);
-		int z = rand() % 131 + (-65);
-		Vector3 randomPosition(static_cast<float>(x), 0.f, static_cast<float>(z));
-		static bool noCollision = false;
-		while (!noCollision)
+		if (SceneManager::GetInstance()->GetActiveScene() == "World")
 		{
-			randomPosition.Set(static_cast<float>(x), 0.f, static_cast<float>(z));
-			for (map<string, CEnemy*>::iterator thisEnemy = CEnemy_Manager::GetInstance()->GetEnemyList()->begin();
-				thisEnemy != CEnemy_Manager::GetInstance()->GetEnemyList()->end();
-				++thisEnemy)
+			int x = rand() % 171 + (-85);
+			int z = rand() % 131 + (-65);
+			Vector3 randomPosition(static_cast<float>(x), 0.f, static_cast<float>(z));
+			static bool noCollision = false;
+			while (!noCollision)
 			{
-				if (!Check::AABB(randomPosition, thisEnemy->second->GetPosition()))
-					noCollision = true;
-				else
+				randomPosition.Set(static_cast<float>(x), 0.f, static_cast<float>(z));
+				for (map<string, CEnemy*>::iterator thisEnemy = CEnemy_Manager::GetInstance()->GetEnemyList()->begin();
+					thisEnemy != CEnemy_Manager::GetInstance()->GetEnemyList()->end();
+					++thisEnemy)
 				{
+					if (!Check::AABB(randomPosition, thisEnemy->second->GetPosition()))
+						noCollision = true;
+					else
+					{
+						noCollision = false;
+						break;
+					}
+				}
+
+				if (enemyList->size() == 0)
+					noCollision = true;
+
+				if (Check::AABB(randomPosition, player->GetPosition()))
 					noCollision = false;
-					break;
+
+				if (!noCollision)
+				{
+					x = rand() % 171 + (-85);
+					z = rand() % 131 + (-65);
 				}
 			}
-
-			if (enemyList->size() == 0)
-				noCollision = true;
-
-			if (Check::AABB(randomPosition, player->GetPosition()))
-				noCollision = false;
-
-			if (!noCollision)
-			{
-				x = rand() % 171 + (-85);
-				z = rand() % 131 + (-65);
-			}
+			Create::Enemy("ENEMY", randomPosition);
+			noCollision = false;
+			createEnemy = false;
 		}
-		Create::Enemy("ENEMY", randomPosition);
-		noCollision = false;
-		createEnemy = false;
 	}
 }
 

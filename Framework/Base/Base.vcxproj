@@ -16,6 +16,8 @@
     <ClCompile Include="Source\Attributes.cpp" />
     <ClCompile Include="Source\Battle\Battle.cpp" />
     <ClCompile Include="Source\Battle\Battle_Option.cpp" />
+    <ClCompile Include="Source\Battle\Bullet.cpp" />
+    <ClCompile Include="Source\Battle\Bullet_Manager.cpp" />
     <ClCompile Include="Source\Cinematic\Cinematic.cpp" />
     <ClCompile Include="Source\Collision\Collision.cpp" />
     <ClCompile Include="Source\Debugger\Debugger.cpp" />
@@ -40,6 +42,8 @@
     <ClInclude Include="Source\Attributes.h" />
     <ClInclude Include="Source\Battle\Battle.h" />
     <ClInclude Include="Source\Battle\Battle_Option.h" />
+    <ClInclude Include="Source\Battle\Bullet.h" />
+    <ClInclude Include="Source\Battle\Bullet_Manager.h" />
     <ClInclude Include="Source\Cinematic\Cinematic.h" />
     <ClInclude Include="Source\Collision\Collision.h" />
     <ClInclude Include="Source\Debugger\Debugger.h" />

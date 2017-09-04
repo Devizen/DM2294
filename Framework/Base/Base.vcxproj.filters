@@ -126,6 +126,12 @@
     <ClCompile Include="Source\Adjuster\Adjuster.cpp">
       <Filter>Adjuster</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Battle\Bullet.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Battle\Bullet_Manager.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -193,6 +199,12 @@
     </ClInclude>
     <ClInclude Include="Source\Adjuster\Adjuster.h">
       <Filter>Adjuster</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Battle\Bullet.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Battle\Bullet_Manager.h">
+      <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

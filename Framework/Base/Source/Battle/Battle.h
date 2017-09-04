@@ -4,7 +4,7 @@
 
 using std::vector;
 
-enum class Battle_Option;
+enum class ECBattle_Option;
 class CEnemy;
 class CPlayer;
 
@@ -67,7 +67,7 @@ private:
 	/*Check if there is a critical damage.*/
 	bool critical;
 	/*Selecting option to do.*/
-	Battle_Option option;
+	ECBattle_Option option;
 	vector<CEnemy*>battleList;
 	vector<CPlayer*>playerList;
 

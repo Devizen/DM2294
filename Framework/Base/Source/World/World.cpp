@@ -49,6 +49,10 @@
 /*Adjusting position of mesh.*/
 #include "../Adjuster/Adjuster.h"
 
+/*Bullet System.*/
+#include "../Battle/Bullet.h"
+#include "../Battle/Bullet_Manager.h"
+
 //#include "vld.h"
 using namespace std;
 
@@ -155,6 +159,9 @@ void World::Init()
 	enemy->setAttackTo(1);
 	enemy->setSpeed(1);
 	CEnemy_Manager::GetInstance()->SetPlayer(player);
+
+	/*Initialise the number of bullet objects.*/
+	CBullet_Manager::GetInstance()->AddBullet(200);
 }
 
 void World::Update(double dt)
@@ -187,6 +194,11 @@ void World::Update(double dt)
 		//Activate::BattleScene(player->GetBattle(), enemy, player);
 	}
 
+	/*Create Bullet*/
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_SPACE))
+	{
+		Create::Bullet("sphere", player->GetPosition(), CBullet::PLAYER_ORIGINATED);
+	}
 	//EntityManager::GetInstance()->Update(dt); // Update our entities
 
 	//theKeyboard->Read(static_cast<float>(dt));
@@ -212,6 +224,9 @@ void World::Update(double dt)
 
 	/*Update adjuster values for positioning.*/
 	CAdjuster::GetInstance()->Update(dt);
+
+	/*Update Bullets.*/
+	CBullet_Manager::GetInstance()->Update(dt);
 }
 
 void World::Render()
@@ -387,11 +402,12 @@ void World::RenderWorld()
 	//}
 
 	CEnemy_Manager::GetInstance()->Render();
+	CBullet_Manager::GetInstance()->Render();
 }
 
 void World::UpdatePlayerMovement(double dt)
 {
-	const float moveSpeed = 10.f;
+	const float moveSpeed = 20.f;
 
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_UP))
 		player->MovePlayer(static_cast<float>(dt) * moveSpeed, CPlayer::MOVE_UP);

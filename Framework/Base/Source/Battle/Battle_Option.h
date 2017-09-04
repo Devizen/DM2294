@@ -1,7 +1,7 @@
 #ifndef BATTLE_OPTION_H
 #define BATTLE_OPTION_H
 
-enum class Battle_Option
+enum class ECBattle_Option
 {
 	NO_TOP_OPTION = 0,
 	ATTACK_OPTION,
@@ -11,10 +11,10 @@ enum class Battle_Option
 };
 
 /*Increment*/
-Battle_Option& operator++(Battle_Option &_option);
-Battle_Option operator++(Battle_Option &_option, int);
+ECBattle_Option& operator++(ECBattle_Option &_option);
+ECBattle_Option operator++(ECBattle_Option &_option, int);
 /*Decrement*/
-Battle_Option& operator--(Battle_Option &_option);
-Battle_Option operator--(Battle_Option &_option, int);
+ECBattle_Option& operator--(ECBattle_Option &_option);
+ECBattle_Option operator--(ECBattle_Option &_option, int);
 
 #endif
