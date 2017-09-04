@@ -8,6 +8,7 @@ using std::map;
 using std::string;
 
 class CEnemy;
+class CPlayer;
 
 class CEnemy_Manager
 {
@@ -23,9 +24,12 @@ public:
 	void AddEnemy(CEnemy* _enemy);
 	/*Get the Enemy List.*/
 	map<string, CEnemy*>*GetEnemyList(void);
-
+	/*Get player for checking against enemy purposes.*/
+	CPlayer* GetPlayer(void);
 	/*Set createEnemy to start creating enemy on map.*/
 	void SetCreateEnemy(bool _createEnemy);
+	/*Set player to allow enemy to check against player.*/
+	void SetPlayer(CPlayer* _player);
 
 	/*Render enemy in list.*/
 	void Render(void);
@@ -37,6 +41,7 @@ public:
 	void Destroy(void);
 
 private:
+	CPlayer* player;
 	map<string, CEnemy*>*enemyList;
 	bool createEnemy;
 

@@ -2,6 +2,8 @@
 #define COLLISION_H
 #include "Vector3.h"
 
+class CPlayer;
+
 class CCollision
 {
 public:

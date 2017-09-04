@@ -154,20 +154,21 @@ void World::Init()
 	enemy->setMaxHealthTo(10);
 	enemy->setAttackTo(1);
 	enemy->setSpeed(1);
+	CEnemy_Manager::GetInstance()->SetPlayer(player);
 }
 
 void World::Update(double dt)
 {
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD1))
-		SceneManager::GetInstance()->SetActiveScene("Tutorial");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD2))
-		SceneManager::GetInstance()->SetActiveScene("Level01");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD3))
-		SceneManager::GetInstance()->SetActiveScene("Level02");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD4))
-		SceneManager::GetInstance()->SetActiveScene("Level03");
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
-		SceneManager::GetInstance()->SetActiveScene("Level04");
+	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD1))
+	//	SceneManager::GetInstance()->SetActiveScene("Tutorial");
+	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD2))
+	//	SceneManager::GetInstance()->SetActiveScene("Level01");
+	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD3))
+	//	SceneManager::GetInstance()->SetActiveScene("Level02");
+	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD4))
+	//	SceneManager::GetInstance()->SetActiveScene("Level03");
+	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
+	//	SceneManager::GetInstance()->SetActiveScene("Level04");
 
 	/*Update text display.*/
 	if (Text_Manager::GetInstance()->returnTextList().size() > 0)

@@ -1,5 +1,6 @@
 #include "Enemy_Manager.h"
 #include "Enemy.h"
+#include "../Player/Player.h"
 #include "../Collision/Collision.h"
 #include <utility>
 
@@ -47,9 +48,19 @@ map<string, CEnemy*>* CEnemy_Manager::GetEnemyList(void)
 	return enemyList;
 }
 
+CPlayer * CEnemy_Manager::GetPlayer(void)
+{
+	return player;
+}
+
 void CEnemy_Manager::SetCreateEnemy(bool _createEnemy)
 {
 	createEnemy = _createEnemy;
+}
+
+void CEnemy_Manager::SetPlayer(CPlayer * _player)
+{
+	player = _player;
 }
 
 void CEnemy_Manager::Render(void)
@@ -101,6 +112,13 @@ void CEnemy_Manager::Update(double dt)
 					break;
 				}
 			}
+
+			if (enemyList->size() == 0)
+				noCollision = true;
+
+			if (Check::AABB(randomPosition, player->GetPosition()))
+				noCollision = false;
+
 			if (!noCollision)
 			{
 				x = rand() % 171 + (-85);
