@@ -24,6 +24,9 @@ public:
 	/*Get the Enemy List.*/
 	map<string, CEnemy*>*GetEnemyList(void);
 
+	/*Set createEnemy to start creating enemy on map.*/
+	void SetCreateEnemy(bool _createEnemy);
+
 	/*Render enemy in list.*/
 	void Render(void);
 
@@ -35,6 +38,7 @@ public:
 
 private:
 	map<string, CEnemy*>*enemyList;
+	bool createEnemy;
 
 protected:
 

@@ -18,6 +18,7 @@
 #include "ShaderProgram.h"
 #include "../Light.h"
 #include "../DepthFBO.h"
+#include "../Collision/Collision.h"
 
 
 /*Rendering*/
@@ -177,7 +178,7 @@ void World::Update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('B'))
 	{
-		enemy = Create::Enemy("ENEMY", Vector3(20.f, 0.f, 20.f));
+		CEnemy_Manager::GetInstance()->SetCreateEnemy(true);
 		//enemy->setHealthTo(10);
 		//enemy->setMaxHealthTo(10);
 		//enemy->setAttackTo(1);

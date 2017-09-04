@@ -1,12 +1,22 @@
 #include "Enemy_Manager.h"
 #include "Enemy.h"
+#include "../Collision/Collision.h"
 #include <utility>
+
+#include <string>
+using std::string;
+
+/*Debugging purpose.*/
+#include <iostream>
+using std::cout;
+using std::endl;
 
 using std::pair;
 
 CEnemy_Manager* CEnemy_Manager::s_instance = 0;
 
-CEnemy_Manager::CEnemy_Manager()
+CEnemy_Manager::CEnemy_Manager() :
+	createEnemy(false)
 {
 }
 
@@ -27,12 +37,19 @@ CEnemy_Manager * CEnemy_Manager::GetInstance(void)
 
 void CEnemy_Manager::AddEnemy(CEnemy * _enemy)
 {
-	enemyList->insert(pair<string, CEnemy*>(_enemy->GetName(), _enemy));
+	string key = _enemy->GetName();
+	key += std::to_string(enemyList->size());
+	enemyList->insert(pair<string, CEnemy*>(key, _enemy));
 }
 
 map<string, CEnemy*>* CEnemy_Manager::GetEnemyList(void)
 {
 	return enemyList;
+}
+
+void CEnemy_Manager::SetCreateEnemy(bool _createEnemy)
+{
+	createEnemy = _createEnemy;
 }
 
 void CEnemy_Manager::Render(void)
@@ -60,6 +77,39 @@ void CEnemy_Manager::Update(double dt)
 			continue;
 
 		it->second->Update(dt);
+	}
+
+	if (createEnemy)
+	{
+		srand(static_cast<unsigned>(time(NULL)));
+		int x = rand() % 171 + (-85);
+		int z = rand() % 131 + (-65);
+		Vector3 randomPosition(static_cast<float>(x), 0.f, static_cast<float>(z));
+		static bool noCollision = false;
+		while (!noCollision)
+		{
+			randomPosition.Set(static_cast<float>(x), 0.f, static_cast<float>(z));
+			for (map<string, CEnemy*>::iterator thisEnemy = CEnemy_Manager::GetInstance()->GetEnemyList()->begin();
+				thisEnemy != CEnemy_Manager::GetInstance()->GetEnemyList()->end();
+				++thisEnemy)
+			{
+				if (!Check::AABB(randomPosition, thisEnemy->second->GetPosition()))
+					noCollision = true;
+				else
+				{
+					noCollision = false;
+					break;
+				}
+			}
+			if (!noCollision)
+			{
+				x = rand() % 171 + (-85);
+				z = rand() % 131 + (-65);
+			}
+		}
+		Create::Enemy("ENEMY", randomPosition);
+		noCollision = false;
+		createEnemy = false;
 	}
 }
 
