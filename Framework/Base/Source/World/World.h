@@ -39,7 +39,6 @@ private:
 
 	CPlayer* player;
 	CEnemy* enemy;
-	CBattle* battle;
 	FPSCamera* camera;
 	CCinematic* cinematic;
 	Light* lights[2];

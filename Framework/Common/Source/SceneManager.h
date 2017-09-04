@@ -23,9 +23,9 @@ public:
 	void SetActiveScene(const std::string& _name);
 	bool CheckSceneExist(const std::string& _name);
 	std::string GetActiveScene(void);
-	void initShader(void);
-	ShaderProgram* currProg;
-	ShaderProgram* m_gPassShaderID;
+	void InitShader(void);
+	//ShaderProgram* currProg;
+	//ShaderProgram* m_gPassShaderID;
 
 private:
 	SceneManager();

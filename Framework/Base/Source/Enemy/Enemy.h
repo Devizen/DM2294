@@ -25,6 +25,8 @@ public:
 	void SetDefaultPosition(Vector3 _defaultPosition);
 	/*Set model mesh for enemy.*/
 	void SetModelMesh(string _meshName);
+	/*Set activeBattle to trigger battle event.*/
+	void SetBattleMode(bool _activeBattle);
 
 	/*Get the name.*/
 	string GetName(void) const;
@@ -34,6 +36,8 @@ public:
 	Vector3 GetDefaultPosition(void) const;
 	/*Get modelMesh.*/
 	Mesh* GetModelMesh(void);
+	/*Get activeBattle to check whether battle should be triggered.*/
+	bool GetActiveBattle(void);
 
 	/*Render enemy.*/
 	void Render(void);
@@ -46,6 +50,7 @@ private:
 	Vector3 defaultPosition;
 	float rotate;
 	Mesh* modelMesh;
+	bool activateBattle;
 protected:
 };
 

@@ -39,6 +39,7 @@ public:
 	void AddPlayer(CPlayer* _player);
 	void AddEnemy(CEnemy* _enemy);
 
+	void CheckTurnToGoFirst(double dt);
 	void PlayerAttack(double dt);
 	void EnemyAttack(double dt);
 	void PlayerDefend(double dt);
@@ -63,7 +64,8 @@ private:
 	float shakeAll;
 	/*Keep track of fight state.*/
 	FIGHT_STATE fightState;
-
+	/*Check if there is a critical damage.*/
+	bool critical;
 	/*Selecting option to do.*/
 	Battle_Option option;
 	vector<CEnemy*>battleList;

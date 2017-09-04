@@ -71,6 +71,11 @@ void CEnemy::SetModelMesh(string _meshName)
 		this->modelMesh = modelMesh;
 }
 
+void CEnemy::SetBattleMode(bool _activeBattle)
+{
+	activateBattle = _activeBattle;
+}
+
 string CEnemy::GetName(void) const
 {
 	return name;
@@ -89,6 +94,11 @@ Vector3 CEnemy::GetDefaultPosition(void) const
 Mesh * CEnemy::GetModelMesh(void)
 {
 	return modelMesh;
+}
+
+bool CEnemy::GetActiveBattle(void)
+{
+	return activateBattle;
 }
 
 void CEnemy::Render(void)

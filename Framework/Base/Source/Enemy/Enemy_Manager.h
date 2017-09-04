@@ -30,6 +30,9 @@ public:
 	/*Update enemy in list.*/
 	void Update(double dt);
 
+	/*Remove everything from CEnemy_Manager.*/
+	void Destroy(void);
+
 private:
 	map<string, CEnemy*>*enemyList;
 

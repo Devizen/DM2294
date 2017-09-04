@@ -4,8 +4,16 @@
 #include <iostream>
 using namespace std;
 
+ShaderProgram::ShaderProgram() :
+	currProg(nullptr)
+	, m_gPassShaderID(nullptr)
+{
+}
+
 ShaderProgram::ShaderProgram(unsigned int _programID) :
 programID(_programID)
+, currProg(nullptr)
+, m_gPassShaderID(nullptr)
 {
 }
 
@@ -147,4 +155,12 @@ void ShaderProgram::UpdateMatrix44(const std::string& _name, float* _startPtr)
 		return;
 
 	UpdateMatrix44(ID, _startPtr);
+}
+
+void ShaderProgram::RemoveUniformMap(void)
+{
+	for (map<string, unsigned int>::iterator it = uniformMap.begin(); it != uniformMap.end();)
+	{
+		it = uniformMap.erase(it);
+	}
 }

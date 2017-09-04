@@ -4,17 +4,30 @@
 #include "../Enemy/Enemy.h"
 #include "../Enemy/Enemy_Manager.h"
 #include "../Collision/Collision.h"
+#include "../Battle/Battle.h"
+
+/*Debugging purpose.*/
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 //using std::map;
 //using std::pair;
 
 CPlayer::CPlayer() :
 	position(0.f, 0.f, 0.f)
+	, battle(nullptr)
 {
 }
 
 CPlayer::~CPlayer()
 {
+	if (battle)
+	{
+		delete battle;
+		battle = nullptr;
+	}
 }
 
 void CPlayer::SetPosition(Vector3 _position)
@@ -25,6 +38,14 @@ void CPlayer::SetPosition(Vector3 _position)
 Vector3 CPlayer::GetPosition(void)
 {
 	return position;
+}
+
+CBattle * CPlayer::GetBattle(void)
+{
+	if (!battle)
+		battle = new CBattle();
+
+	return battle;
 }
 
 void CPlayer::MovePlayer(float move, MOVE_PLAYER direction)
@@ -50,6 +71,15 @@ void CPlayer::Update(double dt)
 	{
 		if (Check::AABB(position, it->second->GetPosition()))
 		{
+			if (!this->GetBattle()->GetBattleState())
+			{
+				it->second->SetBattleMode(true);
+				it->second->setHealthTo(3);
+				it->second->setMaxHealthTo(3);
+				it->second->setAttackTo(1);
+				it->second->setSpeed(1);
+				Activate::BattleScene(this->battle, it->second, this);
+			}
 			position = previousPosition;
 			break;
 		}

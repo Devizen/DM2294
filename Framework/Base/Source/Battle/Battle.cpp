@@ -10,6 +10,7 @@
 #include "Battle_Option.h"
 #include "SceneManager.h"
 #include "../Text_Display/Text/Text.h"
+#include "../Enemy/Enemy_Manager.h"
 
 /*Debugging purpose.*/
 #include <iostream>
@@ -28,6 +29,7 @@ CBattle::CBattle() :
 	, adjustY(0.f)
 	, scaleX(0.f)
 	, scaleY(0.f)
+	, critical(false)
 {
 	Init();
 }
@@ -49,6 +51,7 @@ void CBattle::Init(void)
 	adjustY = 0.f;
 	scaleX = 0.f;
 	scaleY = 0.f;
+	critical = false;
 
 	while (battleList.size() > 0)
 	{
@@ -87,6 +90,28 @@ void CBattle::AddEnemy(CEnemy * _enemy)
 	battleList.push_back(_enemy);
 }
 
+void CBattle::CheckTurnToGoFirst(double dt)
+{
+	int totalEnemySpeed = 0;
+	int totalPlayerSpeed = 0;
+
+	for (vector<CEnemy*>::iterator it = battleList.begin(); it != battleList.end(); ++it)
+	{
+		CEnemy* enemy = (CEnemy*)*it;
+		totalEnemySpeed += enemy->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+	}
+	for (vector<CPlayer*>::iterator it = playerList.begin(); it != playerList.end(); ++it)
+	{
+		CPlayer* player = (CPlayer*)*it;
+		totalPlayerSpeed += player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
+	}
+
+	if (totalEnemySpeed > totalPlayerSpeed)
+		turn = ENEMY_TURN;
+	else
+		turn = PLAYER_TURN;
+}
+
 void CBattle::PlayerAttack(double dt)
 {
 	static int damage = 0;
@@ -111,7 +136,7 @@ void CBattle::PlayerAttack(double dt)
 	/*0.209f is the duration of PLAYER_ATTACK.ogg.*/
 	if (waitForSound > 0.5f && playAttack && !playDamaged)
 	{
-		srand(time(NULL));
+		srand(static_cast<unsigned>(time((NULL))));
 		int criticalChance = rand() % 2; /*Randomise from 0 to 1*/
 										 /*
 										 int criticalChance = rand() % 1 + 1;
@@ -131,8 +156,9 @@ void CBattle::PlayerAttack(double dt)
 			else
 			{
 				CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\CRITICAL.ogg", false);
-				battleList.back()->deductHealthBy(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) * 2);
-				damage = playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) * 2;
+				battleList.back()->deductHealthBy(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) * 3);
+				damage = playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) * 3;
+				critical = true;
 			}
 		}
 		waitForSound = 0.f;
@@ -148,7 +174,12 @@ void CBattle::PlayerAttack(double dt)
 	/*0.220f is the duration of DAMAGED.ogg.*/
 	else if (waitForSound > 0.5f && playDamaged)
 	{
-		string message = "Player damaged ";
+		string message = "";
+		if (critical)
+			message = "Player CRITICAL ";
+		else
+			message = "Player damaged ";
+		critical = false;
 		message += std::to_string(damage);
 		message += " to ";
 		message += battleList.back()->GetName();
@@ -259,6 +290,7 @@ void CBattle::EnemyAttack(double dt)
 			checkTurn = false;
 			shakeAll = 0.f;
 
+			playerList.back()->GetBattle()->SetBattleState(false);
 			Exit();
 			battleState = false;
 			playVictory = false;
@@ -377,7 +409,6 @@ void CBattle::Render()
 
 void CBattle::Update(double dt)
 {
-	cout << "UPDATING BATTLE" << endl;
 	if (battleState)
 	{
 		static int damage = 0;
@@ -385,29 +416,11 @@ void CBattle::Update(double dt)
 		{
 			if (!checkTurn)
 			{
-				int totalEnemySpeed = 0;
-				int totalPlayerSpeed = 0;
-
-				for (vector<CEnemy*>::iterator it = battleList.begin(); it != battleList.end(); ++it)
-				{
-					CEnemy* enemy = (CEnemy*)*it;
-					totalEnemySpeed += enemy->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
-				}
-				for (vector<CPlayer*>::iterator it = playerList.begin(); it != playerList.end(); ++it)
-				{
-					CPlayer* player = (CPlayer*)*it;
-					totalPlayerSpeed += player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED);
-				}
-
-				if (totalEnemySpeed > totalPlayerSpeed)
-					turn = ENEMY_TURN;
-				else
-					turn = PLAYER_TURN;
-
+				CheckTurnToGoFirst(dt);
 				checkTurn = true;
 			}
 
-			else if (turn == PLAYER_TURN)
+			else if (checkTurn)
 			{
 				if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN))
 					++option;
@@ -425,25 +438,59 @@ void CBattle::Update(double dt)
 						fightState = PLAYER_RUN;
 				}
 			}
-			else if (turn == ENEMY_TURN)
-			{
-				fightState = ENEMY_ATTACK;
-			}
 		}
-		else if (fightState == PLAYER_ATTACK)
-			PlayerAttack(dt);
-		else if (fightState == ENEMY_ATTACK)
-			EnemyAttack(dt);
+		else if (turn == ENEMY_TURN)
+		{
+			if (fightState == ENEMY_ATTACK)
+				EnemyAttack(dt);
+			else if (fightState == PLAYER_ATTACK)
+				PlayerAttack(dt);
+		}
+		else if (turn == PLAYER_TURN)
+		{
+			if (fightState == PLAYER_ATTACK)
+				PlayerAttack(dt);
+			else if (fightState == ENEMY_ATTACK)
+				EnemyAttack(dt);
+		}
 	}
 }
 
 void CBattle::Exit(void)
 {
+	for (map<string, CEnemy*>::iterator thisEnemy = CEnemy_Manager::GetInstance()->GetEnemyList()->begin(); thisEnemy != CEnemy_Manager::GetInstance()->GetEnemyList()->end();)
+	{
+		bool deleted = false;
+		for (vector<CEnemy*>::iterator thatEnemy = battleList.begin(); thatEnemy != battleList.end();)
+		{
+			if (thisEnemy->second != (*thatEnemy))
+			{
+				++thatEnemy;
+				continue;
+			}
+
+			deleted = true;
+			CEnemy* enemy = thisEnemy->second;
+			delete enemy;
+			enemy = nullptr;
+
+			thatEnemy = battleList.erase(thatEnemy);
+			thisEnemy = CEnemy_Manager::GetInstance()->GetEnemyList()->erase(thisEnemy);
+		}
+		if (!deleted)
+			++thisEnemy;
+	}
 	while (battleList.size() > 0)
 	{
-		//CEnemy* object = battleList.back();
-		//delete object;
-		//object = nullptr;
+		CEnemy* object = battleList.back();
+		if (object->GetModelMesh())
+		{
+			Mesh* mesh = object->GetModelMesh();
+			delete mesh;
+			mesh = nullptr;
+		}
+		delete object;
+		object = nullptr;
 		battleList.pop_back();
 	}
 

@@ -62,3 +62,18 @@ void CEnemy_Manager::Update(double dt)
 		it->second->Update(dt);
 	}
 }
+
+void CEnemy_Manager::Destroy(void)
+{
+	for (map<string, CEnemy*>::iterator it = enemyList->begin(); it != enemyList->end();)
+	{
+		CEnemy* enemy = it->second;
+		delete enemy;
+		enemy = nullptr;
+		it = enemyList->erase(it);
+	}
+
+	enemyList->clear();
+	delete enemyList;
+	enemyList = nullptr;
+}

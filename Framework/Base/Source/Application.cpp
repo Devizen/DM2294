@@ -13,7 +13,10 @@
 #include "Map_Editor\Map_Editor.h"
 #include "MeshBuilder.h"
 #include "GraphicsManager.h"
-
+#include "RenderHelper.h"
+#include "Enemy\Enemy_Manager.h"
+#include "ShaderProgram.h"
+#include "DepthFBO.h"
 //Include GLEW
 #include <GL/glew.h>
 
@@ -232,8 +235,16 @@ void Application::Exit()
 	glfwTerminate();
 
 	/*Destroying Singletons to prevent memory leaks.*/
+	SceneManager::GetInstance()->Destroy();
+	Text_Manager::GetInstance()->Destroy();
+	MeshBuilder::GetInstance()->Destroy();
+	GraphicsManager::GetInstance()->Destroy();
+	RenderHelper::GetInstance()->Destroy();
+	CEnemy_Manager::GetInstance()->Destroy();
+	ShaderProgram::GetInstance()->Destroy();
+	Debugger::GetInstance()->Destroy();
+	DepthFBO::GetInstance()->Destroy();
 	//CCinematic::GetInstance()->Destroy();
-	//Debugger::GetInstance()->Destroy();
 	//ParticleManager::GetInstance()->Destroy();
 	//SceneManager::GetInstance()->Destroy();
 	//Text_Manager::GetInstance()->Destroy();

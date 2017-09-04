@@ -19,6 +19,8 @@
 
 
 SceneManager::SceneManager() : activeScene(nullptr), nextScene(nullptr)
+//, currProg(nullptr)
+//, m_gPassShaderID(nullptr)
 {
 }
 
@@ -38,7 +40,7 @@ void SceneManager::Update(double _dt)
 		}
 
 		activeScene = nextScene;
-		initShader();
+		InitShader();
 		activeScene->Init();
 	}
 
@@ -142,67 +144,70 @@ string SceneManager::GetActiveScene(void)
 	return sceneName;
 }
 
-void SceneManager::initShader(void)
+void SceneManager::InitShader(void)
 {
-	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
-	m_gPassShaderID = GraphicsManager::GetInstance()->LoadShader("gpass", "Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
+	//currProg = ShaderProgram::GetInstance()->currProg;
+	//m_gPassShaderID = ShaderProgram::GetInstance()->m_gPassShaderID;
+
+	ShaderProgram::GetInstance()->currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
+	ShaderProgram::GetInstance()->m_gPassShaderID = GraphicsManager::GetInstance()->LoadShader("gpass", "Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
 
 	// Tell the shader program to store these uniform locations
-	currProg->AddUniform("MVP");
-	currProg->AddUniform("MV");
-	currProg->AddUniform("MV_inverse_transpose");
-	currProg->AddUniform("material.kAmbient");
-	currProg->AddUniform("material.kDiffuse");
-	currProg->AddUniform("material.kSpecular");
-	currProg->AddUniform("material.kShininess");
-	currProg->AddUniform("lightEnabled");
-	currProg->AddUniform("numLights");
-	currProg->AddUniform("lights[0].type");
-	currProg->AddUniform("lights[0].position_cameraspace");
-	currProg->AddUniform("lights[0].color");
-	currProg->AddUniform("lights[0].power");
-	currProg->AddUniform("lights[0].kC");
-	currProg->AddUniform("lights[0].kL");
-	currProg->AddUniform("lights[0].kQ");
-	currProg->AddUniform("lights[0].spotDirection");
-	currProg->AddUniform("lights[0].cosCutoff");
-	currProg->AddUniform("lights[0].cosInner");
-	currProg->AddUniform("lights[0].exponent");
-	currProg->AddUniform("lights[1].type");
-	currProg->AddUniform("lights[1].position_cameraspace");
-	currProg->AddUniform("lights[1].color");
-	currProg->AddUniform("lights[1].power");
-	currProg->AddUniform("lights[1].kC");
-	currProg->AddUniform("lights[1].kL");
-	currProg->AddUniform("lights[1].kQ");
-	currProg->AddUniform("lights[1].spotDirection");
-	currProg->AddUniform("lights[1].cosCutoff");
-	currProg->AddUniform("lights[1].cosInner");
-	currProg->AddUniform("lights[1].exponent");
-	currProg->AddUniform("colorTextureEnabled");
-	currProg->AddUniform("colorTexture");
-	currProg->AddUniform("textEnabled");
-	currProg->AddUniform("textColor");
+	ShaderProgram::GetInstance()->currProg->AddUniform("MVP");
+	ShaderProgram::GetInstance()->currProg->AddUniform("MV");
+	ShaderProgram::GetInstance()->currProg->AddUniform("MV_inverse_transpose");
+	ShaderProgram::GetInstance()->currProg->AddUniform("material.kAmbient");
+	ShaderProgram::GetInstance()->currProg->AddUniform("material.kDiffuse");
+	ShaderProgram::GetInstance()->currProg->AddUniform("material.kSpecular");
+	ShaderProgram::GetInstance()->currProg->AddUniform("material.kShininess");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lightEnabled");
+	ShaderProgram::GetInstance()->currProg->AddUniform("numLights");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].type");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].position_cameraspace");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].color");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].power");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].kC");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].kL");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].kQ");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].spotDirection");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].cosCutoff");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].cosInner");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[0].exponent");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].type");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].position_cameraspace");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].color");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].power");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].kC");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].kL");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].kQ");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].spotDirection");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].cosCutoff");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].cosInner");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lights[1].exponent");
+	ShaderProgram::GetInstance()->currProg->AddUniform("colorTextureEnabled");
+	ShaderProgram::GetInstance()->currProg->AddUniform("colorTexture");
+	ShaderProgram::GetInstance()->currProg->AddUniform("textEnabled");
+	ShaderProgram::GetInstance()->currProg->AddUniform("textColor");
 
 	/*Fog*/
-	currProg->AddUniform("fogParam.color");
-	currProg->AddUniform("fogParam.start");
-	currProg->AddUniform("fogParam.end");
-	currProg->AddUniform("fogParam.density");
-	currProg->AddUniform("fogParam.type");
-	currProg->AddUniform("fogParam.enabled");
+	ShaderProgram::GetInstance()->currProg->AddUniform("fogParam.color");
+	ShaderProgram::GetInstance()->currProg->AddUniform("fogParam.start");
+	ShaderProgram::GetInstance()->currProg->AddUniform("fogParam.end");
+	ShaderProgram::GetInstance()->currProg->AddUniform("fogParam.density");
+	ShaderProgram::GetInstance()->currProg->AddUniform("fogParam.type");
+	ShaderProgram::GetInstance()->currProg->AddUniform("fogParam.enabled");
 
 	/*Shadow*/
-	currProg->AddUniform("lightDepthMVP");
-	currProg->AddUniform("shadowMap");
+	ShaderProgram::GetInstance()->currProg->AddUniform("lightDepthMVP");
+	ShaderProgram::GetInstance()->currProg->AddUniform("shadowMap");
 
-	m_gPassShaderID->AddUniform("lightDepthMVP");
-	m_gPassShaderID->AddUniform("colorTextureEnabled[0]");
-	m_gPassShaderID->AddUniform("colorTexture[0]");
-	m_gPassShaderID->AddUniform("colorTextureEnabled[1]");
-	m_gPassShaderID->AddUniform("colorTexture[1]");
-	m_gPassShaderID->AddUniform("colorTextureEnabled[2]");
-	m_gPassShaderID->AddUniform("colorTexture[2]");
+	ShaderProgram::GetInstance()->m_gPassShaderID->AddUniform("lightDepthMVP");
+	ShaderProgram::GetInstance()->m_gPassShaderID->AddUniform("colorTextureEnabled[0]");
+	ShaderProgram::GetInstance()->m_gPassShaderID->AddUniform("colorTexture[0]");
+	ShaderProgram::GetInstance()->m_gPassShaderID->AddUniform("colorTextureEnabled[1]");
+	ShaderProgram::GetInstance()->m_gPassShaderID->AddUniform("colorTexture[1]");
+	ShaderProgram::GetInstance()->m_gPassShaderID->AddUniform("colorTextureEnabled[2]");
+	ShaderProgram::GetInstance()->m_gPassShaderID->AddUniform("colorTexture[2]");
 
 	// Load all the meshes
 	MeshBuilder::GetInstance()->GenerateAxes("reference");
@@ -221,6 +226,7 @@ void SceneManager::initShader(void)
 	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 1, 0), 18, 36, 0.5f);
 	MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 	MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("PLAYER", Color(1.0f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("RAIN", Color(0.5f, 0.5f, 0.5f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("cubeBox", Color(1.0f, 0.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("ENEMY", Color(1.0f, 0.0f, 0.0f), 1.0f);

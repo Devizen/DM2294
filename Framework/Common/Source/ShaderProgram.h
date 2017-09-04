@@ -5,12 +5,14 @@
 #include <string>
 #include "Vector3.h"
 #include "Mtx44.h"
+#include "SingletonTemplate.h"
 
-class ShaderProgram
+class ShaderProgram : public Singleton<ShaderProgram>
 {
 public:
 	const unsigned int SHADER_ERROR = UINT_MAX;
 
+	ShaderProgram();
 	ShaderProgram(unsigned int _programID);
 	~ShaderProgram();
 
@@ -34,6 +36,11 @@ public:
 	void UpdateVector3(const std::string& _name, float* _startPtr);
 	void UpdateMatrix44(const std::string& _name, const Mtx44& _value);
 	void UpdateMatrix44(const std::string& _name, float* _startPtr);
+
+	void RemoveUniformMap(void);
+
+	ShaderProgram* currProg;
+	ShaderProgram* m_gPassShaderID;
 
 private:
 	unsigned int programID;

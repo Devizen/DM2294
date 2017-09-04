@@ -4,6 +4,8 @@
 #include "Vector3.h"
 #include "../Attributes.h"
 
+class CBattle;
+
 class CPlayer : public CAttributes
 {
 public:
@@ -24,12 +26,16 @@ public:
 	/*Get player position.*/
 	Vector3 GetPosition(void);
 
+	/*Get battle to trigger battle event.*/
+	CBattle* GetBattle(void);
+
 	/*Move player position.*/
 	void MovePlayer(float move, MOVE_PLAYER direction);
 
 	/*Update player.*/
 	void Update(double dt);
 private:
+	CBattle* battle;
 	Vector3 position;
 protected:
 };

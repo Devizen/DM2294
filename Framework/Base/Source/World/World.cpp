@@ -47,6 +47,8 @@
 
 /*Adjusting position of mesh.*/
 #include "../Adjuster/Adjuster.h"
+
+//#include "vld.h"
 using namespace std;
 
 World* World::sInstance = new World(SceneManager::GetInstance());
@@ -100,16 +102,16 @@ void World::Init()
 	lights[1]->power = 0.4f;
 	lights[1]->name = "lights[1]";
 
-	SceneManager::GetInstance()->currProg->UpdateInt("numLights", 1);
-	SceneManager::GetInstance()->currProg->UpdateInt("textEnabled", 0);
+	ShaderProgram::GetInstance()->currProg->UpdateInt("numLights", 1);
+	ShaderProgram::GetInstance()->currProg->UpdateInt("textEnabled", 0);
 
 	Color fogColor(0.5f, 0.5f, 0.5f); //Vec3 Color
-	SceneManager::GetInstance()->currProg->UpdateVector3("fogParam.color", &fogColor.r);
-	SceneManager::GetInstance()->currProg->UpdateFloat("fogParam.start", 10);
-	SceneManager::GetInstance()->currProg->UpdateFloat("fogParam.end", 2000);
-	SceneManager::GetInstance()->currProg->UpdateFloat("fogParam.density", 0.005f);
-	SceneManager::GetInstance()->currProg->UpdateInt("fogParam.type", 0);
-	SceneManager::GetInstance()->currProg->UpdateInt("fogParam.enabled", 0);
+	ShaderProgram::GetInstance()->currProg->UpdateVector3("fogParam.color", &fogColor.r);
+	ShaderProgram::GetInstance()->currProg->UpdateFloat("fogParam.start", 10);
+	ShaderProgram::GetInstance()->currProg->UpdateFloat("fogParam.end", 2000);
+	ShaderProgram::GetInstance()->currProg->UpdateFloat("fogParam.density", 0.005f);
+	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.type", 0);
+	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 0);
 
 	// Create and attach the camera to the scene
 	camera = new FPSCamera();
@@ -145,8 +147,6 @@ void World::Init()
 	player->setMaxHealthTo(10);
 	player->setAttackTo(1);
 	player->setSpeed(2);
-	
-	battle = new CBattle();
 
 	enemy = Create::Enemy("ENEMY", Vector3(20.f, 0.f, 20.f));
 	enemy->setHealthTo(10);
@@ -177,11 +177,12 @@ void World::Update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed('B'))
 	{
-		enemy->setHealthTo(10);
-		enemy->setMaxHealthTo(10);
-		enemy->setAttackTo(1);
-		enemy->setSpeed(1);
-		Activate::BattleScene(battle, enemy, player);
+		enemy = Create::Enemy("ENEMY", Vector3(20.f, 0.f, 20.f));
+		//enemy->setHealthTo(10);
+		//enemy->setMaxHealthTo(10);
+		//enemy->setAttackTo(1);
+		//enemy->setSpeed(1);
+		//Activate::BattleScene(player->GetBattle(), enemy, player);
 	}
 
 	//EntityManager::GetInstance()->Update(dt); // Update our entities
@@ -189,7 +190,7 @@ void World::Update(double dt)
 	//theKeyboard->Read(static_cast<float>(dt));
 	//theMouse->Read(static_cast<float>(dt));
 
-	if (!battle->GetBattleState())
+	if (!player->GetBattle()->GetBattleState())
 	{
 		/*Update camera.*/
 		UpdateCameraMovement(dt);
@@ -200,12 +201,11 @@ void World::Update(double dt)
 
 		/*Update enemy.*/
 		CEnemy_Manager::GetInstance()->Update(dt);
-		cout << "PLAYER UDPATE" << endl;
 	}
 
 	/*Update battle system.*/
 	if (!Text_Manager::GetInstance()->displayingText)
-		battle->Update(dt);
+		player->GetBattle()->Update(dt);
 
 
 	/*Update adjuster values for positioning.*/
@@ -275,7 +275,7 @@ void World::RenderPassMain(void)
 
 	//pass light depth texture 
 	DepthFBO::GetInstance()->BindForReading(GL_TEXTURE8);
-	SceneManager::GetInstance()->currProg->UpdateInt("shadowMap", 8);
+	ShaderProgram::GetInstance()->currProg->UpdateInt("shadowMap", 8);
 	//GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 
 	// Camera matrix
@@ -292,19 +292,19 @@ void World::RenderPassMain(void)
 	{
 		Vector3 lightDir(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z);
 		Vector3 lightDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lightDir;
-		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightDirection_cameraspace.x);
+		ShaderProgram::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightDirection_cameraspace.x);
 	}
 	else if (lights[0]->type == Light::LIGHT_SPOT)
 	{
 		Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[0]->position;
-		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
+		ShaderProgram::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
 		Vector3 spotDirection_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[0]->spotDirection;
-		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].spotDirection", &spotDirection_cameraspace.x);
+		ShaderProgram::GetInstance()->currProg->UpdateVector3("lights[0].spotDirection", &spotDirection_cameraspace.x);
 	}
 	else
 	{
 		Position lightPosition_cameraspace = GraphicsManager::GetInstance()->GetViewMatrix() * lights[0]->position;
-		SceneManager::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
+		ShaderProgram::GetInstance()->currProg->UpdateVector3("lights[0].position_cameraspace", &lightPosition_cameraspace.x);
 	}
 
 
@@ -335,7 +335,7 @@ void World::RenderPassMain(void)
 	//RenderHelper::RenderMesh(modelMesh);
 	//modelStack.PopMatrix();
 
-	battle->Render();
+	player->GetBattle()->Render();
 
 	/*Render text display.*/
 	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
@@ -356,7 +356,7 @@ void World::RenderWorld()
 	Mesh* modelMesh;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 
-	modelMesh = MeshBuilder::GetInstance()->GetMesh("cube");
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER");
 	modelStack.PushMatrix();
 	modelStack.Translate(player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
 	modelStack.Scale(10.f, 10.f, 10.f);
@@ -437,4 +437,15 @@ void World::Exit()
 	}
 	Text_Manager::GetInstance()->resetAll();
 	CSoundEngine::GetInstance()->GetSoundEngine()->stopAllSounds();
+
+	if (player)
+	{
+		delete player;
+		player = nullptr;
+	}
+	if (camera)
+	{
+		delete camera;
+		camera = nullptr;
+	}
 }
