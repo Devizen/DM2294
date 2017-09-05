@@ -34,11 +34,16 @@ CText * Create::Text(const std::string & _meshName, string _message, float _dura
 
 	CText* text = new CText(_modelMesh);
 	text->message = _message;
-	if (_textType == CText::TEXT_CONVERSATION)
+	/*Assign 3 lines of sentences for message.*/
+	if (_textType == CText::TEXT_BATTLE || _textType == CText::TEXT_CONVERSATION)
+	{
 		for (unsigned i = 0; i < 3; ++i)
 		{
 			text->textConversation.push_back("");
 		}
+		/*Prepare text for checking so that render will shift to next line if the word exceeds the screen.*/
+		Text_Manager::GetInstance()->CheckText(_message);
+	}
 	text->durationElapsed = _durationElapsed;
 	text->maxDuration = _maxDuration;
 	text->textType = _textType;
@@ -46,7 +51,8 @@ CText * Create::Text(const std::string & _meshName, string _message, float _dura
 
 	if (_textType != CText::TEXT_NONE)
 		Text_Manager::GetInstance()->addText(text);
-	if (_textType != CText::TEXT_BATTLE)
+	if (_textType != CText::TEXT_POPUP)
+		/*Only pause the updates if TEXT Type is not TEXT_POPUP.*/
 		Text_Manager::GetInstance()->displayingText = true;
 
 	Text_Manager::GetInstance()->storeText = _message;

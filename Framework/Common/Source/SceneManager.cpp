@@ -215,7 +215,7 @@ void SceneManager::InitShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
 	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
-	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//comic.tga");
+	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//IMPACT.tga");
 	MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
 
 	MeshBuilder::GetInstance()->GenerateText("IMPACT", 16, 16);

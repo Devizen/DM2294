@@ -32,6 +32,7 @@ Text_Manager::Text_Manager() :
 	, count(0)
 	, erase(false)
 	, lineCount(0)
+	, wordCount(0)
 	, storeText("")
 {
 }
@@ -54,7 +55,7 @@ void Text_Manager::updateText(double dt)
 			CText* text = (CText*)*it;
 
 			if (text->activateText)
-				if (text->textType == CText::TEXT_BATTLE)
+				if (text->textType == CText::TEXT_POPUP)
 				{
 					text->durationElapsed += static_cast<float>(dt);
 
@@ -85,13 +86,131 @@ void Text_Manager::updateText(double dt)
 						}
 					}
 				}
+				else if (text->textType == CText::TEXT_BATTLE)
+				{
+					bool preventCancel = false;
+
+					if (!erase)
+					{
+						storeText = text->message;
+						text->message = "";
+						erase = true;
+					}
+
+					/*Display entire message.*/
+					if ((KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) || MouseController::GetInstance()->IsButtonPressed(MouseController::BUTTON_TYPE::LMB)) && text->message.size() != storeText.size())
+					{
+						text->textConversation[0] = "";
+						text->textConversation[1] = "";
+						text->textConversation[2] = "";
+
+						int count = 0;
+						int nextVector = 0;
+						wordCount = 0;
+						for (size_t i = 0; i < storeText.size(); ++i)
+						{
+							if (checkList[wordCount].characterCount + count > 25)
+							{
+								count = 0;
+								++nextVector;
+							}
+
+							if (storeText[i] == '\n')
+							{
+								count = 0;
+								++nextVector;
+								continue;
+							}
+
+							text->textConversation[nextVector] += storeText[i];
+							++count;
+							if (storeText[i] == ' ')
+								++wordCount;
+							if (count > 25 && nextVector < 3)
+							{
+								count = 0;
+								++nextVector;
+								continue;
+							}
+						}
+						text->message = storeText;
+						preventCancel = true;
+					}
+
+					if (checkList[wordCount].characterCount + characterCount > 26)
+					{
+						characterCount = 0;
+						++lineCount;
+					}
+
+					text->durationElapsed += static_cast<float>(dt);
+
+					if (text->durationElapsed >= 0.025f && text->message.size() != storeText.size())
+					{
+						if (storeText[count] == ' ')
+							++wordCount;
+
+						text->durationElapsed = 0.f;
+						text->message += storeText[count];
+						++characterCount;
+
+						if (characterCount <= 26 && lineCount == 0)
+							text->textConversation[0] += storeText[count];
+						else if (characterCount <= 26 && lineCount == 1)
+							text->textConversation[1] += storeText[count];
+						else if (characterCount <= 26 && lineCount == 2)
+							text->textConversation[2] += storeText[count];
+
+						if (text->message[count] == '\n')
+						{
+							++lineCount;
+							characterCount = 0;
+						}
+
+						if (characterCount == 26)
+						{
+							characterCount = 0;
+							++lineCount;
+						}
+
+						++count;
+					}
+					if (text->message.size() >= storeText.size())
+					{
+						if ((KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) || MouseController::GetInstance()->IsButtonPressed(MouseController::BUTTON_TYPE::LMB)) && !preventCancel)
+						{
+							text->activateText = false;
+
+							if (textList.size() > 0)
+							{
+								/*Resets variables so that it will re-calculate.*/
+								erase = false;
+								count = 0;
+								lineCount = 0;
+								characterCount = 0;
+								storeText = "";
+
+								CText* _text = textList.back();
+								delete text;
+								text = nullptr;
+								textList.pop_back();
+								displayingText = false;
+								break;
+							}
+							else
+							{
+								delete text;
+								text = nullptr;
+								textList.pop_back();
+								displayingText = false;
+								break;
+							}
+						}
+					}
+				}
+
 				else if (text->textType == CText::TEXT_CONVERSATION)
 				{
-					//static string storeText = text->message;
-					//static int count = 0;
-					//static bool erase = false;
-					//static int lineCount = 0;
-					//static int characterCount = 0;
 					bool preventCancel = false;
 
 					if (!erase)
@@ -393,7 +512,7 @@ void Text_Manager::renderText(void)
 
 			if (text->activateText)
 			{
-				if (text->textType == CText::TEXT_BATTLE)
+				if (text->textType == CText::TEXT_POPUP)
 				{
 					if (Application::GetInstance().GetWindowWidth() / Application::GetInstance().GetWindowHeight() < 1.5f)
 					{
@@ -435,6 +554,44 @@ void Text_Manager::renderText(void)
 						RenderHelper::RenderText(text->modelMesh, text->message, Color(1.f, 0.f, 0.f));
 						modelStack.PopMatrix();
 					}
+				}
+				else if (text->textType == CText::TEXT_BATTLE)
+				{
+
+					MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * -0.1725f, -Application::GetInstance().GetWindowWidth() * 0.2535f, 0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.655503f, Application::GetInstance().GetWindowWidth()  * 0.255f, 1.f);
+
+					Mesh* modelMesh;
+					modelMesh = MeshBuilder::GetInstance()->GenerateCube("cube", Color(0.f, 0.f, 0.f), 1.0f);
+					RenderHelper::RenderMesh(modelMesh);
+					modelStack.PopMatrix();
+
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
+						Application::GetInstance().GetWindowHeight() * -0.195f,
+						0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					RenderHelper::RenderText(text->modelMesh, text->textConversation[0], Color(1.f, 0.f, 0.f));
+					modelStack.PopMatrix();
+
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
+						Application::GetInstance().GetWindowHeight() * -0.250f,
+						0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					RenderHelper::RenderText(text->modelMesh, text->textConversation[1], Color(1.f, 0.f, 0.f));
+					modelStack.PopMatrix();
+
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
+						Application::GetInstance().GetWindowHeight() * -0.305f,
+						0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					RenderHelper::RenderText(text->modelMesh, text->textConversation[2], Color(1.f, 0.f, 0.f));
+					modelStack.PopMatrix();
 				}
 				else if (text->textType == CText::TEXT_CONVERSATION)
 				{
@@ -574,6 +731,37 @@ void Text_Manager::addText(CText * _text)
 		textList.push_back(_text);
 }
 
+void Text_Manager::CheckText(string _message)
+{
+	int _characterCount = 0;
+	string _word = "";
+
+	for (int i = 0; i < _message.size(); ++i)
+	{
+		if (_message[i] != ' ')
+		{
+			++_characterCount;
+			_word += _message[i];
+		}
+		else
+		{
+			Text_Check check;
+			check.characterCount = _characterCount;
+			check.word = _word;
+			checkList.push_back(check);
+			_characterCount = 0;
+			_word = "";
+		}
+	}
+
+	Text_Check check;
+	check.characterCount = _characterCount;
+	check.word = _word;
+	checkList.push_back(check);
+	_characterCount = 0;
+	_word = "";
+}
+
 void Text_Manager::resetAll(void)
 {
 	messagePrompt = 0;
@@ -588,6 +776,7 @@ void Text_Manager::resetAll(void)
 	count = 0;
 	erase = false;
 	lineCount = 0;
+	wordCount = 0;
 	if (textList.size() > 0)
 	{
 		CText* text = textList.back();

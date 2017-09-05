@@ -15,6 +15,12 @@ class CText;
 
 class Text_Manager : public Singleton <Text_Manager>
 {
+	struct Text_Check
+	{
+		string word = "";
+		int characterCount = 0;
+	};
+
 public:
 	Text_Manager();
 	~Text_Manager();
@@ -23,6 +29,7 @@ public:
 	void updateText(double dt);
 	void renderText(void);
 	void addText(CText* _text);
+	void CheckText(string _message);
 	bool displayingText;
 
 	size_t messagePrompt;
@@ -38,9 +45,11 @@ public:
 	int count;
 	bool erase;
 	int lineCount;
+	int wordCount;
 
 private:
 	vector<CText*>textList;
+	vector<Text_Check>checkList;
 
 protected:
 };

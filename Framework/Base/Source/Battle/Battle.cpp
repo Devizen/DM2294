@@ -184,7 +184,7 @@ void CBattle::PlayerAttack(double dt)
 		message += " to ";
 		message += battleList.back()->GetName();
 		message += ".";
-		Create::Text("text", message, 0.f, 1.f, CText::TEXT_CONVERSATION);
+		Create::Text("text", message, 0.f, 1.f, CText::TEXT_BATTLE);
 
 		fightState = ENEMY_ATTACK;
 		playAttack = false;
@@ -248,13 +248,14 @@ void CBattle::EnemyAttack(double dt)
 		/*0.220f is the duration of DAMAGED.ogg.*/
 		else if (waitForSound > 0.5f && playDamaged)
 		{
-			string message = battleList.back()->GetName();
-			message += " damaged ";
-			message += std::to_string(damage);
-			message += " to ";
-			message += "Player";
-			message += ".";
-			Create::Text("text", message, 0.f, 1.f, CText::TEXT_CONVERSATION);
+			string message = "1234567890abcdefghijklmnopqrstuvwxyz.";
+			//string message = battleList.back()->GetName();
+			//message += " damaged ";
+			//message += std::to_string(damage);
+			//message += " to ";
+			//message += "Player";
+			//message += ".";
+			Create::Text("text", message, 0.f, 1.f, CText::TEXT_BATTLE);
 
 			turn = NO_ONE_TURN;
 			fightState = NO_ATTACK;

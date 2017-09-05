@@ -171,7 +171,7 @@ void RenderHelper::RenderText(Mesh* _mesh, const std::string& _text, Color _colo
 	for (unsigned i = 0; i < _text.length(); ++i)
 	{
 		Mtx44 characterSpacing, MVP;
-		characterSpacing.SetToTranslation(i * 0.5f, 0, 0); // 1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.6f, 0, 0); // 1.0f is the spacing of each character, you may change this value
 		//characterSpacing.SetToTranslation((i+0.7f) * 1.f, 0, 0); // 1.0f is the spacing of each character, you may change this value
 		//characterSpacing.SetToTranslation((float)(0.75f + (float)i), 0.0f, 0.0f); // 1.0f is the spacing of each character, you may change this value
 		MVP = GraphicsManager::GetInstance()->GetProjectionMatrix() * GraphicsManager::GetInstance()->GetViewMatrix() * GraphicsManager::GetInstance()->GetModelStack().Top() * characterSpacing;
