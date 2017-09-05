@@ -106,15 +106,10 @@ void Text_Manager::updateText(double dt)
 
 						int count = 0;
 						int nextVector = 0;
+						static bool pass = true;
 						wordCount = 0;
 						for (size_t i = 0; i < storeText.size(); ++i)
 						{
-							if (checkList[wordCount].characterCount + count > 25)
-							{
-								count = 0;
-								++nextVector;
-							}
-
 							if (storeText[i] == '\n')
 							{
 								count = 0;
@@ -122,11 +117,28 @@ void Text_Manager::updateText(double dt)
 								continue;
 							}
 
+							if (storeText[i] == ' ')
+							{
+								if (count == 0)
+									continue;
+								++wordCount;
+								pass = false;
+							}
+
+
 							text->textConversation[nextVector] += storeText[i];
 							++count;
-							if (storeText[i] == ' ')
-								++wordCount;
-							if (count > 25 && nextVector < 3)
+
+							if (checkList[wordCount].characterCount + count > 26 && !pass)
+							{
+								count = 0;
+								++nextVector;
+								continue;
+							}
+							else
+								pass = true;
+
+							if (count > 26 && nextVector < 3)
 							{
 								count = 0;
 								++nextVector;
@@ -134,6 +146,7 @@ void Text_Manager::updateText(double dt)
 							}
 						}
 						text->message = storeText;
+						wordCount = 0;
 						preventCancel = true;
 					}
 

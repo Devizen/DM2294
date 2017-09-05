@@ -176,7 +176,7 @@ void CBattle::PlayerAttack(double dt)
 	{
 		string message = "";
 		if (critical)
-			message = "Player CRITICAL ";
+			message = "Player CRITICALLY DAMAGED ";
 		else
 			message = "Player damaged ";
 		critical = false;
@@ -248,13 +248,12 @@ void CBattle::EnemyAttack(double dt)
 		/*0.220f is the duration of DAMAGED.ogg.*/
 		else if (waitForSound > 0.5f && playDamaged)
 		{
-			string message = "1234567890abcdefghijklmnopqrstuvwxyz.";
-			//string message = battleList.back()->GetName();
-			//message += " damaged ";
-			//message += std::to_string(damage);
-			//message += " to ";
-			//message += "Player";
-			//message += ".";
+			string message = battleList.back()->GetName();
+			message += " damaged ";
+			message += std::to_string(damage);
+			message += " to ";
+			message += "Player";
+			message += ".";
 			Create::Text("text", message, 0.f, 1.f, CText::TEXT_BATTLE);
 
 			turn = NO_ONE_TURN;
