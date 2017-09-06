@@ -34,6 +34,7 @@ Text_Manager::Text_Manager() :
 	, lineCount(0)
 	, wordCount(0)
 	, storeText("")
+	, pass(true)
 {
 }
 
@@ -106,7 +107,6 @@ void Text_Manager::updateText(double dt)
 
 						int count = 0;
 						int nextVector = 0;
-						static bool pass = true;
 						wordCount = 0;
 						for (size_t i = 0; i < storeText.size(); ++i)
 						{
@@ -150,43 +150,45 @@ void Text_Manager::updateText(double dt)
 						preventCancel = true;
 					}
 
-					if (checkList[wordCount].characterCount + characterCount > 26)
-					{
-						characterCount = 0;
-						++lineCount;
-					}
+					//if (checkList[wordCount].characterCount + characterCount > 26)
+					//{
+					//	characterCount = 0;
+					//	++lineCount;
+					//}
 
 					text->durationElapsed += static_cast<float>(dt);
 
 					if (text->durationElapsed >= 0.025f && text->message.size() != storeText.size())
 					{
-						if (storeText[count] == ' ')
+						if (storeText[characterCount] == ' ')
+						{
+							if (characterCount == 0)
+								return;
 							++wordCount;
+							pass = false;
+						}
 
 						text->durationElapsed = 0.f;
-						text->message += storeText[count];
+						text->message += storeText[(lineCount * 26) + characterCount];
+
+						text->textConversation[lineCount] += storeText[(lineCount * 26) + characterCount];
 						++characterCount;
 
-						if (characterCount <= 26 && lineCount == 0)
-							text->textConversation[0] += storeText[count];
-						else if (characterCount <= 26 && lineCount == 1)
-							text->textConversation[1] += storeText[count];
-						else if (characterCount <= 26 && lineCount == 2)
-							text->textConversation[2] += storeText[count];
-
-						if (text->message[count] == '\n')
+						if (checkList[wordCount].characterCount + characterCount > 26 && !pass)
 						{
+							characterCount = lineCount * 26;
 							++lineCount;
-							characterCount = 0;
+							return;
 						}
+						else
+							pass = true;
 
-						if (characterCount == 26)
+						if (characterCount > 26 && lineCount < 3)
 						{
 							characterCount = 0;
 							++lineCount;
+							continue;
 						}
-
-						++count;
 					}
 					if (text->message.size() >= storeText.size())
 					{
@@ -207,6 +209,7 @@ void Text_Manager::updateText(double dt)
 								delete text;
 								text = nullptr;
 								textList.pop_back();
+								pass = true;
 								displayingText = false;
 								break;
 							}
@@ -215,6 +218,7 @@ void Text_Manager::updateText(double dt)
 								delete text;
 								text = nullptr;
 								textList.pop_back();
+								pass = true;
 								displayingText = false;
 								break;
 							}
@@ -790,6 +794,8 @@ void Text_Manager::resetAll(void)
 	erase = false;
 	lineCount = 0;
 	wordCount = 0;
+	pass = true;
+
 	if (textList.size() > 0)
 	{
 		CText* text = textList.back();

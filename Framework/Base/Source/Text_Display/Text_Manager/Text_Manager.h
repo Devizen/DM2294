@@ -46,6 +46,7 @@ public:
 	bool erase;
 	int lineCount;
 	int wordCount;
+	bool pass;
 
 private:
 	vector<CText*>textList;
