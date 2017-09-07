@@ -37,7 +37,7 @@ CText * Create::Text(const std::string & _meshName, string _message, float _dura
 	/*Assign 3 lines of sentences for message.*/
 	if (_textType == CText::TEXT_BATTLE || _textType == CText::TEXT_CONVERSATION)
 	{
-		for (unsigned i = 0; i < 3; ++i)
+		for (unsigned i = 0; i < 6; ++i)
 		{
 			text->textConversation.push_back("");
 		}

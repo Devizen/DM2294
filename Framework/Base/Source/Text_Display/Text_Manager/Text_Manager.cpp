@@ -104,6 +104,9 @@ void Text_Manager::updateText(double dt)
 						text->textConversation[0] = "";
 						text->textConversation[1] = "";
 						text->textConversation[2] = "";
+						text->textConversation[3] = "";
+						text->textConversation[4] = "";
+						text->textConversation[5] = "";
 
 						int count = 0;
 						int nextVector = 0;
@@ -160,10 +163,13 @@ void Text_Manager::updateText(double dt)
 
 					if (text->durationElapsed >= 0.025f && text->message.size() != storeText.size())
 					{
-						if (storeText[characterCount] == ' ')
+						if (storeText[(lineCount * 26) + characterCount] == ' ')
 						{
-							if (characterCount == 0)
+	/*						if (characterCount == 0)
+							{
+								++characterCount;
 								return;
+							}*/
 							++wordCount;
 							pass = false;
 						}
@@ -176,52 +182,50 @@ void Text_Manager::updateText(double dt)
 
 						if (checkList[wordCount].characterCount + characterCount > 26 && !pass)
 						{
-							characterCount = lineCount * 26;
+							characterCount -= 26;
 							++lineCount;
-							return;
 						}
 						else
 							pass = true;
 
-						if (characterCount > 26 && lineCount < 3)
-						{
-							characterCount = 0;
-							++lineCount;
-							continue;
-						}
+						//if (characterCount > 26 && lineCount < 6)
+						//{
+						//	characterCount = 0;
+						//	return;
+						//}
 					}
 					if (text->message.size() >= storeText.size())
 					{
 						if ((KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) || MouseController::GetInstance()->IsButtonPressed(MouseController::BUTTON_TYPE::LMB)) && !preventCancel)
 						{
 							text->activateText = false;
+							resetAll();
+							//if (textList.size() > 0)
+							//{
+							//	/*Resets variables so that it will re-calculate.*/
+							//	erase = false;
+							//	count = 0;
+							//	lineCount = 0;
+							//	characterCount = 0;
+							//	storeText = "";
 
-							if (textList.size() > 0)
-							{
-								/*Resets variables so that it will re-calculate.*/
-								erase = false;
-								count = 0;
-								lineCount = 0;
-								characterCount = 0;
-								storeText = "";
-
-								CText* _text = textList.back();
-								delete text;
-								text = nullptr;
-								textList.pop_back();
-								pass = true;
-								displayingText = false;
-								break;
-							}
-							else
-							{
-								delete text;
-								text = nullptr;
-								textList.pop_back();
-								pass = true;
-								displayingText = false;
-								break;
-							}
+							//	CText* _text = textList.back();
+							//	delete text;
+							//	text = nullptr;
+							//	textList.pop_back();
+							//	pass = true;
+							//	displayingText = false;
+							//	break;
+							//}
+							//else
+							//{
+							//	delete text;
+							//	text = nullptr;
+							//	textList.pop_back();
+							//	pass = true;
+							//	displayingText = false;
+							//	break;
+							//}
 						}
 					}
 				}
@@ -586,6 +590,7 @@ void Text_Manager::renderText(void)
 					RenderHelper::RenderMesh(modelMesh);
 					modelStack.PopMatrix();
 
+					/*Line 1*/
 					modelStack.PushMatrix();
 					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
 						Application::GetInstance().GetWindowHeight() * -0.195f,
@@ -594,6 +599,7 @@ void Text_Manager::renderText(void)
 					RenderHelper::RenderText(text->modelMesh, text->textConversation[0], Color(1.f, 0.f, 0.f));
 					modelStack.PopMatrix();
 
+					/*Line 2*/
 					modelStack.PushMatrix();
 					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
 						Application::GetInstance().GetWindowHeight() * -0.250f,
@@ -602,12 +608,40 @@ void Text_Manager::renderText(void)
 					RenderHelper::RenderText(text->modelMesh, text->textConversation[1], Color(1.f, 0.f, 0.f));
 					modelStack.PopMatrix();
 
+					/*Line 3*/
 					modelStack.PushMatrix();
 					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
 						Application::GetInstance().GetWindowHeight() * -0.305f,
 						0.f);
 					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
 					RenderHelper::RenderText(text->modelMesh, text->textConversation[2], Color(1.f, 0.f, 0.f));
+					modelStack.PopMatrix();
+
+					/*Line 4*/
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
+						Application::GetInstance().GetWindowHeight() * -0.355f,
+						0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					RenderHelper::RenderText(text->modelMesh, text->textConversation[3], Color(1.f, 0.f, 0.f));
+					modelStack.PopMatrix();
+
+					/*Line 5*/
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
+						Application::GetInstance().GetWindowHeight() * -0.405f,
+						0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					RenderHelper::RenderText(text->modelMesh, text->textConversation[4], Color(1.f, 0.f, 0.f));
+					modelStack.PopMatrix();
+
+					/*Line 6*/
+					modelStack.PushMatrix();
+					modelStack.Translate(-Application::GetInstance().GetWindowWidth() * 0.125f,
+						Application::GetInstance().GetWindowHeight() * -0.455f,
+						0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.04f, Application::GetInstance().GetWindowWidth() * 0.04f, 1.f);
+					RenderHelper::RenderText(text->modelMesh, text->textConversation[5], Color(1.f, 0.f, 0.f));
 					modelStack.PopMatrix();
 				}
 				else if (text->textType == CText::TEXT_CONVERSATION)
@@ -800,8 +834,18 @@ void Text_Manager::resetAll(void)
 	{
 		CText* text = textList.back();
 
-		if (text->textConversation.size() > 0)
-			text->textConversation.clear();
+		while (text->textConversation.size() > 0)
+		{
+			text->textConversation.back() = "";
+			text->textConversation.pop_back();
+		}
+
+		while (checkList.size() > 0)
+		{
+			checkList.back().characterCount = 0;
+			checkList.back().word = "";
+			checkList.pop_back();
+		}
 
 		text->message = "";
 		text->durationElapsed = 0.f;

@@ -184,6 +184,7 @@ void CBattle::PlayerAttack(double dt)
 		message += " to ";
 		message += battleList.back()->GetName();
 		message += ".";
+		message += " DOES THIS EVEN WORK FOR THE ENTER KEY OH GREAT IT SEEMS TO WORK FOR 6 LINES OF TEXT ON SCREEN IS IT REAL";
 		Create::Text("text", message, 0.f, 1.f, CText::TEXT_BATTLE);
 
 		fightState = ENEMY_ATTACK;
