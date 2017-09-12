@@ -48,6 +48,7 @@ public:
 	void UnbindTexture(int _slot);
 
 	void removeLightMap(void);
+	void removeShaderMap(void);
 
 private:
 	GraphicsManager();

@@ -1,5 +1,7 @@
 #include "ShaderProgram.h"
 #include "GL\glew.h"
+#include "Vector3.h"
+#include "Mtx44.h"
 
 #include <iostream>
 using namespace std;

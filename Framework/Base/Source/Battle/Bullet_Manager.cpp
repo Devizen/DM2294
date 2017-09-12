@@ -61,3 +61,26 @@ vector<CBullet*>* CBullet_Manager::GetBulletList(void)
 {
 	return bulletList;
 }
+
+void CBullet_Manager::DestroyAll(void)
+{
+	while (bulletList->size() > 0)
+	{
+		CBullet* bullet = bulletList->back();
+		delete bullet;
+		bullet = nullptr;
+		bulletList->pop_back();
+	}
+
+	if (bulletList)
+	{
+		delete bulletList;
+		bulletList = nullptr;
+	}
+
+	if (s_instance)
+	{
+		delete s_instance;
+		s_instance = nullptr;
+	}
+}

@@ -21,6 +21,8 @@
 using std::cout;
 using std::endl;
 
+Text_Manager* Text_Manager::s_instance = 0;
+
 Text_Manager::Text_Manager() :
 	displayingText(false)
 	, messagePrompt(0)
@@ -40,6 +42,14 @@ Text_Manager::Text_Manager() :
 
 Text_Manager::~Text_Manager()
 {
+}
+
+Text_Manager * Text_Manager::GetInstance(void)
+{
+	if (s_instance == nullptr)
+		s_instance = new Text_Manager();
+
+	return s_instance;
 }
 
 vector<CText*>& Text_Manager::returnTextList()
@@ -855,4 +865,18 @@ void Text_Manager::resetAll(void)
 
 		textList.pop_back();
 	}
+}
+
+void Text_Manager::DestroyAll(void)
+{
+	while (textList.size() > 0)
+	{
+		CText* text = textList.back();
+		delete text;
+		text = nullptr;
+		textList.pop_back();
+	}
+
+	if (this)
+		delete this;
 }

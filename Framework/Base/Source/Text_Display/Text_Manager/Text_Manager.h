@@ -4,7 +4,6 @@
 #ifndef TEXT_MANAGER_H
 #define TEXT_MANAGER_H
 
-#include "SingletonTemplate.h"
 #include <vector>
 #include <string>
 
@@ -13,7 +12,7 @@ using std::string;
 
 class CText;
 
-class Text_Manager : public Singleton <Text_Manager>
+class Text_Manager
 {
 	struct Text_Check
 	{
@@ -21,9 +20,13 @@ class Text_Manager : public Singleton <Text_Manager>
 		int characterCount = 0;
 	};
 
+	static Text_Manager* s_instance;
+
 public:
 	Text_Manager();
 	~Text_Manager();
+
+	static Text_Manager* GetInstance(void);
 
 	vector<CText*>&returnTextList();
 	void updateText(double dt);
@@ -47,7 +50,7 @@ public:
 	int lineCount;
 	int wordCount;
 	bool pass;
-
+	void DestroyAll(void);
 private:
 	vector<CText*>textList;
 	vector<Text_Check>checkList;

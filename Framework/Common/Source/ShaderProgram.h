@@ -3,9 +3,10 @@
 
 #include <map>
 #include <string>
-#include "Vector3.h"
-#include "Mtx44.h"
 #include "SingletonTemplate.h"
+
+struct Vector3;
+class Mtx44;
 
 class ShaderProgram : public Singleton<ShaderProgram>
 {

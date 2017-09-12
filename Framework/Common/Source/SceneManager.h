@@ -1,21 +1,22 @@
 #ifndef SCENE_MANAGER_H
 #define SCENE_MANAGER_H
 
-#include "SingletonTemplate.h"
 #include <map>
 #include <string>
 
 class Scene;
 class ShaderProgram;
 
-class SceneManager : public Singleton<SceneManager>
+class SceneManager
 {
-	friend Singleton<SceneManager>;
+	static SceneManager* s_instance;
 public:
 	// System Interface
 	void Update(double _dt);
 	void Render();
 	void Exit();
+
+	static SceneManager* GetInstance();
 
 	// User Interface
 	void AddScene(const std::string& _name, Scene* _scene);
@@ -26,6 +27,8 @@ public:
 	void InitShader(void);
 	//ShaderProgram* currProg;
 	//ShaderProgram* m_gPassShaderID;
+
+	void DestroyAll(void);
 
 private:
 	SceneManager();

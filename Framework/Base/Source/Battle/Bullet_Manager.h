@@ -16,6 +16,7 @@ public:
 	void Render(void);
 	void Update(double dt);
 	vector<CBullet*>*GetBulletList(void);
+	void DestroyAll(void);
 private:
 	vector<CBullet*>*bulletList;
 protected:

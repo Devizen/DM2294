@@ -344,3 +344,17 @@ void GraphicsManager::removeLightMap(void)
 		it = lightMap.erase(it);
 	}
 }
+
+void GraphicsManager::removeShaderMap(void)
+{
+	for (std::map<std::string, ShaderProgram*>::iterator it = shaderMap.begin(); it != shaderMap.end();)
+	{
+		std::string s_Shader = (std::string)it->first;
+		s_Shader = "";
+		ShaderProgram* shaderProgram = it->second;
+		if (shaderProgram != nullptr)
+			delete shaderProgram;
+
+		it = shaderMap.erase(it);
+	}
+}

@@ -17,6 +17,7 @@
 #include "Enemy\Enemy_Manager.h"
 #include "ShaderProgram.h"
 #include "DepthFBO.h"
+#include "Battle\Bullet_Manager.h"
 //Include GLEW
 #include <GL/glew.h>
 
@@ -235,15 +236,18 @@ void Application::Exit()
 	glfwTerminate();
 
 	/*Destroying Singletons to prevent memory leaks.*/
-	SceneManager::GetInstance()->Destroy();
-	Text_Manager::GetInstance()->Destroy();
+	SceneManager::GetInstance()->DestroyAll();
+	Text_Manager::GetInstance()->DestroyAll();
 	MeshBuilder::GetInstance()->Destroy();
+	GraphicsManager::GetInstance()->removeLightMap();
+	GraphicsManager::GetInstance()->removeShaderMap();
 	GraphicsManager::GetInstance()->Destroy();
 	RenderHelper::GetInstance()->Destroy();
 	CEnemy_Manager::GetInstance()->Destroy();
 	ShaderProgram::GetInstance()->Destroy();
 	Debugger::GetInstance()->Destroy();
 	DepthFBO::GetInstance()->Destroy();
+	CBullet_Manager::GetInstance()->DestroyAll();
 	//CCinematic::GetInstance()->Destroy();
 	//ParticleManager::GetInstance()->Destroy();
 	//SceneManager::GetInstance()->Destroy();

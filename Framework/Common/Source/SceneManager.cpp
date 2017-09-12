@@ -1,22 +1,44 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-#include "GL\glew.h"
 #include "GLFW\glfw3.h"
 #include "ShaderProgram.h"
 
 #include "shader.hpp"
 #include "MeshBuilder.h"
 #include "GraphicsManager.h"
-#include "MeshBuilder.h"
 #include "Mesh.h"
-#include "../../Base/Source/Application.h"
-#include "Utility.h"
 #include "LoadTGA.h"
 
 #include "../../Base/Source/Debugger/Debugger.h"
 #include "KeyboardController.h"
 
+SceneManager* SceneManager::s_instance = 0;
+
+void SceneManager::DestroyAll(void)
+{
+	for (std::map<std::string, Scene*>::iterator it = sceneMap.begin(); it != sceneMap.end();)
+	{
+		if (it->second != nullptr)
+		{
+			Scene* scene = it->second;
+			delete scene;
+			scene = nullptr;
+			it = sceneMap.erase(it);
+			continue;
+		}
+		++it;
+	}
+
+	if (activeScene)
+	{
+		delete activeScene;
+		activeScene = nullptr;
+	}
+
+	if (this)
+		delete this;
+}
 
 SceneManager::SceneManager() : activeScene(nullptr), nextScene(nullptr)
 //, currProg(nullptr)
@@ -77,6 +99,14 @@ void SceneManager::Exit()
 		delete it->second;
 	}
 	sceneMap.clear();
+}
+
+SceneManager * SceneManager::GetInstance()
+{
+	if (s_instance == nullptr)
+		s_instance = new SceneManager();
+
+	return s_instance;
 }
 
 void SceneManager::AddScene(const std::string& _name, Scene* _scene)
