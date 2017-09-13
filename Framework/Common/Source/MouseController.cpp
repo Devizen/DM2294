@@ -1,5 +1,7 @@
 #include "MouseController.h"
 
+MouseController* MouseController::s_instance = 0;
+
 void MouseController::setXOffset(double _xoffset)
 {
 	xoffset = _xoffset;
@@ -121,4 +123,21 @@ void MouseController::GetMouseDelta(double& _resultX, double& _resultY)
 {
 	_resultX = curr_posX - prev_posX;
 	_resultY = curr_posY - prev_posY;
+}
+
+MouseController* MouseController::GetInstance(void)
+{
+	if (s_instance == nullptr)
+		s_instance = new MouseController();
+
+	return s_instance;
+}
+
+void MouseController::DestroyAll(void)
+{
+	if (s_instance)
+	{
+		delete s_instance;
+		s_instance = nullptr;
+	}
 }

@@ -18,6 +18,7 @@
 #include "ShaderProgram.h"
 #include "DepthFBO.h"
 #include "Battle\Bullet_Manager.h"
+#include "Adjuster\Adjuster.h"
 //Include GLEW
 #include <GL/glew.h>
 
@@ -243,11 +244,15 @@ void Application::Exit()
 	GraphicsManager::GetInstance()->removeShaderMap();
 	GraphicsManager::GetInstance()->Destroy();
 	RenderHelper::GetInstance()->Destroy();
-	CEnemy_Manager::GetInstance()->Destroy();
+	CEnemy_Manager::GetInstance()->DestroyAll();
 	ShaderProgram::GetInstance()->Destroy();
 	Debugger::GetInstance()->Destroy();
 	DepthFBO::GetInstance()->Destroy();
 	CBullet_Manager::GetInstance()->DestroyAll();
+	CSoundEngine::GetInstance()->DestroyAll();
+	CAdjuster::GetInstance()->DestroyAll();
+	KeyboardController::GetInstance()->DestroyAll();
+	MouseController::GetInstance()->DestroyAll();
 	//CCinematic::GetInstance()->Destroy();
 	//ParticleManager::GetInstance()->Destroy();
 	//SceneManager::GetInstance()->Destroy();

@@ -1,15 +1,16 @@
 #ifndef KEYBOARD_CONTROLLER_H
 #define KEYBOARD_CONTROLLER_H
 
-#include "SingletonTemplate.h"
 #include <bitset>
 #include <windows.h>
 
-class KeyboardController : public Singleton<KeyboardController>
+class KeyboardController
 {
-	friend Singleton<KeyboardController>;
+	static KeyboardController* s_instance;
 public:
 	const static int MAX_KEYS = 256;
+
+	static KeyboardController* GetInstance(void);
 
 	// System Interface
 	void UpdateKeyboardStatus(unsigned char _slot, bool _isPressed);
@@ -21,6 +22,7 @@ public:
 	bool IsKeyPressed(unsigned char _slot);
 	bool IsKeyReleased(unsigned char _slot);
 
+	void DestroyAll(void);
 private:
 	KeyboardController();
 	~KeyboardController();

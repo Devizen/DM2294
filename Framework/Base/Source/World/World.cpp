@@ -53,7 +53,7 @@
 #include "../Battle/Bullet.h"
 #include "../Battle/Bullet_Manager.h"
 
-#include "vld.h"
+//#include "vld.h"
 using namespace std;
 
 World* World::sInstance = new World(SceneManager::GetInstance());

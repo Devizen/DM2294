@@ -3,6 +3,8 @@
 
 using namespace std;
 
+CSoundEngine* CSoundEngine::s_instance = 0;
+
 // Constructor
 CSoundEngine::CSoundEngine()
 	: theSoundEngine(NULL)
@@ -12,15 +14,23 @@ CSoundEngine::CSoundEngine()
 // Destructor
 CSoundEngine::~CSoundEngine()
 {
-	// Clear out the sound map
-	soundMap.clear();
+	//// Clear out the sound map
+	//soundMap.clear();
 
-	// Delete the sound engine
-	if (theSoundEngine)
-	{
-		delete theSoundEngine;
-		theSoundEngine = NULL;
-	}
+	//// Delete the sound engine
+	//if (theSoundEngine)
+	//{
+	//	delete theSoundEngine;
+	//	theSoundEngine = NULL;
+	//}
+}
+
+CSoundEngine * CSoundEngine::GetInstance()
+{
+	if (s_instance == nullptr)
+		s_instance = new CSoundEngine();
+
+	return s_instance;
 }
 
 // Init this class and it will create the Sound Engine
@@ -117,5 +127,24 @@ void CSoundEngine::PlayASound(const std::string& _soundIndex)
 	{
 		// Play a sound
 		theSoundEngine->play2D(aSound.c_str(), false, false);
+	}
+}
+
+void CSoundEngine::DestroyAll(void)
+{
+	if (soundMap.size() > 0)
+		soundMap.clear();
+
+	if (GetSoundEngine())
+	{
+		ISoundEngine* sound = GetSoundEngine();
+		delete sound;
+		sound = nullptr;
+	}
+
+	if (s_instance)
+	{
+		delete s_instance;
+		s_instance = nullptr;
 	}
 }

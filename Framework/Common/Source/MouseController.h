@@ -1,11 +1,9 @@
 #ifndef MOUSE_CONTROLLER_H
 #define MOUSE_CONTROLLER_H
 
-#include "SingletonTemplate.h"
-
-class MouseController : public Singleton<MouseController>
+class MouseController
 {
-	friend Singleton<MouseController>;
+	static MouseController* s_instance;
 public:
 	enum BUTTON_TYPE
 	{
@@ -21,6 +19,7 @@ public:
 		NUM_SCROLL_TYPE
 	};
 
+	static MouseController* GetInstance(void);
 	// System Interface
 	void UpdateMousePosition(double _x, double _y);
 	void UpdateMouseButtonPressed(int _slot);
@@ -45,7 +44,7 @@ public:
 
 	void setXOffset(double _xoffset);
 	void setYOffset(double _yoffset);
-
+	void DestroyAll(void);
 private:
 	MouseController();
 	~MouseController();

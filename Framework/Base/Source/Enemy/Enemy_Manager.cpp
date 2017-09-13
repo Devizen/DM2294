@@ -135,7 +135,7 @@ void CEnemy_Manager::Update(double dt)
 	}
 }
 
-void CEnemy_Manager::Destroy(void)
+void CEnemy_Manager::DestroyAll(void)
 {
 	for (map<string, CEnemy*>::iterator it = enemyList->begin(); it != enemyList->end();)
 	{
@@ -148,4 +148,10 @@ void CEnemy_Manager::Destroy(void)
 	enemyList->clear();
 	delete enemyList;
 	enemyList = nullptr;
+
+	if (s_instance)
+	{
+		delete s_instance;
+		s_instance = nullptr;
+	}
 }

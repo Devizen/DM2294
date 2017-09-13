@@ -797,7 +797,7 @@ void Text_Manager::CheckText(string _message)
 	int _characterCount = 0;
 	string _word = "";
 
-	for (int i = 0; i < _message.size(); ++i)
+	for (size_t i = 0; i < _message.size(); ++i)
 	{
 		if (_message[i] != ' ')
 		{

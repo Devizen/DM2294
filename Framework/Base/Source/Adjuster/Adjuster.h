@@ -22,6 +22,8 @@ public:
 	Vector3 GetPosition(void);
 	Vector3 GetScale(void);
 	static CAdjuster* GetInstance(void);
+
+	void DestroyAll(void);
 private:
 	Vector3 position;
 	Vector3 scale;

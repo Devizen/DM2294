@@ -85,3 +85,12 @@ CAdjuster * CAdjuster::GetInstance(void)
 
 	return s_instance;
 }
+
+void CAdjuster::DestroyAll(void)
+{
+	if (s_instance)
+	{
+		delete s_instance;
+		s_instance = nullptr;
+	}
+}

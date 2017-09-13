@@ -1,5 +1,7 @@
 #include "KeyboardController.h"
 
+KeyboardController* KeyboardController::s_instance = 0;
+
 KeyboardController::KeyboardController()
 {
 }
@@ -36,4 +38,21 @@ bool KeyboardController::IsKeyPressed(unsigned char _slot)
 bool KeyboardController::IsKeyReleased(unsigned char _slot)
 {
 	return IsKeyUp(_slot) && prevStatus.test(_slot);
+}
+
+KeyboardController* KeyboardController::GetInstance(void)
+{
+	if (s_instance == nullptr)
+		s_instance = new KeyboardController();
+
+	return s_instance;
+}
+
+void KeyboardController::DestroyAll(void)
+{
+	if (s_instance)
+	{
+		delete s_instance;
+		s_instance = nullptr;
+	}
 }

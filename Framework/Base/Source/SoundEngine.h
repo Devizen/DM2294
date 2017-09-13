@@ -5,8 +5,9 @@
 using namespace irrklang;
 #include <map>
 
-class CSoundEngine : public Singleton<CSoundEngine>
+class CSoundEngine
 {
+	static CSoundEngine* s_instance;
 protected:
 	// Destructor
 	ISoundEngine* theSoundEngine;
@@ -18,6 +19,8 @@ public:
 	// Constructor
 	CSoundEngine();
 	virtual ~CSoundEngine();
+
+	static CSoundEngine* GetInstance();
 
 	// Init this class and it will create the Sound Engine
 	bool Init(void);
@@ -33,5 +36,7 @@ public:
 	bool RemoveSound(const std::string& _soundIndex);
 	// Play a sound from this map
 	void PlayASound(const std::string& _soundIndex);
+
+	void DestroyAll(void);
 };
 

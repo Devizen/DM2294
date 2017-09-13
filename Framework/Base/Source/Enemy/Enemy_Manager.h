@@ -38,7 +38,7 @@ public:
 	void Update(double dt);
 
 	/*Remove everything from CEnemy_Manager.*/
-	void Destroy(void);
+	void DestroyAll(void);
 
 private:
 	CPlayer* player;
