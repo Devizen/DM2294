@@ -163,28 +163,22 @@ void Text_Manager::updateText(double dt)
 						preventCancel = true;
 					}
 
-					//if (checkList[wordCount].characterCount + characterCount > 26)
-					//{
-					//	characterCount = 0;
-					//	++lineCount;
-					//}
-
 					text->durationElapsed += static_cast<float>(dt);
 
 					if (text->durationElapsed >= 0.025f && text->message.size() != storeText.size())
 					{
+						/*Reset time to delay character(s) from printing only if character is not a ' '.*/
+						bool resetTime = true;
 						if (storeText[(lineCount * 26) + characterCount] == ' ')
 						{
-	/*						if (characterCount == 0)
-							{
-								++characterCount;
-								return;
-							}*/
+							/*Prevent time reset so that the ' ' will not delay the printing of character(s).*/
+							resetTime = false;
 							++wordCount;
 							pass = false;
 						}
 
-						text->durationElapsed = 0.f;
+						if (resetTime)
+							text->durationElapsed = 0.f;
 						text->message += storeText[(lineCount * 26) + characterCount];
 
 						text->textConversation[lineCount] += storeText[(lineCount * 26) + characterCount];
@@ -198,11 +192,6 @@ void Text_Manager::updateText(double dt)
 						else
 							pass = true;
 
-						//if (characterCount > 26 && lineCount < 6)
-						//{
-						//	characterCount = 0;
-						//	return;
-						//}
 					}
 					if (text->message.size() >= storeText.size())
 					{

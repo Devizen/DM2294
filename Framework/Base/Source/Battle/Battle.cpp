@@ -303,15 +303,7 @@ void CBattle::EnemyAttack(double dt)
 			{
 				if (playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_EXP) >= playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXEXP))
 				{
-					playerList.back()->setLevel(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_LEVEL) + 1);
-					string playerLevelUp = "Player level up to ";
-					playerLevelUp += std::to_string(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_LEVEL));
-					playerLevelUp += ".";
-					Create::Text("text", playerLevelUp, 0.f, 0.f, CText::TEXT_BATTLE);
-
-					playerList.back()->setEXP(0);
-					playerList.back()->SetMaxEXP(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXEXP) * 2);
-					CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\LEVELUP.ogg", false);
+					PlayerLevelUp(playerList.back());
 				}
 
 				checkLevelUp = true;
@@ -334,6 +326,68 @@ void CBattle::EnemyAttack(double dt)
 			}
 		}
 	}
+}
+
+void CBattle::PlayerLevelUp(CPlayer * _player)
+{
+	playerList.back()->setLevel(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_LEVEL) + 1);
+	string playerLevelUp = "Player level up to ";
+	playerLevelUp += std::to_string(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_LEVEL));
+	playerLevelUp += ".";
+
+	/*Next line code.*/
+	while (playerLevelUp.size() % 26 != 0)
+		playerLevelUp += " ";
+
+	/*Increase Max Health.*/
+	playerLevelUp += "HP: ";
+	playerLevelUp += std::to_string(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXHEALTH));
+	playerLevelUp += "->";
+	int randomHPIncrease = rand() % 10 + 5;
+	_player->setMaxHealthTo(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXHEALTH) + randomHPIncrease);
+	playerLevelUp += std::to_string(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXHEALTH));
+
+	/*Next line code.*/
+	while (playerLevelUp.size() % 26 != 0)
+		playerLevelUp += " ";
+
+	/*Increase Attack.*/
+	playerLevelUp += "Attack: ";
+	playerLevelUp += std::to_string(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK));
+	playerLevelUp += "->";
+	int randomAttackIncrease = rand() % 3 + 1;
+	_player->setAttackTo(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK) + randomAttackIncrease);
+	playerLevelUp += std::to_string(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_ATTACK));
+
+	/*Next line code.*/
+	while (playerLevelUp.size() % 26 != 0)
+		playerLevelUp += " ";
+
+	/*Increase Defense.*/
+	playerLevelUp += "Defense: ";
+	playerLevelUp += std::to_string(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_DEFENSE));
+	playerLevelUp += "->";
+	int randomDefenseIncrease = rand() % 3 + 1;
+	_player->setDefenseTo(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_DEFENSE) + randomDefenseIncrease);
+	playerLevelUp += std::to_string(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_DEFENSE));
+
+	/*Next line code.*/
+	while (playerLevelUp.size() % 26 != 0)
+		playerLevelUp += " ";
+
+	/*Increase Speed.*/
+	playerLevelUp += "Speed: ";
+	playerLevelUp += std::to_string(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED));
+	playerLevelUp += "->";
+	int randomSpeedIncrease = rand() % 2 + 1;
+	_player->setSpeed(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED) + randomSpeedIncrease);
+	playerLevelUp += std::to_string(_player->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_SPEED));
+
+	Create::Text("text", playerLevelUp, 0.f, 0.f, CText::TEXT_BATTLE);
+
+	playerList.back()->setEXP(0);
+	playerList.back()->SetMaxEXP(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXEXP) * 2);
+	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\LEVELUP.ogg", false);
 }
 
 void CBattle::Render()

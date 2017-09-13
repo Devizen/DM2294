@@ -46,6 +46,7 @@ public:
 	void EnemyDefend(double dt);
 	void PlayerRun(double dt);
 	void EnemyRun(double dt);
+	void PlayerLevelUp(CPlayer* _player);
 
 	void Render();
 	void Update(double dt);
