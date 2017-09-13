@@ -53,7 +53,7 @@
 #include "../Battle/Bullet.h"
 #include "../Battle/Bullet_Manager.h"
 
-//#include "vld.h"
+#include "vld.h"
 using namespace std;
 
 World* World::sInstance = new World(SceneManager::GetInstance());
@@ -166,17 +166,6 @@ void World::Init()
 
 void World::Update(double dt)
 {
-	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD1))
-	//	SceneManager::GetInstance()->SetActiveScene("Tutorial");
-	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD2))
-	//	SceneManager::GetInstance()->SetActiveScene("Level01");
-	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD3))
-	//	SceneManager::GetInstance()->SetActiveScene("Level02");
-	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD4))
-	//	SceneManager::GetInstance()->SetActiveScene("Level03");
-	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_NUMPAD5))
-	//	SceneManager::GetInstance()->SetActiveScene("Level04");
-
 	/*Update text display.*/
 	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
 		Text_Manager::GetInstance()->updateText(dt);

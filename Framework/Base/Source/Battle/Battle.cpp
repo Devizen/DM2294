@@ -30,6 +30,8 @@ CBattle::CBattle() :
 	, scaleX(0.f)
 	, scaleY(0.f)
 	, critical(false)
+	, checkExperiencePoints(false)
+	, checkLevelUp(false)
 {
 	Init();
 }
@@ -52,6 +54,8 @@ void CBattle::Init(void)
 	scaleX = 0.f;
 	scaleY = 0.f;
 	critical = false;
+	checkExperiencePoints = false;
+	checkLevelUp = false;
 
 	while (battleList.size() > 0)
 	{
@@ -283,18 +287,51 @@ void CBattle::EnemyAttack(double dt)
 		/*1.727f is the duration of DAMAGED.ogg.*/
 		if (waitForSound > 1.727f)
 		{
-			turn = NO_ONE_TURN;
-			fightState = NO_ATTACK;
-			playAttack = false;
-			playDamaged = false;
-			waitForSound = 0.f;
-			checkTurn = false;
-			shakeAll = 0.f;
+			if (!checkExperiencePoints)
+			{
+				/*Player experience points plus enemy experience points.*/
+				playerList.back()->setEXP(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_EXP) +
+					battleList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_EXP));
+				string playerCurrentExperiencePoint = "Player current EXP: ";
+				playerCurrentExperiencePoint += std::to_string(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_EXP));
+				playerCurrentExperiencePoint += "/" + std::to_string(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXEXP));
+				Create::Text("text", playerCurrentExperiencePoint, 0.f, 0.f, CText::TEXT_BATTLE);
 
-			playerList.back()->GetBattle()->SetBattleState(false);
-			Exit();
-			battleState = false;
-			playVictory = false;
+				checkExperiencePoints = true;
+			}
+			else if (checkExperiencePoints && !checkLevelUp)
+			{
+				if (playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_EXP) >= playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXEXP))
+				{
+					playerList.back()->setLevel(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_LEVEL) + 1);
+					string playerLevelUp = "Player level up to ";
+					playerLevelUp += std::to_string(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_LEVEL));
+					playerLevelUp += ".";
+					Create::Text("text", playerLevelUp, 0.f, 0.f, CText::TEXT_BATTLE);
+
+					playerList.back()->setEXP(0);
+					playerList.back()->SetMaxEXP(playerList.back()->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXEXP) * 2);
+					CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\SFX\\BATTLE\\LEVELUP.ogg", false);
+				}
+
+				checkLevelUp = true;
+			}
+			else
+			{
+				turn = NO_ONE_TURN;
+				fightState = NO_ATTACK;
+				playAttack = false;
+				playDamaged = false;
+				waitForSound = 0.f;
+				checkTurn = false;
+				shakeAll = 0.f;
+				playerList.back()->GetBattle()->SetBattleState(false);
+				Exit();
+				battleState = false;
+				playVictory = false;
+				checkExperiencePoints = false;
+				checkLevelUp = false;
+			}
 		}
 	}
 }

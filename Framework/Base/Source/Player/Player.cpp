@@ -78,6 +78,7 @@ void CPlayer::Update(double dt)
 				it->second->setMaxHealthTo(3);
 				it->second->setAttackTo(1);
 				it->second->setSpeed(1);
+				it->second->setEXP(1);
 				Activate::BattleScene(this->battle, it->second, this);
 			}
 			position = previousPosition;

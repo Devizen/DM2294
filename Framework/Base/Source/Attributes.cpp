@@ -175,6 +175,11 @@ void CAttributes::setEXP(int exp)
 	this->EXP = exp;
 }
 
+void CAttributes::SetMaxEXP(int _maxEXP)
+{
+	MAX_EXP = _maxEXP;
+}
+
 void CAttributes::printAttributes()
 {
 }

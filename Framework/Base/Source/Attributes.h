@@ -99,6 +99,9 @@ public:
 	//set current exp
 	void setEXP(int exp);
 
+	/*Set max experience points.*/
+	void SetMaxEXP(int _maxEXP);
+
 	void printAttributes();
 
 	void addAttack(int newAttack);

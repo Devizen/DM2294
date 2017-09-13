@@ -76,6 +76,11 @@ private:
 	float adjustY;
 	float scaleX;
 	float scaleY;
+
+	/*Check experience points before exiting battle scene.*/
+	bool checkExperiencePoints;
+	/*Check if player level up after checking experience points.*/
+	bool checkLevelUp;
 protected:
 };
 
