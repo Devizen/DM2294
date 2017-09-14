@@ -42,6 +42,8 @@ public:
 	virtual void MoveCamera(float move, MOVE_CAMERA direction);
 	virtual void LookCamera(float look, LOOK_CAMERA direction);
 
+	virtual void SetOffsetToPlayer(Vector3 _playerPos);
+	virtual Vector3 GetOffsetToPlayer(void);
 private:
 	Vector3 position;
 	Vector3 target;
@@ -50,6 +52,8 @@ private:
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;
 	Vector3 defaultUp;
+
+	Vector3 offsetToPlayer;
 };
 
 #endif

@@ -43,6 +43,16 @@ Vector3 CPlayer::GetPosition(void)
 	return position;
 }
 
+void CPlayer::SetTarget(Vector3 _target)
+{
+	target = _target;
+}
+
+Vector3 CPlayer::GetTarget(void)
+{
+	return target;
+}
+
 CBattle * CPlayer::GetBattle(void)
 {
 	if (!battle)
@@ -55,18 +65,32 @@ void CPlayer::MovePlayer(float move, MOVE_PLAYER direction)
 {
 	/*Z Axis is flipped.*/
 	if (direction == MOVE_UP)
+	{
 		position.z -= move;
+		target = Vector3(position.x, position.y, position.z - 1.f);
+	}
 	else if (direction == MOVE_DOWN)
+	{
 		position.z += move;
+		target = Vector3(position.x, position.y, position.z + 1.f);
+	}
 	else if (direction == MOVE_LEFT)
+	{
 		position.x -= move;
+		target = Vector3(position.x - 1.f, position.y, position.z);
+	}
 	else if (direction == MOVE_RIGHT)
+	{
 		position.x += move;
+		target = Vector3(position.x + 1.f, position.y, position.z);
+	}
 }
 
 void CPlayer::Update(double dt)
 {
 	static Vector3 previousPosition(0.f, 0.f, 0.f);
+
+	//target =  Vector3(0.f * position.x, 0.f * position.y, 1.f * position.z);
 
 	map<string, CEnemy*>* enemyList = CEnemy_Manager::GetInstance()->GetEnemyList();
 
@@ -92,4 +116,6 @@ void CPlayer::Update(double dt)
 
 	/*Keep updating position.y to terrain height.*/
 	position.y = (350.f * ReadHeightMap(SceneManager::GetInstance()->GetHeightMap(), position.x / 4000.f, position.z / 4000.f)) + 5.f;
+	//cout << "Position: " << position << endl;
+	//cout << "Target: " << target << endl;
 }

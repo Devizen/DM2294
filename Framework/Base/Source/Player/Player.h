@@ -26,6 +26,12 @@ public:
 	/*Get player position.*/
 	Vector3 GetPosition(void);
 
+	/*Set player target.*/
+	void SetTarget(Vector3 _target);
+
+	/*Get player target.*/
+	Vector3 GetTarget(void);
+
 	/*Get battle to trigger battle event.*/
 	CBattle* GetBattle(void);
 
@@ -37,6 +43,7 @@ public:
 private:
 	CBattle* battle;
 	Vector3 position;
+	Vector3 target;
 protected:
 };
 

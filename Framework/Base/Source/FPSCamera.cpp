@@ -34,41 +34,51 @@ void FPSCamera::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 
 void FPSCamera::Update(double dt)
 {
-	static const float CAMERA_SPEED = 200.f;
+	//static const float CAMERA_SPEED = 200.f;
 
-	double mouse_diff_x, mouse_diff_y;
-	MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
+	//double mouse_diff_x, mouse_diff_y;
+	//MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
 
-	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
-	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
+	//double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
+	//double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
 
-	//Update the camera direction based on mouse move
-	// left-right rotate
-	{
-		Vector3 view = (target - position).Normalized();
-		float yaw = (float)(-CAMERA_SPEED * camera_yaw * (float)dt);
-		Mtx44 rotation;
-		rotation.SetToRotation(yaw, 0, 1, 0);
-		view = rotation * view;
-		target = position + view;
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-	}
-	{
-		float pitch = (float)(-CAMERA_SPEED * camera_pitch * (float)dt);
-		Vector3 view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-		Mtx44 rotation;
-		rotation.SetToRotation(pitch, right.x, right.y, right.z);
-		view = rotation * view;
-		target = position + view;
-	}
 
+	/*Switch angle.*/
+	//if (KeyboardController::GetInstance()->IsKeyDown(VK_LEFT))
+	//	offsetToPlayer = Vector3(100.f, offsetToPlayer.y, 0.f);
+	//if (KeyboardController::GetInstance()->IsKeyDown(VK_RIGHT))
+	//	offsetToPlayer = Vector3(-100.f, offsetToPlayer.y, 0.f);
+	//if (KeyboardController::GetInstance()->IsKeyDown(VK_UP))
+	//	offsetToPlayer = Vector3(0.f, offsetToPlayer.y, -100.f);
+	//if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
+	//	offsetToPlayer = Vector3(0.f, offsetToPlayer.y, 100.f);
+
+	////Update the camera direction based on mouse move
+	//// left-right rotate
+	//{
+	//	Vector3 view = (target - position).Normalized();
+	//	float yaw = (float)(-CAMERA_SPEED * camera_yaw * (float)dt);
+	//	Mtx44 rotation;
+	//	rotation.SetToRotation(yaw, 0, 1, 0);
+	//	view = rotation * view;
+	//	target = position + view;
+	//	Vector3 right = view.Cross(up);
+	//	right.y = 0;
+	//	right.Normalize();
+	//	up = right.Cross(view).Normalized();
+	//}
+	//{
+	//	float pitch = (float)(-CAMERA_SPEED * camera_pitch * (float)dt);
+	//	Vector3 view = (target - position).Normalized();
+	//	Vector3 right = view.Cross(up);
+	//	right.y = 0;
+	//	right.Normalize();
+	//	up = right.Cross(view).Normalized();
+	//	Mtx44 rotation;
+	//	rotation.SetToRotation(pitch, right.x, right.y, right.z);
+	//	view = rotation * view;
+	//	target = position + view;
+	//}
 }
 
 Vector3 FPSCamera::GetCameraPos() const
@@ -156,6 +166,16 @@ void FPSCamera::LookCamera(float look, LOOK_CAMERA direction)
 	}
 
 	std::cout << target << std::endl;
+}
+
+void FPSCamera::SetOffsetToPlayer(Vector3 _playerPos)
+{
+	offsetToPlayer = position - _playerPos;
+}
+
+Vector3 FPSCamera::GetOffsetToPlayer(void)
+{
+	return offsetToPlayer;
 }
 
 void FPSCamera::Reset()

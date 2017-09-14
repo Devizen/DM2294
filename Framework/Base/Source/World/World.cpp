@@ -166,6 +166,8 @@ void World::Init()
 
 	/*Initialise the number of bullet objects.*/
 	CBullet_Manager::GetInstance()->AddBullet(200);
+
+	camera->SetOffsetToPlayer(player->GetPosition());
 }
 
 void World::Update(double dt)
@@ -230,6 +232,16 @@ void World::Update(double dt)
 
 	/*Update Bullets.*/
 	CBullet_Manager::GetInstance()->Update(dt);
+
+	//camera->SetCameraPos(player->GetPosition());
+	camera->Update(dt);
+	camera->SetCameraPos(player->GetPosition() + camera->GetOffsetToPlayer());
+
+	camera->SetCameraTarget(player->GetPosition());
+
+	//std::cout << "Position: " << camera->GetCameraPos() << std::endl;
+	//std::cout << "Target: " << camera->GetCameraTarget() << std::endl;
+	//std::cout << "Offset to Player: " << camera->GetOffsetToPlayer() << std::endl;
 }
 
 void World::Render()
@@ -444,7 +456,7 @@ void World::RenderTerrain(void)
 	modelMesh = MeshBuilder::GetInstance()->GetMesh("TERRAIN");
 	modelStack.PushMatrix();
 	modelStack.Scale(4000.f, 350.f, 4000.f);
-	RenderHelper::GetInstance()->RenderMesh(modelMesh);
+	RenderHelper::GetInstance()->RenderMeshWithLight(modelMesh);
 	modelStack.PopMatrix();
 }
 
