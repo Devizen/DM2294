@@ -1,6 +1,8 @@
 #include "FPSCamera.h"
 #include "MouseController.h"
 #include "KeyboardController.h"
+/*Debugging purposes.*/
+#include <iostream>
 
 FPSCamera::FPSCamera()
 {
@@ -128,6 +130,32 @@ void FPSCamera::MoveCamera(float move, MOVE_CAMERA direction)
 		position.z += static_cast<float>(move);
 		target.z += static_cast<float>(move);
 	}
+}
+
+void FPSCamera::LookCamera(float look, LOOK_CAMERA direction)
+{
+	if (direction == LOOK_UP)
+	{
+		//position.y += static_cast<float>(look);
+		target.y += static_cast<float>(look);
+	}
+	else if (direction == LOOK_DOWN)
+	{
+		//position.y -= static_cast<float>(look);
+		target.y -= static_cast<float>(look);
+	}
+	else if (direction == LOOK_LEFT)
+	{
+		/*position.x -= static_cast<float>(look);*/
+		target.x -= static_cast<float>(look);
+	}
+	else if (direction == LOOK_RIGHT)
+	{
+		//position.x += static_cast<float>(look);
+		target.x += static_cast<float>(look);
+	}
+
+	std::cout << target << std::endl;
 }
 
 void FPSCamera::Reset()

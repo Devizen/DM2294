@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 class Scene;
 class ShaderProgram;
@@ -27,7 +28,7 @@ public:
 	void InitShader(void);
 	//ShaderProgram* currProg;
 	//ShaderProgram* m_gPassShaderID;
-
+	std::vector<unsigned char>& GetHeightMap(void);
 	void DestroyAll(void);
 
 private:
@@ -36,6 +37,7 @@ private:
 
 	std::map<std::string, Scene*> sceneMap;
 	Scene* activeScene, *nextScene;
+	std::vector<unsigned char>heightMap;
 };
 
 #endif // SCENE_MANAGER_H

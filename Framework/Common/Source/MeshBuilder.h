@@ -5,6 +5,7 @@
 #include "Vertex.h"
 #include <map>
 #include <string>
+#include <vector>
 
 // Forward Declaration
 class Mesh;
@@ -30,6 +31,7 @@ public:
 	Mesh* GenerateText(const std::string &meshName, unsigned row, unsigned col);
 	Mesh* GenerateSkyPlane(const std::string &meshName, Color color, int slices,float PlanetRadius, float AtmosphereRadius, float hTile, float vTile);
 	Mesh* GenerateCircle(const std::string &meshName, Color color, float length = 1.0f);
+	Mesh* GenerateTerrain(const std::string &meshName, const std::string &file_path, std::vector <unsigned char> &heightmap);
 
 	Mesh* GetMesh(const std::string& _meshName);
 	void AddMesh(const std::string& _meshName, Mesh* _newMesh);

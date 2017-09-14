@@ -55,6 +55,9 @@
     <Filter Include="Adjuster">
       <UniqueIdentifier>{9f0b9cbf-d0fc-4612-9d74-04975a5e30e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{2e8e6733-2483-40ec-98b3-9b60b7903732}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -132,6 +135,9 @@
     <ClCompile Include="Source\Battle\Bullet_Manager.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Terrain\LoadHmap.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -205,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="Source\Battle\Bullet_Manager.h">
       <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Terrain\LoadHmap.h">
+      <Filter>Terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

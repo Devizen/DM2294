@@ -4,6 +4,8 @@
 #include <vector>
 #include "MyMath.h"
 #include "LoadOBJ.h"
+/*Terrain load height map.*/
+#include "Terrain\LoadHmap.h"
 #include <iostream>
 using namespace std;
 /******************************************************************************/
@@ -572,6 +574,127 @@ Mesh* MeshBuilder::GenerateCircle(const std::string &meshName, Color color, floa
 
 	AddMesh(meshName, mesh);
 
+	return mesh;
+}
+
+Mesh * MeshBuilder::GenerateTerrain(const std::string & meshName, const std::string & file_path, std::vector<unsigned char>& heightmap)
+{
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	const float SCALE_FACTOR = 256.f;
+
+	if (!LoadHeightMap(file_path.c_str(), heightmap))
+	{
+		return NULL;
+	}
+
+	Vertex v;
+
+	unsigned terrainSize = (unsigned)sqrt((double)heightmap.size());
+
+	for (unsigned z = 0; z < terrainSize; ++z)
+	{
+		for (unsigned x = 0; x < terrainSize; ++x)
+		{
+			float scaledHeight = (float)heightmap[z * terrainSize + x] / SCALE_FACTOR;
+
+			v.pos.Set(static_cast<float>(x) / terrainSize - 0.5f, scaledHeight, static_cast<float>(z) / terrainSize - 0.5f);
+			v.color.Set(scaledHeight, scaledHeight, scaledHeight); //For rendering heightmap without texture.
+
+			v.texCoord.Set((float)x / terrainSize * 8, 1.f - (float)z / terrainSize * 8);
+			//For tiling times x 8
+			vertex_buffer_data.push_back(v);
+
+			/*Normal Theory was taught by Hong Yu and http://www.lighthouse3d.com/opengl/terrain/index.php?normals*/
+			/*As the terrain shape is inconsistent, the normal of it will point to all sorts of direction, making lighting looks weird.*/
+			/*By using points surrounding a center point, it will make the normal more consistent.*/
+			/*If x or z is at the edges, set normal to Y axis.*/
+			if (z == 0 || x == 0 || z == terrainSize - 1 || x == terrainSize - 1)
+				v.normal.Set(0, 1, 0);
+			else
+			{
+				/*Creating normals on 8 points on a 3 X 3 Grid based on a center point*/
+				Vector3 surroundingPoints[8];
+				Vector3 surroundingPointsNormal[8];
+
+				/*Variable to move to next surround point.*/
+				unsigned nextPoint = 0;
+
+				/*Getting all 8 different combinations.*/
+				for (int offsetZ = -1; offsetZ < 2; ++offsetZ)
+				{
+					for (int offsetX = -1; offsetX < 2; ++offsetX)
+					{
+						if (offsetX == 0 && offsetZ == 0)
+							continue;
+
+						surroundingPoints[nextPoint].Set(static_cast<float>(x + offsetX) / terrainSize - 0.5f,
+							(float)heightmap[(z + offsetZ) * terrainSize + x + offsetX] / SCALE_FACTOR,
+							static_cast<float>(z + offsetZ) / terrainSize - 0.5f);
+
+						/*Get the distance from the surrounding point to the center point.*/
+						surroundingPoints[nextPoint] = (surroundingPoints[nextPoint] - Vector3(v.pos.x, v.pos.y, v.pos.z)).Normalized();
+
+						/*Scale the points based on map size.*/
+						surroundingPoints[nextPoint].x *= 4000.f;
+						surroundingPoints[nextPoint].y *= 350.f;
+						surroundingPoints[nextPoint].z *= 4000.f;
+
+						++nextPoint;
+					}
+				}
+
+				/*Get the normal of each point through cross product.*/
+				surroundingPointsNormal[0] = surroundingPoints[1].Cross(surroundingPoints[0]).Normalized();
+				surroundingPointsNormal[1] = surroundingPoints[0].Cross(surroundingPoints[3]).Normalized();
+				surroundingPointsNormal[2] = surroundingPoints[3].Cross(surroundingPoints[5]).Normalized();
+				surroundingPointsNormal[3] = surroundingPoints[5].Cross(surroundingPoints[6]).Normalized();
+				surroundingPointsNormal[4] = surroundingPoints[6].Cross(surroundingPoints[7]).Normalized();
+				surroundingPointsNormal[5] = surroundingPoints[7].Cross(surroundingPoints[4]).Normalized();
+				surroundingPointsNormal[6] = surroundingPoints[4].Cross(surroundingPoints[2]).Normalized();
+				surroundingPointsNormal[7] = surroundingPoints[2].Cross(surroundingPoints[1]).Normalized();
+
+				Vector3 surroundingAverageNormal(0.f, 0.f, 0.f);
+				//Add all the normals together.
+				for (size_t i = 0; i < 8; ++i)
+				{
+					surroundingAverageNormal += surroundingPointsNormal[i];
+				}
+
+				//Assign the normals of 8 surrounding points as the center point.
+				v.normal = surroundingAverageNormal.Normalized();
+			}
+		}
+	}
+
+	for (unsigned z = 0; z < terrainSize - 1; ++z)
+	{
+		for (unsigned x = 0; x < terrainSize - 1; ++x)
+		{
+			//Triangle 1
+			index_buffer_data.push_back(terrainSize * z + x + 0);
+			index_buffer_data.push_back(terrainSize * (z + 1) + x + 0);
+			index_buffer_data.push_back(terrainSize * z + x + 1);
+
+			//Triangle 2
+			index_buffer_data.push_back(terrainSize * (z + 1) + x + 1);
+			index_buffer_data.push_back(terrainSize * z + x + 1);
+			index_buffer_data.push_back(terrainSize * (z + 1) + x + 0);
+		}
+	}
+
+	Mesh *mesh = new Mesh(meshName);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
+
+	AddMesh(meshName, mesh);
 	return mesh;
 }
 

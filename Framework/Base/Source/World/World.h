@@ -48,6 +48,7 @@ private:
 	void RenderPassGPass(void);
 	void RenderPassMain(void);
 	void RenderWorld(void);
+	void RenderTerrain(void);
 
 	void UpdatePlayerMovement(double dt);
 	void UpdateCameraMovement(double dt);

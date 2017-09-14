@@ -5,6 +5,9 @@
 #include "../Enemy/Enemy_Manager.h"
 #include "../Collision/Collision.h"
 #include "../Battle/Battle.h"
+/*Terrain.*/
+#include "../Terrain/LoadHmap.h"
+#include "SceneManager.h"
 
 /*Debugging purpose.*/
 #include <iostream>
@@ -86,4 +89,7 @@ void CPlayer::Update(double dt)
 		}
 	}
 	previousPosition = position;
+
+	/*Keep updating position.y to terrain height.*/
+	position.y = (350.f * ReadHeightMap(SceneManager::GetInstance()->GetHeightMap(), position.x / 4000.f, position.z / 4000.f)) + 5.f;
 }

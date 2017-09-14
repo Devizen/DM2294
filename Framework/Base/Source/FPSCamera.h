@@ -40,6 +40,7 @@ public:
 	virtual void SetCameraUp(Vector3 pos);
 
 	virtual void MoveCamera(float move, MOVE_CAMERA direction);
+	virtual void LookCamera(float look, LOOK_CAMERA direction);
 
 private:
 	Vector3 position;

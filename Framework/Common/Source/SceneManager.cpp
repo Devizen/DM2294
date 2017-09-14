@@ -15,6 +15,11 @@
 
 SceneManager* SceneManager::s_instance = 0;
 
+std::vector<unsigned char>& SceneManager::GetHeightMap(void)
+{
+	return heightMap;
+}
+
 void SceneManager::DestroyAll(void)
 {
 	for (std::map<std::string, Scene*>::iterator it = sceneMap.begin(); it != sceneMap.end();)
@@ -366,8 +371,19 @@ void SceneManager::InitShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_STENCIL", Color(1, 1, 1), 1.0f);
 	MeshBuilder::GetInstance()->GetMesh("MINIMAP_STENCIL")->textureID = LoadTGA("Image//minimap//minimapStencil.tga");
 
-	/*Battle Scene*/
+	/*Battle Scene.*/
 	MeshBuilder::GetInstance()->GenerateQuad("B_GRASS", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("B_GRASS")->textureID = LoadTGA("Image//Battle/B_GRASS.tga");
+	MeshBuilder::GetInstance()->GetMesh("B_GRASS")->textureID = LoadTGA("Image//BATTLE//B_GRASS.tga");
+
+	/*World Tiles.*/
+	//MeshBuilder::GetInstance()->GenerateQuad("W_SNOW", Color(1, 1, 1), 1.f);
+	//MeshBuilder::GetInstance()->GetMesh("W_SNOW")->textureID = LoadTGA("Image//WORLD//W_SNOW.tga");
+
+	//MeshBuilder::GetInstance()->GenerateQuad("W_GRASS", Color(1, 1, 1), 1.f);
+	//MeshBuilder::GetInstance()->GetMesh("W_GRASS")->textureID = LoadTGA("Image//WORLD//W_GRASS.tga");
+
+	/*Terrain.*/
+	MeshBuilder::GetInstance()->GenerateTerrain("TERRAIN", "Image//TERRAIN//heightMap.raw", heightMap);
+	MeshBuilder::GetInstance()->GetMesh("TERRAIN")->textureID = LoadTGA("Image//WORLD//W_GRASS.tga");
 
 }

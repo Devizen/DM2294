@@ -31,7 +31,7 @@
 /*Cinematic Camera*/
 #include "../Cinematic\Cinematic.h"
 
-/*DIsplaying Text*/
+/*Displaying Text*/
 #include "../Text_Display\Text\Text.h"
 #include "../Text_Display\Text_Manager\Text_Manager.h"
 
@@ -52,6 +52,9 @@
 /*Bullet System.*/
 #include "../Battle/Bullet.h"
 #include "../Battle/Bullet_Manager.h"
+
+/*Terrain.*/
+#include "../Terrain/LoadHmap.h"
 
 #include "vld.h"
 using namespace std;
@@ -120,7 +123,8 @@ void World::Init()
 
 	// Create and attach the camera to the scene
 	camera = new FPSCamera();
-	camera->Init(Vector3(0.f, 100.f, 0.f), Vector3(0.f ,0.f ,0.f), Vector3(0.f, 0.f, -1.f));
+	//camera->Init(Vector3(0.f, 100.f, 0.f), Vector3(0.f ,0.f ,0.f), Vector3(0.f, 0.f, -1.f));
+	camera->Init(Vector3(0.f, 20.f, 100.f), Vector3(0.f, 20.f, -20.f), Vector3(0.f, 20.f, 0.f));
 	cinematic = new CCinematic();
 	cinematic->Init(Vector3(0.f, 100.f, 0.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f));
 
@@ -183,11 +187,21 @@ void World::Update(double dt)
 		//Activate::BattleScene(player->GetBattle(), enemy, player);
 	}
 
-	/*Create Bullet*/
+	/*Create Bullet.*/
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_SPACE))
 	{
 		Create::Bullet("sphere", player->GetPosition(), CBullet::PLAYER_ORIGINATED);
 	}
+
+	///*Switch camera angle.*/
+	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP))
+	//{
+	//	camera->SetCameraPos
+	//}
+	//if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN))
+	//{
+	//	Create::Bullet("sphere", player->GetPosition(), CBullet::PLAYER_ORIGINATED);
+	//}
 	//EntityManager::GetInstance()->Update(dt); // Update our entities
 
 	//theKeyboard->Read(static_cast<float>(dt));
@@ -361,6 +375,35 @@ void World::RenderWorld()
 {
 	Mesh* modelMesh;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	RenderTerrain();
+	//float translateTileX = -100.f;
+	//float translateTileZ = -100.f;
+	//static int changeTile = 0;
+	//for (unsigned i = 0; i < 20; ++i)
+	//{
+	//	for (unsigned j = 0; j < 20; ++j)
+	//	{
+	//		if (changeTile == 0)
+	//		{
+	//			modelMesh = MeshBuilder::GetInstance()->GetMesh("W_SNOW");
+	//			changeTile = 1;
+	//		}
+	//		else
+	//		{
+	//			modelMesh = MeshBuilder::GetInstance()->GetMesh("W_GRASS");
+	//			changeTile = 0;
+	//		}
+	//		modelStack.PushMatrix();
+	//		modelStack.Translate(translateTileX, 0.f, translateTileZ);
+	//		modelStack.Rotate(-90.f, 1.f, 0.f, 0.f);
+	//		modelStack.Scale(10.f, 10.f, 0.f);
+	//		RenderHelper::RenderMesh(modelMesh);
+	//		modelStack.PopMatrix();
+	//		translateTileX += 10.f;
+	//	}
+	//	translateTileX = -100.f;
+	//	translateTileZ += 10.f;
+	//}
 
 	modelMesh = MeshBuilder::GetInstance()->GetMesh("PLAYER");
 	modelStack.PushMatrix();
@@ -369,12 +412,12 @@ void World::RenderWorld()
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();
 
-	modelMesh = MeshBuilder::GetInstance()->GetMesh("BLACK");
-	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 0.f, 0.f);
-	modelStack.Scale(Application::GetInstance().GetWindowWidth(), 0.f, Application::GetInstance().GetWindowHeight());
-	RenderHelper::RenderMesh(modelMesh);
-	modelStack.PopMatrix();
+	//modelMesh = MeshBuilder::GetInstance()->GetMesh("BLACK");
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.f, 0.f, 0.f);
+	//modelStack.Scale(Application::GetInstance().GetWindowWidth(), 0.f, Application::GetInstance().GetWindowHeight());
+	//RenderHelper::RenderMesh(modelMesh);
+	//modelStack.PopMatrix();
 
 	//int grid = 0;
 
@@ -394,9 +437,20 @@ void World::RenderWorld()
 	CBullet_Manager::GetInstance()->Render();
 }
 
+void World::RenderTerrain(void)
+{
+	Mesh* modelMesh;
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("TERRAIN");
+	modelStack.PushMatrix();
+	modelStack.Scale(4000.f, 350.f, 4000.f);
+	RenderHelper::GetInstance()->RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+}
+
 void World::UpdatePlayerMovement(double dt)
 {
-	const float moveSpeed = 20.f;
+	const float moveSpeed = 200.f;
 
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_UP))
 		player->MovePlayer(static_cast<float>(dt) * moveSpeed, CPlayer::MOVE_UP);
@@ -410,7 +464,7 @@ void World::UpdatePlayerMovement(double dt)
 
 void World::UpdateCameraMovement(double dt)
 {
-	const float moveSpeed = 10.f;
+	const float moveSpeed = 100.f;
 	if (KeyboardController::GetInstance()->IsKeyDown('W'))
 		camera->MoveCamera(static_cast<float>(dt) * moveSpeed, FPSCamera::MOVE_UP);
 	if (KeyboardController::GetInstance()->IsKeyDown('S'))
@@ -423,6 +477,10 @@ void World::UpdateCameraMovement(double dt)
 		camera->MoveCamera(static_cast<float>(dt) * moveSpeed, FPSCamera::MOVE_BACKWARD);
 	if (KeyboardController::GetInstance()->IsKeyDown('E'))
 		camera->MoveCamera(static_cast<float>(dt) * moveSpeed, FPSCamera::MOVE_FORWARD);
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_LSHIFT))
+		camera->LookCamera(static_cast<float>(dt) * moveSpeed, FPSCamera::LOOK_UP);
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_RSHIFT))
+		camera->LookCamera(static_cast<float>(dt) * moveSpeed, FPSCamera::LOOK_DOWN);
 }
 
 void World::Exit()
