@@ -26,7 +26,7 @@ public:
 	unsigned indexSize;
 
 	Material material;
-	unsigned textureID;
+	unsigned textureID[8];
 };
 
 #endif

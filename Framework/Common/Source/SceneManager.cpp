@@ -1,6 +1,9 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+/*DepthFBO Quad.*/
+#include "../../../Framework/Base/Source/DepthFBO.h"
+
 #include "GLFW\glfw3.h"
 #include "ShaderProgram.h"
 
@@ -248,13 +251,13 @@ void SceneManager::InitShader(void)
 	MeshBuilder::GetInstance()->GenerateAxes("reference");
 	MeshBuilder::GetInstance()->GenerateCrossHair("crosshair", 1.f, 1.f, 0.f, 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
+	MeshBuilder::GetInstance()->GetMesh("quad")->textureID[0] = LoadTGA("Image//calibri.tga");
 	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
-	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//TEXT.tga");
+	MeshBuilder::GetInstance()->GetMesh("text")->textureID[0] = LoadTGA("Image//TEXT.tga");
 	MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
 
 	MeshBuilder::GetInstance()->GenerateText("IMPACT", 16, 16);
-	MeshBuilder::GetInstance()->GetMesh("IMPACT")->textureID = LoadTGA("Image//IMPACT.tga");
+	MeshBuilder::GetInstance()->GetMesh("IMPACT")->textureID[0] = LoadTGA("Image//IMPACT.tga");
 
 	MeshBuilder::GetInstance()->GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	MeshBuilder::GetInstance()->GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
@@ -272,118 +275,124 @@ void SceneManager::InitShader(void)
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
 
 	MeshBuilder::GetInstance()->GenerateQuad("INVENTORY", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("INVENTORY")->textureID = LoadTGA("Image//Inventory.tga");
+	MeshBuilder::GetInstance()->GetMesh("INVENTORY")->textureID[0] = LoadTGA("Image//Inventory.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("EQWINDOW", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("EQWINDOW")->textureID = LoadTGA("Image//Equipment.tga");
+	MeshBuilder::GetInstance()->GetMesh("EQWINDOW")->textureID[0] = LoadTGA("Image//Equipment.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("EMPHELM", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("EMPHELM")->textureID = LoadTGA("Image//EmperorHelmet.tga");
+	MeshBuilder::GetInstance()->GetMesh("EMPHELM")->textureID[0] = LoadTGA("Image//EmperorHelmet.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("EMPARMOR", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("EMPARMOR")->textureID = LoadTGA("Image//EmperorArmor.tga");
+	MeshBuilder::GetInstance()->GetMesh("EMPARMOR")->textureID[0] = LoadTGA("Image//EmperorArmor.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("EMPGLOVE", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("EMPGLOVE")->textureID = LoadTGA("Image//EmperorGlove.tga");
+	MeshBuilder::GetInstance()->GetMesh("EMPGLOVE")->textureID[0] = LoadTGA("Image//EmperorGlove.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("EMPSHOE", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("EMPSHOE")->textureID = LoadTGA("Image//EmperorShoe.tga");
+	MeshBuilder::GetInstance()->GetMesh("EMPSHOE")->textureID[0] = LoadTGA("Image//EmperorShoe.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("CAPHELM", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("CAPHELM")->textureID = LoadTGA("Image//CaptainHelmet.tga");
+	MeshBuilder::GetInstance()->GetMesh("CAPHELM")->textureID[0] = LoadTGA("Image//CaptainHelmet.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("CAPARMOR", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("CAPARMOR")->textureID = LoadTGA("Image//CaptainArmor.tga");
+	MeshBuilder::GetInstance()->GetMesh("CAPARMOR")->textureID[0] = LoadTGA("Image//CaptainArmor.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("CAPSHOE", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("CAPSHOE")->textureID = LoadTGA("Image//CaptainShoe.tga");
+	MeshBuilder::GetInstance()->GetMesh("CAPSHOE")->textureID[0] = LoadTGA("Image//CaptainShoe.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("CAPGLOVE", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("CAPGLOVE")->textureID = LoadTGA("Image//CaptainGlove.tga");
+	MeshBuilder::GetInstance()->GetMesh("CAPGLOVE")->textureID[0] = LoadTGA("Image//CaptainGlove.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERHELM", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SOLDIERHELM")->textureID = LoadTGA("Image//SoldierHelmet.tga");
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERHELM")->textureID[0] = LoadTGA("Image//SoldierHelmet.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERARMOR", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SOLDIERARMOR")->textureID = LoadTGA("Image//SoldierArmor.tga");
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERARMOR")->textureID[0] = LoadTGA("Image//SoldierArmor.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERSHOE", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SOLDIERSHOE")->textureID = LoadTGA("Image//SoldierShoe.tga");
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERSHOE")->textureID[0] = LoadTGA("Image//SoldierShoe.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERGLOVE", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SOLDIERGLOVE")->textureID = LoadTGA("Image//SoldierGlove.tga");
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERGLOVE")->textureID[0] = LoadTGA("Image//SoldierGlove.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("BHELM", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("BHELM")->textureID = LoadTGA("Image//BasicHelmet.tga");
+	MeshBuilder::GetInstance()->GetMesh("BHELM")->textureID[0] = LoadTGA("Image//BasicHelmet.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("BARMOR", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("BARMOR")->textureID = LoadTGA("Image//BasicArmor.tga");
+	MeshBuilder::GetInstance()->GetMesh("BARMOR")->textureID[0] = LoadTGA("Image//BasicArmor.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("BGLOVE", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("BGLOVE")->textureID = LoadTGA("Image//BasicGlove.tga");
+	MeshBuilder::GetInstance()->GetMesh("BGLOVE")->textureID[0] = LoadTGA("Image//BasicGlove.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("BSHOE", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("BSHOE")->textureID = LoadTGA("Image//BasicShoe.tga");
+	MeshBuilder::GetInstance()->GetMesh("BSHOE")->textureID[0] = LoadTGA("Image//BasicShoe.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("BGUN", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("BGUN")->textureID = LoadTGA("Image//BasicGun.tga");
+	MeshBuilder::GetInstance()->GetMesh("BGUN")->textureID[0] = LoadTGA("Image//BasicGun.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERSWORD", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SOLDIERSWORD")->textureID = LoadTGA("Image//SoldierSword.tga");
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERSWORD")->textureID[0] = LoadTGA("Image//SoldierSword.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("SOLDIERGUN", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SOLDIERGUN")->textureID = LoadTGA("Image//SoldierGun.tga");
+	MeshBuilder::GetInstance()->GetMesh("SOLDIERGUN")->textureID[0] = LoadTGA("Image//SoldierGun.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("CAPSWORD", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("CAPSWORD")->textureID = LoadTGA("Image//CaptainSword.tga");
+	MeshBuilder::GetInstance()->GetMesh("CAPSWORD")->textureID[0] = LoadTGA("Image//CaptainSword.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("CAPGUN", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("CAPGUN")->textureID = LoadTGA("Image//CaptainGun.tga");
+	MeshBuilder::GetInstance()->GetMesh("CAPGUN")->textureID[0] = LoadTGA("Image//CaptainGun.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("EMPSWORD", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("EMPSWORD")->textureID = LoadTGA("Image//EmperorSword.tga");
+	MeshBuilder::GetInstance()->GetMesh("EMPSWORD")->textureID[0] = LoadTGA("Image//EmperorSword.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("EMPGUN", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("EMPGUN")->textureID = LoadTGA("Image//EmperorGun.tga");
+	MeshBuilder::GetInstance()->GetMesh("EMPGUN")->textureID[0] = LoadTGA("Image//EmperorGun.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("BSWORD", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("BSWORD")->textureID = LoadTGA("Image//BasicSword.tga");
+	MeshBuilder::GetInstance()->GetMesh("BSWORD")->textureID[0] = LoadTGA("Image//BasicSword.tga");
 
 	MeshBuilder::GetInstance()->GenerateQuad("SHOP", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SHOP")->textureID = LoadTGA("Image//Shop.tga");
+	MeshBuilder::GetInstance()->GetMesh("SHOP")->textureID[0] = LoadTGA("Image//Shop.tga");
 
 	/*Player Health Bar Color*/
 	MeshBuilder::GetInstance()->GenerateCube("PLAYER_HEALTH_BAR", Color(0.f, 1.0f, 0.0f), 1.0f);
 
 	/*Translucent Quad*/
 	MeshBuilder::GetInstance()->GenerateQuad("TRANS_QUAD", Color(1.f, 1.f, 1.f), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("TRANS_QUAD")->textureID = LoadTGA("Image//TRANS_QUAD.tga");
+	MeshBuilder::GetInstance()->GetMesh("TRANS_QUAD")->textureID[0] = LoadTGA("Image//TRANS_QUAD.tga");
 	/*Minimap Enlarged*/
 	MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_ENLARGED", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MINIMAP_ENLARGED")->textureID = LoadTGA("Image//minimap//minimapStencil.tga");
+	MeshBuilder::GetInstance()->GetMesh("MINIMAP_ENLARGED")->textureID[0] = LoadTGA("Image//minimap//minimapStencil.tga");
 
 	MeshBuilder::GetInstance()->GenerateCircle("MINIMAP", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("MINIMAP")->textureID = LoadTGA("Image//minimap/minimapBackground.tga");
+	MeshBuilder::GetInstance()->GetMesh("MINIMAP")->textureID[0] = LoadTGA("Image//minimap/minimapBackground.tga");
 	MeshBuilder::GetInstance()->GenerateQuad("MINIMAPBORDER", Color(1, 1, 1), 1.05f);
-	MeshBuilder::GetInstance()->GetMesh("MINIMAPBORDER")->textureID = LoadTGA("Image//minimap//minimapBorder.tga");
+	MeshBuilder::GetInstance()->GetMesh("MINIMAPBORDER")->textureID[0] = LoadTGA("Image//minimap//minimapBorder.tga");
 	MeshBuilder::GetInstance()->GenerateQuad("MINIMAPAVATAR", Color(1, 1, 0), 0.25f);
-	MeshBuilder::GetInstance()->GetMesh("MINIMAPAVATAR")->textureID = LoadTGA("Image//minimap//minimapAvatar.tga");
+	MeshBuilder::GetInstance()->GetMesh("MINIMAPAVATAR")->textureID[0] = LoadTGA("Image//minimap//minimapAvatar.tga");
 	MeshBuilder::GetInstance()->GenerateQuad("MINIMAP_STENCIL", Color(1, 1, 1), 1.0f);
-	MeshBuilder::GetInstance()->GetMesh("MINIMAP_STENCIL")->textureID = LoadTGA("Image//minimap//minimapStencil.tga");
+	MeshBuilder::GetInstance()->GetMesh("MINIMAP_STENCIL")->textureID[0] = LoadTGA("Image//minimap//minimapStencil.tga");
 
 	/*Battle Scene.*/
 	MeshBuilder::GetInstance()->GenerateQuad("B_GRASS", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("B_GRASS")->textureID = LoadTGA("Image//BATTLE//B_GRASS.tga");
+	MeshBuilder::GetInstance()->GetMesh("B_GRASS")->textureID[0] = LoadTGA("Image//BATTLE//B_GRASS.tga");
 
 	/*World Tiles.*/
 	//MeshBuilder::GetInstance()->GenerateQuad("W_SNOW", Color(1, 1, 1), 1.f);
-	//MeshBuilder::GetInstance()->GetMesh("W_SNOW")->textureID = LoadTGA("Image//WORLD//W_SNOW.tga");
+	//MeshBuilder::GetInstance()->GetMesh("W_SNOW")->textureID[0] = LoadTGA("Image//WORLD//W_SNOW.tga");
 
 	//MeshBuilder::GetInstance()->GenerateQuad("W_GRASS", Color(1, 1, 1), 1.f);
-	//MeshBuilder::GetInstance()->GetMesh("W_GRASS")->textureID = LoadTGA("Image//WORLD//W_GRASS.tga");
+	//MeshBuilder::GetInstance()->GetMesh("W_GRASS")->textureID[0] = LoadTGA("Image//WORLD//W_GRASS.tga");
 
 	/*Terrain.*/
 	MeshBuilder::GetInstance()->GenerateTerrain("TERRAIN", "Image//TERRAIN//heightMap.raw", heightMap);
-	MeshBuilder::GetInstance()->GetMesh("TERRAIN")->textureID = LoadTGA("Image//WORLD//W_GRASS.tga");
+	MeshBuilder::GetInstance()->GetMesh("TERRAIN")->textureID[0] = LoadTGA("Image//WORLD//W_GRASS.tga");
+	MeshBuilder::GetInstance()->GetMesh("TERRAIN")->textureID[1] = LoadTGA("Image//WORLD//W_SNOW.tga");
+	MeshBuilder::GetInstance()->GetMesh("TERRAIN")->textureID[2] = LoadTGA("Image//WORLD//W_WATER.tga");
+
+	/*Shadow Quad.*/
+	MeshBuilder::GetInstance()->GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("LIGHT_DEPTH_TEXTURE")->textureID[0] = DepthFBO::GetInstance()->GetTexture();
 
 }

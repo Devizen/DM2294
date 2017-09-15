@@ -56,7 +56,7 @@
 /*Terrain.*/
 #include "../Terrain/LoadHmap.h"
 
-#include "vld.h"
+//#include "vld.h"
 using namespace std;
 
 World* World::sInstance = new World(SceneManager::GetInstance());
@@ -90,7 +90,7 @@ void World::Init()
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	lights[0]->position.Set(-6, 2, 0);
+	lights[0]->position.Set(-1, 1, 0);
 	lights[0]->color.Set(1, 1, 1);
 	lights[0]->power = 1;
 	lights[0]->kC = 1.f;
@@ -99,7 +99,7 @@ void World::Init()
 	lights[0]->cosCutoff = cos(Math::DegreeToRadian(45));
 	lights[0]->cosInner = cos(Math::DegreeToRadian(30));
 	lights[0]->exponent = 3.f;
-	lights[0]->spotDirection.Set(0.f, 1.f, 0.f);
+	//lights[0]->spotDirection.Set(0.f, 1.f, 0.f);
 	lights[0]->name = "lights[0]";
 
 	lights[1] = new Light();
@@ -239,9 +239,23 @@ void World::Update(double dt)
 
 	camera->SetCameraTarget(player->GetPosition());
 
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD9))
+		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y + (20.f * dt), lights[0]->position.z);
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD7))
+		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y - (20.f * dt), lights[0]->position.z);
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD8))
+		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z - (20.f * dt));
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD2))
+		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z + (20.f * dt));
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD4))
+		lights[0]->position.Set(lights[0]->position.x - (20.f * dt), lights[0]->position.y, lights[0]->position.z);
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD6))
+		lights[0]->position.Set(lights[0]->position.x + (20.f * dt), lights[0]->position.y, lights[0]->position.z);
+
 	//std::cout << "Position: " << camera->GetCameraPos() << std::endl;
 	//std::cout << "Target: " << camera->GetCameraTarget() << std::endl;
 	//std::cout << "Offset to Player: " << camera->GetOffsetToPlayer() << std::endl;
+	//std::cout << lights[0]->position << std::endl;
 }
 
 void World::Render()
@@ -269,7 +283,7 @@ void World::RenderPassGPass(void)
 
 	if (lights[0]->type == Light::LIGHT_DIRECTIONAL)
 	{
-		DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-150, 150, -150, 150, -1000, 2000);
+		DepthFBO::GetInstance()->m_lightDepthProj.SetToOrtho(-400, 400, -400, 400, -400, 800);
 	}
 	else
 	{
@@ -385,6 +399,8 @@ void World::RenderPassMain(void)
 
 void World::RenderWorld()
 {
+	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 1);
+
 	Mesh* modelMesh;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	RenderTerrain();
@@ -424,6 +440,13 @@ void World::RenderWorld()
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();
 
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("LIGHT_DEPTH_TEXTURE");
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 50.f, 0.f);
+	modelStack.Scale(100.f, 100.f, 100.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+
 	//modelMesh = MeshBuilder::GetInstance()->GetMesh("BLACK");
 	//modelStack.PushMatrix();
 	//modelStack.Translate(0.f, 0.f, 0.f);
@@ -447,6 +470,7 @@ void World::RenderWorld()
 
 	CEnemy_Manager::GetInstance()->Render();
 	CBullet_Manager::GetInstance()->Render();
+	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 0);
 }
 
 void World::RenderTerrain(void)

@@ -8,6 +8,9 @@
 #include "../../Base/Source/Attributes.h"
 #include "../../Base/Source/Application.h"
 #include "MeshBuilder.h"
+#include <string>
+
+#define MAX_TEXTURES 8
 
 void RenderHelper::RenderMesh(Mesh* _mesh)
 {
@@ -24,18 +27,31 @@ void RenderHelper::RenderMesh(Mesh* _mesh)
 		//glUniformMatrix4fv(g->GetActiveShader()->GetUniform("lightDepthMVP"), 1, GL_FALSE, &lightDepthMVP.a[0]);
 		//mesh->Render();
 
-		//for (int i = 0; i < MAX_TEXTURES; ++i)
-		//{
-		if (_mesh->textureID > 0)
+		for (int i = 0; i < MAX_TEXTURES; ++i)
 		{
-			gpassShader->UpdateInt("colorTextureEnabled[0]", 1);
-			GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID);
-			gpassShader->UpdateInt("colorTexture[0]", 0);
+			if (_mesh->textureID[i] > 0)
+			{
+				std::string colourTextureEnabled = "colorTextureEnabled[";
+				colourTextureEnabled += std::to_string(i);
+				colourTextureEnabled += "]";
+				gpassShader->UpdateInt(colourTextureEnabled, 1);
 
+				GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID[i]);
+
+				std::string colourTexture = "colorTexture[";
+				colourTexture += std::to_string(i);
+				colourTexture += "]";
+				gpassShader->UpdateInt(colourTexture, 0);
+
+			}
+			else
+			{
+				std::string colourTextureEnabled = "colorTextureEnabled[";
+				colourTextureEnabled += std::to_string(i);
+				colourTextureEnabled += "]";
+				gpassShader->UpdateInt(colourTextureEnabled, 0);
+			}
 		}
-		else
-			gpassShader->UpdateInt("colorTextureEnabled[0]", 0);
-		//	}
 		_mesh->Render();
 
 		g->SetActiveShader("default");
@@ -51,15 +67,29 @@ void RenderHelper::RenderMesh(Mesh* _mesh)
 	currProg->UpdateInt("lightEnabled", 0);
 
 	// Update textures first if available
-	if (_mesh->textureID > 0)
+	for (int i = 0; i < MAX_TEXTURES; ++i)
 	{
-		currProg->UpdateInt("colorTextureEnabled", 1);
-		GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID);
-		currProg->UpdateInt("colorTexture", 0);
-	}
-	else
-	{
-		currProg->UpdateInt("colorTextureEnabled", 0);
+		if (_mesh->textureID[i] > 0)
+		{
+			std::string colourTextureEnabled = "colorTextureEnabled[";
+			colourTextureEnabled += std::to_string(i);
+			colourTextureEnabled += "]";
+			currProg->UpdateInt(colourTextureEnabled, 1);
+
+			GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID[i]);
+
+			std::string colourTexture = "colorTexture[";
+			colourTexture += std::to_string(i);
+			colourTexture += "]";
+			currProg->UpdateInt(colourTexture, 0);
+		}
+		else
+		{
+			std::string colourTextureEnabled = "colorTextureEnabled[";
+			colourTextureEnabled += std::to_string(i);
+			colourTextureEnabled += "]";
+			currProg->UpdateInt(colourTextureEnabled, 0);
+		}
 	}
 
 	// Do actual rendering
@@ -87,18 +117,41 @@ void RenderHelper::RenderMeshWithLight(Mesh* _mesh)
 		glUniformMatrix4fv(g->GetActiveShader()->GetUniform("lightDepthMVP"), 1, GL_FALSE, &lightDepthMVP.a[0]);
 		//mesh->Render();
 
-		//for (int i = 0; i < MAX_TEXTURES; ++i)
-		//{
-			if (_mesh->textureID > 0)
+		for (int i = 0; i < MAX_TEXTURES; ++i)
+		{
+			if (_mesh->textureID[i] > 0)
 			{
-				gpassShader->UpdateInt("colorTextureEnabled[0]", 1);
-				GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID);
-				gpassShader->UpdateInt("colorTexture[0]", 0);
+				std::string colourTextureEnabled = "colorTextureEnabled[";
+				colourTextureEnabled += std::to_string(i);
+				colourTextureEnabled += "]";
+				gpassShader->UpdateInt(colourTextureEnabled, 1);
+
+				GraphicsManager::GetInstance()->UpdateTexture(i, _mesh->textureID[i]);
+
+				std::string colourTexture = "colorTexture[";
+				colourTexture += std::to_string(i);
+				colourTexture += "]";
+				gpassShader->UpdateInt(colourTexture, i);
 
 			}
 			else
-				gpassShader->UpdateInt("colorTextureEnabled[0]", 0);
-	//	}
+			{
+				std::string colourTextureEnabled = "colorTextureEnabled[";
+				colourTextureEnabled += std::to_string(i);
+				colourTextureEnabled += "]";
+				gpassShader->UpdateInt(colourTextureEnabled, 0);
+			}
+
+			//if (_mesh->textureID > 0)
+			//{
+			//	gpassShader->UpdateInt("colorTextureEnabled[0]", 1);
+			//	GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID);
+			//	gpassShader->UpdateInt("colorTexture[0]", 0);
+
+			//}
+			//else
+			//	gpassShader->UpdateInt("colorTextureEnabled[0]", 0);
+		}
 		_mesh->Render();
 
 		g->SetActiveShader("default");
@@ -130,15 +183,30 @@ void RenderHelper::RenderMeshWithLight(Mesh* _mesh)
 	currProg->UpdateFloat("material.kShininess", _mesh->material.kShininess);
 	
 	// Update textures first if available
-	if (_mesh->textureID > 0)
+	for (int i = 0; i < MAX_TEXTURES; ++i)
 	{
-		currProg->UpdateInt("colorTextureEnabled", 1);
-		GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID);
-		currProg->UpdateInt("colorTexture", 0);
-	}
-	else
-	{
-		currProg->UpdateInt("colorTextureEnabled", 0);
+		if (_mesh->textureID[i] > 0)
+		{
+			std::string colourTextureEnabled = "colorTextureEnabled[";
+			colourTextureEnabled += std::to_string(i);
+			colourTextureEnabled += "]";
+
+			currProg->UpdateInt(colourTextureEnabled, 1);
+
+			GraphicsManager::GetInstance()->UpdateTexture(i, _mesh->textureID[i]);
+
+			std::string colourTexture = "colorTexture[";
+			colourTexture += std::to_string(i);
+			colourTexture += "]";
+			currProg->UpdateInt(colourTexture, i);
+		}
+		else
+		{
+			std::string colourTextureEnabled = "colorTextureEnabled[";
+			colourTextureEnabled += std::to_string(i);
+			colourTextureEnabled += "]";
+			currProg->UpdateInt(colourTextureEnabled, 0);
+		}
 	}
 
 	// Do actual rendering
@@ -165,7 +233,7 @@ void RenderHelper::RenderText(Mesh* _mesh, const std::string& _text, Color _colo
 	currProg->UpdateInt("colorTextureEnabled", 1);
 	
 	currProg->UpdateInt("colorTextureEnabled", 1);
-	GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID);
+	GraphicsManager::GetInstance()->UpdateTexture(0, _mesh->textureID[0]);
 	currProg->UpdateInt("colorTexture", 0);
 
 	for (unsigned i = 0; i < _text.length(); ++i)

@@ -8,6 +8,12 @@ struct Position
 	float x, y, z;
 	Position(float x = 0, float y = 0, float z = 0) {Set(x, y, z);}
 	void Set(float x, float y, float z) {this->x = x; this->y = y; this->z = z;}
+	//friend std::ostream& operator<<(std::ostream& os, Position& rhs); //print to ostream
+	friend std::ostream& operator<< (std::ostream& os, Position& rhs)
+	{
+		os << "[" << rhs.x << "," << rhs.y << "," << rhs.z << "]";
+		return os;
+	}
 };
 
 struct Color
