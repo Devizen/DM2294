@@ -408,14 +408,29 @@ void CBattle::Render()
 		for (vector<CEnemy*>::iterator it = battleList.begin(); it != battleList.end(); ++it)
 		{
 			CEnemy* enemy = (CEnemy*)*it;
-			
-			/*Enemy*/
-			modelStack.PushMatrix();
-			modelStack.Translate(shake, 0.f, 0.f);
-			modelStack.Translate(-shakeAll, 0.f, 0.f);
-			modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.1f, Application::GetInstance().GetWindowWidth() * 0.1f, 0.f);
-			RenderHelper::GetInstance()->RenderMesh(enemy->GetModelMesh());
-			modelStack.PopMatrix();
+
+			if (enemy->GetEnemyType() == CEnemy::HUMAN)
+			{
+				for (std::map<string, Mesh*>::iterator it = enemy->GetHumanModelMesh().begin(); it != enemy->GetHumanModelMesh().end(); ++it)
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(shake, 0.f, 0.f);
+					modelStack.Translate(-shakeAll, 0.f, 0.f);
+					modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.05f, Application::GetInstance().GetWindowWidth() * 0.05f, 0.f);
+					RenderHelper::GetInstance()->RenderMesh(it->second);
+					modelStack.PopMatrix();
+				}
+			}
+			else
+			{
+				/*Enemy*/
+				modelStack.PushMatrix();
+				modelStack.Translate(shake, 0.f, 0.f);
+				modelStack.Translate(-shakeAll, 0.f, 0.f);
+				modelStack.Scale(Application::GetInstance().GetWindowWidth() * 0.1f, Application::GetInstance().GetWindowWidth() * 0.1f, 0.f);
+				RenderHelper::GetInstance()->RenderMesh(enemy->GetModelMesh());
+				modelStack.PopMatrix();
+			}
 
 			/*Render Health Bar*/
 			float offsetHealth = healthBar -
@@ -423,7 +438,7 @@ void CBattle::Render()
 					static_cast<float>(enemy->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXHEALTH)) * healthBar);
 			_mesh = MeshBuilder::GetInstance()->GetMesh("ENEMY");
 			modelStack.PushMatrix();
-			modelStack.Translate(-offsetHealth * 0.5f, Application::GetInstance().GetWindowWidth() * 0.11f, 0.f);
+			modelStack.Translate(-offsetHealth * 0.5f, Application::GetInstance().GetWindowWidth() * enemy->GetHealthBarPosition()/*0.11f*/, 0.f);
 			modelStack.Translate(-shakeAll, 0.f, 0.f);
 			modelStack.Scale(static_cast<float>(enemy->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_HEALTH)) / /*X-Axis*/
 				static_cast<float>(enemy->GetAttribute(CAttributes::ATTRIBUTE_TYPES::TYPE_MAXHEALTH)) * healthBar, /*X-Axis*/

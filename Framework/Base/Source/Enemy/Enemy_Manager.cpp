@@ -128,7 +128,8 @@ void CEnemy_Manager::Update(double dt)
 					z = rand() % 131 + (-65);
 				}
 			}
-			Create::Enemy("ENEMY", randomPosition);
+			//Create::Enemy("ENEMY", randomPosition);
+			Create::Human("Monk", "Head", "Body", "Left arm", "Right arm", "Left leg", "Right leg", randomPosition, "Gourd", "Talisman");
 			noCollision = false;
 			createEnemy = false;
 		}

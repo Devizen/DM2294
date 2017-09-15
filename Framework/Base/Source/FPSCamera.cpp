@@ -43,15 +43,15 @@ void FPSCamera::Update(double dt)
 	//double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
 
 
-	/*Switch angle.*/
-	//if (KeyboardController::GetInstance()->IsKeyDown(VK_LEFT))
-	//	offsetToPlayer = Vector3(100.f, offsetToPlayer.y, 0.f);
-	//if (KeyboardController::GetInstance()->IsKeyDown(VK_RIGHT))
-	//	offsetToPlayer = Vector3(-100.f, offsetToPlayer.y, 0.f);
-	//if (KeyboardController::GetInstance()->IsKeyDown(VK_UP))
-	//	offsetToPlayer = Vector3(0.f, offsetToPlayer.y, -100.f);
-	//if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
-	//	offsetToPlayer = Vector3(0.f, offsetToPlayer.y, 100.f);
+	///*Switch angle.*/
+	////if (KeyboardController::GetInstance()->IsKeyDown(VK_LEFT))
+	////	offsetToPlayer = Vector3(100.f, offsetToPlayer.y, 0.f);
+	////if (KeyboardController::GetInstance()->IsKeyDown(VK_RIGHT))
+	////	offsetToPlayer = Vector3(-100.f, offsetToPlayer.y, 0.f);
+	////if (KeyboardController::GetInstance()->IsKeyDown(VK_UP))
+	////	offsetToPlayer = Vector3(0.f, offsetToPlayer.y, -100.f);
+	////if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
+	////	offsetToPlayer = Vector3(0.f, offsetToPlayer.y, 100.f);
 
 	////Update the camera direction based on mouse move
 	//// left-right rotate

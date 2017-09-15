@@ -66,6 +66,8 @@ private:
 	int selectedChoice;
 
 	int loopCredits;
+
+	float rotateLeftLeg;
 };
 
 #endif

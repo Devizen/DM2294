@@ -19,6 +19,8 @@ public:
 
 	void Init(void);
 	void Update(double dt);
+	void SetSpeed(float _speed);
+
 	Vector3 GetPosition(void);
 	Vector3 GetScale(void);
 	static CAdjuster* GetInstance(void);
@@ -28,6 +30,7 @@ private:
 	Vector3 position;
 	Vector3 scale;
 	MODE mode;
+	float speed;
 protected:
 };
 

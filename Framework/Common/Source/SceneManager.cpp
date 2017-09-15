@@ -395,4 +395,40 @@ void SceneManager::InitShader(void)
 	MeshBuilder::GetInstance()->GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("LIGHT_DEPTH_TEXTURE")->textureID[0] = DepthFBO::GetInstance()->GetTexture();
 
+	/*Monk.*/
+	MeshBuilder::GetInstance()->GenerateOBJ("Head", "OBJ//MONK//Head.obj");
+	MeshBuilder::GetInstance()->GetMesh("Head")->textureID[0] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Body", "OBJ//MONK//Body.obj");
+	MeshBuilder::GetInstance()->GetMesh("Body")->textureID[0] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Left arm", "OBJ//MONK//Left arm.obj");
+	MeshBuilder::GetInstance()->GetMesh("Left arm")->textureID[0] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Right arm", "OBJ//MONK//Right arm.obj");
+	MeshBuilder::GetInstance()->GetMesh("Right arm")->textureID[0] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Left leg", "OBJ//MONK//Left leg.obj");
+	MeshBuilder::GetInstance()->GetMesh("Left leg")->textureID[0] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Right leg", "OBJ//MONK//Right leg.obj");
+	MeshBuilder::GetInstance()->GetMesh("Right leg")->textureID[0] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Gourd", "OBJ//MONK//Gourd.obj");
+	MeshBuilder::GetInstance()->GetMesh("Gourd")->textureID[0] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Talisman", "OBJ//MONK//Talisman.obj");
+	MeshBuilder::GetInstance()->GetMesh("Talisman")->textureID[0] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Weapon", "OBJ//MONK//Weapon.obj");
+	MeshBuilder::GetInstance()->GetMesh("Weapon")->textureID[0] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+	//MeshBuilder::GetInstance()->GenerateOBJ("MONK", "OBJ//MONK.obj");
+	//MeshBuilder::GetInstance()->GetMesh("MONK")->textureID[0] = LoadTGA("Image//MONK//bad tang_alphapart.tga");
+	//MeshBuilder::GetInstance()->GetMesh("MONK")->textureID[1] = LoadTGA("Image//MONK//bad tang_ao.tga");
+	//MeshBuilder::GetInstance()->GetMesh("MONK")->textureID[2] = LoadTGA("Image//MONK//bad tang_diffuse.tga");
+	//MeshBuilder::GetInstance()->GetMesh("MONK")->textureID[3] = LoadTGA("Image//MONK//bad tang_emissive.tga");
+	//MeshBuilder::GetInstance()->GetMesh("MONK")->textureID[4] = LoadTGA("Image//MONK//bad tang_height.tga");
+	//MeshBuilder::GetInstance()->GetMesh("MONK")->textureID[5] = LoadTGA("Image//MONK//bad tang_normal.tga");
+	//MeshBuilder::GetInstance()->GetMesh("MONK")->textureID[6] = LoadTGA("Image//MONK//bad tang_roughness.tga");
+	//MeshBuilder::GetInstance()->GetMesh("MONK")->textureID[7] = LoadTGA("Image//MONK//bad tang_spec-metallic.tga");
 }

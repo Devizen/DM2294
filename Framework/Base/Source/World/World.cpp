@@ -65,11 +65,13 @@ World::World()
 	:  windowHeight(0.f)
 	, windowWidth(0.f)
 	, loopCredits(0)
+	, rotateLeftLeg(0.f)
 {
 }
 
 World::World(SceneManager* _sceneMgr)
 	: loopCredits(0)
+	, rotateLeftLeg(0.f)
 {
 	_sceneMgr->AddScene("World", this);
 }
@@ -228,7 +230,7 @@ void World::Update(double dt)
 
 
 	/*Update adjuster values for positioning.*/
-	CAdjuster::GetInstance()->Update(dt);
+	//CAdjuster::GetInstance()->Update(dt);
 
 	/*Update Bullets.*/
 	CBullet_Manager::GetInstance()->Update(dt);
@@ -256,6 +258,20 @@ void World::Update(double dt)
 	//std::cout << "Target: " << camera->GetCameraTarget() << std::endl;
 	//std::cout << "Offset to Player: " << camera->GetOffsetToPlayer() << std::endl;
 	//std::cout << lights[0]->position << std::endl;
+	static int rotateLeftLegState = 0;
+
+	if (rotateLeftLegState == 0)
+	{
+		rotateLeftLeg += static_cast<float>(dt) * 50.f;
+		if (rotateLeftLeg >= 10.f)
+			rotateLeftLegState = 1;
+	}
+	else if (rotateLeftLegState == 1)
+	{
+		rotateLeftLeg -= static_cast<float>(dt) * 50.f;
+		if (rotateLeftLeg <= -10.f)
+			rotateLeftLegState = 0;
+	}
 }
 
 void World::Render()
@@ -399,7 +415,7 @@ void World::RenderPassMain(void)
 
 void World::RenderWorld()
 {
-	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 1);
+	//ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 1);
 
 	Mesh* modelMesh;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
@@ -440,12 +456,85 @@ void World::RenderWorld()
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();
 
-	modelMesh = MeshBuilder::GetInstance()->GetMesh("LIGHT_DEPTH_TEXTURE");
+	//modelMesh = MeshBuilder::GetInstance()->GetMesh("MONK");
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.f, 0.f, 20.f);
+	//modelStack.Scale(0.25f, 0.25f, 0.25f);
+	//RenderHelper::RenderMeshWithLight(modelMesh);
+	//modelStack.PopMatrix();
+
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("Head");
 	modelStack.PushMatrix();
-	modelStack.Translate(0.f, 50.f, 0.f);
-	modelStack.Scale(100.f, 100.f, 100.f);
+	modelStack.Translate(0.f, 0.f, 0.f);
+	modelStack.Scale(10.f, 10.f, 10.f);
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();
+
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("Body");
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.f, 0.f);
+	modelStack.Scale(10.f, 10.f, 10.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("Left arm");
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.f, 0.f);
+	modelStack.Scale(10.f, 10.f, 10.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("Right arm");
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.f, 0.f);
+	modelStack.Scale(10.f, 10.f, 10.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("Left leg");
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 12.3f, 0.f);
+	modelStack.Rotate(rotateLeftLeg, 1.f, 0.f, 0.f);
+	modelStack.Translate(0.f, -12.3f, 0.f);
+	modelStack.Scale(10.f, 10.f, 10.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+	CAdjuster::GetInstance()->SetSpeed(10.f);
+
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("Right leg");
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.f, 0.f);
+	modelStack.Scale(10.f, 10.f, 10.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("Gourd");
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.f, 0.f);
+	modelStack.Scale(10.f, 10.f, 10.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("Talisman");
+	modelStack.PushMatrix();
+	modelStack.Translate(0.f, 0.f, 0.f);
+	modelStack.Scale(10.f, 10.f, 10.f);
+	RenderHelper::RenderMesh(modelMesh);
+	modelStack.PopMatrix();
+
+	//modelMesh = MeshBuilder::GetInstance()->GetMesh("Weapon");
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.f, 0.f, 0.f);
+	//modelStack.Scale(1.f, 1.f, 1.f);
+	//RenderHelper::RenderMesh(modelMesh);
+	//modelStack.PopMatrix();
+
+	//modelMesh = MeshBuilder::GetInstance()->GetMesh("LIGHT_DEPTH_TEXTURE");
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0.f, 50.f, 0.f);
+	//modelStack.Scale(100.f, 100.f, 100.f);
+	//RenderHelper::RenderMesh(modelMesh);
+	//modelStack.PopMatrix();
 
 	//modelMesh = MeshBuilder::GetInstance()->GetMesh("BLACK");
 	//modelStack.PushMatrix();
@@ -470,7 +559,7 @@ void World::RenderWorld()
 
 	CEnemy_Manager::GetInstance()->Render();
 	CBullet_Manager::GetInstance()->Render();
-	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 0);
+	//ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 0);
 }
 
 void World::RenderTerrain(void)
