@@ -4,6 +4,7 @@
 #include "../Attributes.h"
 #include "Vector3.h"
 #include <string>
+#include <vector>
 #include <map>
 
 using std::string;
@@ -18,6 +19,32 @@ public:
 		MONSTER = 0,
 		HUMAN,
 		NONE
+	};
+	enum TRANSLATEAXIS
+	{
+		X = 0,
+		Y,
+		Z
+	};
+
+	struct TRANSFORM
+	{
+		/*To offset vector together with animation count.*/
+		unsigned count = 0;
+		string transform = "";
+		string axis = "";
+		string value = "";
+		string speed = "";
+		bool check = false;
+		//bool checkHead = false;
+		//bool checkBody = false;
+		//bool checkLeftArm = false;
+		//bool checkRightArm = false;
+		//bool checkLeftLeg = false;
+		//bool checkRightLeg = false;
+		//bool checkAccessoryOne = false;
+		//bool checkAccessoryTwo = false;
+		//bool checkAccessoryThree = false;
 	};
 
 	CEnemy();
@@ -68,6 +95,10 @@ public:
 	/*Get human model mesh.*/
 	std::map<string, Mesh*>& GetHumanModelMesh(void);
 
+	/*Function to translate model.*/
+	bool TranslateModel(TYPE _type, string _bodyPart, TRANSLATEAXIS _axis, float _value, float _speed, double _dt);
+	/*Reset the values in TRASFORM struct.*/
+	void ResetCheckTransform(std::string _bodyPart);
 	/*Render enemy.*/
 	void Render(void);
 
@@ -80,7 +111,14 @@ private:
 	float rotate;
 	Mesh* modelMesh;
 	std::map<string, Mesh*>humanModelMesh;
+	std::map<string, Vector3>translateHumanModel;
+	std::map<string, std::pair<TRANSFORM, std::vector<string>>>translate;
+	std::map<string, float>rotateHumanModel;
+	std::map<string, unsigned>translateHumanModelState;
+	std::map<string, unsigned>rotateHumanModelState;
 	bool activateBattle;
+
+	TRANSFORM checkTransform;
 
 	/*To check what type of enemy.*/
 	TYPE type;

@@ -58,6 +58,9 @@
     <Filter Include="Terrain">
       <UniqueIdentifier>{2e8e6733-2483-40ec-98b3-9b60b7903732}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{54f3b203-9ebe-4ce9-a8f3-1cbb1f22298a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -138,6 +141,9 @@
     <ClCompile Include="Source\Terrain\LoadHmap.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Battle_Editor.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -214,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="Source\Terrain\LoadHmap.h">
       <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Battle_Editor.h">
+      <Filter>Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

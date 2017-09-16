@@ -20,7 +20,6 @@
 #include "../DepthFBO.h"
 #include "../Collision/Collision.h"
 
-
 /*Rendering*/
 #include "RenderHelper.h"
 
@@ -56,6 +55,8 @@
 /*Terrain.*/
 #include "../Terrain/LoadHmap.h"
 
+/*Battle Animation Editor.*/
+#include "../Editor/Battle_Editor.h"
 //#include "vld.h"
 using namespace std;
 
@@ -115,12 +116,25 @@ void World::Init()
 	ShaderProgram::GetInstance()->currProg->UpdateInt("numLights", 1);
 	ShaderProgram::GetInstance()->currProg->UpdateInt("textEnabled", 0);
 
-	Color fogColor(0.5f, 0.5f, 0.5f); //Vec3 Color
+	Color fogColor(0.5f, 0.f, 0.f); //Vec3 Color
 	ShaderProgram::GetInstance()->currProg->UpdateVector3("fogParam.color", &fogColor.r);
-	ShaderProgram::GetInstance()->currProg->UpdateFloat("fogParam.start", 10);
-	ShaderProgram::GetInstance()->currProg->UpdateFloat("fogParam.end", 2000);
-	ShaderProgram::GetInstance()->currProg->UpdateFloat("fogParam.density", 0.005f);
-	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.type", 0);
+	ShaderProgram::GetInstance()->currProg->UpdateFloat("fogParam.start", 0);
+	ShaderProgram::GetInstance()->currProg->UpdateFloat("fogParam.end", 1000);
+	ShaderProgram::GetInstance()->currProg->UpdateFloat("fogParam.density", 0.002f);
+	/*
+	Fog Type 0
+	Slightly foggy.
+	Fog is between start and end.
+
+	Fog Type 1
+	Natural fog.
+	As it goes further from position, the fog will be thicker.
+
+	Fog Type 2
+	Denser among all 3 types of Fog.
+	Will look thicker at the further end.
+	*/
+	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.type", 1);
 	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 0);
 
 	// Create and attach the camera to the scene
@@ -150,7 +164,7 @@ void World::Init()
 	//theMouse = new CMouse();
 	//theMouse->Create(playerInfo);
 
-	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\INTENSE.ogg", true);
+	//CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\INTENSE.ogg", true);
 
 	loopCredits = 0;
 	player = new CPlayer();
@@ -242,42 +256,47 @@ void World::Update(double dt)
 	camera->SetCameraTarget(player->GetPosition());
 
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD9))
-		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y + (20.f * dt), lights[0]->position.z);
+		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y + (20.f * static_cast<float>(dt)), lights[0]->position.z);
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD7))
-		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y - (20.f * dt), lights[0]->position.z);
+		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y - (20.f * static_cast<float>(dt)), lights[0]->position.z);
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD8))
-		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z - (20.f * dt));
+		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z - (20.f * static_cast<float>(dt)));
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD2))
-		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z + (20.f * dt));
+		lights[0]->position.Set(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z + (20.f * static_cast<float>(dt)));
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD4))
-		lights[0]->position.Set(lights[0]->position.x - (20.f * dt), lights[0]->position.y, lights[0]->position.z);
+		lights[0]->position.Set(lights[0]->position.x - (20.f * static_cast<float>(dt)), lights[0]->position.y, lights[0]->position.z);
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_NUMPAD6))
-		lights[0]->position.Set(lights[0]->position.x + (20.f * dt), lights[0]->position.y, lights[0]->position.z);
+		lights[0]->position.Set(lights[0]->position.x + (20.f * static_cast<float>(dt)), lights[0]->position.y, lights[0]->position.z);
 
 	//std::cout << "Position: " << camera->GetCameraPos() << std::endl;
 	//std::cout << "Target: " << camera->GetCameraTarget() << std::endl;
 	//std::cout << "Offset to Player: " << camera->GetOffsetToPlayer() << std::endl;
 	//std::cout << lights[0]->position << std::endl;
-	static int rotateLeftLegState = 0;
+	//static int rotateLeftLegState = 0;
 
-	if (rotateLeftLegState == 0)
-	{
-		rotateLeftLeg += static_cast<float>(dt) * 50.f;
-		if (rotateLeftLeg >= 10.f)
-			rotateLeftLegState = 1;
-	}
-	else if (rotateLeftLegState == 1)
-	{
-		rotateLeftLeg -= static_cast<float>(dt) * 50.f;
-		if (rotateLeftLeg <= -10.f)
-			rotateLeftLegState = 0;
-	}
+	//if (rotateLeftLegState == 0)
+	//{
+	//	rotateLeftLeg += static_cast<float>(dt) * 50.f;
+	//	if (rotateLeftLeg >= 10.f)
+	//		rotateLeftLegState = 1;
+	//}
+	//else if (rotateLeftLegState == 1)
+	//{
+	//	rotateLeftLeg -= static_cast<float>(dt) * 50.f;
+	//	if (rotateLeftLeg <= -10.f)
+	//		rotateLeftLegState = 0;
+	//}
+
+	if (CBattle_Editor::GetInstance()->GetState())
+		CBattle_Editor::GetInstance()->Update(dt);
 }
 
 void World::Render()
 {
 	RenderPassGPass();
+	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 1);
 	RenderPassMain();
+	ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 0);
 }
 
 
@@ -317,8 +336,8 @@ void World::RenderPassGPass(void)
 
 	DepthFBO::GetInstance()->m_lightDepthView.SetToLookAt(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z, 0, 0, 0, 0, 1, 0);
 
-
-	RenderWorld();
+	if (!player->GetBattle()->GetBattleState())
+		RenderWorld();
 }
 
 void World::RenderPassMain(void)
@@ -379,7 +398,8 @@ void World::RenderPassMain(void)
 
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
 
-	RenderWorld();
+	if (!player->GetBattle()->GetBattleState())
+		RenderWorld();
 
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
@@ -397,7 +417,11 @@ void World::RenderPassMain(void)
 	//RenderHelper::RenderMesh(modelMesh);
 	//modelStack.PopMatrix();
 
-	player->GetBattle()->Render();
+	/*Render Battle Animation Editor if state is true, otherwise, render the battle scene.*/
+	if (CBattle_Editor::GetInstance()->GetState())
+		CBattle_Editor::GetInstance()->Render();
+	else
+		player->GetBattle()->Render();
 
 	/*Render text display.*/
 	if (Text_Manager::GetInstance()->returnTextList().size() > 0)
@@ -415,8 +439,6 @@ void World::RenderPassMain(void)
 
 void World::RenderWorld()
 {
-	//ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 1);
-
 	Mesh* modelMesh;
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	RenderTerrain();
@@ -463,7 +485,7 @@ void World::RenderWorld()
 	//RenderHelper::RenderMeshWithLight(modelMesh);
 	//modelStack.PopMatrix();
 
-	modelMesh = MeshBuilder::GetInstance()->GetMesh("Head");
+	/*modelMesh = MeshBuilder::GetInstance()->GetMesh("Head");
 	modelStack.PushMatrix();
 	modelStack.Translate(0.f, 0.f, 0.f);
 	modelStack.Scale(10.f, 10.f, 10.f);
@@ -520,7 +542,7 @@ void World::RenderWorld()
 	modelStack.Translate(0.f, 0.f, 0.f);
 	modelStack.Scale(10.f, 10.f, 10.f);
 	RenderHelper::RenderMesh(modelMesh);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//modelMesh = MeshBuilder::GetInstance()->GetMesh("Weapon");
 	//modelStack.PushMatrix();
@@ -559,7 +581,6 @@ void World::RenderWorld()
 
 	CEnemy_Manager::GetInstance()->Render();
 	CBullet_Manager::GetInstance()->Render();
-	//ShaderProgram::GetInstance()->currProg->UpdateInt("fogParam.enabled", 0);
 }
 
 void World::RenderTerrain(void)

@@ -19,6 +19,7 @@
 #include "DepthFBO.h"
 #include "Battle\Bullet_Manager.h"
 #include "Adjuster\Adjuster.h"
+#include "Editor\Battle_Editor.h"
 //Include GLEW
 #include <GL/glew.h>
 
@@ -253,6 +254,7 @@ void Application::Exit()
 	CAdjuster::GetInstance()->DestroyAll();
 	KeyboardController::GetInstance()->DestroyAll();
 	MouseController::GetInstance()->DestroyAll();
+	CBattle_Editor::GetInstance()->DestroyAll();
 	//CCinematic::GetInstance()->Destroy();
 	//ParticleManager::GetInstance()->Destroy();
 	//SceneManager::GetInstance()->Destroy();

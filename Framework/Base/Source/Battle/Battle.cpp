@@ -14,6 +14,7 @@
 
 /*Debugging purpose.*/
 #include <iostream>
+//#include "..\Editor\Battle\Battle.h"
 
 using std::cout;
 using std::endl;

@@ -23,6 +23,7 @@
     <ClCompile Include="Source\Debugger\Debugger.cpp" />
     <ClCompile Include="Source\Debugger\Debug_Message.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
+    <ClCompile Include="Source\Editor\Battle_Editor.cpp" />
     <ClCompile Include="Source\Enemy\Enemy.cpp" />
     <ClCompile Include="Source\Enemy\Enemy_Manager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="Source\Debugger\Debugger.h" />
     <ClInclude Include="Source\Debugger\Debug_Message.h" />
     <ClInclude Include="Source\DepthFBO.h" />
+    <ClInclude Include="Source\Editor\Battle_Editor.h" />
     <ClInclude Include="Source\Enemy\Enemy.h" />
     <ClInclude Include="Source\Enemy\Enemy_Manager.h" />
     <ClInclude Include="Source\FPSCamera.h" />
