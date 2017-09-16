@@ -1,0 +1,2 @@
+translate,z,10,50
+translate,z,-10,50

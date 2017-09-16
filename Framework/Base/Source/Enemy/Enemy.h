@@ -106,6 +106,9 @@ public:
 
 	/*Update enemy.*/
 	void Update(double dt);
+
+	/*Load animations from text files.*/
+	void Load(CEnemy* _enemy);
 private:
 	string name;
 	Vector3 position;

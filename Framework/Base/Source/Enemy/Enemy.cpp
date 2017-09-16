@@ -13,6 +13,9 @@
 /*Debugging purpose.*/
 #include <iostream>
 
+/*Loading text files.*/
+#include <fstream>
+
 using std::cout;
 using std::endl;
 
@@ -144,30 +147,8 @@ CEnemy::CEnemy(std::string _name,
 	/*Add the enemy into the Enemy Manager.*/
 	CEnemy_Manager::GetInstance()->AddEnemy(this);
 
-	/*Testing on string.*/
-	translate["HEAD"].second.push_back("translate,z,10,50");
-	translate["HEAD"].second.push_back("translate,z,-10,50");
-
-	translate["BODY"].second.push_back("translate,z,10,50");
-	translate["BODY"].second.push_back("translate,z,-10,50");
-
-	translate["LEFTARM"].second.push_back("translate,z,10,50");
-	translate["LEFTARM"].second.push_back("translate,z,-10,50");
-
-	translate["RIGHTARM"].second.push_back("translate,z,10,50");
-	translate["RIGHTARM"].second.push_back("translate,z,-10,50");
-
-	translate["LEFTLEG"].second.push_back("translate,z,10,50");
-	translate["LEFTLEG"].second.push_back("translate,z,-10,50");
-
-	translate["RIGHTLEG"].second.push_back("translate,z,10,50");
-	translate["RIGHTLEG"].second.push_back("translate,z,-10,50");
-
-	translate["ACCESSORYONE"].second.push_back("translate,z,10,50");
-	translate["ACCESSORYONE"].second.push_back("translate,z,-10,50");
-
-	translate["ACCESSORYTWO"].second.push_back("translate,z,10,50");
-	translate["ACCESSORYTWO"].second.push_back("translate,z,-10,50");
+	/*Load animations.*/
+	Load(this);
 }
 
 CEnemy::~CEnemy()
@@ -507,6 +488,79 @@ void CEnemy::Update(double dt)
 			else if (it->first == "ACCESSORYTHREE")
 				UpdateAnimation("ACCESSORYTHREE", dt);
 		}
+	}
+}
+
+void CEnemy::Load(CEnemy * _enemy)
+{
+	std::string content = "";
+	std::string filePath = "Animation//";
+	filePath += _enemy->GetName() + "//";
+
+	if (_enemy->GetEnemyType() == HUMAN)
+	{
+		std::ifstream path(filePath + "HEAD.txt");
+		if (path)
+			while (std::getline(path, content))
+				translate["HEAD"].second.push_back(content);
+		path.clear();
+		path.close();
+
+		path.open(filePath + "BODY.txt");
+		if (path)
+			while (std::getline(path, content))
+				translate["BODY"].second.push_back(content);
+		path.clear();
+		path.close();
+
+		path.open(filePath + "LEFTARM.txt");
+		if (path)
+			while (std::getline(path, content))
+				translate["LEFTARM"].second.push_back(content);
+		path.clear();
+		path.close();
+
+		path.open(filePath + "RIGHTARM.txt");
+		if (path)
+			while (std::getline(path, content))
+				translate["RIGHTARM"].second.push_back(content);
+		path.clear();
+		path.close();
+
+		path.open(filePath + "LEFTLEG.txt");
+		if (path)
+			while (std::getline(path, content))
+				translate["LEFTLEG"].second.push_back(content);
+		path.clear();
+		path.close();
+
+		path.open(filePath + "RIGHTLEG.txt");
+		if (path)
+			while (std::getline(path, content))
+				translate["RIGHTLEG"].second.push_back(content);
+		path.clear();
+		path.close();
+
+		path.open(filePath + "ACCESSORYONE.txt");
+		if (path)
+			while (std::getline(path, content))
+				translate["ACCESSORYONE"].second.push_back(content);
+		path.clear();
+		path.close();
+
+		path.open(filePath + "ACCESSORYTWO.txt");
+		if (path)
+			while (std::getline(path, content))
+				translate["ACCESSORYTWO"].second.push_back(content);
+		path.clear();
+		path.close();
+
+		path.open(filePath + "ACCESSORYTHREE.txt");
+		if (path)
+			while (std::getline(path, content))
+				translate["ACCESSORYTHREE"].second.push_back(content);
+		path.clear();
+		path.close();
 	}
 }
 
