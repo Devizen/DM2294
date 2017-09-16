@@ -147,6 +147,27 @@ CEnemy::CEnemy(std::string _name,
 	/*Testing on string.*/
 	translate["HEAD"].second.push_back("translate,z,10,50");
 	translate["HEAD"].second.push_back("translate,z,-10,50");
+
+	translate["BODY"].second.push_back("translate,z,10,50");
+	translate["BODY"].second.push_back("translate,z,-10,50");
+
+	translate["LEFTARM"].second.push_back("translate,z,10,50");
+	translate["LEFTARM"].second.push_back("translate,z,-10,50");
+
+	translate["RIGHTARM"].second.push_back("translate,z,10,50");
+	translate["RIGHTARM"].second.push_back("translate,z,-10,50");
+
+	translate["LEFTLEG"].second.push_back("translate,z,10,50");
+	translate["LEFTLEG"].second.push_back("translate,z,-10,50");
+
+	translate["RIGHTLEG"].second.push_back("translate,z,10,50");
+	translate["RIGHTLEG"].second.push_back("translate,z,-10,50");
+
+	translate["ACCESSORYONE"].second.push_back("translate,z,10,50");
+	translate["ACCESSORYONE"].second.push_back("translate,z,-10,50");
+
+	translate["ACCESSORYTWO"].second.push_back("translate,z,10,50");
+	translate["ACCESSORYTWO"].second.push_back("translate,z,-10,50");
 }
 
 CEnemy::~CEnemy()
@@ -427,64 +448,14 @@ void CEnemy::Update(double dt)
 			if (it->first == "HEAD")
 				UpdateAnimation("HEAD", dt);
 			else if (it->first == "BODY")
-			{
-				if (translateHumanModelState["BODY"] == 0)
-				{
-					translateHumanModel["BODY"].z += static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["BODY"].z >= 10.f)
-						translateHumanModelState["BODY"] = 1;
-				}
-				else if (translateHumanModelState["BODY"] == 1)
-				{
-					translateHumanModel["BODY"].z -= static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["BODY"].z <= -10.f)
-						translateHumanModelState["BODY"] = 0;
-				}
-			}
+				UpdateAnimation("BODY", dt);
 			else if (it->first == "LEFTARM")
-			{
-				if (translateHumanModelState["LEFTARM"] == 0)
-				{
-					translateHumanModel["LEFTARM"].z += static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["LEFTARM"].z >= 10.f)
-						translateHumanModelState["LEFTARM"] = 1;
-				}
-				else if (translateHumanModelState["LEFTARM"] == 1)
-				{
-					translateHumanModel["LEFTARM"].z -= static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["LEFTARM"].z <= -10.f)
-						translateHumanModelState["LEFTARM"] = 0;
-				}
-			}
+				UpdateAnimation("LEFTARM", dt);
 			else if (it->first == "RIGHTARM")
-			{
-				if (translateHumanModelState["RIGHTARM"] == 0)
-				{
-					translateHumanModel["RIGHTARM"].z += static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["RIGHTARM"].z >= 10.f)
-						translateHumanModelState["RIGHTARM"] = 1;
-				}
-				else if (translateHumanModelState["RIGHTARM"] == 1)
-				{
-					translateHumanModel["RIGHTARM"].z -= static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["RIGHTARM"].z <= -10.f)
-						translateHumanModelState["RIGHTARM"] = 0;
-				}
-			}
+				UpdateAnimation("RIGHTARM", dt);
 			else if (it->first == "LEFTLEG")
 			{
-				if (translateHumanModelState["LEFTLEG"] == 0)
-				{
-					translateHumanModel["LEFTLEG"].z += static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["LEFTLEG"].z >= 10.f)
-						translateHumanModelState["LEFTLEG"] = 1;
-				}
-				else if (translateHumanModelState["LEFTLEG"] == 1)
-				{
-					translateHumanModel["LEFTLEG"].z -= static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["LEFTLEG"].z <= -10.f)
-						translateHumanModelState["LEFTLEG"] = 0;
-				}
+				UpdateAnimation("LEFTLEG", dt);
 
 				if (rotateHumanModelState["LEFTLEG"] == 0)
 				{
@@ -501,19 +472,7 @@ void CEnemy::Update(double dt)
 			}
 			else if (it->first == "RIGHTLEG")
 			{
-				if (translateHumanModelState["RIGHTLEG"] == 0)
-				{
-					translateHumanModel["RIGHTLEG"].z += static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["RIGHTLEG"].z >= 10.f)
-						translateHumanModelState["RIGHTLEG"] = 1;
-				}
-				else if (translateHumanModelState["RIGHTLEG"] == 1)
-				{
-					translateHumanModel["RIGHTLEG"].z -= static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["RIGHTLEG"].z <= -10.f)
-						translateHumanModelState["RIGHTLEG"] = 0;
-				}
-
+				UpdateAnimation("RIGHTLEG", dt);
 				if (rotateHumanModelState["RIGHTLEG"] == 0)
 				{
 					rotateHumanModel["RIGHTLEG"] -= static_cast<float>(dt) * 50.f;
@@ -528,36 +487,10 @@ void CEnemy::Update(double dt)
 				}
 			}
 			else if (it->first == "ACCESSORYONE")
-			{
-
-				if (translateHumanModelState["ACCESSORYONE"] == 0)
-				{
-					translateHumanModel["ACCESSORYONE"].z += static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["ACCESSORYONE"].z >= 10.f)
-						translateHumanModelState["ACCESSORYONE"] = 1;
-				}
-				else if (translateHumanModelState["ACCESSORYONE"] == 1)
-				{
-					translateHumanModel["ACCESSORYONE"].z -= static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["ACCESSORYONE"].z <= -10.f)
-						translateHumanModelState["ACCESSORYONE"] = 0;
-				}
-			}
+				UpdateAnimation("ACCESSORYONE", dt);
 			else if (it->first == "ACCESSORYTWO")
 			{
-				if (translateHumanModelState["ACCESSORYTWO"] == 0)
-				{
-					translateHumanModel["ACCESSORYTWO"].z += static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["ACCESSORYTWO"].z >= 10.f)
-						translateHumanModelState["ACCESSORYTWO"] = 1;
-				}
-				else if (translateHumanModelState["ACCESSORYTWO"] == 1)
-				{
-					translateHumanModel["ACCESSORYTWO"].z -= static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["ACCESSORYTWO"].z <= -10.f)
-						translateHumanModelState["ACCESSORYTWO"] = 0;
-				}
-
+				UpdateAnimation("ACCESSORYTWO", dt);
 				if (rotateHumanModelState["ACCESSORYTWO"] == 0)
 				{
 					rotateHumanModel["ACCESSORYTWO"] -= static_cast<float>(dt) * 50.f;
@@ -572,20 +505,7 @@ void CEnemy::Update(double dt)
 				}
 			}
 			else if (it->first == "ACCESSORYTHREE")
-			{
-				if (translateHumanModelState["ACCESSORYTHREE"] == 0)
-				{
-					translateHumanModel["ACCESSORYTHREE"].z += static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["ACCESSORYTHREE"].z >= 10.f)
-						translateHumanModelState["ACCESSORYTHREE"] = 1;
-				}
-				else if (translateHumanModelState["ACCESSORYTHREE"] == 1)
-				{
-					translateHumanModel["ACCESSORYTHREE"].z -= static_cast<float>(dt) * 50.f;
-					if (translateHumanModel["ACCESSORYTHREE"].z <= -10.f)
-						translateHumanModelState["ACCESSORYTHREE"] = 0;
-				}
-			}
+				UpdateAnimation("ACCESSORYTHREE", dt);
 		}
 	}
 }
