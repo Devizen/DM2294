@@ -95,7 +95,9 @@ public:
 	/*Get human model mesh.*/
 	std::map<string, Mesh*>& GetHumanModelMesh(void);
 
-	/*Function to translate model.*/
+	/*Update animation based on body parts.*/
+	void UpdateAnimation(string _bodyPart, double dt);
+	/*For translating model based on different body parts.*/
 	bool TranslateModel(TYPE _type, string _bodyPart, TRANSLATEAXIS _axis, float _value, float _speed, double _dt);
 	/*Reset the values in TRASFORM struct.*/
 	void ResetCheckTransform(std::string _bodyPart);

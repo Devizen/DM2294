@@ -232,6 +232,69 @@ std::map<string, Mesh*>& CEnemy::GetHumanModelMesh(void)
 	return humanModelMesh;
 }
 
+void CEnemy::UpdateAnimation(string _bodyPart, double dt)
+{
+	/*Real time loop control. Only check when the values differ.*/
+	if (!translate[_bodyPart].first.check)
+	{
+		/*Used for going to next word.*/
+		unsigned wordCount = 0;
+
+		for (unsigned i = 0; i < translate[_bodyPart].second[translate[_bodyPart].first.count].size(); ++i)
+		{
+			/*Skip to next word when , is found.*/
+			if (translate[_bodyPart].second[translate[_bodyPart].first.count][i] == ',')
+			{
+				++wordCount;
+				continue;
+			}
+
+			/*First word is for checking whether the transformation is translate or rotate.*/
+			if (wordCount == 0)
+				translate[_bodyPart].first.transform += translate[_bodyPart].second[translate[_bodyPart].first.count][i];
+
+			/*Second word is for checking which axis to transform.*/
+			else if (wordCount == 1)
+				translate[_bodyPart].first.axis += translate[_bodyPart].second[translate[_bodyPart].first.count][i];
+
+			/*Third word is for transforming to a certain value.*/
+			else if (wordCount == 2)
+				translate[_bodyPart].first.value += translate[_bodyPart].second[translate[_bodyPart].first.count][i];
+
+			/*Fourth word is for the speed of transformation.*/
+			else if (wordCount == 3)
+				translate[_bodyPart].first.speed += translate[_bodyPart].second[translate[_bodyPart].first.count][i];
+		}
+		/*Conclude that all the values have been checked.*/
+		translate[_bodyPart].first.check = true;
+	}
+	/*Assign a TRANSLATEAXIS value to use for TranslateModel function.*/
+	TRANSLATEAXIS axis;
+	if (translate[_bodyPart].first.axis == "x")
+		axis = X;
+	else if (translate[_bodyPart].first.axis == "y")
+		axis = Y;
+	else
+		axis = Z;
+
+	/*Keep translating the model until the value is met.*/
+	if (TranslateModel(type, _bodyPart, axis, std::stof(translate[_bodyPart].first.value), std::stof(translate[_bodyPart].first.speed), dt))
+		/*Revert back to first animation if the animation count is at the last animation.*/
+		if (translate[_bodyPart].second.size() == translate[_bodyPart].first.count + 1)
+		{
+			translate[_bodyPart].first.count = 0;
+			/*Start checking again.*/
+			ResetCheckTransform(_bodyPart);
+		}
+	/*Go to next animation if the animation count is not the last animation.*/
+		else
+		{
+			++translate[_bodyPart].first.count;
+			/*Start checking again.*/
+			ResetCheckTransform(_bodyPart);
+		}
+}
+
 bool CEnemy::TranslateModel(TYPE _type, string _bodyPart, TRANSLATEAXIS _axis, float _value, float _speed, double _dt)
 {
 	float dt = static_cast<float>(_dt);
@@ -362,67 +425,7 @@ void CEnemy::Update(double dt)
 
 			*/
 			if (it->first == "HEAD")
-			{
-				/*Real time loop control. Only check when the values differ.*/
-				if (!translate["HEAD"].first.check)
-				{
-					/*Used for going to next word.*/
-					unsigned wordCount = 0;
-
-					for (unsigned i = 0; i < translate["HEAD"].second[translate["HEAD"].first.count].size(); ++i)
-					{
-						/*Skip to next word when , is found.*/
-						if (translate["HEAD"].second[translate["HEAD"].first.count][i] == ',')
-						{
-							++wordCount;
-							continue;
-						}
-
-						/*First word is for checking whether the transformation is translate or rotate.*/
-						if (wordCount == 0)
-							translate["HEAD"].first.transform += translate["HEAD"].second[translate["HEAD"].first.count][i];
-
-						/*Second word is for checking which axis to transform.*/
-						else if (wordCount == 1)
-							translate["HEAD"].first.axis += translate["HEAD"].second[translate["HEAD"].first.count][i];
-
-						/*Third word is for transforming to a certain value.*/
-						else if (wordCount == 2)
-							translate["HEAD"].first.value += translate["HEAD"].second[translate["HEAD"].first.count][i];
-
-						/*Fourth word is for the speed of transformation.*/
-						else if (wordCount == 3)
-							translate["HEAD"].first.speed += translate["HEAD"].second[translate["HEAD"].first.count][i];
-					}
-					/*Conclude that all the values have been checked.*/
-					translate["HEAD"].first.check = true;
-				}
-				/*Assign a TRANSLATEAXIS value to use for TranslateModel function.*/
-				TRANSLATEAXIS axis;
-				if (translate["HEAD"].first.axis == "x")
-					axis = X;
-				else if (translate["HEAD"].first.axis == "y")
-					axis = Y;
-				else
-					axis = Z;
-
-				/*Keep translating the model until the value is met.*/
-				if (TranslateModel(type, "HEAD", axis, std::stof(translate["HEAD"].first.value), std::stof(translate["HEAD"].first.speed), dt))
-					/*Revert back to first animation if the animation count is at the last animation.*/
-					if (translate["HEAD"].second.size() == translate["HEAD"].first.count + 1)
-					{
-						translate["HEAD"].first.count = 0;
-						/*Start checking again.*/
-						ResetCheckTransform("HEAD");
-					}
-					/*Go to next animation if the animation count is not the last animation.*/
-					else
-					{
-						++translate["HEAD"].first.count;
-						/*Start checking again.*/
-						ResetCheckTransform("HEAD");
-					}
-			}
+				UpdateAnimation("HEAD", dt);
 			else if (it->first == "BODY")
 			{
 				if (translateHumanModelState["BODY"] == 0)
