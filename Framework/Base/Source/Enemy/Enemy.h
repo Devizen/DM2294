@@ -7,8 +7,6 @@
 #include <vector>
 #include <map>
 
-using std::string;
-
 class Mesh;
 
 class CEnemy : public CAttributes
@@ -31,10 +29,11 @@ public:
 	{
 		/*To offset vector together with animation count.*/
 		unsigned count = 0;
-		string transform = "";
-		string axis = "";
-		string value = "";
-		string speed = "";
+		std::string transform = "";
+		std::string axis = "";
+		std::string value = "";
+		std::string speed = "";
+		TRANSLATEAXIS eAxis;
 		bool check = false;
 		//bool checkHead = false;
 		//bool checkBody = false;
@@ -64,13 +63,13 @@ public:
 	~CEnemy();
 
 	/*Set name for enemy.*/
-	void SetName(string _name);
+	void SetName(std::string _name);
 	/*Set position for enemy.*/
 	void SetPosition(Vector3 _position);
 	/*Set default position for enemy.*/
 	void SetDefaultPosition(Vector3 _defaultPosition);
 	/*Set model mesh for enemy.*/
-	void SetModelMesh(string _meshName);
+	void SetModelMesh(std::string _meshName);
 	/*Set activeBattle to trigger battle event.*/
 	void SetBattleMode(bool _activeBattle);
 	/*Set enemy type.*/
@@ -79,7 +78,7 @@ public:
 	void SetHealthBarPosition(float _healthBarPosition);
 
 	/*Get the name.*/
-	string GetName(void) const;
+	std::string GetName(void) const;
 	/*Get the position.*/
 	Vector3 GetPosition(void) const;
 	/*Get the default position.*/
@@ -93,16 +92,18 @@ public:
 	/*Get health bar position for battle scene.*/
 	float GetHealthBarPosition(void);
 	/*Get human model mesh.*/
-	std::map<string, Mesh*>& GetHumanModelMesh(void);
+	std::map<std::string, Mesh*>& GetHumanModelMesh(void);
 
 	/*Update animation based on body parts.*/
-	void UpdateAnimation(string _bodyPart, double dt);
+	void UpdateAnimation(std::string _bodyPart, double dt);
 	/*For translating model based on different body parts.*/
-	bool TranslateModel(TYPE _type, string _bodyPart, TRANSLATEAXIS _axis, float _value, float _speed, double _dt);
+	bool TranslateModel(TYPE _type, std::string _bodyPart, TRANSLATEAXIS _axis, float _value, float _speed, double _dt);
 	/*Reset the values in TRASFORM struct.*/
 	void ResetCheckTransform(std::string _bodyPart);
 	/*Render enemy.*/
 	void Render(void);
+	/*Render individual body parts to prevent delay.*/
+	void Render(std::string _bodyPart);
 
 	/*Update enemy.*/
 	void Update(double dt);
@@ -110,17 +111,19 @@ public:
 	/*Load animations from text files.*/
 	void Load(CEnemy* _enemy);
 private:
-	string name;
+	std::string name;
 	Vector3 position;
 	Vector3 defaultPosition;
+	Vector3 minAABB;
+	Vector3 maxAABB;
 	float rotate;
 	Mesh* modelMesh;
-	std::map<string, Mesh*>humanModelMesh;
-	std::map<string, Vector3>translateHumanModel;
-	std::map<string, std::pair<TRANSFORM, std::vector<string>>>translate;
-	std::map<string, float>rotateHumanModel;
-	std::map<string, unsigned>translateHumanModelState;
-	std::map<string, unsigned>rotateHumanModelState;
+	std::map<std::string, Mesh*>humanModelMesh;
+	std::map<std::string, Vector3>translateHumanModel;
+	std::map<std::string, std::pair<TRANSFORM, std::vector<std::string>>>translate;
+	std::map<std::string, float>rotateHumanModel;
+	std::map<std::string, unsigned>translateHumanModelState;
+	std::map<std::string, unsigned>rotateHumanModelState;
 	bool activateBattle;
 
 	TRANSFORM checkTransform;
@@ -135,23 +138,23 @@ protected:
 
 namespace Create
 {
-	CEnemy* Enemy(const string& _meshName,
+	CEnemy* Enemy(const std::string& _meshName,
 		const Vector3& _position = Vector3(0.f, 0.f, 0.f));
 }
 
 namespace Create
 {
-	CEnemy* Human(const string& _name,
-		const string& _head,
-		const string& _body,
-		const string& _leftArm,
-		const string& _rightArm,
-		const string& _leftLeg,
-		const string& _rightLeg,
+	CEnemy* Human(const std::string& _name,
+		const std::string& _head,
+		const std::string& _body,
+		const std::string& _leftArm,
+		const std::string& _rightArm,
+		const std::string& _leftLeg,
+		const std::string& _rightLeg,
 		const Vector3& _position = Vector3(0.f, 0.f, 0.f),
-		const string& _accessoryOne = "",
-		const string& _accessoryTwo = "",
-		const string& _accessoryThree = "");
+		const std::string& _accessoryOne = "",
+		const std::string& _accessoryTwo = "",
+		const std::string& _accessoryThree = "");
 }
 
 #endif

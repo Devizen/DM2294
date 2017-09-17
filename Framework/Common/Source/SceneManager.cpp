@@ -271,6 +271,8 @@ void SceneManager::InitShader(void)
 	MeshBuilder::GetInstance()->GenerateCube("ALLY", Color(0.f, 0.0f, 1.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("BLACK", Color(0.f, 0.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("PATH", Color(0.f, 1.0f, 0.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("AABB", Color(1.f, 1.f, 1.f), 1.f);
+	//MeshBuilder::GetInstance()->GetMesh("AABB")->textureID[0] = LoadTGA("Image//TRANS_QUAD.tga");
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
 

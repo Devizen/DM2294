@@ -16,6 +16,14 @@
 /*Loading text files.*/
 #include <fstream>
 
+/*Reading terrain height.*/
+#include "../Terrain/LoadHmap.h"
+/*To access vector that consists height map.*/
+#include "SceneManager.h"
+
+/*To adjust AABB collision box.*/
+#include "../Adjuster/Adjuster.h"
+
 using std::cout;
 using std::endl;
 
@@ -62,6 +70,9 @@ CEnemy::CEnemy(std::string _name,
 {
 	name = _name;
 
+	/*Set visual AABB box.*/
+	modelMesh = MeshBuilder::GetInstance()->GetMesh("AABB");
+
 	/*Initialise model.*/
 	humanModelMesh["HEAD"] = _head;
 	humanModelMesh["BODY"] = _body;
@@ -77,18 +88,30 @@ CEnemy::CEnemy(std::string _name,
 		humanModelMesh["ACCESSORYTHREE"] = _accessoryThree;
 
 	/*Initialise translation for body parts.*/
-	translateHumanModel["HEAD"] = Vector3(0.f, 0.f, 0.f);
-	translateHumanModel["BODY"] = Vector3(0.f, 0.f, 0.f);
-	translateHumanModel["LEFTARM"] = Vector3(0.f, 0.f, 0.f);
-	translateHumanModel["RIGHTARM"] = Vector3(0.f, 0.f, 0.f);
-	translateHumanModel["LEFTLEG"] = Vector3(0.f, 0.f, 0.f);
-	translateHumanModel["RIGHTLEG"] = Vector3(0.f, 0.f, 0.f);
+	translateHumanModel["HEAD"] = _position;
+	translateHumanModel["BODY"] = _position;
+	translateHumanModel["LEFTARM"] = _position;
+	translateHumanModel["RIGHTARM"] = _position;
+	translateHumanModel["LEFTLEG"] = _position;
+	translateHumanModel["RIGHTLEG"] = _position;
 	if (_accessoryOne != nullptr)
-		translateHumanModel["ACCESSORYONE"] = Vector3(0.f, 0.f, 0.f);
+		translateHumanModel["ACCESSORYONE"] = _position;
 	if (_accessoryTwo != nullptr)
-		translateHumanModel["ACCESSORYTWO"] = Vector3(0.f, 0.f, 0.f);
+		translateHumanModel["ACCESSORYTWO"] = _position;
 	if (_accessoryThree != nullptr)
-		translateHumanModel["ACCESSORYTHREE"] = Vector3(0.f, 0.f, 0.f);
+		translateHumanModel["ACCESSORYTHREE"] = _position;
+	//translateHumanModel["HEAD"] = Vector3(0.f, 0.f, 0.f);
+	//translateHumanModel["BODY"] = Vector3(0.f, 0.f, 0.f);
+	//translateHumanModel["LEFTARM"] = Vector3(0.f, 0.f, 0.f);
+	//translateHumanModel["RIGHTARM"] = Vector3(0.f, 0.f, 0.f);
+	//translateHumanModel["LEFTLEG"] = Vector3(0.f, 0.f, 0.f);
+	//translateHumanModel["RIGHTLEG"] = Vector3(0.f, 0.f, 0.f);
+	//if (_accessoryOne != nullptr)
+	//	translateHumanModel["ACCESSORYONE"] = Vector3(0.f, 0.f, 0.f);
+	//if (_accessoryTwo != nullptr)
+	//	translateHumanModel["ACCESSORYTWO"] = Vector3(0.f, 0.f, 0.f);
+	//if (_accessoryThree != nullptr)
+	//	translateHumanModel["ACCESSORYTHREE"] = Vector3(0.f, 0.f, 0.f);
 
 	/*Initialise rotation for body parts.*/
 	rotateHumanModel["HEAD"] = 0.f;
@@ -236,6 +259,10 @@ std::map<string, Mesh*>& CEnemy::GetHumanModelMesh(void)
 
 void CEnemy::UpdateAnimation(string _bodyPart, double dt)
 {
+	/*Prevent program from crashing when the body part is not used.*/
+	if (humanModelMesh[_bodyPart] == nullptr)
+		return;
+
 	/*Real time loop control. Only check when the values differ.*/
 	if (!translate[_bodyPart].first.check)
 	{
@@ -271,16 +298,16 @@ void CEnemy::UpdateAnimation(string _bodyPart, double dt)
 		translate[_bodyPart].first.check = true;
 	}
 	/*Assign a TRANSLATEAXIS value to use for TranslateModel function.*/
-	TRANSLATEAXIS axis;
+	//TRANSLATEAXIS axis;
 	if (translate[_bodyPart].first.axis == "x")
-		axis = X;
+		translate[_bodyPart].first.eAxis = X;
 	else if (translate[_bodyPart].first.axis == "y")
-		axis = Y;
+		translate[_bodyPart].first.eAxis = Y;
 	else
-		axis = Z;
+		translate[_bodyPart].first.eAxis = Z;
 
 	/*Keep translating the model until the value is met.*/
-	if (TranslateModel(type, _bodyPart, axis, std::stof(translate[_bodyPart].first.value), std::stof(translate[_bodyPart].first.speed), dt))
+	if (TranslateModel(type, _bodyPart, translate[_bodyPart].first.eAxis, std::stof(translate[_bodyPart].first.value), std::stof(translate[_bodyPart].first.speed), dt))
 		/*Revert back to first animation if the animation count is at the last animation.*/
 		if (translate[_bodyPart].second.size() == translate[_bodyPart].first.count + 1)
 		{
@@ -365,25 +392,51 @@ void CEnemy::Render(void)
 	if (type == CEnemy::HUMAN)
 	{
 		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		Render("HEAD");
+		Render("BODY");
+		Render("LEFTARM");
+		Render("RIGHTARM");
+		Render("LEFTLEG");
+		Render("RIGHTLEG");
+		Render("ACCESSORYONE");
+		Render("ACCESSORYTWO");
+		Render("ACCESSORYTHREE");
+	
+		//for (std::map<string, Mesh*>::iterator it = humanModelMesh.begin(); it != humanModelMesh.end(); ++it)
+		//{
+		//	/*Prevent program from crashing when the body part is not used.*/
+		//	if (it->second == nullptr)
+		//		continue;
 
-		int offsetWithMesh = 0;
-		for (std::map<string, Mesh*>::iterator it = humanModelMesh.begin(); it != humanModelMesh.end(); ++it)
+		//	float offsetLeg = 0.f;
+		//	if (it->first == "LEFTLEG" || it->first == "RIGHTLEG")
+		//		offsetLeg = 12.3f;
+
+		//	modelStack.PushMatrix();
+		//	modelStack.Translate(position.x + translateHumanModel[it->first].x, 
+		//		position.y + translateHumanModel[it->first].y + offsetLeg, 
+		//		position.z + translateHumanModel[it->first].z);
+
+		//	modelStack.Rotate(rotateHumanModel[it->first], 1.f, 0.f, 0.f);
+		//	if (it->first == "LEFTLEG" || it->first == "RIGHTLEG")
+		//		modelStack.Translate(0.f, -offsetLeg, 0.f);
+		//	modelStack.Scale(10.f, 10.f, 10.f);
+		//	RenderHelper::GetInstance()->RenderMeshWithLight(it->second);
+		//	modelStack.PopMatrix();
+		//}
+
+		if (CAdjuster::GetInstance()->GetState())
 		{
-			float offsetLeg = 0.f;
-			if (it->first == "LEFTLEG" || it->first == "RIGHTLEG")
-				offsetLeg = 12.3f;
-
+			modelStack = GraphicsManager::GetInstance()->GetModelStack();
 			modelStack.PushMatrix();
-			modelStack.Translate(position.x + translateHumanModel[it->first].x, 
-				position.y + translateHumanModel[it->first].y + offsetLeg, 
-				position.z + translateHumanModel[it->first].z);
-
-			modelStack.Rotate(rotateHumanModel[it->first], 1.f, 0.f, 0.f);
-			if (it->first == "LEFTLEG" || it->first == "RIGHTLEG")
-				modelStack.Translate(0.f, -offsetLeg, 0.f);
-			modelStack.Scale(10.f, 10.f, 10.f);
-			RenderHelper::GetInstance()->RenderMeshWithLight(it->second);
+			modelStack.Translate(position.x, position.y, position.z);
+			//modelStack.Translate(position.x + translateHumanModel["BODY"].x, position.y + translateHumanModel["BODY"].y, position.z + translateHumanModel["BODY"].z);
+			modelStack.Scale(maxAABB.x - minAABB.x, maxAABB.y - minAABB.y, maxAABB.z - minAABB.z);
+			//modelStack.Scale(CAdjuster::GetInstance()->GetScale().x, CAdjuster::GetInstance()->GetScale().y, CAdjuster::GetInstance()->GetScale().z);
+			RenderHelper::GetInstance()->RenderMesh(modelMesh);
 			modelStack.PopMatrix();
+			//CAdjuster::GetInstance()->SetSpeed(10.f);
+			//CAdjuster::GetInstance()->SetMode(CAdjuster::SCALE_MODE);
 		}
 	}
 	else
@@ -398,97 +451,142 @@ void CEnemy::Render(void)
 	}
 }
 
+void CEnemy::Render(std::string _bodyPart)
+{
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+
+	/*Prevent program from crashing when the body part is not used.*/
+	if (humanModelMesh[_bodyPart] == nullptr)
+		return;
+
+	float offsetLeg = 0.f;
+	if (_bodyPart == "LEFTLEG" || _bodyPart == "RIGHTLEG")
+		offsetLeg = 12.3f;
+
+	modelStack.PushMatrix();
+	modelStack.Translate(translateHumanModel[_bodyPart].x,
+		translateHumanModel[_bodyPart].y + offsetLeg,
+		translateHumanModel[_bodyPart].z);
+
+	modelStack.Rotate(rotateHumanModel[_bodyPart], 1.f, 0.f, 0.f);
+	if (_bodyPart == "LEFTLEG" || _bodyPart == "RIGHTLEG")
+		modelStack.Translate(0.f, -offsetLeg, 0.f);
+	modelStack.Scale(10.f, 10.f, 10.f);
+	RenderHelper::GetInstance()->RenderMeshWithLight(humanModelMesh[_bodyPart]);
+	modelStack.PopMatrix();
+}
+
 void CEnemy::Update(double dt)
 {
+	/*Keep updating position.y to terrain height.*/
+	position.y = (350.f * ReadHeightMap(SceneManager::GetInstance()->GetHeightMap(), position.x / 4000.f, position.z / 4000.f));
+
 	if (humanModelMesh.size() > 0)
 	{
-		for (std::map<string, Mesh*>::iterator it = humanModelMesh.begin(); it != humanModelMesh.end(); ++it)
-		{
-			/*
-			Draft Theory on how to make animation soft coded.
-			File load HEAD
-			Translate Animation got 4.
-			0 translate z to 40
-			1 translate x to 50
-			2 translate z to 60
-			3 translate y to 70
+		UpdateAnimation("HEAD", dt);
+		UpdateAnimation("BODY", dt);
+		UpdateAnimation("LEFTARM", dt);
+		UpdateAnimation("RIGHTARM", dt);
+		UpdateAnimation("LEFTLEG", dt);
+		UpdateAnimation("RIGHTLEG", dt);
+		UpdateAnimation("ACCESSORYONE", dt);
+		UpdateAnimation("ACCESSORYTWO", dt);
+		UpdateAnimation("ACCESSORYTHREE", dt);
+		//cout << "Position Body: " << translateHumanModel["BODY"] << endl;
+		cout << "Position Head: " << translateHumanModel["HEAD"] << endl;
+		//for (std::map<string, Mesh*>::iterator it = humanModelMesh.begin(); it != humanModelMesh.end(); ++it)
+		//{
+		//	/*
+		//	Draft Theory on how to make animation soft coded.
+		//	File load HEAD
+		//	Translate Animation got 4.
+		//	0 translate z to 40
+		//	1 translate x to 50
+		//	2 translate z to 60
+		//	3 translate y to 70
 
-			if (type == CEnemy::HUMAN)
-			Load from to_string(name).txt folder
-			HEAD
-			BODY
-			LEFTARM
-			RIGHTARM
-			LEFTLEG
-			RIGHTLEG
-			ACCESSORYONE
-			ACCESSORYTWO
-			ACCESSORYTHREE
+		//	if (type == CEnemy::HUMAN)
+		//	Load from to_string(name).txt folder
+		//	HEAD
+		//	BODY
+		//	LEFTARM
+		//	RIGHTARM
+		//	LEFTLEG
+		//	RIGHTLEG
+		//	ACCESSORYONE
+		//	ACCESSORYTWO
+		//	ACCESSORYTHREE
 
-			*/
-			if (it->first == "HEAD")
-				UpdateAnimation("HEAD", dt);
-			else if (it->first == "BODY")
-				UpdateAnimation("BODY", dt);
-			else if (it->first == "LEFTARM")
-				UpdateAnimation("LEFTARM", dt);
-			else if (it->first == "RIGHTARM")
-				UpdateAnimation("RIGHTARM", dt);
-			else if (it->first == "LEFTLEG")
-			{
-				UpdateAnimation("LEFTLEG", dt);
+		//	*/
+		//	if (it->first == "HEAD")
+		//		UpdateAnimation("HEAD", dt);
+		//	else if (it->first == "BODY")
+		//		UpdateAnimation("BODY", dt);
+		//	else if (it->first == "LEFTARM")
+		//		UpdateAnimation("LEFTARM", dt);
+		//	else if (it->first == "RIGHTARM")
+		//		UpdateAnimation("RIGHTARM", dt);
+		//	else if (it->first == "LEFTLEG")
+		//	{
+		//		UpdateAnimation("LEFTLEG", dt);
 
-				if (rotateHumanModelState["LEFTLEG"] == 0)
-				{
-					rotateHumanModel["LEFTLEG"] += static_cast<float>(dt) * 50.f;
-					if (rotateHumanModel["LEFTLEG"] >= 10.f)
-						rotateHumanModelState["LEFTLEG"] = 1;
-				}
-				else if (rotateHumanModelState["LEFTLEG"] == 1)
-				{
-					rotateHumanModel["LEFTLEG"] -= static_cast<float>(dt) * 50.f;
-					if (rotateHumanModel["LEFTLEG"] <= -10.f)
-						rotateHumanModelState["LEFTLEG"] = 0;
-				}
-			}
-			else if (it->first == "RIGHTLEG")
-			{
-				UpdateAnimation("RIGHTLEG", dt);
-				if (rotateHumanModelState["RIGHTLEG"] == 0)
-				{
-					rotateHumanModel["RIGHTLEG"] -= static_cast<float>(dt) * 50.f;
-					if (rotateHumanModel["RIGHTLEG"] <= -10.f)
-						rotateHumanModelState["RIGHTLEG"] = 1;
-				}
-				else if (rotateHumanModelState["RIGHTLEG"] == 1)
-				{
-					rotateHumanModel["RIGHTLEG"] += static_cast<float>(dt) * 50.f;
-					if (rotateHumanModel["RIGHTLEG"] >= 10.f)
-						rotateHumanModelState["RIGHTLEG"] = 0;
-				}
-			}
-			else if (it->first == "ACCESSORYONE")
-				UpdateAnimation("ACCESSORYONE", dt);
-			else if (it->first == "ACCESSORYTWO")
-			{
-				UpdateAnimation("ACCESSORYTWO", dt);
-				if (rotateHumanModelState["ACCESSORYTWO"] == 0)
-				{
-					rotateHumanModel["ACCESSORYTWO"] -= static_cast<float>(dt) * 50.f;
-					if (rotateHumanModel["ACCESSORYTWO"] <= -10.f)
-						rotateHumanModelState["ACCESSORYTWO"] = 1;
-				}
-				else if (rotateHumanModelState["ACCESSORYTWO"] == 1)
-				{
-					rotateHumanModel["ACCESSORYTWO"] += static_cast<float>(dt) * 50.f;
-					if (rotateHumanModel["ACCESSORYTWO"] >= 10.f)
-						rotateHumanModelState["ACCESSORYTWO"] = 0;
-				}
-			}
-			else if (it->first == "ACCESSORYTHREE")
-				UpdateAnimation("ACCESSORYTHREE", dt);
-		}
+		//		if (rotateHumanModelState["LEFTLEG"] == 0)
+		//		{
+		//			rotateHumanModel["LEFTLEG"] += static_cast<float>(dt) * 50.f;
+		//			if (rotateHumanModel["LEFTLEG"] >= 10.f)
+		//				rotateHumanModelState["LEFTLEG"] = 1;
+		//		}
+		//		else if (rotateHumanModelState["LEFTLEG"] == 1)
+		//		{
+		//			rotateHumanModel["LEFTLEG"] -= static_cast<float>(dt) * 50.f;
+		//			if (rotateHumanModel["LEFTLEG"] <= -10.f)
+		//				rotateHumanModelState["LEFTLEG"] = 0;
+		//		}
+		//	}
+		//	else if (it->first == "RIGHTLEG")
+		//	{
+		//		UpdateAnimation("RIGHTLEG", dt);
+		//		if (rotateHumanModelState["RIGHTLEG"] == 0)
+		//		{
+		//			rotateHumanModel["RIGHTLEG"] -= static_cast<float>(dt) * 50.f;
+		//			if (rotateHumanModel["RIGHTLEG"] <= -10.f)
+		//				rotateHumanModelState["RIGHTLEG"] = 1;
+		//		}
+		//		else if (rotateHumanModelState["RIGHTLEG"] == 1)
+		//		{
+		//			rotateHumanModel["RIGHTLEG"] += static_cast<float>(dt) * 50.f;
+		//			if (rotateHumanModel["RIGHTLEG"] >= 10.f)
+		//				rotateHumanModelState["RIGHTLEG"] = 0;
+		//		}
+		//	}
+		//	else if (it->first == "ACCESSORYONE")
+		//		UpdateAnimation("ACCESSORYONE", dt);
+		//	else if (it->first == "ACCESSORYTWO")
+		//	{
+		//		UpdateAnimation("ACCESSORYTWO", dt);
+		//		if (rotateHumanModelState["ACCESSORYTWO"] == 0)
+		//		{
+		//			rotateHumanModel["ACCESSORYTWO"] -= static_cast<float>(dt) * 50.f;
+		//			if (rotateHumanModel["ACCESSORYTWO"] <= -10.f)
+		//				rotateHumanModelState["ACCESSORYTWO"] = 1;
+		//		}
+		//		else if (rotateHumanModelState["ACCESSORYTWO"] == 1)
+		//		{
+		//			rotateHumanModel["ACCESSORYTWO"] += static_cast<float>(dt) * 50.f;
+		//			if (rotateHumanModel["ACCESSORYTWO"] >= 10.f)
+		//				rotateHumanModelState["ACCESSORYTWO"] = 0;
+		//		}
+		//	}
+		//	else if (it->first == "ACCESSORYTHREE")
+		//		UpdateAnimation("ACCESSORYTHREE", dt);
+		//}
 	}
+
+	/*Bind position with animation.*/
+	position = Vector3(translateHumanModel["BODY"].x, position.y, translateHumanModel["BODY"].z);
+	/*Keep updating AABB to follow object.*/
+	minAABB += position;
+	maxAABB += position;
 }
 
 void CEnemy::Load(CEnemy * _enemy)
@@ -562,6 +660,53 @@ void CEnemy::Load(CEnemy * _enemy)
 		path.clear();
 		path.close();
 	}
+
+	content = "";
+	filePath = "Data//Collision//";
+	filePath += _enemy->GetName() + "//AABB.txt";
+	std::ifstream path(filePath);
+	if (path)
+		while (std::getline(path, content))
+		{
+			std::string x = "";
+			std::string y = "";
+			std::string z = "";
+			unsigned wordCount = 0;
+			for (unsigned i = 0; i < content.size(); ++i)
+			{
+				if (content[i] == ',')
+				{
+					++wordCount;
+					continue;
+				}
+
+				if (wordCount == 0)
+				{
+					x += content[i];
+					continue;
+				}
+
+				if (wordCount == 1)
+				{
+					y += content[i];
+					continue;
+				}
+
+				if (wordCount == 2)
+				{
+					z += content[i];
+					continue;
+				}
+			}
+
+			minAABB = Vector3(-std::stof(x) * 0.5f,
+				-std::stof(y) * 0.5f,
+				-std::stof(z) * 0.5f);
+
+			maxAABB = Vector3(std::stof(x) * 0.5f,
+				std::stof(y) * 0.5f,
+				std::stof(z) * 0.5f);
+		}
 }
 
 CEnemy * Create::Enemy(const string & _meshName, const Vector3 & _position)

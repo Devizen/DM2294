@@ -164,7 +164,7 @@ void World::Init()
 	//theMouse = new CMouse();
 	//theMouse->Create(playerInfo);
 
-	//CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\INTENSE.ogg", true);
+	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\INTENSE.ogg", true);
 
 	loopCredits = 0;
 	player = new CPlayer();
@@ -173,6 +173,7 @@ void World::Init()
 	player->setAttackTo(1);
 	player->setSpeed(2);
 
+	/*Cube enemy test.*/
 	enemy = Create::Enemy("ENEMY", Vector3(20.f, 0.f, 20.f));
 	enemy->setHealthTo(10);
 	enemy->setMaxHealthTo(10);
@@ -225,14 +226,23 @@ void World::Update(double dt)
 	//theKeyboard->Read(static_cast<float>(dt));
 	//theMouse->Read(static_cast<float>(dt));
 
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_LSHIFT))
+		if (!CAdjuster::GetInstance()->GetState())
+			CAdjuster::GetInstance()->SetState(true);
+		else
+			CAdjuster::GetInstance()->SetState(false);
+
 	if (!player->GetBattle()->GetBattleState())
 	{
 		/*Update camera.*/
 		UpdateCameraMovement(dt);
 
 		/*Update player.*/
-		player->Update(dt);
-		UpdatePlayerMovement(dt);
+		if (!CAdjuster::GetInstance()->GetState())
+		{
+			player->Update(dt);
+			UpdatePlayerMovement(dt);
+		}
 
 		/*Update enemy.*/
 		CEnemy_Manager::GetInstance()->Update(dt);
@@ -244,7 +254,8 @@ void World::Update(double dt)
 
 
 	/*Update adjuster values for positioning.*/
-	//CAdjuster::GetInstance()->Update(dt);
+	if (CAdjuster::GetInstance()->GetState())
+		CAdjuster::GetInstance()->Update(dt);
 
 	/*Update Bullets.*/
 	CBullet_Manager::GetInstance()->Update(dt);

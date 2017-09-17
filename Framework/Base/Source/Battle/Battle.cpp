@@ -414,6 +414,10 @@ void CBattle::Render()
 			{
 				for (std::map<string, Mesh*>::iterator it = enemy->GetHumanModelMesh().begin(); it != enemy->GetHumanModelMesh().end(); ++it)
 				{
+					/*Go to next body part if this body part is not available.*/
+					if (it->second == nullptr)
+						continue;
+
 					modelStack.PushMatrix();
 					modelStack.Translate(shake, 0.f, 0.f);
 					modelStack.Translate(-shakeAll, 0.f, 0.f);

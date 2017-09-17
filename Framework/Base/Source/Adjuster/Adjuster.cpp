@@ -10,9 +10,10 @@ CAdjuster* CAdjuster::s_instance = 0;
 
 CAdjuster::CAdjuster() :
 	position(0.f, 0.f, 0.f)
-	, scale(0.f, 0.f, 0.f)
+	, scale(1.f, 1.f, 1.f)
 	, mode(TRANSLATE_MODE)
 	, speed(0.1f)
+	, state(false)
 {
 }
 
@@ -47,8 +48,8 @@ void CAdjuster::Update(double dt)
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
 			position.y += (static_cast<float>(dt) * speed);
 
-		cout << "Translate X: " << position.x << endl;
-		cout << "Translate Y: " << position.y << endl;
+		/*cout << "Translate X: " << position.x << endl;
+		cout << "Translate Y: " << position.y << endl;*/
 	}
 	else if (mode == SCALE_MODE)
 	{
@@ -64,14 +65,24 @@ void CAdjuster::Update(double dt)
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_DOWN))
 			scale.y -= (static_cast<float>(dt) * speed);
 
-		cout << "Scale X: " << scale.x << endl;
-		cout << "Scale Y: " << scale.y << endl;
+		/*cout << "Scale X: " << scale.x << endl;
+		cout << "Scale Y: " << scale.y << endl;*/
 	}
 }
 
 void CAdjuster::SetSpeed(float _speed)
 {
 	speed = _speed;
+}
+
+void CAdjuster::SetMode(MODE _mode)
+{
+	mode = _mode;
+}
+
+void CAdjuster::SetState(bool _state)
+{
+	state = _state;
 }
 
 Vector3 CAdjuster::GetPosition(void)
@@ -82,6 +93,16 @@ Vector3 CAdjuster::GetPosition(void)
 Vector3 CAdjuster::GetScale(void)
 {
 	return scale;
+}
+
+CAdjuster::MODE CAdjuster::GetMode(void)
+{
+	return mode;
+}
+
+bool CAdjuster::GetState(void)
+{
+	return state;
 }
 
 CAdjuster * CAdjuster::GetInstance(void)
