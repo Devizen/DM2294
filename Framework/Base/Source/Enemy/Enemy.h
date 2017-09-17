@@ -34,6 +34,7 @@ public:
 		std::string value = "";
 		std::string speed = "";
 		TRANSLATEAXIS eAxis;
+		float amount = 0.f;
 		bool check = false;
 		//bool checkHead = false;
 		//bool checkBody = false;

@@ -329,51 +329,36 @@ bool CEnemy::TranslateModel(TYPE _type, string _bodyPart, TRANSLATEAXIS _axis, f
 	float dt = static_cast<float>(_dt);
 	if (_type == HUMAN)
 	{
-		if (_axis == X)
-			if (_value > 0.f)
-			{
+		if (_value > 0.f)
+		{
+			translate[_bodyPart].first.amount += dt * _speed;
+			if (_axis == X)
 				translateHumanModel[_bodyPart].x += dt * _speed;
-				if (translateHumanModel[_bodyPart].x >= _value)
-					return true;
-				return false;
-			}
-			else
-			{
-				translateHumanModel[_bodyPart].x -= dt * _speed;
-				if (translateHumanModel[_bodyPart].x <= _value)
-					return true;
-				return false;
-			}
-		else if (_axis == Y)
-			if (_value > 0.f)
-			{
+			else if (_axis == Y)
 				translateHumanModel[_bodyPart].y += dt * _speed;
-				if (translateHumanModel[_bodyPart].y >= _value)
-					return true;
-				return false;
-			}
-			else
-			{
-				translateHumanModel[_bodyPart].y -= dt * _speed;
-				if (translateHumanModel[_bodyPart].y <= _value)
-					return true;
-				return false;
-			}
-		else if (_axis == Z)
-			if (_value > 0.f)
-			{
+			else 
 				translateHumanModel[_bodyPart].z += dt * _speed;
-				if (translateHumanModel[_bodyPart].z >= _value)
-					return true;
-				return false;
-			}
+
+			if (translate[_bodyPart].first.amount >= _value)
+				return true;
 			else
-			{
-				translateHumanModel[_bodyPart].z -= dt * _speed;
-				if (translateHumanModel[_bodyPart].z <= _value)
-					return true;
 				return false;
-			}
+		}
+		else
+		{
+			translate[_bodyPart].first.amount -= dt * _speed;
+			if (_axis == X)
+				translateHumanModel[_bodyPart].x -= dt * _speed;
+			else if (_axis == Y)
+				translateHumanModel[_bodyPart].y -= dt * _speed;
+			else
+				translateHumanModel[_bodyPart].z -= dt * _speed;
+
+			if (translate[_bodyPart].first.amount <= _value)
+				return true;
+			else
+				return false;
+		}
 	}
 	return true;
 }
@@ -384,6 +369,7 @@ void CEnemy::ResetCheckTransform(std::string _bodyPart)
 	translate[_bodyPart].first.axis = "";
 	translate[_bodyPart].first.value = "";
 	translate[_bodyPart].first.speed = "";
+	translate[_bodyPart].first.amount = 0.f;
 	translate[_bodyPart].first.check = false;
 }
 
@@ -392,22 +378,15 @@ void CEnemy::Render(void)
 	if (type == CEnemy::HUMAN)
 	{
 		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-		Render("HEAD");
-		Render("BODY");
-		Render("LEFTARM");
-		Render("RIGHTARM");
-		Render("LEFTLEG");
-		Render("RIGHTLEG");
-		Render("ACCESSORYONE");
-		Render("ACCESSORYTWO");
-		Render("ACCESSORYTHREE");
-	
-		//for (std::map<string, Mesh*>::iterator it = humanModelMesh.begin(); it != humanModelMesh.end(); ++it)
-		//{
-		//	/*Prevent program from crashing when the body part is not used.*/
-		//	if (it->second == nullptr)
-		//		continue;
 
+		for (std::map<string, Mesh*>::iterator it = humanModelMesh.begin(); it != humanModelMesh.end(); ++it)
+		{
+			/*Prevent program from crashing when the body part is not used.*/
+			if (it->second == nullptr)
+				continue;
+
+			Render(it->first);
+		}
 		//	float offsetLeg = 0.f;
 		//	if (it->first == "LEFTLEG" || it->first == "RIGHTLEG")
 		//		offsetLeg = 12.3f;
@@ -429,7 +408,7 @@ void CEnemy::Render(void)
 		{
 			modelStack = GraphicsManager::GetInstance()->GetModelStack();
 			modelStack.PushMatrix();
-			modelStack.Translate(position.x, position.y, position.z);
+			modelStack.Translate(translateHumanModel["BODY"].x, translateHumanModel["BODY"].y, translateHumanModel["BODY"].z);
 			//modelStack.Translate(position.x + translateHumanModel["BODY"].x, position.y + translateHumanModel["BODY"].y, position.z + translateHumanModel["BODY"].z);
 			modelStack.Scale(maxAABB.x - minAABB.x, maxAABB.y - minAABB.y, maxAABB.z - minAABB.z);
 			//modelStack.Scale(CAdjuster::GetInstance()->GetScale().x, CAdjuster::GetInstance()->GetScale().y, CAdjuster::GetInstance()->GetScale().z);
@@ -492,101 +471,54 @@ void CEnemy::Update(double dt)
 		UpdateAnimation("ACCESSORYONE", dt);
 		UpdateAnimation("ACCESSORYTWO", dt);
 		UpdateAnimation("ACCESSORYTHREE", dt);
-		//cout << "Position Body: " << translateHumanModel["BODY"] << endl;
-		cout << "Position Head: " << translateHumanModel["HEAD"] << endl;
-		//for (std::map<string, Mesh*>::iterator it = humanModelMesh.begin(); it != humanModelMesh.end(); ++it)
-		//{
-		//	/*
-		//	Draft Theory on how to make animation soft coded.
-		//	File load HEAD
-		//	Translate Animation got 4.
-		//	0 translate z to 40
-		//	1 translate x to 50
-		//	2 translate z to 60
-		//	3 translate y to 70
 
-		//	if (type == CEnemy::HUMAN)
-		//	Load from to_string(name).txt folder
-		//	HEAD
-		//	BODY
-		//	LEFTARM
-		//	RIGHTARM
-		//	LEFTLEG
-		//	RIGHTLEG
-		//	ACCESSORYONE
-		//	ACCESSORYTWO
-		//	ACCESSORYTHREE
+		if (rotateHumanModelState["LEFTLEG"] == 0)
+		{
+			rotateHumanModel["LEFTLEG"] += static_cast<float>(dt) * 50.f;
+			if (rotateHumanModel["LEFTLEG"] >= 10.f)
+				rotateHumanModelState["LEFTLEG"] = 1;
+		}
+		else if (rotateHumanModelState["LEFTLEG"] == 1)
+		{
+			rotateHumanModel["LEFTLEG"] -= static_cast<float>(dt) * 50.f;
+			if (rotateHumanModel["LEFTLEG"] <= -10.f)
+				rotateHumanModelState["LEFTLEG"] = 0;
+		}
 
-		//	*/
-		//	if (it->first == "HEAD")
-		//		UpdateAnimation("HEAD", dt);
-		//	else if (it->first == "BODY")
-		//		UpdateAnimation("BODY", dt);
-		//	else if (it->first == "LEFTARM")
-		//		UpdateAnimation("LEFTARM", dt);
-		//	else if (it->first == "RIGHTARM")
-		//		UpdateAnimation("RIGHTARM", dt);
-		//	else if (it->first == "LEFTLEG")
-		//	{
-		//		UpdateAnimation("LEFTLEG", dt);
+		if (rotateHumanModelState["RIGHTLEG"] == 0)
+		{
+			rotateHumanModel["RIGHTLEG"] -= static_cast<float>(dt) * 50.f;
+			if (rotateHumanModel["RIGHTLEG"] <= -10.f)
+				rotateHumanModelState["RIGHTLEG"] = 1;
+		}
+		else if (rotateHumanModelState["RIGHTLEG"] == 1)
+		{
+			rotateHumanModel["RIGHTLEG"] += static_cast<float>(dt) * 50.f;
+			if (rotateHumanModel["RIGHTLEG"] >= 10.f)
+				rotateHumanModelState["RIGHTLEG"] = 0;
+		}
 
-		//		if (rotateHumanModelState["LEFTLEG"] == 0)
-		//		{
-		//			rotateHumanModel["LEFTLEG"] += static_cast<float>(dt) * 50.f;
-		//			if (rotateHumanModel["LEFTLEG"] >= 10.f)
-		//				rotateHumanModelState["LEFTLEG"] = 1;
-		//		}
-		//		else if (rotateHumanModelState["LEFTLEG"] == 1)
-		//		{
-		//			rotateHumanModel["LEFTLEG"] -= static_cast<float>(dt) * 50.f;
-		//			if (rotateHumanModel["LEFTLEG"] <= -10.f)
-		//				rotateHumanModelState["LEFTLEG"] = 0;
-		//		}
-		//	}
-		//	else if (it->first == "RIGHTLEG")
-		//	{
-		//		UpdateAnimation("RIGHTLEG", dt);
-		//		if (rotateHumanModelState["RIGHTLEG"] == 0)
-		//		{
-		//			rotateHumanModel["RIGHTLEG"] -= static_cast<float>(dt) * 50.f;
-		//			if (rotateHumanModel["RIGHTLEG"] <= -10.f)
-		//				rotateHumanModelState["RIGHTLEG"] = 1;
-		//		}
-		//		else if (rotateHumanModelState["RIGHTLEG"] == 1)
-		//		{
-		//			rotateHumanModel["RIGHTLEG"] += static_cast<float>(dt) * 50.f;
-		//			if (rotateHumanModel["RIGHTLEG"] >= 10.f)
-		//				rotateHumanModelState["RIGHTLEG"] = 0;
-		//		}
-		//	}
-		//	else if (it->first == "ACCESSORYONE")
-		//		UpdateAnimation("ACCESSORYONE", dt);
-		//	else if (it->first == "ACCESSORYTWO")
-		//	{
-		//		UpdateAnimation("ACCESSORYTWO", dt);
-		//		if (rotateHumanModelState["ACCESSORYTWO"] == 0)
-		//		{
-		//			rotateHumanModel["ACCESSORYTWO"] -= static_cast<float>(dt) * 50.f;
-		//			if (rotateHumanModel["ACCESSORYTWO"] <= -10.f)
-		//				rotateHumanModelState["ACCESSORYTWO"] = 1;
-		//		}
-		//		else if (rotateHumanModelState["ACCESSORYTWO"] == 1)
-		//		{
-		//			rotateHumanModel["ACCESSORYTWO"] += static_cast<float>(dt) * 50.f;
-		//			if (rotateHumanModel["ACCESSORYTWO"] >= 10.f)
-		//				rotateHumanModelState["ACCESSORYTWO"] = 0;
-		//		}
-		//	}
-		//	else if (it->first == "ACCESSORYTHREE")
-		//		UpdateAnimation("ACCESSORYTHREE", dt);
-		//}
+		if (rotateHumanModelState["ACCESSORYTWO"] == 0)
+		{
+			rotateHumanModel["ACCESSORYTWO"] -= static_cast<float>(dt) * 50.f;
+			if (rotateHumanModel["ACCESSORYTWO"] <= -10.f)
+				rotateHumanModelState["ACCESSORYTWO"] = 1;
+		}
+		else if (rotateHumanModelState["ACCESSORYTWO"] == 1)
+		{
+			rotateHumanModel["ACCESSORYTWO"] += static_cast<float>(dt) * 50.f;
+			if (rotateHumanModel["ACCESSORYTWO"] >= 10.f)
+				rotateHumanModelState["ACCESSORYTWO"] = 0;
+		}
+		//std::cout << "AMOUNT: " << translate["BODY"].first.amount << std::endl;
+		//std::cout << "COUNT: " << translate["BODY"].first.count << std::endl;
+		//std::cout << "Position: " << translateHumanModel["BODY"] << std::endl;
 	}
-
 	/*Bind position with animation.*/
-	position = Vector3(translateHumanModel["BODY"].x, position.y, translateHumanModel["BODY"].z);
+	//position = Vector3(translateHumanModel["BODY"].x, position.y, translateHumanModel["BODY"].z);
 	/*Keep updating AABB to follow object.*/
-	minAABB += position;
-	maxAABB += position;
+	//minAABB += translateHumanModel["BODY"];
+	//maxAABB += translateHumanModel["BODY"];
 }
 
 void CEnemy::Load(CEnemy * _enemy)
