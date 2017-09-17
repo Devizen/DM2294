@@ -61,6 +61,9 @@
     <Filter Include="Editor">
       <UniqueIdentifier>{54f3b203-9ebe-4ce9-a8f3-1cbb1f22298a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{621bcf30-46b7-4df9-9145-5227f10998ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -144,6 +147,9 @@
     <ClCompile Include="Source\Editor\Battle_Editor.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Animation\Animation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -223,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Battle_Editor.h">
       <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Animation\Animation.h">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

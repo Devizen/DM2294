@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include "../Attributes.h"
+#include "../Animation/Animation.h"
 #include "Vector3.h"
 #include <string>
 #include <vector>
@@ -9,43 +10,43 @@
 
 class Mesh;
 
-class CEnemy : public CAttributes
+class CEnemy : public CAttributes, public CAnimation
 {
 public:
-	enum TYPE
-	{
-		MONSTER = 0,
-		HUMAN,
-		NONE
-	};
-	enum TRANSLATEAXIS
-	{
-		X = 0,
-		Y,
-		Z
-	};
+	//enum TYPE
+	//{
+	//	MONSTER = 0,
+	//	HUMAN,
+	//	NONE
+	//};
+	//enum TRANSLATEAXIS
+	//{
+	//	X = 0,
+	//	Y,
+	//	Z
+	//};
 
-	struct TRANSFORM
-	{
-		/*To offset vector together with animation count.*/
-		unsigned count = 0;
-		std::string transform = "";
-		std::string axis = "";
-		std::string value = "";
-		std::string speed = "";
-		TRANSLATEAXIS eAxis;
-		float amount = 0.f;
-		bool check = false;
-		//bool checkHead = false;
-		//bool checkBody = false;
-		//bool checkLeftArm = false;
-		//bool checkRightArm = false;
-		//bool checkLeftLeg = false;
-		//bool checkRightLeg = false;
-		//bool checkAccessoryOne = false;
-		//bool checkAccessoryTwo = false;
-		//bool checkAccessoryThree = false;
-	};
+	//struct TRANSFORM
+	//{
+	//	/*To offset vector together with animation count.*/
+	//	unsigned count = 0;
+	//	std::string transform = "";
+	//	std::string axis = "";
+	//	std::string value = "";
+	//	std::string speed = "";
+	//	TRANSLATEAXIS eAxis;
+	//	float amount = 0.f;
+	//	bool check = false;
+	//	//bool checkHead = false;
+	//	//bool checkBody = false;
+	//	//bool checkLeftArm = false;
+	//	//bool checkRightArm = false;
+	//	//bool checkLeftLeg = false;
+	//	//bool checkRightLeg = false;
+	//	//bool checkAccessoryOne = false;
+	//	//bool checkAccessoryTwo = false;
+	//	//bool checkAccessoryThree = false;
+	//};
 
 	CEnemy();
 	CEnemy(Mesh* _modelMesh);
@@ -92,15 +93,15 @@ public:
 	TYPE GetEnemyType(void);
 	/*Get health bar position for battle scene.*/
 	float GetHealthBarPosition(void);
-	/*Get human model mesh.*/
-	std::map<std::string, Mesh*>& GetHumanModelMesh(void);
+	///*Get human model mesh.*/
+	//std::map<std::string, Mesh*>& GetHumanModelMesh(void);
 
-	/*Update animation based on body parts.*/
-	void UpdateAnimation(std::string _bodyPart, double dt);
-	/*For translating model based on different body parts.*/
-	bool TranslateModel(TYPE _type, std::string _bodyPart, TRANSLATEAXIS _axis, float _value, float _speed, double _dt);
-	/*Reset the values in TRASFORM struct.*/
-	void ResetCheckTransform(std::string _bodyPart);
+	///*Update animation based on body parts.*/
+	//void UpdateAnimation(std::string _bodyPart, double dt);
+	///*For translating model based on different body parts.*/
+	//bool TranslateModel(TYPE _type, std::string _bodyPart, TRANSLATEAXIS _axis, float _value, float _speed, double _dt);
+	///*Reset the values in TRASFORM struct.*/
+	//void ResetCheckTransform(std::string _bodyPart);
 	/*Render enemy.*/
 	void Render(void);
 	/*Render individual body parts to prevent delay.*/
@@ -119,18 +120,18 @@ private:
 	Vector3 maxAABB;
 	float rotate;
 	Mesh* modelMesh;
-	std::map<std::string, Mesh*>humanModelMesh;
-	std::map<std::string, Vector3>translateHumanModel;
-	std::map<std::string, std::pair<TRANSFORM, std::vector<std::string>>>translate;
-	std::map<std::string, float>rotateHumanModel;
-	std::map<std::string, unsigned>translateHumanModelState;
-	std::map<std::string, unsigned>rotateHumanModelState;
+	//std::map<std::string, Mesh*>humanModelMesh;
+	//std::map<std::string, Vector3>translateHumanModel;
+	//std::map<std::string, std::pair<TRANSFORM, std::vector<std::string>>>translate;
+	//std::map<std::string, float>rotateHumanModel;
+	//std::map<std::string, unsigned>translateHumanModelState;
+	//std::map<std::string, unsigned>rotateHumanModelState;
 	bool activateBattle;
 
 	TRANSFORM checkTransform;
 
-	/*To check what type of enemy.*/
-	TYPE type;
+	///*To check what type of enemy.*/
+	//TYPE type;
 
 	/*Placing the health bar in battle scene.*/
 	float healthBarPosition;

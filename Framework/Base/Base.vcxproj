@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Adjuster\Adjuster.cpp" />
+    <ClCompile Include="Source\Animation\Animation.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Attributes.cpp" />
     <ClCompile Include="Source\Battle\Battle.cpp" />
@@ -40,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Adjuster\Adjuster.h" />
+    <ClInclude Include="Source\Animation\Animation.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Attributes.h" />
     <ClInclude Include="Source\Battle\Battle.h" />
