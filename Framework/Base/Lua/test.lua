@@ -6,7 +6,8 @@ Comment Section
 -- - is the same as //
 
 String Section
-io.write will write to console.
+io.write("Content") - write to console.
+io.read() - read whatever you type. Similar to C++ getchar().
 # - size of the variable.
 string.len(variable) - get the length of string.
 # and .len returns same result.
@@ -63,9 +64,14 @@ local variableName - this will make variableName only available within a block.
 Loop Section
 while(condition) do - while(condition).
 repeat - same as while loop, activates until the condition is false.
+until - to be added below repeat so that it knows what condition to meet to stop.
+for i = 0, 10, 1 do - for(i = 0; i <= 10; ++i)
 break - same as C++.
-end - to be added at the end of every conditional statement.
+end - to be added at the end of every conditional statement except repeat and until.
 There is no continue statement.
+
+Table Section - Array
+variable = {} - Same as C++.
 
 Conversion of types
 tostring(variable) - std::to_string(variable)
@@ -111,3 +117,30 @@ while (i < 10) do
 		break 
 		end
 end
+
+repeat
+	io.write("Keep typing any numbers except 0: ", '\n')
+	number = io.read()
+	io.write("The number you entered is: ", number, '\n')
+until tonumber(number) == 0
+
+for i = 0, 10, 1 do
+	io.write(i, '\n')
+end
+
+months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}
+
+-- This is basically looping through each individual string in months array.
+for word, month in pairs(months) do
+	io.write(month, '\n')
+end
+
+io.write("Index 1 of months: ", months[1], '\n')
+
+-- I rewrite everything from months to arrayMonths but started with 0 index. If you initialise months = {"Some value"}, it will start the index with 1.
+arrayMonths = {}
+for i = 0, 11, 1 do
+	arrayMonths[i] = months[i + 1]
+end
+
+io.write("Index 0 of arrayMonths: ", arrayMonths[0], '\n');
