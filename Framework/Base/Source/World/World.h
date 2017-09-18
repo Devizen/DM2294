@@ -4,6 +4,9 @@
 #include "Scene.h"
 #include <vector>
 
+/*Lua scripting.*/
+#include "lua.hpp"
+
 using std::vector;
 
 class FPSCamera;
@@ -68,6 +71,8 @@ private:
 	int loopCredits;
 
 	float rotateLeftLeg;
+
+	lua_State *lua;
 };
 
 #endif

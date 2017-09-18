@@ -1,0 +1,111 @@
+VIDEO LINK: http://www.youtube.com/watch?v=X5D_h2X8LCk
+
+
+cl /MD /O2 /c /DLUA_BUILD_AS_DLL *.c
+
+This line compiles all files in the directory with the ".c" extension without linking them (/c) with the fastest possible (/O2) multithreaded (/MD) code
+
+NOTICE! IN THE NEXT FEW STEPS X.X MEANS YOUR CURRENT LUA VERSION NUMBER, E.G. 5.2
+
+
+link /DLL /IMPLIB:luaX.X.lib /OUT:luaX.X.dll *.obj
+
+This will create luaX.X.dll and luaX.X.lib out of all ".obj" files
+
+REMEMBER TO RENAME "lua.obj" AND "luac.obj" WITH THE EXTENSION ".o" SO THEY WON'T BE SELECTED!!
+
+
+link /OUT:lua.exe lua.o luaX.X.lib
+
+This will create lua.exe (interpreter) from lua.o using the luaX.X.lib library
+
+
+lib /OUT:luaX.X-static.lib *.obj
+
+This will create luaX.X-static.lib from all ".obj" files, similar to step 2, but with no dll and this is using the "lib" command
+
+
+link /OUT:luac.exe luac.o luaX.X-static.lib
+
+This will create luac.exe (compiler) from luac.o using the luaX.X-static.lib library
+
+
+
+This is how I do my directories (parentheses indicate what the folder represents). This also shows notable file locations.
+
+/Lua
+  /X.X
+    /doc (documentation)
+    /src (source code)
+    /lua (lua libraries)
+    /lib (static libraries we created)
+    /include (relevant header files)
+      /lauxlib.h
+      /lua.h
+      /lua.hpp
+      /luaconf.h
+      /lualib.h
+    /lua.exe
+    /luaX.X.dll
+    /luac.exe
+
+
+
+Environment Variables, ? represents a wildcard
+
+The lua install directory
+LUA_DIR = C:\Program Files\Lua\X.X
+
+Where to look for .dll files (C libraries)
+LUA_CPATH = ?.dll;%LUA_DIR%\?.dll
+
+Where to look for .lua files (Lua libraries)
+LUA_PATH = ?.lua;%LUA_DIR%\lua\?.lua
+
+Also add the contents of LUA_DIR to PATH
+
+
+
+Lua 5.2 test code
+
+function is_even(n)
+  if bit32.band(n,1) == 0 then -- fancy bitwise way to check if a number if even (5.2+ only)
+    print('Even')
+  else
+    print('Odd')
+  end
+end
+
+
+
+To setup in Visual Studio 2012 
+
+go to C/C++ -> General and add $(LUA_DIR)\include to additional include directories.
+
+go to Linker -> General and add $(LUA_DIR)\lib to additional library dir
+
+go to Linker -> Input and add luaX.X.lib to additional dependencies.
+
+
+
+C API test code
+
+#include "stdio.h"
+
+-- C++ header for the C API
+#include "lua.hpp"
+
+int main(int argc, char** argv) {
+  lua_State *L = luaL_newstate();
+  luaL_openlibs(L); -- open the default Lua libraries
+
+  if (luaL_dofile(L, "test.lua")) { -- execute the file
+    const char* err = lua_tostring(L, -1); -- if there was an issue, get the string from the top of the stack...
+    printf(err); -- ...and print it out
+  }
+
+  lua_close(L); -- close the lua state
+
+  getchar();
+  return 0;
+}

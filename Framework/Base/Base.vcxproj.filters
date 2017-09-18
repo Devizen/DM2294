@@ -64,6 +64,9 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{621bcf30-46b7-4df9-9145-5227f10998ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lua">
+      <UniqueIdentifier>{ccad35f8-fe64-44b9-953c-8baa2d792e47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -233,5 +236,10 @@
     <ClInclude Include="Source\Animation\Animation.h">
       <Filter>Animation</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lua\test.lua">
+      <Filter>Lua</Filter>
+    </None>
   </ItemGroup>
 </Project>

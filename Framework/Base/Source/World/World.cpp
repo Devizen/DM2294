@@ -58,6 +58,7 @@
 /*Battle Animation Editor.*/
 #include "../Editor/Battle_Editor.h"
 //#include "vld.h"
+
 using namespace std;
 
 World* World::sInstance = new World(SceneManager::GetInstance());
@@ -164,7 +165,7 @@ void World::Init()
 	//theMouse = new CMouse();
 	//theMouse->Create(playerInfo);
 
-	CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\INTENSE.ogg", true);
+	//CSoundEngine::GetInstance()->GetSoundEngine()->play2D("Sound\\BGM\\INTENSE.ogg", true);
 
 	loopCredits = 0;
 	player = new CPlayer();
@@ -185,6 +186,26 @@ void World::Init()
 	CBullet_Manager::GetInstance()->AddBullet(200);
 
 	camera->SetOffsetToPlayer(player->GetPosition());
+
+	//int c;
+	//puts("Enter text. Include a dot ('.') in a sentence to exit:");
+	//do {
+	//	c = getchar();
+	//	putchar(c);
+	//} while (c != '.');
+
+	/*Initialise Lua.*/
+	lua = luaL_newstate();
+	luaL_openlibs(lua);
+
+	/*Open lua scripting file and execute it.*/
+	if (luaL_dofile(lua, "Lua\\test.lua"))
+	{
+		const char* message = lua_tostring(lua, -1);
+		printf(message);
+	}
+	lua_close(lua);
+	//getchar();
 }
 
 void World::Update(double dt)
