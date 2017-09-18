@@ -72,9 +72,12 @@ There is no continue statement.
 
 Table Section - Array
 variable = {} - Same as C++.
+table.concat(variable, ", ") - concatenate the contents in table (array) together into a string and separate each value by ', '.
+table.remove(variable, index) - remove a content from the table (array).
 
 Conversion of types
 tostring(variable) - std::to_string(variable)
+table.insert(tableVariable, index, content) - this is like assigning a new value to the array based on index. For example, months[1] = "February";
 
 ]]
 
@@ -144,3 +147,14 @@ for i = 0, 11, 1 do
 end
 
 io.write("Index 0 of arrayMonths: ", arrayMonths[0], '\n');
+
+table.insert(arrayMonths, 1, "CHANGED")
+io.write("Index 1 of arrayMonths after CHANGED: ", arrayMonths[1], '\n');
+
+strArrayMonths = table.concat(arrayMonths, ', ')
+io.write("String Version: ", strArrayMonths, '\n')
+
+--Remove March from table.
+table.remove(arrayMonths, 3)
+strArrayMonths = table.concat(arrayMonths, ', ')
+print(strArrayMonths)
